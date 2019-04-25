@@ -6,10 +6,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
-
 // mock
 import './mock'
-
 import bootstrap from './core/bootstrap'
 import './core/use'
 import './permission' // permission control
@@ -19,7 +17,7 @@ Vue.config.productionTip = false
 
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
-
+/* eslint-disable */
 new Vue({
   router,
   store,
