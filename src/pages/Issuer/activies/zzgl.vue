@@ -37,8 +37,8 @@
                                                             <p>备注：{{item.desc}}</p>
                                                             <transition name="fade">
                                                                   <div class="button-box" v-show= "btnShow == index" key="1">
-                                                                        <a-button type="danger" class="danger">驳回</a-button>
-                                                                        <a-button type="primary" class="primary">通过</a-button>
+                                                                        <a-button type="danger" class="danger" @click="showModal">驳回</a-button>
+                                                                        <a-button type="primary" class="primary" @click="success" :loading="loading">通过</a-button>
                                                                   </div>
                                                             </transition>
                                                             
@@ -78,8 +78,8 @@
                                                             <p>备注：{{item.desc}}</p>
                                                             <transition name="fade">
                                                                   <div class="button-box" v-show= "btnShow == index">
-                                                                        <a-button type="danger" class="danger">驳回</a-button>
-                                                                        <a-button type="primary" class="primary">通过</a-button>
+                                                                        <a-button type="danger" class="danger" @click="showModal">驳回</a-button>
+                                                                        <a-button type="primary" class="primary" @click="success" :loading="loading">通过</a-button>
                                                                   </div>
                                                             </transition>
                                                             
@@ -116,6 +116,17 @@
                         
                   </a-tabs>
             </div>
+            <a-modal
+                  title=""
+                  :visible="visible"
+                  @ok="handleOk"
+                  :confirmLoading="confirmLoading"
+                  @cancel="handleCancel"
+            >
+                  <a-form-item label="原因">
+                        <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }"/>
+                  </a-form-item>
+            </a-modal>
       </div>
 </template>
 <style lang="less" scoped>
@@ -130,6 +141,7 @@
       .zzgl-content{
             background-color: #fff;
             padding: 20px;
+		margin: 20px;
             .my-icon{
                   font-size: 24px;
             }
@@ -137,7 +149,7 @@
                   font-size: 18px;
                   font-weight: normal;
                   color: #333;
-                  margin: 0;
+                  margin:15px 0;
                   span{
                         i{
                               color: #f50;
@@ -456,6 +468,10 @@ export default {
                   current: 1,
                   data,
                   columns,
+                  
+                  visible: false,
+                  confirmLoading: false,
+                  loading:false,
                   cardItemData:[
                         {
                               name:"李丽丽",
@@ -529,7 +545,32 @@ export default {
             }
       },
       methods:{
-            
+            showModal() {
+                  this.visible = true
+            },
+            handleOk(e) {
+                  this.ModalText = 'The modal will be closed after two seconds';
+                  this.confirmLoading = true;
+                  setTimeout(() => {
+                  this.visible = false;
+                  this.confirmLoading = false;
+                  this.$message.success('操作成功');
+                  //失败提示
+                  //this.$message.error('This is a message of error');
+                  }, 2000);
+            },
+            handleCancel(e) {
+                  console.log('Clicked cancel button');
+                  this.visible = false
+            },
+            success () {
+                  this.loading = true;
+                  setTimeout(() => {
+                        this.loading = false;
+                        this.$message.success('操作成功');
+                  }, 2000);
+                  
+            },
       }
 }
 </script>

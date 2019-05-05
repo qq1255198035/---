@@ -2,21 +2,8 @@
 <template>
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text"></span></div>
-      <div>搞手</div>
-    </div>
-    <div slot="extra">
-      <a-row class="more-info">
-        <a-col :span="8">
-          <head-info title="赞助待审批" content="56" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info title="明星待审批" content="24" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info title="活动待审批" content="2,223" :center="false" />
-        </a-col>
-      </a-row>
+      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div>赞助商</div>
     </div>
     <div id="home">
       <a-row :gutter="24">
@@ -49,9 +36,7 @@
           </a-card>
           <a-card title="活动动态" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
-              <template slot="status" slot-scope="status">
-                <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
-              </template>
+              
             </a-table>
           </a-card>
         </a-col>
@@ -176,8 +161,8 @@ export default {
       operationColumns: [
         {
           title: '编号',
-          dataIndex: 'type',
-          key: 'type'
+          dataIndex: 'number',
+          key: 'number'
         },
         {
           title: '活动名称',
@@ -186,67 +171,82 @@ export default {
         },
         
         {
-          title: '开始时间',
-          dataIndex: 'updatedAt',
-          key: 'updatedAt'
+          title: '推广形式',
+          dataIndex: 'tgxs',
+          key: 'tgxs'
         },
         {
-          title: '活动分类',
-          dataIndex: 'remark',
-          key: 'remark'
+          title: '赞助形式',
+          dataIndex: 'zzxs',
+          key: 'zzxs'
         },
         {
-          title: '状态',
-          dataIndex: 'status',
-          key: 'status',
-          scopedSlots: { customRender: 'status' }
+          title: '现金资助',
+          dataIndex: 'xjzz',
+          key: 'xjzz'
         },
+        {
+          title: '实物赞助',
+          dataIndex: 'swzz',
+          key: 'swzz'
+        },
+        {
+          title: '赞助金额',
+          dataIndex: 'zzje',
+          key: 'zzje'
+        },
+        {
+          title: '已付款',
+          dataIndex: 'yfk',
+          key: 'yfk'
+        },
+        
       ],
       operation1: [
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op1',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op2',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'reject'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op3',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'authen'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op4',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agreeing'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op5',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        }
-        
-        
-        
-        
+            {
+                  key: '1',
+                  number: '01',
+                  name: '篮球比赛',
+                  tgxs: '冠名',
+                  zzxs: '现金+实物',
+                  xjzz: '1000',
+                  swzz: '30 * 衣服',
+                  zzje: '1000',
+                  yfk: '1000',
+            },
+            {
+                  key: '2',
+                  number: '02',
+                  name: '篮球比赛',
+                  tgxs: '冠名',
+                  zzxs: '现金+实物',
+                  xjzz: '1000',
+                  swzz: '30 * 衣服',
+                  zzje: '1000',
+                  yfk: '1000',
+            },
+            {
+                  key: '3',
+                  number: '03',
+                  name: '篮球比赛',
+                  tgxs: '冠名',
+                  zzxs: '现金+实物',
+                  xjzz: '1000',
+                  swzz: '30 * 衣服',
+                  zzje: '1000',
+                  yfk: '1000',
+            },
+            {
+                  key: '4',
+                  number: '04',
+                  name: '篮球比赛',
+                  tgxs: '冠名',
+                  zzxs: '现金+实物',
+                  xjzz: '1000',
+                  swzz: '30 * 衣服',
+                  zzje: '1000',
+                  yfk: '1000',
+            },
       ],
       
     }
@@ -276,24 +276,7 @@ export default {
     },
   },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        'agree': '已审批',
-        'reject': '驳回',
-        'authen': '已认证',
-        'agreeing': '未审批'
-      }
-      return statusMap[status]
-    },
-    statusTypeFilter (type) {
-      const statusTypeMap = {
-        'agree': 'success',
-        'reject': 'error',
-        'authen': 'processing',
-        'agreeing': 'warning'
-      }
-      return statusTypeMap[type]
-    }
+    
   }
 }
 </script>

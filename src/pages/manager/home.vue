@@ -2,38 +2,17 @@
 <template>
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text"></span></div>
-      <div>搞手</div>
+      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div>经纪人</div>
     </div>
-    <div slot="extra">
-      <a-row class="more-info">
-        <a-col :span="8">
-          <head-info title="赞助待审批" content="56" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info title="明星待审批" content="24" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info title="活动待审批" content="2,223" :center="false" />
-        </a-col>
-      </a-row>
-    </div>
-    <div id="home">
+    <div id="myhome">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                   <a-row>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" style="margin-left:-100px;">
-                        <v-chart :height="300" :data="pieData" :scale="pieScale">
-                          <v-legend dataKey="item" :useHtml="true" :itemTpl="itemTpl" position="right" :offsetX="-50" :offsetY="-35"/>
-                          <v-tooltip :showTitle="false" dataKey="item*percent" />
-                          <v-axis />
-                          <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
-                        </v-chart>
-                    </a-col>
+                    
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
                         <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl"/>
@@ -49,9 +28,7 @@
           </a-card>
           <a-card title="活动动态" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
-              <template slot="status" slot-scope="status">
-                <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
-              </template>
+                  
             </a-table>
           </a-card>
         </a-col>
@@ -146,7 +123,6 @@ export default {
       pieData1,
       sourceData,
       sourceData1,
-      c:["item", ["#4275FC","#41BDFD",]],
       c1:["item", ["#F56367","#FFB535",]],
       projects: [],
       loading: true,
@@ -176,8 +152,8 @@ export default {
       operationColumns: [
         {
           title: '编号',
-          dataIndex: 'type',
-          key: 'type'
+          dataIndex: 'number',
+          key: 'number'
         },
         {
           title: '活动名称',
@@ -186,67 +162,74 @@ export default {
         },
         
         {
-          title: '开始时间',
-          dataIndex: 'updatedAt',
-          key: 'updatedAt'
+          title: '参与明星',
+          dataIndex: 'cymx',
+          key: 'cymx',
+          
         },
         {
-          title: '活动分类',
-          dataIndex: 'remark',
-          key: 'remark'
+          title: '活动时间',
+          dataIndex: 'hdss',
+          key: 'hdss'
         },
         {
-          title: '状态',
-          dataIndex: 'status',
-          key: 'status',
-          scopedSlots: { customRender: 'status' }
+          title: '出厂总额',
+          dataIndex: 'ccze',
+          key: 'ccze'
         },
+        {
+          title: '已付款',
+          dataIndex: 'yfk',
+          key: 'yfk'
+        },
+       
       ],
       operation1: [
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op1',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op2',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'reject'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op3',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'authen'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op4',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agreeing'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op5',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        }
-        
-        
-        
-        
+            {
+                  key: '1',
+                  number: '01',
+                  name: '篮球',
+                  cymx: '姚明',
+                  hdss: '2016-09-21  08:50:08',
+                  ccze: '2.00',
+                  yfk: '1000',
+            },
+            {
+                  key: '2',
+                  number: '01',
+                  name: '篮球',
+                  cymx: '姚明',
+                  hdss: '2016-09-21  08:50:08',
+                  ccze: '2.00',
+                  yfk: '1000',
+            },
+            {
+                  key: '3',
+                  number: '01',
+                  name: '篮球',
+                  cymx: '姚明',
+                  hdss: '2016-09-21  08:50:08',
+                  ccze: '2.00',
+                  yfk: '1000',
+            },
+            {
+                  key: '4',
+                  number: '01',
+                  name: '篮球',
+                  cymx: '姚明',
+                  hdss: '2016-09-21  08:50:08',
+                  ccze: '2.00',
+                  yfk: '1000',
+            },
+            {
+                  key: '5',
+                  number: '01',
+                  name: '篮球',
+                  cymx: '姚明',
+                  hdss: '2016-09-21  08:50:08',
+                  ccze: '2.00',
+                  yfk: '1000',
+            },
       ],
       
     }
@@ -276,24 +259,7 @@ export default {
     },
   },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        'agree': '已审批',
-        'reject': '驳回',
-        'authen': '已认证',
-        'agreeing': '未审批'
-      }
-      return statusMap[status]
-    },
-    statusTypeFilter (type) {
-      const statusTypeMap = {
-        'agree': 'success',
-        'reject': 'error',
-        'authen': 'processing',
-        'agreeing': 'warning'
-      }
-      return statusTypeMap[type]
-    }
+    
   }
 }
 </script>
@@ -306,7 +272,7 @@ export default {
     height: auto !important;
   }
 }
-#home{
+#myhome{
 	padding: 24px;
     .my-cards{
         .ant-card-body{

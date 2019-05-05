@@ -1,4 +1,4 @@
-<template>
+0<template>
       <div id="cjhd">
             <div class="cjhd-header">
                   <a-card title="活动进度">
@@ -37,6 +37,10 @@
                               </template>
                         </a-list-item>
                   </a-list>
+                  <div class="btn-bottom">
+                        <a-button>取消</a-button>
+                        <a-button type="primary">提交审批</a-button>
+                  </div>
                   <a-modal
                         :title="title"
                         :visible="visible"
@@ -251,7 +255,7 @@
                                                                   v-for=" tag in tags"
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -265,7 +269,7 @@
                                                                   v-for=" tag in tags1" 
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -279,7 +283,7 @@
                                                                   :key="tag"
                                                                   v-for=" tag in tags2"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -311,7 +315,7 @@
                                                                   v-for=" tag in tags4"
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -325,7 +329,7 @@
                                                                   v-for=" tag in tags5" 
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -339,7 +343,7 @@
                                                                   :key="tag"
                                                                   v-for=" tag in tags6"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -353,7 +357,7 @@
                                                                   v-for=" tag in tags7"
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -367,7 +371,7 @@
                                                                   v-for=" tag in tags8"
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -438,6 +442,9 @@
 <style lang="less" scoped>
 #cjhd{
       padding: 20px 30px;
+	.cjhd-header{
+		.ant-card-bordered{border: 0;}
+	}
       .cjhd-content{
             margin-top: 20px;
             background-color: #fff;
@@ -476,6 +483,15 @@
                               }
                         }
                   }
+            }
+            .btn-bottom{
+                  padding-top: 20px;
+                  border-top: 1px solid #ccc;
+                  display: flex;
+                  justify-content: flex-end;
+                  button{
+                        margin: 0 10px;
+                  } 
             }
       }
 }
@@ -702,7 +718,8 @@ export default {
             handleChange1 ({ fileList }) {
                   this.fileList = fileList
             },
-            handleChange (tag, checked) {
+            //
+            handleChangeT (tag, checked) {
                   const { selectedTags } = this
                   const nextSelectedTags = checked
                   ? [...selectedTags, tag]

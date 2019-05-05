@@ -70,22 +70,7 @@ const projects = () => {
       status: 1,
       updatedAt: '2018-07-26 00:00:00'
     },
-    {
-      id: 5,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-      title: 'Bootstrap',
-      description: '凛冬将至',
-      status: 1,
-      updatedAt: '2018-07-26 00:00:00'
-    },
-    {
-      id: 6,
-      cover: 'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png',
-      title: 'Vue',
-      description: '生命就像一盒巧克力，结果往往出人意料',
-      status: 1,
-      updatedAt: '2018-07-26 00:00:00'
-    }
+    
     ],
     'pageSize': 10,
     'pageNo': 0,

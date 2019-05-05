@@ -2,26 +2,29 @@
 <template>
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text"></span></div>
-      <div>搞手</div>
+      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div>管理员用户</div>
     </div>
     <div slot="extra">
       <a-row class="more-info">
-        <a-col :span="8">
-          <head-info title="赞助待审批" content="56" :center="false" :bordered="false"/>
+        <a-col :span="6">
+          <head-info title="搞手待审批" content="56" :center="false" :bordered="false"/>
         </a-col>
-        <a-col :span="8">
-          <head-info title="明星待审批" content="24" :center="false" :bordered="false"/>
+        <a-col :span="6">
+          <head-info title="赞助商待审批" content="24" :center="false" :bordered="false"/>
         </a-col>
-        <a-col :span="8">
-          <head-info title="活动待审批" content="2,223" :center="false" />
+        <a-col :span="6">
+          <head-info title="经纪人待审批" content="2,223" :center="false" />
+        </a-col>
+        <a-col :span="6">
+          <head-info title="明星待审批" content="2,223" :center="false" />
         </a-col>
       </a-row>
     </div>
-    <div id="home">
+    <div id="adminIndex">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
+          <!-- <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                   <a-row>
@@ -46,7 +49,7 @@
                   </a-row>
               </div>
             </div>
-          </a-card>
+          </a-card> -->
           <a-card title="活动动态" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
               <template slot="status" slot-scope="status">
@@ -56,13 +59,13 @@
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card title="" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 20}">
+          <!-- <a-card title="" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 20}">
             <div class="item-group">
               <h6>Ready to publish your Campaign</h6>
               <p>Upgrade now to make your campaign public and start receiving application.</p>
-              <a-button type="primary" @click="$router.push({name: 'cjhd'})">发布活动</a-button>
+              <a-button type="primary">发布活动</a-button>
             </div>
-        </a-card>
+        </a-card> -->
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
             <a slot="extra">全部消息</a>
             <div>
@@ -306,52 +309,8 @@ export default {
     height: auto !important;
   }
 }
-#home{
-	padding: 24px;
-    .my-cards{
-        .ant-card-body{
-    position: relative;
-    height: 227px;
-    overflow: hidden;
-		margin-bottom: 24px;
-      .item-row{
-        position: absolute;
-        left: 0;
-        top: 0px;
-          .item-box{
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          .desc{
-          display: flex;
-          
-          flex-direction: column;
-          justify-content: flex-start;
-          padding-top: 85px;
-          h5{
-            color: #333;
-            font-size: 20px;
-            span{
-              color: #666;
-              font-size: 14px;
-            }
-          }
-          p{
-            font-size: 15px;
-            &:nth-child(1){
-              color: #42BCFD;
-            }
-            &:nth-child(2){
-              color: #4075FC;
-            }
-          }
-        }
-      }
-      }
-      
-}
-    }
-		.my-activity{border: 0;}
+#adminIndex{
+	.my-activity{border: 0;}
 }
 
 

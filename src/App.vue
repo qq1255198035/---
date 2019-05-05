@@ -26,4 +26,7 @@ export default {
   #app {
     height: 100%;
   }
+  ul,li{
+    list-style: none;
+  }
 </style>

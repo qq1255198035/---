@@ -1,5 +1,5 @@
 <template>
-      <div id="accountSet">
+      <div id="zhsz">
             <a-row :gutter="200" type="flex" justify="center">
                   <a-col :lg="9">
                         <div>
@@ -107,7 +107,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-#accountSet{
+#zhsz{
       background-color: #fff;
       padding: 50px 0;
       .ant-form-item{
