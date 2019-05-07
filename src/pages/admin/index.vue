@@ -310,6 +310,7 @@ export default {
   }
 }
 #adminIndex{
+	margin: 24px;
 	.my-activity{border: 0;}
 }
 

@@ -1,5 +1,6 @@
 <template>
       <div id="mxgl">
+            <page-header :title="pageTitle"></page-header>
             <glTitle></glTitle>
             <div class="mxgl-content">
                   <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
@@ -71,18 +72,22 @@
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-.mxgl-content{
+#mxgl{
+      margin: -24px -24px 0;
+      .mxgl-content{
       background-color: #fff;
+	margin: 24px;
+	padding: 20px;
       .my-cards{
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            padding: 0 120px 50px;
+            padding: 0 0 50px;
             
             .card-item{
                   width: 22%;
                   height: 423px;
-                  margin: 10px 0;
+                  margin: 20px;
                   border:1px solid #ccc;
                   border-radius: 10px;
                   padding: 0 20px;
@@ -148,10 +153,14 @@
             }
       }
 }
+}
+
 </style>
 <script>
 import glTitle from '@/components/glTitle/glTitle'
+import { mixinsTitle } from "@/utils/mixin.js";
 export default {
+      mixins:[mixinsTitle],
       components:{
             glTitle
       },

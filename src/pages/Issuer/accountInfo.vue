@@ -1,5 +1,6 @@
 <template>
       <div id="accountInfo">
+            <page-header :title="pageTitle"></page-header>
             <a-row :gutter="24">
                   <a-col :md="24" :lg="7">
                         <a-card :bordered="false">
@@ -34,7 +35,7 @@
                   <a-col :md="24" :lg="17">
                         <div class="info-box">
                               <div class="title">
-                                    <a-button type="primary">账户设置</a-button>
+                                    <a-button type="primary" @click="$router.push({name: 'accountSet'})">账户设置</a-button>
                               </div>
                               <a-divider :dashed="true"/>
                               <div class="content">
@@ -134,7 +135,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import imgUrl from '@/assets/123.png'
+import { mixinsTitle } from "@/utils/mixin.js";
 export default {
+      mixins:[mixinsTitle],
       data(){
             return{
                   imgUrl

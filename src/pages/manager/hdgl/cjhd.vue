@@ -56,6 +56,7 @@
 </template>
 <style lang="less" scoped>
 #cjdhd{
+	margin: 24px;
       .my-calendar{
             background-color: #fff;
       }
@@ -63,22 +64,23 @@
 .my-popup{
       .items{
                   background-color: #fff;
-                  border: 1px solid #ccc;
                   border-radius: 5px;
                   width: 100%;
-                  padding: 20px 10px;
+                  padding: 20px 10px 0;
                   margin: 10px 0;
                   .my-table{
-                        padding-top: 20px;
+				margin: 20px 20px 0;
+				border-top:1px solid #e8e8e8;
                   }
                   .title{
                         display: flex;
+				margin-bottom: 20px;
                         .item{
                         display: flex;
                         justify-content: space-around;
                         .profile-info{
                               margin-left: 20px;
-                              
+                              h2{color: #21C5C7 !important;}                              
                               p{
                                     color: #999;
                                     margin-bottom: 0;

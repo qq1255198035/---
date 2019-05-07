@@ -1,5 +1,6 @@
 <template>
       <div id="zhxx">
+            <page-header :title="pageTitle"></page-header>
             <a-row :gutter="24">
                   <a-col :md="24" :lg="7">
                         <a-card :bordered="false">
@@ -133,6 +134,7 @@
 </style>
 <script>
 import { mapGetters } from 'vuex'
+import { mixinsTitle } from "@/utils/mixin.js";
 import imgUrl from '@/assets/123.png'
 export default {
       data(){
@@ -140,6 +142,7 @@ export default {
                   imgUrl
             }
       },
+      mixins:[mixinsTitle],
       methods: {
             ...mapGetters(['nickname', 'avatar']),
     }

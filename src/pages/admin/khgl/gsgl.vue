@@ -95,6 +95,7 @@
   opacity: 0;
 }
 #gsgl{
+	margin: 24px;
       .gsgl-header{
             background-color: #fff;
             margin: 20px 0;
@@ -114,6 +115,7 @@
             
       }
       .gsgl-content{
+		padding: 20px;
             background-color: #fff;
             .my-cards{
                   display: flex;

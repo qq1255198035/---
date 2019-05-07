@@ -1,7 +1,7 @@
 // import Vue from 'vue'
 import { deviceEnquire, DEVICE_TYPE } from '@/utils/device'
 import { mapState } from 'vuex'
-
+import PageHeader from '@/components/PageHeader'
 // const mixinsComputed = Vue.config.optionMergeStrategies.computed
 // const mixinsMethods = Vue.config.optionMergeStrategies.methods
 
@@ -49,7 +49,26 @@ const mixinDevice = {
     }
   }
 }
-
+const mixinsTitle = {
+  
+  data(){
+    return {
+      pageTitle: null,
+    }
+  },
+  components: {
+    'page-header': PageHeader,
+  },
+  methods:{
+    getPageMeta() {
+      // eslint-disable-next-line
+      this.pageTitle = this.$route.meta.title
+    },
+  },
+  mounted(){
+    this.getPageMeta()
+  }
+}
 const AppDeviceEnquire = {
   mounted () {
     const { $store } = this
@@ -73,4 +92,4 @@ const AppDeviceEnquire = {
   }
 }
 
-export { mixin, AppDeviceEnquire, mixinDevice }
+export { mixin, AppDeviceEnquire, mixinDevice, mixinsTitle }

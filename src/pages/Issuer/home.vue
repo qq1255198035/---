@@ -2,19 +2,19 @@
 <template>
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text"></span></div>
+      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>搞手</div>
     </div>
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <head-info title="赞助待审批" content="56" :center="false" :bordered="false"/>
+          <head-info title="赞助待审批" :content="number.zzdsp" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info title="明星待审批" content="24" :center="false" :bordered="false"/>
+          <head-info title="明星待审批" :content="number.mxdsp" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info title="活动待审批" content="2,223" :center="false" />
+          <head-info title="活动待审批" :content="number.hddsp" :center="false" />
         </a-col>
       </a-row>
     </div>
@@ -36,7 +36,7 @@
                     </a-col>
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
-                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl"/>
+                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl1"/>
                         <v-tooltip :showTitle="false" dataKey="item*percent" />
                         <v-axis />
                         <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
@@ -48,7 +48,7 @@
             </div>
           </a-card>
           <a-card title="活动动态" class="my-activity">
-            <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
+            <a-table :columns="operationColumns" :dataSource="operation" :pagination="false">
               <template slot="status" slot-scope="status">
                 <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
               </template>
@@ -64,7 +64,7 @@
             </div>
         </a-card>
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
-            <a slot="extra">全部消息</a>
+            <a slot="extra" @click="$router.push({name: 'notices'})">全部消息</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -77,7 +77,7 @@
                     </div>
                   </a-card-meta>
                   <div class="project-item">
-                    <span class="datetime">9小时前</span>
+                    <span class="datetime">{{item.time}}</span>
                   </div>
                 </a-card>
               </a-card-grid>
@@ -91,61 +91,52 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { mapGetters } from 'vuex'
 
+import api from "@/api/index";
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
 
-import { getRoleList, getServiceList } from '@/api/manage'
-const sourceData = [
-  { item: '现金', count: 32.2 },
-  { item: '实物', count: 21 },
-  
-]
-const sourceData1 = [
-  { item: '未付', count: 60 },
-  { item: '已付', count: 10 },
-  
-]
+let sourceData = [{
+              "item": "现金",
+              "count": null
+            }, 
+            {
+              "item": "实物",
+              "count": null
+            }]
+let sourceData1 = [{
+              "item": "未付",
+              "count": null
+            }, 
+            {
+              "item": "已付",
+              "count": null
+            }]
 const DataSet = require('@antv/data-set')
-const dv = new DataSet.View().source(sourceData)
-const dv1 = new DataSet.View().source(sourceData1)
-dv.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
-dv1.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
+let dv = new DataSet.View().source(sourceData)
+let dv1 = new DataSet.View().source(sourceData1)
 const pieScale = [{
   dataKey: 'percent',
   min: 0,
   formatter: '.0%'
 }]
-const pieData = dv.rows
-const pieData1 = dv1.rows
+ let pieData = dv.rows
+ let pieData1 = dv1.rows
 export default {
-  name: 'Workplace',
   components: {
     PageView,
-    HeadInfo,
-    Radar
+    HeadInfo
   },
   data () {
     return {
       timeFix: timeFix(),
       avatar: '',
+      number:{},
       user: {},
       pieData,
       pieData1,
-      sourceData,
-      sourceData1,
+      operation:[],
+      //饼图填充颜色
       c:["item", ["#4275FC","#41BDFD",]],
       c1:["item", ["#F56367","#FFB535",]],
       projects: [],
@@ -154,46 +145,54 @@ export default {
       activities: [],
       teams: [],
       pieScale,
+      //饼图描边颜色参数
       pieStyle: {
         stroke: '#fff',
         lineWidth: 1
       },
       itemTpl: (value, color, checked, index) => {
-    const obj = dv.rows[index];
-    checked = checked ? 'checked' : 'unChecked';
-    return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
-      '" data-value="' + value + '" data-color=' + color +
-      ' style="cursor: pointer;font-size: 14px;">' +
-      '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
-      '<span class="g2-legend-text">' + value + '</span></td>' +
-      '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
-      '</tr>';
-  },
-      
+        const obj = dv.rows[index];
+        checked = checked ? 'checked' : 'unChecked';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
+          '" data-value="' + value + '" data-color=' + color +
+          ' style="cursor: pointer;font-size: 14px;">' +
+          '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
+          '<span class="g2-legend-text">' + value + '</span></td>' +
+          '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
+          '</tr>';
+      },
+      itemTpl1: (value, color, checked, index) => {
+        const obj = dv1.rows[index];
+        checked = checked ? 'checked' : 'unChecked';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
+          '" data-value="' + value + '" data-color=' + color +
+          ' style="cursor: pointer;font-size: 14px;">' +
+          '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
+          '<span class="g2-legend-text">' + value + '</span></td>' +
+          '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
+          '</tr>';
+      },
       // data
-      
-      
       operationColumns: [
         {
           title: '编号',
-          dataIndex: 'type',
-          key: 'type'
+          dataIndex: 'num',
+          key: 'num'
         },
         {
           title: '活动名称',
           dataIndex: 'name',
           key: 'name'
         },
-        
         {
           title: '开始时间',
-          dataIndex: 'updatedAt',
-          key: 'updatedAt'
+          dataIndex: 'time',
+          key: 'time'
         },
         {
           title: '活动分类',
-          dataIndex: 'remark',
-          key: 'remark'
+          dataIndex: 'classify',
+          key: 'classify'
         },
         {
           title: '状态',
@@ -202,53 +201,6 @@ export default {
           scopedSlots: { customRender: 'status' }
         },
       ],
-      operation1: [
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op1',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op2',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'reject'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op3',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'authen'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op4',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agreeing'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op5',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        }
-        
-        
-        
-        
-      ],
-      
     }
   },
   computed: {
@@ -259,19 +211,63 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-
-    
   },
   mounted () {
+    this.getTable()
+    this.getPie()
     this.getProjects()
+    this.getNumber()
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome']),
+    
     getProjects () {
-      this.$http.get('/list/search/projects')
+      this.$http.get(api.IssHomeMsg)
         .then(res => {
-          this.projects = res.result && res.result.data
-          this.loading = false
+          if(res.status == 200){
+            this.projects = res.data.slice(0,4)
+            this.loading = false
+          }
+        })
+    },
+    getNumber () {
+      this.$http.get(api.IssHomeNum)
+        .then(res => {
+          if(res.status == 200){
+            //console.log(res)
+            this.number = res.data
+          }
+        })
+    },
+    getTable(){
+      this.$http.get(api.IssHomeTable)
+        .then(res => {
+            if(res.status == 200){
+              this.operation = res.data
+            }
+        })
+    },
+    getPie(){
+      this.$http.get(api.IssHomePie)
+        .then(res => {
+            if(res.status == 200){
+              this.pieData[0].count= res.data.pie1[0].count
+              this.pieData[1].count= res.data.pie1[1].count
+              this.pieData1[0].count= res.data.pie2[0].count
+              this.pieData1[1].count= res.data.pie2[1].count
+              dv.transform({
+                type: 'percent',
+                field: 'count',
+                dimension: 'item',
+                as: 'percent'
+              })
+              dv1.transform({
+                type: 'percent',
+                field: 'count',
+                dimension: 'item',
+                as: 'percent'
+              })
+              console.log(this.pieData)
+            }
         })
     },
   },

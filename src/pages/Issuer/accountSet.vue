@@ -1,5 +1,6 @@
 <template>
       <div id="accountSet">
+            <page-header :title="pageTitle"></page-header>
             <a-row :gutter="200" type="flex" justify="center">
                   <a-col :lg="9">
                         <div>
@@ -90,12 +91,14 @@ function getBase64 (img, callback) {
       reader.readAsDataURL(img)
 }
 import imgUrl from "@/assets/a1.jpg"
+import { mixinsTitle } from "@/utils/mixin.js";
 export default {
       data(){
             return{
                   imgUrl
             }
       },
+      mixins:[mixinsTitle],
       methods: {
             handleChange (info) {
                   getBase64(info.file.originFileObj, (imgUrl) => {
@@ -109,7 +112,7 @@ export default {
 <style lang="less" scoped>
 #accountSet{
       background-color: #fff;
-      padding: 50px 0;
+      
       .ant-form-item{
             width: 100%;
       }

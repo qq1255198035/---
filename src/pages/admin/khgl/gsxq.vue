@@ -48,6 +48,7 @@
 </template>
 <style lang="less" scoped>
 #gsxq{
+	margin: 24px;
       .account-center-avatarHolder {
             text-align: center;
             margin-bottom: 24px;

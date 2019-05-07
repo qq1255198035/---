@@ -235,6 +235,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+#hdsp{
+	margin: 24px;
     .ant-avatar-lg {
         width: 48px;
         height: 48px;
@@ -256,4 +258,5 @@ export default {
             line-height: 22px;
         }
     }
+}
 </style>

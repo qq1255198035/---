@@ -28,7 +28,7 @@ module.exports = {
     ]
   },
 
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.resolve.alias
       .set('@$', resolve('src'))
       .set('@api', resolve('src/api'))
@@ -74,11 +74,9 @@ module.exports = {
         modifyVars: {
           /* less 变量覆盖，用于自定义 ant design 主题 */
 
-          /*
-          'primary-color': '#F5222D',
+          'primary-color': '#23C6C8',
           'link-color': '#F5222D',
-          'border-radius-base': '4px',
-          */
+          'border-radius-base': '4px'
         },
         javascriptEnabled: true
       }

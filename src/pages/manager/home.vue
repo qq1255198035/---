@@ -69,7 +69,7 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapGetters } from 'vuex'
-
+import { mapActions } from 'vuex'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
@@ -247,9 +247,11 @@ export default {
   },
   mounted () {
     this.getProjects()
+    this.conlog();
   },
   methods: {
     ...mapGetters(['nickname', 'welcome']),
+    ...mapActions(['conlog']),
     getProjects () {
       this.$http.get('/list/search/projects')
         .then(res => {

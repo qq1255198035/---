@@ -10,7 +10,8 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+    tel: '',
   },
 
   mutations: {
@@ -29,6 +30,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_TEL:(state,tel)=>{
+      state.tel = tel
     }
   },
 
@@ -65,13 +69,14 @@ const user = {
             role.permissionList = role.permissions.map(permission => { return permission.permissionId })
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
+            
           } else {
             reject(new Error('getInfo: roles must be a non-null array !'))
           }
 
           commit('SET_NAME', { name: result.name, welcome: welcome() })
           commit('SET_AVATAR', result.avatar)
-
+          commit('SET_TEL', result.telephone)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -93,7 +98,7 @@ const user = {
         })
       })
     }
-
+    
   }
 }
 

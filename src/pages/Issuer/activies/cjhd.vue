@@ -1,5 +1,6 @@
 0<template>
       <div id="cjhd">
+            <page-header :title="pageTitle"></page-header>
             <div class="cjhd-header">
                   <a-card title="活动进度">
                         <div class="secetion">
@@ -503,13 +504,16 @@ function getBase64 (img, callback) {
   reader.addEventListener('load', () => callback(reader.result))
   reader.readAsDataURL(img)
 }
+import { mixinsTitle } from "@/utils/mixin.js";
 export default {
+      mixins:[mixinsTitle],
       data () {
             return {
                   visible: false,
                   confirmLoading: false,
                   formShow: -1,
                   title:'',
+                  pageTitle: null,
                   loading: false,
                   imageUrl: '',
                   previewVisible: false,
@@ -637,6 +641,7 @@ export default {
                   ],
             }
       },
+      
       methods:{  
             showModal(index,item) {
                   this.visible = true
@@ -644,6 +649,7 @@ export default {
                   this.formShow = index;
                   console.log(index)
             },
+            
             handleOk(e) {
                   this.ModalText = 'The modal will be closed after two seconds';
                   this.confirmLoading = true;
@@ -790,5 +796,6 @@ export default {
             this.form = this.$form.createForm(this);
             this.form.getFieldDecorator('keys', { initialValue: [], preserve: true });
       },
+      
 }
 </script>

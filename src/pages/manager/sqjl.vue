@@ -1,6 +1,6 @@
 <template>
       <div id="sqjl">
-            <page-header :title="pageTitle"></page-header>
+            
             <div class="sqjl-header">
                   <a-row :gutter="2">
                         <a-col :span="6">
@@ -77,7 +77,6 @@
 }
 </style>
 <script>
-import PageHeader from '@/components/PageHeader' 
 const statusMap = {
       0: {
             status: 'default',
@@ -101,9 +100,7 @@ const statusMap = {
       }
 }
 export default {
-      components: {
-            'page-header': PageHeader,
-      },
+     
       data(){
             return{
                   pageTitle: null,
@@ -167,13 +164,10 @@ export default {
             }
       },
       methods:{
-            getPageMeta () {
-                  // eslint-disable-next-line
-                  this.pageTitle = this.$route.meta.title
-            },
+           
       },
       mounted () {
-            this.getPageMeta();
+            
       
       },
       filters: {

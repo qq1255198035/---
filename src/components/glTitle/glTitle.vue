@@ -1,7 +1,7 @@
 <template>
       <div class="zzgl-title">
             <div class="main">
-                  <a-col :span="8" class="item">
+                  <a-col :span="10" class="item">
                         <div class="profile-image">
                             <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
                         </div>
@@ -14,7 +14,7 @@
                                         长春市南关区卫星广场明珠花园</span>
                         </div>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="10">
                         <dl class="dl-horizontal">
                             <dt>分类：</dt>
                             <dd>篮球</dd>
@@ -76,8 +76,8 @@
                               }
                               .no-margins {
                                     font-size: 18px;
-                                    color: #333;
-                                    font-weight: 600;
+                                    color: #21C5C7;
+                                    font-weight: 500;
                               }
                               .my-icon{
                                     margin-right: 5px;

@@ -162,7 +162,7 @@
       margin: -24px -24px 0;
       .mxgl-header{
             background-color: #fff;
-            margin: 20px 0;
+            margin:0 0 20px;
             padding: 20px;
             .btn-box{
                   padding: 0 20px;

@@ -46,16 +46,16 @@
 }
 </style>
 <script>
-import PageHeader from '@/components/PageHeader' 
+import { mixinsTitle } from "@/utils/mixin.js";
 import HeadInfo from '@/components/tools/HeadInfo'
 import { STable } from '@/components'
 import { getServiceList } from '@/api/manage'
 export default {
       components: {
-            'page-header': PageHeader,
             STable,
             HeadInfo
       },
+      mixins:[mixinsTitle],
       data(){
             return{
                   pageTitle: null,
@@ -148,19 +148,13 @@ export default {
             }
       },
       methods:{
-            getPageMeta () {
-                  // eslint-disable-next-line
-                  this.pageTitle = this.$route.meta.title
-            },
+           
             onSelectChange (selectedRowKeys) {
                   console.log('selectedRowKeys changed: ', selectedRowKeys);
                   this.selectedRowKeys = selectedRowKeys
             }
       },
-      mounted () {
-            this.getPageMeta();
-            
-      },
+      
       filters: {
             
       },

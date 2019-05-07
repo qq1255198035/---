@@ -1,5 +1,6 @@
 <template>
       <div id="zzgl">
+            <page-header :title="pageTitle"></page-header>
             <glTitle></glTitle>
             <div class="zzgl-content">
                   <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
@@ -137,7 +138,7 @@
   opacity: 0;
 }
 #zzgl{
-      
+      margin: -24px -24px 0;
       .zzgl-content{
             background-color: #fff;
             padding: 20px;
@@ -279,6 +280,7 @@
 </style>
 <script>
 import glTitle from '@/components/glTitle/glTitle'
+import { mixinsTitle } from "@/utils/mixin.js";
 const sourceData = [
   { item: '现金', count: 50 },
   { item: '实物', count: 50 },
@@ -462,6 +464,7 @@ export default {
       components:{
             glTitle
       },
+      mixins:[mixinsTitle],
       data(){
             return{
                   btnShow: -1,

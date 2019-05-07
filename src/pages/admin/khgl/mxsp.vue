@@ -107,6 +107,7 @@
   opacity: 0;
 }
 #mxsp{
+	margin: 24px;
       .mxsp-header{
             background-color: #fff;
             margin: 20px 0;
@@ -126,6 +127,7 @@
             
       }
       .gsgl-content{
+		padding: 20px;
             background-color: #fff;
             .my-cards{
                   display: flex;

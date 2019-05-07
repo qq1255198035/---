@@ -119,7 +119,7 @@ export default {
 
 <style lang="less" scoped>
   .content {
-    margin: 10px 10px 0;
+    margin: 0;
     .link {
       margin-top: 16px;
       &:not(:empty) {

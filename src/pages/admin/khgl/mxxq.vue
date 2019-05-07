@@ -65,6 +65,7 @@
 </template>
 <style lang="less" scoped>
 #zzsxq{
+	margin: 24px;
       .account-center-avatarHolder {
             text-align: center;
             margin-bottom: 24px;

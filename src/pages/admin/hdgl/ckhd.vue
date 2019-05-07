@@ -34,7 +34,7 @@
                                                 <detail-list-item term="电子邮件">446996141@qq.com</detail-list-item>
                                                 <detail-list-item term="联系电话">150 0000 0000</detail-list-item>
                                           </detail-list>
-                                          <detail-list title="信息组">
+                                          <detail-list>
                                                 <detail-list-item term="活动地区" class="my-item">
                                                       <a-table :columns="columns" :dataSource="data" size="small" :pagination="false" class="my-table"/>
                                                 </detail-list-item>
@@ -181,8 +181,9 @@
                                     img{
                                           border: 1px solid #ccc;
                                           border-radius: 5px;
-                                          width: 300px;
+                                          width: 200px;
                                           height: 150px;
+							margin-right:20px;
                                     }
                               }
                         }

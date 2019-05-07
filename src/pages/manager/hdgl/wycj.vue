@@ -121,7 +121,7 @@
                               }
                               .profile-info{
                                     margin-left: 20px;
-                                    
+                                    h2{color: #21C5C7 !important;}
                                     p{
                                           color: #999;
                                           margin-bottom: 0;

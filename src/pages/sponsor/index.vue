@@ -94,7 +94,7 @@ const sourceData1 = [
   
 ]
 const DataSet = require('@antv/data-set')
-const dv = new DataSet.View().source(sourceData)
+const dv = new DataSet.createView().source(sourceData)
 const dv1 = new DataSet.View().source(sourceData1)
 dv.transform({
   type: 'percent',

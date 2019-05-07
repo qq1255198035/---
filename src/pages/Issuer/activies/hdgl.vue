@@ -1,10 +1,27 @@
 <template>
       <div id="hdgl">
-            <div class="header" style="margin-bottom: 24px;">
+            <page-header :title="pageTitle"></page-header>
+            <div class="header">
                   <a-button type="primary" class="item-input" @click="$router.push({name: 'cjhd'})">创建活动</a-button>
                   <a-date-picker class="item-input"/>
-                  <a-select value="1" placeholder="全国" style="width: 174px;" class="item-input">
-                        <a-select-option value="1">全国</a-select-option>
+                  <a-select
+                        v-decorator="[
+                        'select-multiple', {
+                            rules: [{ required: true, message: 'Please select your favourite colors!', type: 'array'}],
+                        }]"
+                        mode="multiple"
+                        placeholder="Please select favourite colors"
+                        style="width: 174px;"
+                    >
+                        <a-select-option value="red">
+                        Red
+                        </a-select-option>
+                        <a-select-option value="green">
+                        Green
+                        </a-select-option>
+                        <a-select-option value="blue">
+                        Blue
+                        </a-select-option>
                   </a-select>
                   <a-select value="1" placeholder="活动类型" style="width: 174px;" class="item-input">
                         <a-select-option value="1">活动类型</a-select-option>
@@ -13,117 +30,55 @@
                   <a-input-search placeholder="请输入中文活动名称" @search="onSearch" enterButton="搜索" style="width: 350px;" class="item-input"/>
             </div>
             <div class="main">
-                <div class="show-item">
-                    <a-col :span="11" class="my-item">
+                <div class="show-item" v-if="cardList.length > 0">
+                    <a-col :span="11" class="my-item" v-for="(item ,index) in cardList" :key="index">
                         <div class="ibox float-e-margins">
                             <div class="ibox-content">
                                 <div class="first-row">
                                     <h2 class="ant-col-16 title">
-                                        This is standard IN+ Panel This is standard IN+ Panel
+                                        {{item.title}}
                                     </h2>
                                     <h2 class="ant-col-5 my-text">
-                                        $47.9 <span>万</span>
+                                        ${{item.price}} <span>万</span>
                                     </h2>
                                     <h2 class="ant-col-5 my-text">
-                                        9 <span>位</span>
+                                        {{item.num}} <span>位</span>
                                     </h2>    
                                 </div>
                                 <div class="second-row">
-                                    <span class="ant-col-16">开始时间：2019-01-01 20:00:00</span>
+                                    <span class="ant-col-16">开始时间：{{item.time}}</span>
                                     <span class="ant-col-5">已赞助</span>
                                     <span class="ant-col-5">参与明星</span>
                                 </div>
                                 <div class="third-row">
-                                    <span class="col-lg-12"><a-icon type="environment"/>吉林省 长春市 长春市南关区卫星广场明珠花园</span>
+                                    <span class="col-lg-12"><a-icon type="environment"/>{{item.adress}}</span>
                                 </div>
                                 
                             </div>
                             <div class="ibox-footer">
-                                <div class="button-box">
+                                <div class="button-box" v-if="item.code == 0">
                                     <a-button ghost class="btn-success" @click="$router.push({name:'details'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
                                     <div>
                                           <a-button ghost class="btn-primary" @click="$router.push({name: 'zzgl'})"> 赞助审批 </a-button>
                                           <a-button ghost class="btn-info" @click="$router.push({name: 'mxgl'})"> 明星审批 </a-button>
                                     </div>
-                                    
                                 </div>
-                                
-                            </div>
-                        </div>
-                    </a-col>
-                    <a-col :span="11" class="my-item">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-content">
-                                <div class="first-row">
-                                    <h2 class="ant-col-16 title">
-                                        This is standard IN+ Panel This is standard IN+ Panel
-                                    </h2>
-                                    <h2 class="ant-col-5 my-text">
-                                        $47.9 <span>万</span>
-                                    </h2>
-                                    <h2 class="ant-col-5 my-text">
-                                        9 <span>位</span>
-                                    </h2>    
-                                </div>
-                                <div class="second-row">
-                                    <span class="ant-col-16">开始时间：2019-01-01 20:00:00</span>
-                                    <span class="ant-col-5">已赞助</span>
-                                    <span class="ant-col-5">参与明星</span>
-                                </div>
-                                <div class="third-row">
-                                    <span class="col-lg-12"><a-icon type="environment"/>吉林省 长春市 长春市南关区卫星广场明珠花园</span>
-                                </div>
-                                
-                            </div>
-                            <div class="ibox-footer">
-                                <div class="button-box">
+                                <div class="button-box" v-if="item.code == 1">
                                     <a-button ghost class="btn-success" @click="$router.push({name:'details'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
-                                    
-                                    
                                 </div>
-                                
-                            </div>
-                        </div>
-                    </a-col>
-                    <a-col :span="11" class="my-item">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-content">
-                                <div class="first-row">
-                                    <h2 class="ant-col-16 title">
-                                        This is standard IN+ Panel This is standard IN+ Panel
-                                    </h2>
-                                    <h2 class="ant-col-5 my-text">
-                                        $47.9 <span>万</span>
-                                    </h2>
-                                    <h2 class="ant-col-5 my-text">
-                                        9 <span>位</span>
-                                    </h2>    
-                                </div>
-                                <div class="second-row">
-                                    <span class="ant-col-16">开始时间：2019-01-01 20:00:00</span>
-                                    <span class="ant-col-5">已赞助</span>
-                                    <span class="ant-col-5">参与明星</span>
-                                </div>
-                                <div class="third-row">
-                                    <span class="col-lg-12"><a-icon type="environment"/>吉林省 长春市 长春市南关区卫星广场明珠花园</span>
-                                </div>
-                                
-                            </div>
-                            <div class="ibox-footer">
-                                <div class="button-box">
+                                <div class="button-box" v-if="item.code == 2">
                                     <a-button ghost class="btn-success" @click="$router.push({name:'details'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
                                     <div>
                                           <a-button ghost class="btn-warning" @click="$router.push({name: 'cjhd'})">&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
                                           <a-button ghost class="btn-danger" @click="showDeleteConfirm"> &nbsp;&nbsp; 删 除 &nbsp;&nbsp; </a-button>
                                     </div>
-                                    
                                 </div>
-                                
                             </div>
                         </div>
                     </a-col>
+                    
                 </div>
-                <div class="hide-item" v-if="false">
+                <div class="hide-item" v-else>
                     <a-col :span="8">
                         <a-card title="" :bordered="false" :body-style="{padding: 20}">
                             <div class="item-group">
@@ -136,34 +91,53 @@
                 </div>
             </div>   
       </div>
-      
 </template>
 <script>
+import { mixinsTitle } from "@/utils/mixin.js";
+import api from "@/api/index"
 export default {
+        mixins:[mixinsTitle],
+        data(){
+            return{
+                cardList:[],
+            }
+        },
         methods: {
             onSearch (value) {
-            console.log(value)
+                console.log(value)
+            },
+            showDeleteConfirm() {
+                this.$confirm({
+                    title: 'Are you sure delete this task?',
+                    content: 'Some descriptions',
+                    okText: 'Yes',
+                    okType: 'danger',
+                    cancelText: 'No',
+                    onOk() {
+                        console.log('OK');
+                    },
+                    onCancel() {
+                        console.log('Cancel');
+                    },
+                });
+            },
+            getCardData(){
+                this.$http.get(api.IssHdglCard).then(res =>{
+                    if(res.status == 200){
+                       // console.log(res)
+                       this.cardList = res.data
+                    }
+                })
+            }
         },
-        showDeleteConfirm() {
-            this.$confirm({
-                title: 'Are you sure delete this task?',
-                content: 'Some descriptions',
-                okText: 'Yes',
-                okType: 'danger',
-                cancelText: 'No',
-                onOk() {
-                    console.log('OK');
-                },
-                onCancel() {
-                    console.log('Cancel');
-                },
-            });
-        },
-    },
+        mounted(){
+            this.getCardData();
+        }
 }
 </script>
 <style lang="less" scoped>
 #hdgl{
+    margin: -24px -24px 0;
     .header{
         display: flex;
         align-items: center;
