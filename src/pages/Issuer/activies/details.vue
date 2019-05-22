@@ -73,23 +73,29 @@
                                                 </li>
                                                 <li>
                                                       <span>受众群众：</span>
-                                                      <a-tag color="pink">pink</a-tag>
-                                                      <a-tag color="red">red</a-tag>
-                                                      <a-tag color="orange">orange</a-tag>
-                                                      <a-tag color="green">green</a-tag>
-                                                      <a-tag color="cyan">cyan</a-tag>
-                                                      <a-tag color="blue">blue</a-tag>
-                                                      <a-tag color="purple">purple</a-tag>
+                                                      <div>
+                                                            <a-tag color="pink">pink</a-tag>
+                                                            <a-tag color="red">red</a-tag>
+                                                            <a-tag color="orange">orange</a-tag>
+                                                            <a-tag color="green">green</a-tag>
+                                                            <a-tag color="cyan">cyan</a-tag>
+                                                            <a-tag color="blue">blue</a-tag>
+                                                            <a-tag color="purple">purple</a-tag>
+                                                      </div>
+                                                      
                                                 </li>
                                                 <li>
                                                       <span>活动特点：</span>
-                                                      <a-tag color="pink">pink</a-tag>
-                                                      <a-tag color="red">red</a-tag>
-                                                      <a-tag color="orange">orange</a-tag>
-                                                      <a-tag color="green">green</a-tag>
-                                                      <a-tag color="cyan">cyan</a-tag>
-                                                      <a-tag color="blue">blue</a-tag>
-                                                      <a-tag color="purple">purple</a-tag>
+                                                      <div>
+                                                            <a-tag color="pink">pink</a-tag>
+                                                            <a-tag color="red">red</a-tag>
+                                                            <a-tag color="orange">orange</a-tag>
+                                                            <a-tag color="green">green</a-tag>
+                                                            <a-tag color="cyan">cyan</a-tag>
+                                                            <a-tag color="blue">blue</a-tag>
+                                                            <a-tag color="purple">purple</a-tag>
+                                                      </div>
+                                                      
                                                 </li>
                                           </ul>
                                     </div> 

@@ -5,7 +5,7 @@
                         <a-col :span="8">
                               <div class="input-box">
                                     <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-date-picker class="my-picker"/>
+                                          <a-date-picker class="my-picker" @change="changeDate"/>
                                     </a-form-item>
                               </div>
                         </a-col>
@@ -234,6 +234,10 @@ export default {
       methods:{
             showModal() {
                   this.visible = true
+            },
+            changeDate(val,date){
+                  //选择的日期date
+                  console.log(val,date)
             },
             handleOk(e) {
                   this.ModalText = 'The modal will be closed after two seconds';

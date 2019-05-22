@@ -113,16 +113,23 @@
                                     </a-row>
 
                                     <a-form-item>
-                                    <a-button
-                                    size="large"
-                                    type="primary"
-                                    htmlType="submit"
-                                    class="register-button"
-                                    :loading="registerBtn"
-                                    @click.stop.prevent="handleSubmit"
-                                    :disabled="registerBtn">注册
-                                    </a-button>
-                                    <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
+                                          <a-button
+                                                size="large"
+                                                type="primary"
+                                                class="register-button"
+                                                @click.stop.prevent="current = '0'"
+                                                :disabled="registerBtn">上一步
+                                          </a-button>
+                                          <a-button
+                                                size="large"
+                                                type="primary"
+                                                htmlType="submit"
+                                                class="register-button"
+                                                :loading="registerBtn"
+                                                @click.stop.prevent="handleSubmit"
+                                                :disabled="registerBtn">注册
+                                          </a-button>
+                                          <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
                                     </a-form-item>
 
                               </a-form>
@@ -213,7 +220,8 @@
                   }
 
                   .register-button {
-                        width: 50%;
+                        width: 48%;
+                        margin: 0 1%;
                   }
 
                   .login {
@@ -397,7 +405,8 @@ export default {
                   duration: 4
                   })
                   this.registerBtn = false
-            }
+            },
+            
   },
   watch: {
     'state.passwordLevel' (val) {

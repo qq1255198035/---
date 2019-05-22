@@ -41,13 +41,7 @@
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card title="" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 20}">
-            <div class="item-group">
-              <h6>Ready to publish your Campaign</h6>
-              <p>Upgrade now to make your campaign public and start receiving application.</p>
-              <a-button type="primary" @click="$router.push({name: 'cjhd'})">发布活动</a-button>
-            </div>
-        </a-card>
+          
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
             <a slot="extra">全部消息</a>
             <div>
@@ -94,7 +88,7 @@ const sourceData1 = [
   
 ]
 const DataSet = require('@antv/data-set')
-const dv = new DataSet.createView().source(sourceData)
+const dv = new DataSet.View().source(sourceData)
 const dv1 = new DataSet.View().source(sourceData1)
 dv.transform({
   type: 'percent',

@@ -4,25 +4,7 @@
             <div class="header">
                   <a-button type="primary" class="item-input" @click="$router.push({name: 'cjhd'})">创建活动</a-button>
                   <a-date-picker class="item-input"/>
-                  <a-select
-                        v-decorator="[
-                        'select-multiple', {
-                            rules: [{ required: true, message: 'Please select your favourite colors!', type: 'array'}],
-                        }]"
-                        mode="multiple"
-                        placeholder="Please select favourite colors"
-                        style="width: 174px;"
-                    >
-                        <a-select-option value="red">
-                        Red
-                        </a-select-option>
-                        <a-select-option value="green">
-                        Green
-                        </a-select-option>
-                        <a-select-option value="blue">
-                        Blue
-                        </a-select-option>
-                  </a-select>
+                  <a-cascader :options="options" @change="onChange" placeholder="Please select" :showSearch="true"/>
                   <a-select value="1" placeholder="活动类型" style="width: 174px;" class="item-input">
                         <a-select-option value="1">活动类型</a-select-option>
                   </a-select>
@@ -100,6 +82,30 @@ export default {
         data(){
             return{
                 cardList:[],
+                options: [
+                        {
+                              value: 'zhejiang',
+                              label: 'Zhejiang',
+                              children: [
+                                    {
+                                          value: 'hangzhou',
+                                          label: 'Hangzhou',
+                                          
+                                    }
+                              ],
+                        }, 
+                        {
+                              value: 'jiangsu',
+                              label: 'Jiangsu',
+                              children: [
+                                    {
+                                          value: 'nanjing',
+                                          label: 'Nanjing',
+                        
+                                    }
+                              ],
+                        }
+                  ]
             }
         },
         methods: {
@@ -128,6 +134,9 @@ export default {
                        this.cardList = res.data
                     }
                 })
+            },
+            onChange(value) {
+                  console.log(value);
             }
         },
         mounted(){

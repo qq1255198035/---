@@ -25,7 +25,6 @@ export const asyncRouterMap = [
              {
                path: '/accountInfo',
                name: 'accountInfo',
-
                component: () => import('@/pages/Issuer/accountInfo'),
                meta: { title: '账户信息', keepAlive: true, icon: 'form', permission: ['dashboard'] }
              },
@@ -39,13 +38,13 @@ export const asyncRouterMap = [
              // 我的活动
 
              {
-               path: '/activies/hdgl',
+               path: '/ihdgl',
                name: 'hdgl',
                component: () => import('@/pages/Issuer/activies/hdgl'),
                meta: { title: '活动管理', keepAlive: false, icon: 'tool', permission: ['dashboard'] }
              },
              {
-               path: '/activies/zzgl',
+               path: '/zzgl',
                name: 'zzgl',
                hidden: true,
                component: () => import('@/pages/Issuer/activies/zzgl'),
@@ -53,25 +52,32 @@ export const asyncRouterMap = [
              },
 
              {
-               path: '/activies/mxgl',
+               path: '/mxgl',
                name: 'mxgl',
                hidden: true,
                component: () => import('@/pages/Issuer/activies/mxgl'),
                meta: { title: '明星管理', keepAlive: false, permission: ['dashboard'] }
              },
              {
-               path: '/activies/cjhd',
+               path: '/cjhd',
                name: 'cjhd',
                hidden: true,
                component: () => import('@/pages/Issuer/activies/cjhd'),
                meta: { title: '创建活动', keepAlive: true, permission: ['dashboard'] }
              },
              {
-               path: '/activies/details',
+               path: '/details',
                name: 'details',
                hidden: true,
                component: () => import('@/pages/Issuer/activies/details'),
                meta: { title: '查看活动', keepAlive: true, permission: ['dashboard'] }
+             },
+             {
+               path: '/starsdetail',
+               name: 'starsdetail',
+               hidden: true,
+               component: () => import('@/pages/Issuer/activies/starsdetail'),
+               meta: { title: '详情', keepAlive: false, permission: ['dashboard'] }
              },
 
              // 管理員
@@ -251,7 +257,7 @@ export const asyncRouterMap = [
                meta: { title: '首页', keepAlive: true, icon: bxAnaalyse, permission: ['index'] }
              },
              {
-               path: '/mxgl',
+               path: '/jjrmxgl',
                name: 'jjrmxgl',
                component: () => import('@/pages/manager/mxgl'),
                meta: { title: '明星管理', keepAlive: true, icon: bxAnaalyse, permission: ['index'] }
@@ -280,10 +286,10 @@ export const asyncRouterMap = [
                    name: 'sqjl',
                    component: () => import('@/pages/manager/sqjl'),
                    meta: { title: '申请记录', keepAlive: true, permission: ['index'] }
-                 },
+                 }
                ]
              },
-             
+
              {
                path: '/xxtz',
                name: 'xxtz',

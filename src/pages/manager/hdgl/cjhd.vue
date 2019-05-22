@@ -146,8 +146,10 @@ export default {
             getListData(value) {
                   let listData;
                   //value.month()
-                  
-                  switch (value.date()) {
+                  //var date = value.year() 
+                  console.log(value.year(),value.date(),value.month()  )
+                  if(value.month() === 4){
+                         switch (value.date()) {
                   case 8:
                   listData = [
                         { type: 'warning', content: '主教练培训.' },
@@ -168,6 +170,8 @@ export default {
                   default:
                   }
                   return listData || [];
+                  }
+                 
             },
             getMonthData(value) {
                   if (value.month() === 8) {

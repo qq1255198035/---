@@ -62,18 +62,18 @@
                                                 <a-input placeholder="请输入英文名称" class="my-input"/>
                                           </a-form-item>
                                           <a-form-item label="选择日期" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                                <a-range-picker style="width: 100%;"/>
+                                                <a-range-picker style="width: 100%;" @change="onChangeDate"/>
                                           </a-form-item>
                                           <a-form-item label="选择时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
-                                                <a-time-picker/>
+                                                <a-time-picker @change="onChangeTime"/>
                                           </a-form-item>
-                                          <a-form-item label="选择地点" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
+                                          <a-form-item label="选择地点" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}" :required="true">
                                                 <a-input-group compact style="width: 93%; margin-right: 8px">
-                                                      <a-select defaultValue="Zhejiang" >
+                                                      <a-select defaultValue="Zhejiang" @change="onChangepro">
                                                             <a-select-option value="Zhejiang">Zhejiang</a-select-option>
                                                             <a-select-option value="Jiangsu">Jiangsu</a-select-option>
                                                       </a-select>
-                                                      <a-input style="width: 70%" defaultValue="Xihu District, Hangzhou"/>
+                                                      <a-input style="width: 70%" placeholder="Xihu District, Hangzhou" v-model="city"/>
                                                 </a-input-group>
                                           </a-form-item>
                                           <a-form-item
@@ -298,7 +298,7 @@
                                                                   v-for=" tag in tags3"
                                                                   :key="tag"
                                                                   :checked="selectedTags.indexOf(tag) > -1"
-                                                                  @change="(checked) => handleChange(tag, checked)"
+                                                                  @change="(checked) => handleChangeT(tag, checked)"
                                                                   class="my-tag"
                                                             >
                                                             {{tag}}
@@ -511,6 +511,7 @@ export default {
             return {
                   visible: false,
                   confirmLoading: false,
+                  city: "",
                   formShow: -1,
                   title:'',
                   pageTitle: null,
@@ -649,7 +650,17 @@ export default {
                   this.formShow = index;
                   console.log(index)
             },
-            
+            onChangepro(value){
+                  console.log(value);
+            },
+            onChangeDate(date, dateString) {
+                  //dateString 选择日期 Arr
+                  console.log(dateString);
+            },
+             onChangeTime(date, dateString) {
+                  //dateString 选择时间 Str
+                  console.log(dateString);
+            },
             handleOk(e) {
                   this.ModalText = 'The modal will be closed after two seconds';
                   this.confirmLoading = true;

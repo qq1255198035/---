@@ -266,7 +266,7 @@ export default {
                 dimension: 'item',
                 as: 'percent'
               })
-              console.log(this.pieData)
+              
             }
         })
     },

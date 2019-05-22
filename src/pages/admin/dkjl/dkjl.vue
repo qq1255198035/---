@@ -11,7 +11,7 @@
                   <div class="my-stable">
                         <a-table :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :columns="columns" :dataSource="data">
                               <template slot="action">
-                                    <a-button type="primary" ghost>查 看</a-button>
+                                    <a-button type="primary" ghost @click="$router.push({name: 'dkxq'})">查 看</a-button>
                               </template>
                         </a-table>
                   </div>

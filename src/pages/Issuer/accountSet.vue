@@ -1,12 +1,12 @@
 <template>
       <div id="accountSet">
             <page-header :title="pageTitle"></page-header>
-            <a-row :gutter="200" type="flex" justify="center">
+            <a-row :gutter="200" type="flex" justify="center" style="padding: 20px 0">
                   <a-col :lg="9">
                         <div>
                               <a-form layout="vertical">
                                     <a-form-item label="邮箱">
-                                                <a-input placeholder="input placeholder" />
+                                                <a-input placeholder="input placeholder" :disabled="true"/>
                                     </a-form-item>
                                     <a-form-item label="公司名称">
                                                 <a-input placeholder="input placeholder" />
@@ -25,14 +25,7 @@
                                     </a-form-item>
                                     <a-form-item label="所在省市">
                                           <div class="select-box">
-                                                <a-select defaultValue="浙江省">
-                                                      <a-select-option value="china">浙江省</a-select-option>
-                                                      <a-select-option value="hongkong">吉林省</a-select-option>
-                                                </a-select>
-                                                <a-select defaultValue="中国">
-                                                      <a-select-option value="china">杭州市</a-select-option>
-                                                      <a-select-option value="hongkong">长春</a-select-option>
-                                                </a-select>
+                                                <a-cascader :options="options" @change="onChange" placeholder="Please select" :showSearch="true"/>
                                           </div>
                                           
                                     </a-form-item>
@@ -69,9 +62,9 @@
                               </div>
                               <div class="top">
                                     <p>营业执照</p>
-                                    <a-avatar :src="imgUrl" :size="130"/>
+                                    <a-avatar :src="imgUrl1" :size="130"/>
                                     <template>
-                                          <a-upload name="avatar" action="" @change="handleChange" :showUploadList="false">
+                                          <a-upload name="avatar" action="" @change="handleChange1" :showUploadList="false">
                                                 <a-button>
                                                       <a-icon type="upload" /> 更换营业执照
                                                 </a-button>
@@ -91,11 +84,37 @@ function getBase64 (img, callback) {
       reader.readAsDataURL(img)
 }
 import imgUrl from "@/assets/a1.jpg"
+import imgUrl1 from "@/assets/a1.jpg"
 import { mixinsTitle } from "@/utils/mixin.js";
 export default {
       data(){
             return{
-                  imgUrl
+                  imgUrl,
+                  imgUrl1,
+                  options: [
+                        {
+                              value: 'zhejiang',
+                              label: 'Zhejiang',
+                              children: [
+                                    {
+                                          value: 'hangzhou',
+                                          label: 'Hangzhou',
+                                          
+                                    }
+                              ],
+                        }, 
+                        {
+                              value: 'jiangsu',
+                              label: 'Jiangsu',
+                              children: [
+                                    {
+                                          value: 'nanjing',
+                                          label: 'Nanjing',
+                        
+                                    }
+                              ],
+                        }
+                  ]
             }
       },
       mixins:[mixinsTitle],
@@ -105,8 +124,17 @@ export default {
                         this.imgUrl = imgUrl      
                   })
                   console.log(info)
+            },
+            handleChange1 (info) {
+                  getBase64(info.file.originFileObj, (imgUrl) => {
+                        this.imgUrl1 = imgUrl      
+                  })
+                  console.log(info)
+            },
+            onChange(value) {
+                  console.log(value);
             }
-    },
+      },
 }
 </script>
 <style lang="less" scoped>
