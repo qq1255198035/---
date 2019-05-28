@@ -33,6 +33,11 @@
                           <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
                           <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                         </v-chart>
+                        <div class="calc-price">
+                          总计：￥
+                          <span>10000</span>
+                        </div>
+                        
                     </a-col>
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
@@ -42,6 +47,10 @@
                         <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
                         <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                       </v-chart>
+                      <div class="calc-price">
+                          总计：￥
+                          <span>10000</span>
+                      </div>
                     </a-col>
                   </a-row>
               </div>
@@ -66,7 +75,7 @@
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
             <a slot="extra" @click="$router.push({name: 'notices'})">全部消息</a>
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
+              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in notice">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
@@ -91,7 +100,7 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-
+import { mapActions,mapGetters } from 'vuex'
 import api from "@/api/index";
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
@@ -175,7 +184,7 @@ export default {
       // data
       operationColumns: [
         {
-          title: '编号',
+          title: this.$t('header.HeadMenu.logout'),
           dataIndex: 'num',
           key: 'num'
         },
@@ -206,7 +215,8 @@ export default {
   computed: {
     userInfo () {
       return this.$store.getters.userInfo
-    }
+    },
+    ...mapGetters(['notice']),
   },
   created () {
     this.user = this.userInfo
@@ -217,6 +227,7 @@ export default {
     this.getPie()
     this.getProjects()
     this.getNumber()
+    //console.log(this.$store.getters.notice)
   },
   methods: {
     
@@ -224,7 +235,7 @@ export default {
       this.$http.get(api.IssHomeMsg)
         .then(res => {
           if(res.status == 200){
-            this.projects = res.data.slice(0,4)
+            
             this.loading = false
           }
         })
@@ -318,6 +329,26 @@ export default {
           display: flex;
           align-items: flex-start;
           justify-content: center;
+          &:nth-child(2){
+              .calc-price{
+              color: #FEBF56;
+              span{
+                color: #F5797D;
+              }
+            }
+          }
+          .calc-price{
+            position: absolute;
+            bottom: 80px;
+            left: 186px;
+            font-size: 16px;
+            color: #5DC6FC;
+            span{
+              font-size: 24px;
+              font-weight: bold;
+              color: #1890ff;
+            }
+          }
           .desc{
           display: flex;
           

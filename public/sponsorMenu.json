@@ -1,0 +1,51 @@
+{
+  "message": "请求成功",
+  "status": 200,
+  "data": [{
+    "title": "首页",
+    "key": "",
+    "name": "index",
+    "component": "BasicLayout",
+    "redirect": "/sponsorHome",
+    "children": [{
+        "title": "首页",
+        "key": "sponsorHome",
+        "icon": "dashboard"
+      },
+      {
+        "title": "赞助管理",
+        "key": "",
+        "icon": "tool",
+        "component": "PageView",
+        "children": [{
+            "title": "我要赞助",
+            "key": "wyzz"
+          },
+          {
+            "title": "我的赞助",
+            "key": "wdzz"
+          },
+          {
+            "title": "赞助纪录",
+            "key": "zzjl"
+          }
+        ]
+      },
+      {
+        "title": "通知消息",
+        "key": "tzxx",
+        "icon": "profile"
+      },
+      {
+        "title": "账户信息",
+        "key": "zhxx",
+        "icon": "form"
+      },
+      {
+        "title": "账户设置",
+        "key": "zhsz",
+        "hidden": "true"
+      }
+    ]
+  }]
+}

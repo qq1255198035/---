@@ -21,9 +21,18 @@
 
       <div slot="extra">
         <a-radio-group>
-          <a-radio-button>全部</a-radio-button>
+          <!-- <a-radio-button>全部</a-radio-button>
           <a-radio-button>待审批</a-radio-button>
-          <a-radio-button>已审批</a-radio-button>
+          <a-radio-button>已审批</a-radio-button> -->
+          <a-radio-button value="全部">
+          全部
+        </a-radio-button>
+        <a-radio-button value="待审批">
+          待审批
+        </a-radio-button>
+        <a-radio-button value="已审批">
+          已审批
+        </a-radio-button>
         </a-radio-group>
         <a-input-search style="margin-left: 16px; width: 272px;" />
       </div>
@@ -36,14 +45,14 @@
                         <a href="javascript:;" @click="$router.push({name: 'ckhd'})">查 看</a>
                         <a-divider type="vertical" />
                         <a-popconfirm
-                              v-if="data.length"
                               title="选择操作"
                               @confirm="confirm"
                               @cancel="cancel"
                               okText="通过" 
                               cancelText="驳回"
+                              
                         >
-                              <a href="javascript:;">审 批</a>
+                              <a href="javascript:;" v-if="popconfirmShow">审 批</a>
                         </a-popconfirm>
                   </template>
             </a-table>
@@ -137,7 +146,7 @@ export default {
                         // })
                         data: [
                               {
-                                    key: '0',
+                                    key: 0,
                                     number: '01',
                                     hdmc: '篮球比赛',
                                     hdlx: '篮球',
@@ -145,7 +154,7 @@ export default {
                                     desc: '2016-09-21  08:50:08',
                               },
                               {
-                                    key: '1',
+                                    key: 1,
                                     number: '01',
                                     hdmc: '篮球比赛',
                                     hdlx: '篮球',
@@ -153,7 +162,7 @@ export default {
                                     desc: '2016-09-21  08:50:08',
                               },
                               {
-                                    key: '2',
+                                    key: 2,
                                     number: '01',
                                     hdmc: '篮球比赛',
                                     hdlx: '篮球',
@@ -161,7 +170,7 @@ export default {
                                     desc: '2016-09-21  08:50:08',
                               },
                               {
-                                    key: '3',
+                                    key: 3,
                                     number: '01',
                                     hdmc: '篮球比赛',
                                     hdlx: '篮球',
@@ -169,7 +178,7 @@ export default {
                                     desc: '2016-09-21  08:50:08',
                               },
                               {
-                                    key: '4',
+                                    key: 4,
                                     number: '01',
                                     hdmc: '篮球比赛',
                                     hdlx: '篮球',
@@ -177,7 +186,7 @@ export default {
                                     desc: '2016-09-21  08:50:08',
                               },
                               {
-                                    key: '5',
+                                    key: 5,
                                     number: '01',
                                     hdmc: '篮球比赛',
                                     hdlx: '篮球',
@@ -195,6 +204,26 @@ export default {
             statusTypeFilter (type) {
                   return statusMap[type].status
             }
+      },
+      computed:{
+            popconfirmShow(){
+                  
+                  var res = this.data.map((item,index) =>{
+                        return item.status == '1'
+                  })
+                  return res
+                  
+            },
+            //todo
+            getDataIndex(){
+                  for(var i=0;i < this.data.length;i++){
+                        return i
+                  }
+            }
+      },
+      mounted(){
+            console.log(...this.popconfirmShow)
+            console.log(this.getDataIndex)
       },
       methods:{
             confirm () {

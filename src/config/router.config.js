@@ -14,7 +14,7 @@ export const asyncRouterMap = [
                path: '/home',
                name: 'home',
                component: () => import('@/pages/Issuer/home'),
-               meta: { title: '首页', keepAlive: true, icon: bxAnaalyse, permission: ['index'] }
+               meta: { title: '首页', keepAlive: true, icon: bxAnaalyse, permission: ['index'],roles: 'Issuer' }
              },
              {
                path: '/notices',

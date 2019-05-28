@@ -5,6 +5,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/'
+import i18n from './lang'
 import { VueAxios } from './utils/request'
 // mock
 import './mock'
@@ -21,7 +22,8 @@ Vue.use(VueAxios)
 new Vue({
   router,
   store,
-  created () {
+  i18n,
+  created() {
     bootstrap()
   },
   render: h => h(App)

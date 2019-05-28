@@ -4,9 +4,11 @@
       <notice-icon class="action"/>
       <a href="javascript:;" @click="handleLogout" class="logout">
               <a-icon type="logout"/>
-              <span>退出登录</span>
+              <span>{{ $t('header.HeadMenu.logout') }}</span>
       </a>
+      <LangSelect></LangSelect>
     </div>
+    
   </div>
 </template>
 <style lang="less" scoped>
@@ -31,10 +33,12 @@
 <script>
 import NoticeIcon from '@/components/NoticeIcon'
 import { mapActions, mapGetters } from 'vuex'
+import LangSelect from '@/components/tools/LangSelect'
 export default {
   name: 'UserMenu',
   components: {
-    NoticeIcon
+    NoticeIcon,
+    LangSelect
   },
   methods: {
     ...mapActions(['Logout']),

@@ -26,7 +26,7 @@
                                           </li>
                                     </ul>
                                     <div class="bottom">
-                                          <a-button type="primary" @click="current = '1'" class="my-btn">
+                                          <a-button type="primary" @click="goRegister" class="my-btn">
                                                 注册
                                           </a-button>
                                           <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
@@ -78,22 +78,14 @@
                                     ></a-input>
                                     </a-form-item>
 
-                                    <a-form-item>
+                                    <!-- <a-form-item>
                                     <a-input size="large" placeholder="11 位手机号" v-decorator="['mobile', {rules: [{ required: true, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
                                     <a-select slot="addonBefore" size="large" defaultValue="+86">
                                           <a-select-option value="+86">+86</a-select-option>
                                           <a-select-option value="+87">+87</a-select-option>
                                     </a-select>
                                     </a-input>
-                                    </a-form-item>
-                                    <!--<a-input-group size="large" compact>
-                                          <a-select style="width: 20%" size="large" defaultValue="+86">
-                                          <a-select-option value="+86">+86</a-select-option>
-                                          <a-select-option value="+87">+87</a-select-option>
-                                          </a-select>
-                                          <a-input style="width: 80%" size="large" placeholder="11 位手机号"></a-input>
-                                    </a-input-group>-->
-
+                                    </a-form-item> -->
                                     <a-row :gutter="16">
                                     <a-col class="gutter-row" :span="16">
                                     <a-form-item>
@@ -264,7 +256,7 @@ export default {
       data(){
             return{
                   current: "0",
-                  activeIndex: 0,
+                  activeIndex: "",
                   form: this.$form.createForm(this),
                   state: {
                         time: 60,
@@ -336,13 +328,13 @@ export default {
                   callback()
             },
 
-            handlePhoneCheck (rule, value, callback) {
-                  console.log('handlePhoneCheck, rule:', rule)
-                  console.log('handlePhoneCheck, value', value)
-                  console.log('handlePhoneCheck, callback', callback)
+            // handlePhoneCheck (rule, value, callback) {
+            //       console.log('handlePhoneCheck, rule:', rule)
+            //       console.log('handlePhoneCheck, value', value)
+            //       console.log('handlePhoneCheck, callback', callback)
 
-                  callback()
-            },
+            //       callback()
+            // },
 
             handlePasswordInputClick () {
                   if (!this.isMobile()) {
@@ -351,21 +343,27 @@ export default {
                   }
                   this.state.passwordLevelChecked = false
             },
-
             handleSubmit () {
                   const { form: { validateFields }, $router } = this
                   validateFields((err, values) => {
                   if (!err) {
-                  $router.push({ name: 'registerResult', params: { ...values } })
+                        $router.push({ name: 'registerResult', params: { ...values } })
+                        console.log({ ...values })
                   }
                   })
             },
-
+            goRegister(){
+                  if(!this.activeIndex){
+                        this.$message.error('请选择要注册的角色！');
+                  }else{
+                        this.current = '1'
+                  }
+            },
             getCaptcha (e) {
                   e.preventDefault()
                   const { form: { validateFields }, state, $message, $notification } = this
 
-                  validateFields(['mobile'], { force: true },
+                  validateFields(['email'], { force: true },
                   (err, values) => {
                   if (!err) {
                         state.smsSendBtn = true
@@ -380,7 +378,7 @@ export default {
 
                         const hide = $message.loading('验证码发送中..', 0)
 
-                        getSmsCaptcha({ mobile: values.mobile }).then(res => {
+                        getSmsCaptcha({ email: values.email }).then(res => {
                         setTimeout(hide, 2500)
                         $notification['success']({
                         message: '提示',

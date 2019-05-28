@@ -24,32 +24,6 @@
     <div id="adminIndex">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <!-- <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
-            <div class="item-boxes">
-              <div class="item-row">
-                  <a-row>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" style="margin-left:-100px;">
-                        <v-chart :height="300" :data="pieData" :scale="pieScale">
-                          <v-legend dataKey="item" :useHtml="true" :itemTpl="itemTpl" position="right" :offsetX="-50" :offsetY="-35"/>
-                          <v-tooltip :showTitle="false" dataKey="item*percent" />
-                          <v-axis />
-                          <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
-                        </v-chart>
-                    </a-col>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
-                      <v-chart :height="300" :data="pieData1" :scale="pieScale">
-                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl"/>
-                        <v-tooltip :showTitle="false" dataKey="item*percent" />
-                        <v-axis />
-                        <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
-                        <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
-                      </v-chart>
-                    </a-col>
-                  </a-row>
-              </div>
-            </div>
-          </a-card> -->
           <a-card title="活动动态" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
               <template slot="status" slot-scope="status">
@@ -59,17 +33,10 @@
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
-          <!-- <a-card title="" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 20}">
-            <div class="item-group">
-              <h6>Ready to publish your Campaign</h6>
-              <p>Upgrade now to make your campaign public and start receiving application.</p>
-              <a-button type="primary">发布活动</a-button>
-            </div>
-        </a-card> -->
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
             <a slot="extra">全部消息</a>
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
+              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in notice()">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
@@ -269,7 +236,7 @@ export default {
     this.getProjects()
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome']),
+    ...mapGetters(['nickname', 'welcome','notice']),
     getProjects () {
       this.$http.get('/list/search/projects')
         .then(res => {

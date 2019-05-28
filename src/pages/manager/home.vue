@@ -21,6 +21,10 @@
                         <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
                         <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                       </v-chart>
+                      <div class="calc-price">
+                          总计：￥
+                          <span>10000</span>
+                        </div>
                     </a-col>
                   </a-row>
               </div>
@@ -241,11 +245,11 @@ export default {
   },
   mounted () {
     this.getProjects()
-    this.conlog();
+    // this.conlog();
   },
   methods: {
     ...mapGetters(['nickname', 'welcome']),
-    ...mapActions(['conlog']),
+    // ...mapActions(['conlog']),
     getProjects () {
       this.$http.get('/list/search/projects')
         .then(res => {
@@ -284,6 +288,19 @@ export default {
           display: flex;
           align-items: flex-start;
           justify-content: center;
+          .calc-price{
+            position: absolute;
+            bottom: 80px;
+            left: 86px;
+            font-size: 16px;
+            color: #FEBF56;
+            width: 100%;
+            span{
+              font-size: 24px;
+              font-weight: bold;
+              color: #F5797D;
+            }
+          }
           .desc{
           display: flex;
           

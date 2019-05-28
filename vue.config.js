@@ -7,6 +7,7 @@ function resolve (dir) {
 
 // vue.config.js
 module.exports = {
+  
   /*
     Vue-cli3:
     Crashed when using Webpack `import()` #2463

@@ -1,26 +1,38 @@
 <template>
   <div class="logo">
     <router-link :to="{name:'home'}">
-      <LogoSvg alt="logo" />
-      <h1 v-if="showTitle">{{ title }}</h1>
+      <img src="~@/assets/logo.png" alt="logo">
+      
     </router-link>
   </div>
 </template>
+<style lang="less" scoped>
+.logo{
+  padding: 0 !important;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+  a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    img{
+      width: 90%;
+      height: 90%;
+    }
+  }
+}
+</style>
 
 <script>
-import LogoSvg from '@/assets/logo.svg?inline'
-
 export default {
   name: 'Logo',
   components: {
-    LogoSvg
+    
   },
   props: {
-    title: {
-      type: String,
-      default: 'Sponsor Cube',
-      required: false
-    },
+    
     showTitle: {
       type: Boolean,
       default: true,

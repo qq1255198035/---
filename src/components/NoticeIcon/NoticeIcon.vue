@@ -12,29 +12,20 @@
       <a-spin :spinning="loadding">
         <a-tabs>
           <a-tab-pane tab="通知" key="1">
-            <a-list>
-              <a-list-item>
-                <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
+            <a-list v-for="(item,index) in notice" :key="index">
+              <a-list-item >
+                <a-list-item-meta :title="item.title" :description="item.time">
                   <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
                 </a-list-item-meta>
               </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="你推荐的 曲妮妮 已通过第三轮面试" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="这种模板可以区分多种通知类型" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png"/>
-                </a-list-item-meta>
-              </a-list-item>
+              
             </a-list>
           </a-tab-pane>
         </a-tabs>
       </a-spin>
     </template>
     <span @click="fetchNotice" class="header-notice">
-      <a-badge count="12">
+      <a-badge :count="notice.length">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -42,13 +33,32 @@
 </template>
 
 <script>
+import { mapActions,mapGetters } from 'vuex'
+import api from "@/api/index";
 export default {
   name: 'HeaderNotice',
   data () {
     return {
       loadding: false,
-      visible: false
+      visible: false,
+      msg:[]
     }
+  },
+  mounted(){
+    this.getRouterName()
+    
+    console.log("this.$store.getters,",this.$store.getters)
+    setTimeout(() => {
+      console.log("this.$store.getters.notice,",this.$store.getters.notice)
+    }, 100);
+  },
+  filters: {
+    filterMsg(val){
+      return val.slice(0,3)
+    }
+  },
+  computed:{
+    ...mapGetters(['notice']),
   },
   methods: {
     fetchNotice () {
@@ -56,13 +66,26 @@ export default {
         this.loadding = true
         setTimeout(() => {
           this.loadding = false
-        }, 2000)
+        },100)
       } else {
         this.loadding = false
       }
       this.visible = !this.visible
-    }
-  }
+    },
+     getRouterName(){
+      if(this.$route.name == 'home'){
+         this.GetNotice(api.IssHomeMsg)
+        //this.$store.dispatch('GetNotice',api.IssHomeMsg);
+      }else if(this.$route.name == 'aindex'){
+        this.GetNotice(api.IssHomeMsg1)
+        console.log(11)
+      }
+    },
+    ...mapActions(['GetNotice']),
+    
+  },
+  
+  
 }
 </script>
 

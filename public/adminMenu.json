@@ -1,0 +1,97 @@
+{
+  "message": "请求成功",
+  "status": 200,
+  "data": [{
+    "title": "首页",
+    "key": "",
+    "name": "index",
+    "component": "BasicLayout",
+    "redirect": "/adminHome",
+    "children": [{
+        "title": "首页",
+        "key": "adminHome",
+        "icon": "dashboard"
+      },
+      {
+        "title": "活动管理",
+        "key": "",
+        "icon": "tool",
+        "component": "PageView",
+        "children": [
+              {
+                    "title": "活动审批",
+                    "key": "hdsp"
+              },
+              {
+                "title": "活动认证",
+                "key": "hdrz"
+              },
+              {
+                "title": "查看活动",
+                "key": "ckhd",
+                "hidden": true
+              }
+        ]
+      },
+      {
+        "title": "客户管理",
+        "key": "",
+        "icon": "team",
+        "component": "PageView",
+        "children": [{
+            "title": "搞手审批",
+            "key": "hdsp"
+          },
+          {
+            "title": "搞手详情",
+            "key": "gsxq",
+            "hidden": "true"
+          },
+          {
+            "title": "赞助商审批",
+            "key": "zzssp"
+          },
+           {
+             "title": "赞助商详情",
+             "key": "zzsxq",
+             "hidden": "true"
+           },
+           {
+             "title": "经纪人审批",
+             "key": "jjrsp"
+           },
+           {
+             "title": "经纪人详情",
+             "key": "jjrsp",
+             "hidden": "true"
+           }
+        ]
+      },
+      {
+            "title": "打款记录",
+            "key":"dkjl",
+            "icon": "bxAnaalyse"
+      },
+      {
+        "title": "打款详情",
+        "key": "dkxq",
+        "hidden": "true"
+      },
+      {
+        "title": "通知消息",
+        "key": "tzxx",
+        "icon": "profile"
+      },
+      {
+        "title": "账户信息",
+        "key": "zhxx",
+        "icon": "form"
+      },
+      {
+        "title": "账户设置",
+        "key": "zhsz",
+        "hidden": "true"
+      }
+    ]
+  }]
+}

@@ -1,0 +1,56 @@
+{
+  "message": "请求成功",
+  "status": 200,
+  "data": [{
+    "title": "首页",
+    "key": "",
+    "name": "index",
+    "component": "BasicLayout",
+    "redirect": "/managerHome",
+    "children": [{
+        "title": "首页",
+        "key": "managerHome",
+        "icon": "dashboard"
+      },
+      {
+            "title": "明星管理",
+            "key": "mxgl",
+            "icon": "bxAnaalyse"
+      },
+      {
+        "title": "参加活动管理",
+        "key": "",
+        "icon": "tool",
+        "component": "PageView",
+        "children": [{
+            "title": "我要参加",
+            "key": "wycj"
+          },
+          {
+            "title": "我参加的活动",
+            "key": "cjhd"
+          },
+          {
+            "title": "申请纪录",
+            "key": "sqjl"
+          }
+        ]
+      },
+      {
+        "title": "通知消息",
+        "key": "tzxx",
+        "icon": "profile"
+      },
+      {
+        "title": "账户信息",
+        "key": "zhxx",
+        "icon": "form"
+      },
+      {
+        "title": "账户设置",
+        "key": "zhsz",
+        "hidden": "true"
+      }
+    ]
+  }]
+}

@@ -3,9 +3,11 @@
             <page-header :title="pageTitle"></page-header>
             <div class="header">
                   <a-button type="primary" class="item-input" @click="$router.push({name: 'cjhd'})">创建活动</a-button>
+                  <a-locale-provider :locale="locale">
                   <a-date-picker class="item-input"/>
+                  </a-locale-provider>
                   <a-cascader :options="options" @change="onChange" placeholder="Please select" :showSearch="true"/>
-                  <a-select value="1" placeholder="活动类型" style="width: 174px;" class="item-input">
+                  <a-select value="1" :placeholder="$t('header.HeadMenu.logout')" style="width: 174px;" class="item-input">
                         <a-select-option value="1">活动类型</a-select-option>
                   </a-select>
                   
@@ -76,12 +78,22 @@
 </template>
 <script>
 import { mixinsTitle } from "@/utils/mixin.js";
+import enUS from 'ant-design-vue/lib/locale-provider/en_US';
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN';
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW';
 import api from "@/api/index"
+const lang = {
+                "zh-TW": zhTW,
+                "zh-CN": zhCN,
+                "en-US": enUS,
+            };
 export default {
         mixins:[mixinsTitle],
         data(){
             return{
                 cardList:[],
+                
+                locale: lang[localStorage.getItem("lang")],
                 options: [
                         {
                               value: 'zhejiang',
@@ -137,10 +149,16 @@ export default {
             },
             onChange(value) {
                   console.log(value);
-            }
+            },
+
+        },
+        computed:{
+            
         },
         mounted(){
             this.getCardData();
+            console.log(this.$store.getters.lang)
+            
         }
 }
 </script>

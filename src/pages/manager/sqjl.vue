@@ -68,7 +68,7 @@
             
       }
       .sqjl-content{
-            margin: 20px;
+            margin: 20px 48px;
             background-color: #fff;
             .my-table{
                   padding: 20px;

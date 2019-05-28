@@ -20,6 +20,10 @@
                           <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
                           <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                         </v-chart>
+                        <div class="calc-price">
+                          总计：￥
+                          <span>10000</span>
+                        </div>
                     </a-col>
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
@@ -29,6 +33,10 @@
                         <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
                         <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                       </v-chart>
+                      <div class="calc-price">
+                          总计：￥
+                          <span>10000</span>
+                        </div>
                     </a-col>
                   </a-row>
               </div>
@@ -299,6 +307,26 @@ export default {
           display: flex;
           align-items: flex-start;
           justify-content: center;
+          &:nth-child(2){
+              .calc-price{
+              color: #FEBF56;
+              span{
+                color: #F5797D;
+              }
+            }
+          }
+          .calc-price{
+            position: absolute;
+            bottom: 80px;
+            left: 186px;
+            font-size: 16px;
+            color: #5DC6FC;
+            span{
+              font-size: 24px;
+              font-weight: bold;
+              color: #1890ff;
+            }
+          }
           .desc{
           display: flex;
           

@@ -19,7 +19,7 @@ export function login (parameter) {
     data: parameter
   })
 }
-
+//获取验证码
 export function getSmsCaptcha (parameter) {
   return axios({
     url: api.SendSms,
@@ -27,7 +27,15 @@ export function getSmsCaptcha (parameter) {
     data: parameter
   })
 }
-
+export function getProjects(api) {
+  return axios({
+    url: api,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
 export function getInfo () {
   return axios({
     url: '/user/info',
