@@ -19,6 +19,17 @@ export function login (parameter) {
     data: parameter
   })
 }
+
+export function getMenu(parameter) {
+         return axios({
+           url: api.test,
+           method: 'post',
+           headers: {
+             'Content-Type': 'application/json;charset=UTF-8'
+           },
+           data: parameter
+         })
+       }
 //获取验证码
 export function getSmsCaptcha (parameter) {
   return axios({
