@@ -100,7 +100,6 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { getMenu } from '@/api/login'
 import { mapActions,mapGetters } from 'vuex'
 import api from "@/api/index";
 import { PageView } from '@/layouts'
@@ -228,11 +227,6 @@ export default {
     this.getPie()
     this.getProjects()
     this.getNumber()
-    let data = {'username': '112','password': '123456'}
-    getMenu(data).then(res =>{
-      console.log(res)
-    })
-    //console.log(this.$store.getters.notice)
   },
   methods: {
     

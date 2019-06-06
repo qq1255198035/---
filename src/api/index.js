@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.0.121:8080/'
+const API_BASE_URL = 'http://localhost:8080/'
 const api = {
   Login: '/auth/login',
   Logout: '/auth/logout',
@@ -17,6 +17,6 @@ const api = {
   IssHomeNum: API_BASE_URL + 'Issuer/index/number.json',
   IssHdglCard: API_BASE_URL + 'Issuer/hdgl/active.json',
   IssHomeMsg1: API_BASE_URL + 'Issuer/index/msg1.json',
-  test: '/api/vue/login'
+  test: '/vue/login'
 }
 export default api

@@ -1,6 +1,6 @@
 import api from './index'
 import { axios } from '@/utils/request'
-
+import qs from 'qs'
 /**
  * login func
  * parameter: {
@@ -12,30 +12,34 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
-export function login (parameter) {
+
+
+//注册
+
+export function register(api, parameter) {
   return axios({
-    url: '/auth/login',
+    url: api,
     method: 'post',
-    data: parameter
+    data: qs.stringify(parameter)
   })
 }
 
-export function getMenu(parameter) {
-         return axios({
-           url: api.test,
-           method: 'post',
-           headers: {
-             'Content-Type': 'application/json;charset=UTF-8'
-           },
-           data: parameter
-         })
-       }
+//登录
+
+export function login (parameter) {
+  return axios({
+    url: '/vue/login',
+    method: 'post',
+    data: qs.stringify(parameter)
+  })
+}
+
 //获取验证码
 export function getSmsCaptcha (parameter) {
   return axios({
-    url: api.SendSms,
+    url: 'vue/code',
     method: 'post',
-    data: parameter
+    data: qs.stringify(parameter)
   })
 }
 export function getProjects(api) {

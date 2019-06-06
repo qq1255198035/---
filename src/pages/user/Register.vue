@@ -35,7 +35,6 @@
                         </a-tab-pane>
                         <a-tab-pane tab="" key="1" forceRender>
                               <div class="main user-layout-register">
-                                    
                                     <a-form ref="formRegister" :form="form" id="formRegister">
                                     <a-form-item>
                                     <a-input
@@ -229,7 +228,7 @@
 </style>
 <script>
 import { mixinDevice } from '@/utils/mixin.js'
-import { getSmsCaptcha } from '@/api/login'
+import { getSmsCaptcha,register } from '@/api/login'
 const levelNames = {
   0: '低',
   1: '低',
@@ -286,7 +285,6 @@ export default {
             }
       },
       methods: {
-
             handlePasswordLevel (rule, value, callback) {
                   let level = 0
                   // 判断这个字符串中有没有数字
@@ -315,10 +313,8 @@ export default {
                   callback(new Error('密码强度不够'))
                   }
             },
-
             handlePasswordCheck (rule, value, callback) {
                   const password = this.form.getFieldValue('password')
-                  console.log('value', value)
                   if (value === undefined) {
                   callback(new Error('请输入密码'))
                   }
@@ -327,15 +323,6 @@ export default {
                   }
                   callback()
             },
-
-            // handlePhoneCheck (rule, value, callback) {
-            //       console.log('handlePhoneCheck, rule:', rule)
-            //       console.log('handlePhoneCheck, value', value)
-            //       console.log('handlePhoneCheck, callback', callback)
-
-            //       callback()
-            // },
-
             handlePasswordInputClick () {
                   if (!this.isMobile()) {
                   this.state.passwordLevelChecked = true
@@ -344,30 +331,48 @@ export default {
                   this.state.passwordLevelChecked = false
             },
             handleSubmit () {
-                  const { form: { validateFields }, $router } = this
-                  validateFields((err, values) => {
-                  if (!err) {
-                        $router.push({ name: 'registerResult', params: { ...values } })
-                        console.log({ ...values })
-                  }
-                  })
+                        if(this.activeIndex == '1'){
+                              this.registerActor('/vue/brand')
+                        }else if(this.activeIndex == '2'){
+                              this.registerActor('/vue/event')
+                        }else if(this.activeIndex == '3'){
+                              this.registerActor('/vue/agent')
+                        }
             },
             goRegister(){
                   if(!this.activeIndex){
                         this.$message.error('请选择要注册的角色！');
+                        console.log(this.current)
                   }else{
                         this.current = '1'
                   }
             },
+            registerActor(api){
+                  const { form: { validateFields }, $router, $notification } = this
+                  validateFields((err, values) => {
+                  if (!err) {
+                        register(api,{username: values.email,password: values.password,code: values.captcha}).then(res =>{          
+                        if(res.status == 200){
+                              $router.push({ name: 'registerResult', params: { ...values } })
+                        }else{
+                              $notification['error']({
+                              message: '错误',
+                              description: res.info,
+                              duration: 8
+                        })
+                        }
+                  })
+                  }
+                  })
+                  
+            },
             getCaptcha (e) {
                   e.preventDefault()
                   const { form: { validateFields }, state, $message, $notification } = this
-
                   validateFields(['email'], { force: true },
                   (err, values) => {
                   if (!err) {
                         state.smsSendBtn = true
-
                         const interval = window.setInterval(() => {
                         if (state.time-- <= 0) {
                         state.time = 60
@@ -375,22 +380,23 @@ export default {
                         window.clearInterval(interval)
                         }
                         }, 1000)
-
                         const hide = $message.loading('验证码发送中..', 0)
-
-                        getSmsCaptcha({ email: values.email }).then(res => {
-                        setTimeout(hide, 2500)
-                        $notification['success']({
-                        message: '提示',
-                        description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                        duration: 8
-                        })
+                        getSmsCaptcha({ username: values.email }).then(res => {
+                              if(res.status == 200){
+                                    setTimeout(hide, 2500)
+                                    $notification['success']({
+                                          message: '提示',
+                                          description: '验证码获取成功，请查收！',
+                                          duration: 8
+                                    })
+                              }
+                        
                         }).catch(err => {
-                        setTimeout(hide, 1)
-                        clearInterval(interval)
-                        state.time = 60
-                        state.smsSendBtn = false
-                        this.requestFailed(err)
+                              setTimeout(hide, 1)
+                              clearInterval(interval)
+                              state.time = 60
+                              state.smsSendBtn = false
+                              this.requestFailed(err)
                         })
                   }
                   }
@@ -398,9 +404,9 @@ export default {
             },
             requestFailed (err) {
                   this.$notification['error']({
-                  message: '错误',
-                  description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-                  duration: 4
+                        message: '错误',
+                        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+                        duration: 4
                   })
                   this.registerBtn = false
             },
