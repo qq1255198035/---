@@ -8,20 +8,20 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <head-info title="赞助待审批" :content="number.zzdsp" :center="false" :bordered="false"/>
+          <head-info :title="$t('issuer.index.zzdsp')" :content="number.zzdsp" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info title="明星待审批" :content="number.mxdsp" :center="false" :bordered="false"/>
+          <head-info :title="$t('issuer.index.mxdsp')" :content="number.mxdsp" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info title="活动待审批" :content="number.hddsp" :center="false" />
+          <head-info :title="$t('issuer.index.hddsp')" :content="number.hddsp" :center="false" />
         </a-col>
       </a-row>
     </div>
     <div id="home">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
+          <a-card :loading="loading" :title="$t('issuer.index.zzxq')" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                   <a-row>
@@ -56,7 +56,7 @@
               </div>
             </div>
           </a-card>
-          <a-card title="活动动态" class="my-activity">
+          <a-card :title="$t('issuer.index.hddt')" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation" :pagination="false">
               <template slot="status" slot-scope="status">
                 <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
@@ -67,13 +67,13 @@
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card title="" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 20}">
             <div class="item-group">
-              <h6>Ready to publish your Campaign</h6>
-              <p>Upgrade now to make your campaign public and start receiving application.</p>
-              <a-button type="primary" @click="$router.push({name: 'cjhd'})">发布活动</a-button>
+              <h6>{{$t('issuer.index.title')}}</h6>
+              <p>{{$t('issuer.index.desc')}}</p>
+              <a-button type="primary" @click="$router.push({name: 'cjhd'})">{{$t('issuer.index.fbhd')}}</a-button>
             </div>
         </a-card>
-          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
-            <a slot="extra" @click="$router.push({name: 'notices'})">全部消息</a>
+          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
+            <a slot="extra" @click="$router.push({name: 'notices'})">{{$t('issuer.index.qbxx')}}</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in notice">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
