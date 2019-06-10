@@ -25,7 +25,7 @@
       </a-spin>
     </template>
     <span @click="fetchNotice" class="header-notice">
-      <a-badge :count="notice.length">
+      <a-badge :count="newsLength">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -34,6 +34,7 @@
 
 <script>
 import { mapActions,mapGetters } from 'vuex'
+import { unread } from '@/api/common'
 import api from "@/api/index";
 export default {
   name: 'HeaderNotice',
@@ -41,15 +42,16 @@ export default {
     return {
       loadding: false,
       visible: false,
+      newsLength: '',
       msg:[]
     }
   },
   mounted(){
     this.getRouterName()
     
-    console.log("this.$store.getters,",this.$store.getters)
+    //console.log("this.$store.getters,",this.$store.getters)
     setTimeout(() => {
-      console.log("this.$store.getters.notice,",this.$store.getters.notice)
+      //console.log("this.$store.getters.notice,",this.$store.getters.notice)
     }, 100);
   },
   filters: {
@@ -80,6 +82,13 @@ export default {
         this.GetNotice(api.IssHomeMsg1)
         console.log(11)
       }
+    },
+    getUnread(){
+      unread().then(res => {
+        if(res.code == 1000){
+          this.newsLength = res.data
+        }
+      })
     },
     ...mapActions(['GetNotice']),
     
