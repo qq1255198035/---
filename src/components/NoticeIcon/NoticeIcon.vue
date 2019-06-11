@@ -47,12 +47,8 @@ export default {
     }
   },
   mounted(){
-    this.getRouterName()
-    
-    //console.log("this.$store.getters,",this.$store.getters)
-    setTimeout(() => {
-      //console.log("this.$store.getters.notice,",this.$store.getters.notice)
-    }, 100);
+    this.getRouterName();
+    this.getUnread();
   },
   filters: {
     filterMsg(val){
@@ -87,6 +83,7 @@ export default {
       unread().then(res => {
         if(res.code == 1000){
           this.newsLength = res.data
+          console.log(this.newsLength)
         }
       })
     },

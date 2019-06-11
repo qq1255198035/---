@@ -692,6 +692,7 @@ export default {
             },
             add  () {
                   const { form } = this;
+                  console.log(form)
                   // can use data-binding to get
                   const keys = form.getFieldValue('keys');
                   const nextKeys = keys.concat(++id);
@@ -805,6 +806,7 @@ export default {
       },
       beforeCreate () {
             this.form = this.$form.createForm(this);
+            console.log(this.form)
             this.form.getFieldDecorator('keys', { initialValue: [], preserve: true });
       },
       

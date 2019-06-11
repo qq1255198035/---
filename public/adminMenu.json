@@ -40,7 +40,7 @@
         "component": "PageView",
         "children": [{
             "title": "搞手审批",
-            "key": "hdsp"
+            "key": "gssp"
           },
           {
             "title": "搞手详情",
@@ -81,17 +81,8 @@
         "title": "通知消息",
         "key": "tzxx",
         "icon": "profile"
-      },
-      {
-        "title": "账户信息",
-        "key": "zhxx",
-        "icon": "form"
-      },
-      {
-        "title": "账户设置",
-        "key": "zhsz",
-        "hidden": "true"
       }
+     
     ]
   }]
 }

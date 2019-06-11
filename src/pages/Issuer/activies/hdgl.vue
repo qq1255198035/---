@@ -43,15 +43,15 @@
                                 <div class="button-box" v-if="item.code == 0">
                                     <a-button ghost class="btn-success" @click="$router.push({name:'details'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
                                     <div>
-                                          <a-button ghost class="btn-primary" @click="$router.push({name: 'zzgl'})"> 赞助审批 </a-button>
-                                          <a-button ghost class="btn-info" @click="$router.push({name: 'mxgl'})"> 明星审批 </a-button>
+                                          <a-button ghost class="btn-primary" @click="$router.push({name: 'zzsp'})"> 赞助审批 </a-button>
+                                          <a-button ghost class="btn-info" @click="$router.push({name: 'issuerMxsp'})"> 明星审批 </a-button>
                                     </div>
                                 </div>
                                 <div class="button-box" v-if="item.code == 1">
-                                    <a-button ghost class="btn-success" @click="$router.push({name:'details'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
+                                    <a-button ghost class="btn-success" @click="$router.push({name:'ckhd'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
                                 </div>
                                 <div class="button-box" v-if="item.code == 2">
-                                    <a-button ghost class="btn-success" @click="$router.push({name:'details'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
+                                    <a-button ghost class="btn-success" @click="$router.push({name:'ckhd'})"> &nbsp;&nbsp; 查 看 &nbsp;&nbsp; </a-button>
                                     <div>
                                           <a-button ghost class="btn-warning" @click="$router.push({name: 'cjhd'})">&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
                                           <a-button ghost class="btn-danger" @click="showDeleteConfirm"> &nbsp;&nbsp; 删 除 &nbsp;&nbsp; </a-button>
