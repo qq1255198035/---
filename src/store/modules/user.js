@@ -12,7 +12,7 @@ const user = {
     roles: [],
     info: {},
     tel: '',
-    notice: [],
+    
     lang: 'zh-TW'
   },
 
@@ -36,9 +36,7 @@ const user = {
     SET_TEL: (state, tel) => {
       state.tel = tel
     },
-    SET_NOTICE: (state, notice) => {
-      state.notice = notice
-    },
+   
     SET_LANG: (state, lang) => {
       state.lang = lang
     }
@@ -61,20 +59,7 @@ const user = {
           })
       })
     },
-    GetNotice({ commit }, api) {
-      return new Promise((resolve, reject) => {
-        getProjects(api)
-          .then(res => {
-            if (res.status == 200) {
-              commit('SET_NOTICE', res.data)
-              resolve()
-            }
-          })
-          .catch(error => {
-            reject(error)
-          })
-      })
-    },
+    
     // 获取用户信息
     GetInfo({ commit, dispatch }) {
       return new Promise((resolve, reject) => {

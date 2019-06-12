@@ -43,11 +43,12 @@ export default {
       loadding: false,
       visible: false,
       newsLength: '',
-      msg:[]
+      msg:[],
+      notice:[]
     }
   },
   mounted(){
-    this.getRouterName();
+    
     this.getUnread();
   },
   filters: {
@@ -56,7 +57,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(['notice']),
+    
   },
   methods: {
     fetchNotice () {
@@ -70,15 +71,7 @@ export default {
       }
       this.visible = !this.visible
     },
-     getRouterName(){
-      if(this.$route.name == 'home'){
-         this.GetNotice(api.IssHomeMsg)
-        //this.$store.dispatch('GetNotice',api.IssHomeMsg);
-      }else if(this.$route.name == 'aindex'){
-        this.GetNotice(api.IssHomeMsg1)
-        console.log(11)
-      }
-    },
+     
     getUnread(){
       unread().then(res => {
         if(res.code == 1000){
@@ -87,7 +80,7 @@ export default {
         }
       })
     },
-    ...mapActions(['GetNotice']),
+    
     
   },
   

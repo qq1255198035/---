@@ -1,8 +1,7 @@
 <template>
   <div class="logo">
-    <router-link :to="{name:'home'}">
+    <router-link :to="{name: 'index'}">
       <img src="~@/assets/logo.png" alt="logo">
-      
     </router-link>
   </div>
 </template>

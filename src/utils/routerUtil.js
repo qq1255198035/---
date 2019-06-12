@@ -87,8 +87,8 @@ export const generatorDynamicRouter = () => {
     // ajax
     getRouterByUser().then(res => {
       const result = res.data
+      console.log(res)
       console.log(res.data)
-      
       const routers = generator(result)
       routers.push(notFoundRouter)
       resolve(routers)
@@ -108,16 +108,15 @@ export const generatorDynamicRouter = () => {
  */
 export const generator = (routerMap, parent) => {
   return routerMap.map(item => {
-    
     const currentRouter = {
       // 路由地址 动态拼接生成如 /dashboard/workplace
       path: `${parent && parent.path || ''}/${item.key}`,
       // 路由名称，建议唯一
-      name: item.key || item.name || '',
+      name: item.name || item.key || '',
       hidden: item.hidden || false,
       component: constantRouterComponents[item.component || item.key],
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
-      meta: { title: item.title, icon: item.icon || undefined, permission: item.key && [ item.key ] || null }
+      meta: { title: item.title, icon: item.icon || undefined }
     }
     // 为了防止出现后端返回结果不规范，处理有可能出现拼接出两个 反斜杠
     currentRouter.path = currentRouter.path.replace('//', '/')
