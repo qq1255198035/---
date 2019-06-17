@@ -2,114 +2,97 @@
       <div id="wyzz">
             <div class="input-box">
                   <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-date-picker class="my-picker"/>
+                        <a-range-picker @change="changeDate" class="my-picker"/>
                   </a-form-item>
-                  <a-button type="primary" icon="search">搜 索</a-button>
+                  <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wyzz-content">
-                  <div class="items">
+                  <div class="items" v-for="(item,index) in lists" :key="index">
                         <div class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
-                                    <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
+                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle"/>
                                     </div>
                                     <div class="profile-info">
                                           <h2 class="no-margins">
-                                          STEPHON MARBURY: THE NEXT CHAPTER / 馬布里: 我的下一章
+                                          {{item.name}}
                                           </h2>
-                                          <p>时间：2019-01-02 11:50:00</p>
-                                          <p>分类：篮球</p>
-                                          <p>参赛人数：1300人</p>
+                                          <p>时间：{{item.publishTime}}</p>
+                                          <p>分类：{{item.campCatalogVal}}</p>
+                                          <p>参赛人数：{{item.campNum}}人</p>
                                     </div>
                               </a-col>
                               <a-col :span="12" class="item">
                                     <span>
                                           <a-icon type="environment" class="my-icon"/>
-                                          吉林省 长春市长春市南关区卫星广场明珠花园
+                                          {{item.address}}
                                     </span>
                               </a-col>
                         </div>
-                        <a-table :columns="columns" :dataSource="data" :pagination="false" :bordered="false" class="my-table">
-                              <template slot="operation">
-                                    <a href="javascript:;" @click="showModal">赞 助</a>
+                        <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table">
+                              <template slot="operation" slot-scope="text,record">
+                                    <a href="javascript:;" @click="showModal(record.ssId)">赞 助</a>
                               </template>
                         </a-table>
                         
                   </div>
-                  <div class="items">
-                        <div class="title">
-                              <a-col :span="12" class="item">
-                                    <div class="profile-image">
-                                    <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
-                                    </div>
-                                    <div class="profile-info">
-                                          <h2 class="no-margins">
-                                          STEPHON MARBURY: THE NEXT CHAPTER / 馬布里: 我的下一章
-                                          </h2>
-                                          <p>时间：2019-01-02 11:50:00</p>
-                                          <p>分类：篮球</p>
-                                          <p>参赛人数：1300人</p>
-                                    </div>
-                              </a-col>
-                              <a-col :span="12" class="item">
-                                    <span>
-                                          <a-icon type="environment" class="my-icon"/>
-                                          吉林省 长春市长春市南关区卫星广场明珠花园
-                                    </span>
-                              </a-col>
-                        </div>
-                        <a-table :columns="columns" :dataSource="data" :pagination="false" :bordered="false" class="my-table">
-                              <template slot="operation">
-                                    <a href="javascript:;" @click="showModal">赞 助</a>
-                              </template>
-                        </a-table>
-                        
-                  </div>
+                 
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                  <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || lists.length == 0">加载更多</a-button>
             </div>
             <a-modal
                   title="赞助"
                   :visible="visible"
-                  @ok="handleOk"
+                  @ok="handleSubmit"
                   :confirmLoading="confirmLoading"
                   @cancel="handleCancel"
                   wrapClassName="my-modal"
             >
+            <a-form
+                  id="form"
+                  ref="form"
+                  :form="form"
+                  @submit="handleSubmit"
+            >
                   <a-form-item label="现金" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-input class="my-input"/>
+                        <a-input-number
+                              :formatter="value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                              :parser="value => value.replace(/\￥\s?|(,*)/g, '')"
+                              v-model="cashMoney"
+                              style="width: 100%;"
+                        />
                   </a-form-item>
                   <a-form-item label="实物" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-input class="my-input"/>
+                        <a-input class="my-input" placeholder="请输入物品名称" v-model="proname"/>
                   </a-form-item>
                   <div class="calc-price">
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
-                              <a-input
-                                    defaultValue="单价"
-                                    @change="onChange"
-                                    
-                              />
+                              
+                              <a-input type='text' v-model="price" @change="handlePriceChange" placeholder="单价" style="width: 100%;"/>
                         </a-form-item>
                         *
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
-                              <a-input
-                                    defaultValue="数量"
-                                    @change="onChange"
-                                    
-                              />
+                              <a-input type='text' v-model="number" @change="handleNumberChange" placeholder="数量" style="width: 100%;"/>
                         </a-form-item>
                         =
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               <a-input
                                     @change="onChange"
-                                    defaultValue="总额"
+                                    placehodler="总额"
+                                    :read-only="true"
+                                    v-model="total"
+                                    
                               />
                         </a-form-item>
                         
                   </div>
                   <a-divider class="my-divider"/>
-                  <p>总计： 元</p>
+                  <p>总计：{{totalPrice}}元</p>
                   <a-form-item label="详情" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-textarea class="my-input"/>
+                        <a-textarea class="my-input" v-model="demand"/>
                   </a-form-item>
+                  </a-form>
             </a-modal>
       </div>
 </template>
@@ -133,8 +116,10 @@
       .wyzz-content{
             display: flex;
             justify-content: space-between;
-            padding-top: 20px;
+            
             flex-wrap: wrap;
+            background-color: #fff;
+            padding: 20px;
             .items{
                   background-color: #fff;
                   border: 1px solid #ccc;
@@ -203,30 +188,39 @@
 
 </style>
 <script>
+import { searchCampList,saveMySponsor } from "@/api/sponsor";
+const hasProp = (instance, prop) => {
+  const $options = instance.$options || {};
+  const propsData = $options.propsData || {};
+  return prop in propsData;
+};
 export default {
+      
       data(){
+            const value = this.value || {};
             return{
+                  lists:[],
                   columns: [
                         {
                               title: '赞助形式',
-                              dataIndex: 'zzxs'
+                              dataIndex: 'ssKind'
                         },
                         {
                               title: '赞助金额',
-                              dataIndex: 'zzje'
+                              dataIndex: 'money'
                         },
                         {
                               title: '赞助名额',
-                              dataIndex: 'zzme',
+                              dataIndex: 'num',
                         },
                         {
                               title: '是否议价',
-                              dataIndex: 'sfyj',
+                              dataIndex: 'bargain',
                               
                         },
                         {
                               title: '详情',
-                              dataIndex: 'desc',
+                              dataIndex: 'demand',
                         },
                         {
                               title: '是否感兴趣',
@@ -234,47 +228,91 @@ export default {
                               scopedSlots: { customRender: 'operation' },
                         }
                   ],
-                  data: [
-                              {
-                                    key: '0',
-                                    zzxs: '冠名',
-                                    zzje: '$4,780,000',
-                                    zzme: '30',
-                                    sfyj: '否',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: '1',
-                                    zzxs: '冠名',
-                                    zzje: '$4,780,000',
-                                    zzme: '30',
-                                    sfyj: '否',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: '2',
-                                    zzxs: '冠名',
-                                    zzje: '$4,780,000',
-                                    zzme: '30',
-                                    sfyj: '否',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                  ],
                   visible: false,
                   confirmLoading: false,
+                  loadingMore: true,
+                  btnDsiable:false,
+                  offset:1,
+                  endtime:'',
+                  starttime:'',
+                  date:'',
+                  cashMoney:'',
+                  proname: '',
+                  price: value.price,
+                  number: value.number,
+                  demand: '',
+                  id: '',
+                  form: this.$form.createForm(this),
+                  host: ''
             }
       },
+      mounted(){
+            this.host = this.$host;
+            this.getSearchCampList(this.starttime,this.endtime,this.offset);
+      },
       methods: {
-            showModal() {
+            getSearchCampList(startime, endtime, offset){
+                  searchCampList(startime, endtime, offset).then(res=>{
+                        if(res.code == 1000){
+                              let key = 'key';
+                              this.loadingMore = false;
+                              this.lists = res.page.rows;
+                              console.log(res)
+                              this.lists.map((item,index) => {
+                                    item.sponsor.map((aitem,index)=>{
+                                          aitem[key] = index;
+                                    })
+                              })
+                              
+                        }
+                  })
+            },
+            changeDate(val,date){
+                  console.log(date)
+                  this.starttime = date[0];
+                  this.endtime = date[1];
+            },
+            search(){
+                  this.getSearchCampList(this.starttime,this.endtime,this.offset);  
+            },
+            loadMore(){
+                  this.offset++;
+                  this.loadingMore = true;
+                  searchCampList('','', this.offset).then(res=>{
+                        if(res.code == 1000){
+                              if (this.offset > res.page.pages) {
+                                    this.$message.warning('已加载全部数据');
+                                    this.loadingMore = false;
+                                    this.btnDsiable = true;
+                                    return;
+                              }
+                              let key = 'key'
+                              this.loadingMore = false;
+                              this.lists = this.lists.concat(res.page.rows);
+                              this.lists.map((item,index) => {
+                                    item.sponsor.map((aitem,index)=>{
+                                          aitem[key] = index;
+                                    })
+                              })     
+                        }
+                  })
+            },
+            postSaveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz){
+                  saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz).then(res=>{
+                        if (res.code == 1000) {
+                              this.$message.success('操作成功！');
+                              this.confirmLoading = false;
+                              this.visible = false;
+                        }
+                  })
+            },
+            showModal(id) {
+                  this.id = id;
                   this.visible = true
             },
-            handleOk(e) {
-                  this.ModalText = 'The modal will be closed after two seconds';
+            handleSubmit() {
                   this.confirmLoading = true;
-                  setTimeout(() => {
-                  this.visible = false;
-                  this.confirmLoading = false;
-                  }, 2000);
+                  this.postSaveMySponsor(this.id,this.cashMoney,this.proname,this.number,this.total,this.totalPrice,this.demand)
             },
             handleCancel(e) {
                   console.log('Clicked cancel button');
@@ -283,6 +321,47 @@ export default {
             onChange(value) {
                   console.log('changed', value);
             },
-      }
+           
+            handlePriceChange(e) {
+                  const price = parseInt(e.target.value || 0, 10);
+                  if (isNaN(price)) {
+                        return;
+                  }
+                  if (!hasProp(this, 'value')) {
+                  this.price = price;
+                  }
+                  this.triggerChange({ price });
+            },
+            handleNumberChange(e) {
+                  const number = parseInt(e.target.value || 0, 10);
+                  if (isNaN(number)) {
+                        return;
+                  }
+                  if (!hasProp(this, 'value')) {
+                  this.number = number;
+                  }
+                  this.triggerChange({ number });
+            },
+            triggerChange  (changedValue) {
+                  // Should provide an event to pass value to Form.
+                  this.$emit('change', Object.assign({}, this.$data, changedValue));
+            },
+            
+      },
+      computed:{
+            total(){
+                  return this.price*this.number || 0
+            },
+            totalPrice(){
+                  return this.cashMoney + this.total
+            }
+      },
+      watch: {
+            value (val = {}) {
+                  this.price = val.price || 0;
+                  this.number = val.number || 0;
+            },
+            
+      },
 }
 </script>

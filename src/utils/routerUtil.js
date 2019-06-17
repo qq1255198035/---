@@ -32,9 +32,11 @@ const constantRouterComponents = {
   zzsxq: () => import('@/pages/admin/khgl/zzsxq'),
   jjrsp: () => import('@/pages/admin/khgl/jjrgl'),
   jjrxq: () => import('@/pages/admin/khgl/jjrxq'),
+  mxsp: () => import('@/pages/admin/khgl/mxsp'),
+  mxxq: () => import('@/pages/admin/khgl/mxxq'),
   dkjl: () => import('@/pages/admin/dkjl/dkjl'),
   dkxq: () => import('@/pages/admin/dkjl/dkxq'),
-  tzxx: () => import('@/pages/admin/tzxx'),
+  admintzxx: () => import('@/pages/admin/tzxx'),
   // 贊助商路由
   sponsorHome: () => import('@/pages/sponsor/index'),
   wyzz: () => import('@/pages/sponsor/zzgl/wyzz'),
@@ -87,12 +89,11 @@ export const generatorDynamicRouter = () => {
     // ajax
     getRouterByUser().then(res => {
       const result = res.data
-      console.log(res)
       console.log(res.data)
       const routers = generator(result)
       routers.push(notFoundRouter)
-      resolve(routers)
       console.log(routers)
+      resolve(routers)
     }).catch(err => {
       reject(err)
     })

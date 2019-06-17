@@ -9,30 +9,32 @@
                                     :label-col="{ span: 3 }"
                                     :wrapper-col="{ span: 24 }"
                               >
-                                    <a-input placeholder="请输入标题"/>
+                                    <a-input placeholder="请输入标题" v-model="title"/>
                               </a-form-item>
                               <a-form-item
                                     label="发送至："
                                     :label-col="{ span: 3 }"
                                     :wrapper-col="{ span: 24}"
                               >
-                                    <a-select placeholder="请选择">
-                                    <a-select-option value="male">
-                                          male
-                                    </a-select-option>
-                                    <a-select-option value="female">
-                                          female
-                                    </a-select-option>
+                                    <a-select
+                                          showSearch
+                                          placeholder="Select a person"
+                                          optionFilterProp="children"
+                                          @change="handleChange"
+                                          :filterOption="filterOption"
+                                          allowClear
+                                    >
+                                          <a-select-option v-for="item in actor" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
                                     </a-select>
                               </a-form-item>
                               <a-form-item
-                                    label="标题："
+                                    label="内容："
                                     :label-col="{ span: 3 }"
                                     :wrapper-col="{ span: 24 }"
                               >
-                                    <a-textarea placeholder="" :rows="8" />
+                                    <a-textarea placeholder="" :rows="8" v-model="messages"/>
                               </a-form-item>
-                              <a-button type="primary" block>发 送</a-button>
+                              <a-button type="primary" block @click="sendMessages">发 送</a-button>
                         </a-form>
                   </div>
                   <div class="right">
@@ -44,16 +46,16 @@
                               itemLayout="vertical"
                               :dataSource="data"
                               >
-                              <a-list-item :key="item.id" slot="renderItem" slot-scope="item">
-                              
-                              <a-list-item-meta>
-                                    <a slot="title" href="https://vue.ant.design/">{{ item.title }}</a>
-                              </a-list-item-meta>
-                              <article-list-content :description="item.description" :owner="item.owner" :avatar="item.avatar" :href="item.href" :updateAt="item.updatedAt" />
-                              </a-list-item>
-                              <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
-                              <a-button @click="loadMore" :loading="loadingMore">加载更多</a-button>
-                              </div>
+                                    <a-list-item :key="item.id" slot="renderItem" slot-scope="item">
+                                    
+                                          <a-list-item-meta>
+                                                <span slot="title">{{ item.title }}</span>
+                                          </a-list-item-meta>
+                                          <article-list-content :description="item.content" :updateAt="item.createtime" />
+                                    </a-list-item>
+                                    <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
+                                          <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+                                    </div>
                               </a-list>
                         </a-card>
                   </div>
@@ -82,6 +84,8 @@
 <script>
 import PageHeader from '@/components/PageHeader' 
 import { ArticleListContent } from '@/components'
+import { infoList } from '@/api/common'
+import {selectActor,sendMessage } from '@/api/admin'
 export default {
       components: {
             'page-header': PageHeader,
@@ -93,33 +97,91 @@ export default {
                   loading: true,
                   loadingMore: false,
                   data: [],
+                  offset:1,
+                  btnDsiable:false,
+                  pages:0,
+                  actor:[],
+                  selector:'',
+                  messages:'',
+                  title:'',
+                 
             }
       },
       methods:{
+            getInfoList(){
+                  infoList('',this.offset).then(res => {
+                        if(res.code == 1000){
+                              let page = parseInt(this.pages)
+                              this.data = res.page.rows;
+                              this.pages = res.page.pages;
+                              this.loading = false;
+                        }
+                  })
+            },
             getPageMeta () {
                   // eslint-disable-next-line
                   this.pageTitle = this.$route.meta.title
             },
-            getList () {
-                  this.$http.get('/list/article').then(res => {
-                  //console.log('res', res)
-                  this.data = res.result
-                  this.loading = false
-                  })
-            },
             loadMore () {
-                  this.loadingMore = true
-                  this.$http.get('/list/article').then(res => {
-                  this.data = this.data.concat(res.result)
-                  }).finally(() => {
-                  this.loadingMore = false
+                  this.offset++
+                  this.loadingMore = true;
+                  this.loading = true;
+                  infoList('',this.offset).then(res => {
+                        if(res.code == 1000){
+                              let page = parseInt(this.pages)
+                              if (res.page.offset > page) {
+                                    this.btnDsiable = true;
+                                    this.$message.warning('已加载全部信息！');
+                                    this.loadingMore = false;
+                                    this.loading = false;
+                                    return
+                              }
+                              this.data = this.data.concat(res.page.rows)
+                              this.loading = false
+                              this.loadingMore = false;
+                              this.pages = res.page.pages;
+                              this.loading = false;
+                        }
+                  })
+                  
+            },
+            handleChange (value) {
+                  this.selector = value;
+            },
+            filterOption(input, option) {
+                  return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            },
+            getSelectActor(){
+                  selectActor().then(res=>{
+                        if (res.code == 1000) {
+                              this.actor = res.data
+                        }
                   })
             },
+            postSendMessage(title, content, recipients){
+                  if (recipients) {
+                        sendMessage(title, content, recipients).then(res=>{
+                        
+                              if(res.code == 1000){
+                                    this.$message.success('发送成功！');
+                                    setTimeout(() => {
+                                          window.location.reload();
+                                    }, 1000);
+                              }
+                        })
+                  }else{
+                        this.$message.error('请选择发送人！');
+                  }
+                  
+            },
+            sendMessages(){
+                  this.postSendMessage(this.title,this.messages,this.selector)
+            }
       },
       mounted () {
             this.getPageMeta();
-            this.getList()
-            
+            this.getSelectActor();
+            this.getInfoList();
       },
 }
 </script>

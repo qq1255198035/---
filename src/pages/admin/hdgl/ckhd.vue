@@ -1,11 +1,11 @@
 <template>
       <div id="details">
-            <glTitle></glTitle>
+            <glTitle :logo="logo" :title="titleName" :start="startTime" :type="type" :num="num" :stars="starList | filterLength" :sponsors="sponsorList | filterLength" :status="status | filterStatus" :price="money" :adress="area"></glTitle>
             <div class="details-content">
                   <div class="details-header">
                         <a-card title="活动进度">
                               <div class="secetion">
-                                    <a-steps :current="2">
+                                    <a-steps :current="status | filterStatusStep">
                                           <a-popover slot="progressDot" slot-scope="{index, status, prefixCls}">
                                                 <template slot="content">
                                                 <span>step {{index}} status: {{status}}</span>
@@ -25,21 +25,21 @@
                               <a-tab-pane key="1" tab="活动信息">
                                     <a-card :bordered="false">
                                           <detail-list title="活动基本信息">
-                                                <detail-list-item term="活动中文名称">馬布里: 我的下一章</detail-list-item>
-                                                <detail-list-item term="活动分类">篮球</detail-list-item>
-                                                <detail-list-item term="参赛人数">1200人</detail-list-item>
-                                                <detail-list-item term="活动英文名称">STEPHON MARBURY: THE NEXT CHAPTER /</detail-list-item>
-                                                <detail-list-item term="活动时间">2019-04-18 10:00 ~ 17:00</detail-list-item>
-                                                <detail-list-item term="联系人">万启源</detail-list-item>
-                                                <detail-list-item term="电子邮件">446996141@qq.com</detail-list-item>
-                                                <detail-list-item term="联系电话">150 0000 0000</detail-list-item>
+                                                <detail-list-item term="活动中文名称">{{name}}</detail-list-item>
+                                                <detail-list-item term="活动分类">{{campCatalog}}</detail-list-item>
+                                                <detail-list-item term="参赛人数">{{campNum}}</detail-list-item>
+                                                <detail-list-item term="活动英文名称">{{enName}}</detail-list-item>
+                                                <detail-list-item term="活动时间">{{publishTime}} ~ {{endTime}}</detail-list-item>
+                                                <detail-list-item term="联系人">{{contact}}</detail-list-item>
+                                                <detail-list-item term="电子邮件">{{email}}</detail-list-item>
+                                                <detail-list-item term="联系电话">{{phone}}</detail-list-item>
                                           </detail-list>
                                           <detail-list>
                                                 <detail-list-item term="活动地区" class="my-item">
                                                       <a-table :columns="columns" :dataSource="data" size="small" :pagination="false" class="my-table"/>
                                                 </detail-list-item>
                                                 <detail-list-item term="活动封面" class="my-item-1">
-                                                      <img :src="imgUrl" alt="">
+                                                      <img :src="coverImg" alt="">
                                                 </detail-list-item>
                                           </detail-list>
                                     </a-card>               
@@ -48,18 +48,18 @@
                                           <ul>
                                                 <li>
                                                       <span>活动内容：</span>
-                                                      <p>这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长</p>
+                                                      <p>{{ content }}</p>
                                                 </li>
                                                 <li>
                                                       <span>活动视频：</span>
-                                                      <video src="" controls poster="./../../../assets/a1.jpg" width="200px" height="150px"></video>
+                                                      <video :src="video" controls poster="./../../../assets/a1.jpg" width="200px" height="150px"></video>
                                                 </li>
                                                 <li>
                                                       <span>活动照片：</span>
-                                                      <img :src="imgUrl" alt="">
-                                                      <img :src="imgUrl" alt="">
-                                                      <img :src="imgUrl" alt="">
-                                                      <img :src="imgUrl" alt="">
+                                                      <div class="img-box" v-for="(item,index) in imgs" :key="index">
+                                                            <img :src="host + item" alt="">        
+                                                      </div>
+                                                      
                                                 </li>
                                           </ul>
                                     </div>     
@@ -72,23 +72,15 @@
                                                 </li>
                                                 <li>
                                                       <span>受众群众：</span>
-                                                      <a-tag color="pink">pink</a-tag>
-                                                      <a-tag color="red">red</a-tag>
-                                                      <a-tag color="orange">orange</a-tag>
-                                                      <a-tag color="green">green</a-tag>
-                                                      <a-tag color="cyan">cyan</a-tag>
-                                                      <a-tag color="blue">blue</a-tag>
-                                                      <a-tag color="purple">purple</a-tag>
+                                                      <div v-for="(item,index) in audiences" :key="index">
+                                                            <a-tag :color="tagColors">{{item}}</a-tag>
+                                                      </div>
                                                 </li>
                                                 <li>
                                                       <span>活动特点：</span>
-                                                      <a-tag color="pink">pink</a-tag>
-                                                      <a-tag color="red">red</a-tag>
-                                                      <a-tag color="orange">orange</a-tag>
-                                                      <a-tag color="green">green</a-tag>
-                                                      <a-tag color="cyan">cyan</a-tag>
-                                                      <a-tag color="blue">blue</a-tag>
-                                                      <a-tag color="purple">purple</a-tag>
+                                                      <div v-for="(item,index) in campFeature" :key="index">
+                                                            <a-tag :color="tagColors">{{item}}</a-tag>
+                                                      </div>
                                                 </li>
                                           </ul>
                                     </div> 
@@ -97,7 +89,7 @@
                                           <ul>
                                                 <li>
                                                       <span>招商截止日期：</span>
-                                                      <p>2019-04-18 20:00</p>
+                                                      <p>{{jzTime}}</p>
                                                 </li>
                                                 <li>
                                                       <span>赞助要求：</span>
@@ -105,23 +97,23 @@
                                                 </li>
                                                 <li>
                                                       <span>活动要求：</span>
-                                                      <p>这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长</p>
+                                                      <p>{{demand}}</p>
                                                 </li>
                                           </ul>
                                     </div>  
                               </a-tab-pane>
                               <a-tab-pane key="2" tab="赞助信息">
                                     <div class="my-tables">
-                                          <h3>冠名赞助<span>（ 2 ）</span></h3>
-                                          <a-table :columns="columns3" :dataSource="data3" size="middle"></a-table>   
+                                          <h3>冠名赞助<span> ( {{dataName.length}} ) </span></h3>
+                                          <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>   
                                     </div>
                                     <div class="my-tables">
                                           <h3>非冠名赞助<span>（ 2 ）</span></h3>
-                                          <a-table :columns="columns3" :dataSource="data3" size="middle"></a-table>   
+                                          <a-table :columns="columns3" :dataSource="dataNoName" size="middle"></a-table>   
                                     </div>
                                     <div class="my-tables">
                                           <h3>其他赞助<span>（ 2 ）</span></h3>
-                                          <a-table :columns="columns3" :dataSource="data3" size="middle"></a-table>   
+                                          <a-table :columns="columns3" :dataSource="dataOther" size="middle"></a-table>   
                                     </div>
                               </a-tab-pane>
                               <a-tab-pane key="3" tab="明星信息">
@@ -167,6 +159,18 @@
                                     display: flex;
                                     align-items: flex-start;
                                     margin: 20px 0;
+                                    .img-box{
+                                          display: flex;
+                                          justify-content: space-around;
+                                          flex-wrap: wrap;
+                                          img{
+                                                border: 1px solid #ccc;
+                                                border-radius: 5px;
+                                                width: 200px;
+                                                height: 150px;
+                                                margin-right:20px;
+                                          }
+                                    }
                                     .my-table{
                                           width: 70%;
                                     }
@@ -178,13 +182,7 @@
                                           margin: 0;
                                           
                                     }
-                                    img{
-                                          border: 1px solid #ccc;
-                                          border-radius: 5px;
-                                          width: 200px;
-                                          height: 150px;
-							margin-right:20px;
-                                    }
+                                    
                               }
                         }
                   }
@@ -220,308 +218,117 @@
 import glTitle from '@/components/glTitle/glTitle'
 import DetailList from '@/components/tools/DetailList'
 import imgUrl from '@/assets/a1.jpg'
+import { campInformation,searchCampSponsor,searchCampStar,campHeadInfo } from '@/api/admin'
 const DetailListItem = DetailList.Item
-const columns = [{
-  title: '地区',
-  dataIndex: 'address',
-}, {
-  title: '详细',
-  dataIndex: 'desc',
-}, ];
-const columns1 = [{
-  title: '主办承办方',
-  dataIndex: 'name',
-}, {
-  title: '名称',
-  dataIndex: 'desc',
-}, ];
-const columns2 = [{
-  title: '推广形式',
-  dataIndex: 'tgWay',
-}, {
-  title: '赞助形式',
-  dataIndex: 'zzWay',
-}, {
-      title: '赞助金额',
-      dataIndex: 'zzPrice',
-},
-{
-      title: '赞助名额',
-      dataIndex: 'zzNum',
-},
-{
-      title: '是否议价',
-      dataIndex: 'desc',
-},
-{
-      title: '备注',
-      dataIndex: 'remarks',
-},
-];
-const data = [{
-  key: '1',
-  address: '香港',
-  desc: '南关区 长春市南关区亚泰大街与自由大路交会处 体育场',
-  
-}, {
-  key: '2',
-  address: '深圳',
-  desc: '南关区 长春市南关区亚泰大街与自由大路交会处 体育场',
-  
-}, {
-  key: '3',
-  address: '广州',
-  desc: '南关区 长春市南关区亚泰大街与自由大路交会处 体育场',
-  
-}];
-const data1 = [{
-  key: '1',
-  name: '主办方',
-  desc: '南关区 长春市南关区亚泰大街与自由大路交会处 体育场',
-  
-}, {
-  key: '2',
-  name: '承办方',
-  desc: '南关区 长春市南关区亚泰大街与自由大路交会处 体育场',
-  
-}, {
-  key: '3',
-  name: '协办方',
-  desc: '南关区 长春市南关区亚泰大街与自由大路交会处 体育场',
-  
-}];
-const data2 = [{
-            key: '1',
-            tgWay: '冠名赞助',
-            zzWay: '现金+实物',
-            zzprice: '1000万',
-            zzNum: '10名',
-            desc: '否',
-            remarks: '宽城区万达广场3楼某某某'
-      },
+const columns = [
       {
-            key: '2',
-            tgWay: '冠名赞助',
-            zzWay: '现金+实物',
-            zzprice: '1000万',
-            zzNum: '10名',
-            desc: '否',
-            remarks: '宽城区万达广场3楼某某某'
+            title: '地区',
+            dataIndex: 'area',
+      }, {
+            itle: '详细',
+            dataIndex: 'address',
+      }, 
+];
+const columns1 = [
+      {
+            title: '主办承办方',
+            dataIndex: 'workType',
+      }, {
+            title: '名称',
+            dataIndex: 'name',
+      }, 
+];
+const columns2 = [
+      {
+            title: '推广形式',
+            dataIndex: 'sponsorship',
+      },    {
+            title: '赞助形式',
+            dataIndex: 'ssKind',
+      }, {
+            title: '赞助金额',
+            dataIndex: 'money',
+      },{
+            title: '赞助名额',
+            dataIndex: 'num',
+      },{
+            title: '是否议价',
+            dataIndex: 'bargain',
+      },{
+            title: '备注',
+            dataIndex: 'bz',
       },
 ];
-const columns3 = [{
-                        title: '编号',
-                        dataIndex: 'num',
-                        align: "center"
-                  }, {
-                        title: '赞助公司名称',
-                        dataIndex: 'name',
-                        align: "center"
-                  }, {
-                        title: '赞助形式',
-                        dataIndex: 'way',
-                        align: "center"
-                  }, {
-                        title: '是否议价',
-                        dataIndex: 'isPrice',
-                        align: "center"
-                  },{
-                        title: '现金赞助',
-                        dataIndex: 'cash',
-                        align: "center"
-                  },{
-                        title: '实物赞助',
-                        dataIndex: 'pro',
-                        align: "center"
-                  },
-                  {
-                        title: '赞助总额',
-                        dataIndex: 'calPrice',
-                        align: "center"
-                  },
-                  {
-                        title: '已付款金额',
-                        dataIndex: 'payPrice',
-                        align: "center"
-                  },
-            ];
-            const columns4 = [{
-                        title: '姓名',
-                        dataIndex: 'name',
-                        align: "center"
-                  }, {
-                        title: '出厂费用',
-                        dataIndex: 'price',
-                        align: "center"
-                  }, {
-                        title: '联系人',
-                        dataIndex: 'lxr',
-                        align: "center"
-                  }, {
-                        title: '联系电话',
-                        dataIndex: 'tel',
-                        align: "center"
-                  },{
-                        title: '邮箱',
-                        dataIndex: 'email',
-                        align: "center"
-                  },{
-                        title: '公司',
-                        dataIndex: 'company',
-                        align: "center"
-                  },
-            ];
-const data3 = [{
-                        key: '1',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '2',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '3',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '4',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '5',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '6',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '7',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '8',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '9',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '10',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, {
-                        key: '11',
-                        num: '01',
-                        name: "李宁体育用品公司",
-                        way: '现金 + 实物',
-                        isPrice: "否",
-                        cash: "2.00",
-                        pro: "1 * 衣物",
-                        calPrice: '28.00',
-                        payPrice: '23.00'
-                  }, 
+
+const columns3 = [
+      {
+            title: '编号',
+            dataIndex: 'key',
+            align: "center"
+      }, 
+      {
+            title: '赞助公司名称',
+            dataIndex: 'company',
+            align: "center"
+      }, 
+      {
+            title: '赞助形式',
+            dataIndex: 'ssKind',
+            align: "center"
+      }, 
+      {
+            title: '是否议价',
+            dataIndex: 'bargain',
+            align: "center"
+      },
+      {
+            title: '现金赞助',
+            dataIndex: 'cash',
+            align: "center"
+      },
+      {
+            title: '实物赞助',
+            dataIndex: 'productVal',
+            align: "center"
+      },
+      {
+            title: '赞助总额',
+            dataIndex: 'tolMoney',
+            align: "center"
+      },
+      {
+            title: '已付款金额',
+            dataIndex: 'paid',
+            align: "center"
+      },
 ];
-const data4 = [
+const columns4 = [
       {
-            key: '1',
-            name: '斯蒂芬·赛维尔·马布里',
-            price: "$39999",
-            lxr: '张 **',
-            tel: "155 **** 0000",
-            email: "**** @mlsports.com.hk",
-            company: "北京大学附属中学初中男",
+            title: '姓名',
+            dataIndex: 'name',
+            align: "center"
+      }, {
+            title: '出厂费用',
+            dataIndex: 'cost',
+            align: "center"
+      }, {
+            title: '联系人',
+            dataIndex: 'contact',
+            align: "center"
+      }, {
+            title: '联系电话',
+            dataIndex: 'phone',
+            align: "center"
+      },{
+            title: '邮箱',
+            dataIndex: 'email',
+            align: "center"
+      },{
+            title: '公司',
+            dataIndex: 'company',
+            align: "center"
       },
-      {
-            key: '2',
-            name: '斯蒂芬·赛维尔·马布里',
-            price: "$39999",
-            lxr: '张 **',
-            tel: "155 **** 0000",
-            email: "**** @mlsports.com.hk",
-            company: "北京大学附属中学初中男",
-      },
-      {
-            key: '3',
-            name: '斯蒂芬·赛维尔·马布里',
-            price: "$39999",
-            lxr: '张 **',
-            tel: "155 **** 0000",
-            email: "**** @mlsports.com.hk",
-            company: "北京大学附属中学初中男",
-      },
-      {
-            key: '4',
-            name: '斯蒂芬·赛维尔·马布里',
-            price: "$39999",
-            lxr: '张 **',
-            tel: "155 **** 0000",
-            email: "**** @mlsports.com.hk",
-            company: "北京大学附属中学初中男",
-      },
-      
-]
+];
 export default {
       components:{
             glTitle,
@@ -530,50 +337,166 @@ export default {
       },
       data() {
             return {
-                  data,
+                  data:[],
                   columns,
-                  data1,
+                  data1:[],
                   columns1,
-                  data2,
+                  data2:[],
                   columns2,
-                  data3,
+                  dataName:[],
+                  dataNoName:[],
+                  dataOther:[],
                   columns3,
-                  data4,
+                  data4:[],
                   columns4,
                   imgUrl,
-                  btnShow: -1,
-                   cardItemData:[
-                        {
-                              name:"李丽丽",
-                              tel:"13456874565",
-                              email:"11222222@163.com",
-                              desc: "无"
-                        },
-                        {
-                              name:"李丽丽",
-                              tel:"13456874565",
-                              email:"11222222@163.com",
-                              desc: "无"
-                        },
-                        {
-                              name:"李丽丽",
-                              tel:"13456874565",
-                              email:"11222222@163.com",
-                              desc: "无"
-                        },
-                        {
-                              name:"李丽丽",
-                              tel:"13456874565",
-                              email:"11222222@163.com",
-                              desc: "无"
-                        },
-                        {
-                              name:"李丽丽",
-                              tel:"13456874565",
-                              email:"11222222@163.com",
-                              desc: "无"
-                        },
-                  ],  
+                  name: '',
+                  enName: '',
+                  campCatalog:'',
+                  campNum:'',
+                  publishTime: '',
+                  endTime: '',
+                  contact: '',
+                  email: '',
+                  phone: '',
+                  coverImg:'',
+                  content:'',
+                  video: '',
+                  jzTime: '',
+                  imgs:[],
+                  audiences: [],
+                  campFeature:[],
+                  demand:"",
+                  colors:['pink','red','orange','green','cyan','blue','purple'],
+                  titleName:'',
+                  startTime: '',
+                  area: '',
+                  type: '',
+                  num:'',
+                  starList: [],
+                  sponsorList: [],
+                  status: '',
+                  logo:'',
+                  money:'',
+                  host:''
+            }
+      },
+      mounted(){
+            //this.$route.params.id
+            this.getCampInformation(84);
+            this.getSearchCampSponsor(84);
+            this.getSearchCampStar(84);
+            this.getCampHeadInfo(84);
+            this.host = this.$host;
+            
+      },
+      computed:{
+            tagColors(){
+                  let x = Math.floor(Math.random()*this.colors.length)
+                  return this.colors[x]
+            },
+            
+      },
+      methods:{
+            getCampInformation(id){
+                  campInformation(id).then(res=>{
+                        if(res.code == 1000){
+                              this.name = res.data.basic.name;
+                              this.enName = res.data.basic.enName;
+                              this.campCatalog = res.data.basic.campCatalog;
+                              this.campNum = res.data.basic.campNum;
+                              this.publishTime = res.data.basic.publishTime;
+                              this.endTime = res.data.basic.endTime;
+                              this.contact = res.data.basic.contact;
+                              this.email = res.data.basic.email;
+                              this.phone = res.data.basic.phone;
+                              this.coverImg = res.data.basic.coverImg;
+                              this.data = res.data.basic.newArea;
+                              this.content = res.data.basic.content;
+                              this.video = res.data.basic.video;
+                              this.imgs = (res.data.basic.imgs || '').split(',');
+                              this.data1 = res.data.campOrgList;
+                              this.audiences = (res.data.basic.audiences || '').split(',');
+                              this.campFeature = (res.data.basic.campFeature || '').split(',');
+                              this.jzTime = res.data.campSponsor[0].endTime;
+                              this.data2 = res.data.campSponsor;
+                              this.demand = res.data.campSponsor[0].demand;
+                              
+                        }
+                  })
+            },
+            getSearchCampSponsor(id){
+                  searchCampSponsor(id).then(res=>{
+                        if(res.code == 1000){
+                              let key = "key";
+                              console.log(res)
+                              this.dataName = res.data.namingCampSponsor;
+                              this.dataNoName = res.data.noNamingCampSponsor;
+                              this.dataOther = res.data.otherCampSponsor;
+                              this.dataName.map((item,index)=>{
+                                    item[key] = index
+                              })
+                              this.dataNoName.map((item,index)=>{
+                                    item[key] = index
+                              })
+                              this.dataOther.map((item,index)=>{
+                                    item[key] = index
+                              })
+                        }
+                  })
+            },
+            getSearchCampStar(id){
+                  searchCampStar(id).then(res=>{
+                        if(res.code == 1000){
+                              let key = "key";
+                              console.log(res)
+                              this.data4 = res.data;
+                              this.data4.map((item,index)=>{
+                                    item[key] = index
+                              })
+                        }
+                  })
+            },
+            getCampHeadInfo(id){
+                  campHeadInfo(id).then(res=>{
+                        if(res.code == 1000){
+                              this.logo = this.$host + res.data.campain.coverImg;
+                              this.titleName = res.data.campain.name;
+                              this.status = res.data.campain.status;
+                              this.money = res.data.campain.money;
+                              this.startTime = res.data.campain.publishTime;
+                              this.type = res.data.campain.campCatalog;
+                              this.num = res.data.campain.campNum.toString();
+                              this.starList = res.data.starList;
+                              this.area = res.data.campain.area;
+                              this.sponsorList = res.data.sponsorList;
+                        }
+                  })
+            }
+      },
+      filters:{
+            filterStatus(val){
+                  switch (val) {
+                        case 0 : return '未审批';
+                        case 20 : return '已审批';
+                        case 30 : return '驳回';
+                        case 40 : return '已认证'
+                  }
+            },
+            filterLength(val){
+                  if(val.length > 4){
+                        return val.slice(0,4)
+                  }else{
+                        return val
+                  }
+            },
+            filterStatusStep(val){
+                  if(val === 40 || 20){
+                        return 2
+                  }
+                  if(val === 0 || 30){
+                        return 1
+                  }
             }
       }
 }

@@ -11,3 +11,21 @@ export function unread(){
         data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) })
       })
 }
+
+//头部消息列表
+export function headMsg() {
+  return axios({
+    url: '/vue/information/listFive',
+    method: 'post',
+    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) })
+  })
+}
+
+// 信息列表页
+export function infoList(condition, offset) {
+  return axios({
+    url: '/vue/information/list',
+    method: 'post',
+    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), condition: condition, limit: 5, offset: offset})
+  })
+}

@@ -3,51 +3,54 @@
             <div class="main">
                   <a-col :span="10" class="item">
                         <div class="profile-image">
-                            <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
+                            <a-avatar :size="96" :src="logo" class="img-circle"/>
                         </div>
                         <div class="profile-info">
                                     <h2 class="no-margins">
-                                        STEPHON MARBURY: THE NEXT CHAPTER / 馬布里: 我的下一章
+                                        {{title}}
                                     </h2>
-                                    <p>时间：2019-01-02 11:50:00</p>
-                                    <span><a-icon type="environment" class="my-icon"/>吉林省 长春市
-                                        长春市南关区卫星广场明珠花园</span>
+                                    <p>时间：{{start}}</p>
+                                    <span><a-icon type="environment" class="my-icon"/>{{adress}}</span>
                         </div>
                   </a-col>
                   <a-col :span="10">
-                        <dl class="dl-horizontal">
-                            <dt>分类：</dt>
-                            <dd>篮球</dd>
-                            <dt>参赛人数：</dt>
-                            <dd>1300人</dd>
-                            <dt>参与明星：</dt>
-                            <dd class="project-people">
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a1.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a1.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a2.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a4.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a5.jpg"/>
-                            </dd>
-                            <dt>品牌赞助：</dt>
-                            <dd class="project-people">
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a3.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a1.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a2.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a4.jpg"/>
-                                <a-avatar :size="40" class="img-circle" src="./../../assets/a5.jpg"/>
-                            </dd>
-                        </dl>
+                        <ul class="dl-horizontal">
+                              <li>
+                                    分类：{{type}}
+                              </li>
+                              <li>
+                                    参赛人数：{{num}}人
+                              </li>
+                              <li>
+                                    参与明星：
+                                    <ul style="display: flex; padding: 0">
+                                          <li v-for="(item,index) in stars" :key="index">
+                                                <a-avatar :size="40" class="img-circle" :src="host + item.avatar"/>
+                                                <i v-if="item.length > 4"></i>
+                                          </li>
+                                    </ul>
+                              </li>
+                              <li>
+                                    参与明星：
+                                    <ul style="display: flex; padding: 0">
+                                          <li v-for="(item,index) in sponsors" :key="index">
+                                                <a-avatar :size="40" class="img-circle" :src="host + item.logo"/>
+                                                <i v-if="item.length > 4"></i>
+                                          </li>
+                                    </ul>
+                              </li>
+                        </ul>
                   </a-col>
             </div>
             <div class="side">
                   <a-row class="status-list">
                         <a-col :xs="12" :sm="12">
                         <div class="text">状态</div>
-                        <div class="heading">待审批</div>
+                        <div class="heading">{{status}}</div>
                         </a-col>
                         <a-col :xs="12" :sm="12">
                         <div class="text">订单金额</div>
-                        <div class="heading">¥ 568.08</div>
+                        <div class="heading">¥ {{price}}</div>
                         </a-col>
                   </a-row>
             </div>   
@@ -65,7 +68,7 @@
                   .item{
                         padding: 20px;
                         display: flex;
-                        justify-content: space-around;
+                        justify-content: flex-start;
                         .profile-info{
                               margin-left: 20px;
                               p{
@@ -108,20 +111,10 @@
             .dl-horizontal{
                   padding: 20px;
                   margin: 0;
-                  dt{
-                        float: left;
-                        width: 160px;
-                        overflow: hidden;
-                        clear: left;
-                        text-align: right;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
+                  li{
+                        display: flex;
                         color: #999;
-                  }
-                  dd{
-                        color: #999;
-                        font-weight: normal;
-                        
+                        margin: 2px 0;
                   }
                   .img-circle{
                         margin: 0 2px;
@@ -131,6 +124,49 @@
 </style>
 <script>
 export default {
-      
+
+      props: {
+            title: {
+                  type: String,
+            },
+            logo: {
+                  type: String,
+            },
+            start: {
+                  type: String,
+            },
+            adress: {
+                  type: String,
+            },
+            type: {
+                  type: String,
+            },
+            num: {
+                  type: String,
+            },
+            stars: {
+                  type: Array,
+            },
+            sponsors: {
+                  type: Array,
+            },
+            status: {
+                  type: String,
+            },
+            price: {
+                  type: String,
+            },
+      },
+      data(){
+            return{
+                  host: ''
+            }
+      },
+      mounted(){
+            this.host = this.$host
+      },
+      filters:{
+            
+      }
 }
 </script>

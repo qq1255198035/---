@@ -25,7 +25,7 @@
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card title="活动动态" class="my-activity">
-            <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
+            <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false" :loading="tableLoading">
               <template slot="status" slot-scope="status">
                 <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
               </template>
@@ -36,18 +36,18 @@
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
             <a slot="extra">全部消息</a>
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in notice()">
+              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in infoList">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
                       <a>{{ item.title }}</a>
                     </div>
                     <div slot="description" class="card-description">
-                      {{ item.description }}
+                      {{ item.content }}
                     </div>
                   </a-card-meta>
                   <div class="project-item">
-                    <span class="datetime">9小时前</span>
+                    <span class="datetime">{{ item.createtime }}</span>
                   </div>
                 </a-card>
               </a-card-grid>
@@ -62,46 +62,28 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapGetters } from 'vuex'
-
+import { headMsg } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
-
 import { getRoleList, getServiceList } from '@/api/manage'
-const sourceData = [
-  { item: '现金', count: 32.2 },
-  { item: '实物', count: 21 },
-  
-]
-const sourceData1 = [
-  { item: '未付', count: 60 },
-  { item: '已付', count: 10 },
-  
-]
-const DataSet = require('@antv/data-set')
-const dv = new DataSet.View().source(sourceData)
-const dv1 = new DataSet.View().source(sourceData1)
-dv.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
-dv1.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
-const pieScale = [{
-  dataKey: 'percent',
-  min: 0,
-  formatter: '.0%'
-}]
-const pieData = dv.rows
-const pieData1 = dv1.rows
+import { searchCampList } from '@/api/admin'
+const statusMap = {
+      0: {
+            status: 'processing',
+            text: '待审批'
+      },
+      20: {
+            status: 'success',
+            text: '已通过'
+      },
+      30: {
+            status: 'error',
+            text: '驳回'
+      },
+}
 export default {
-  name: 'Workplace',
+  
   components: {
     PageView,
     HeadInfo,
@@ -112,113 +94,36 @@ export default {
       timeFix: timeFix(),
       avatar: '',
       user: {},
-      pieData,
-      pieData1,
-      sourceData,
-      sourceData1,
-      c:["item", ["#4275FC","#41BDFD",]],
-      c1:["item", ["#F56367","#FFB535",]],
-      projects: [],
+      infoList:[],
       loading: true,
       radarLoading: true,
+      tableLoading: true,
       activities: [],
       teams: [],
-      pieScale,
-      pieStyle: {
-        stroke: '#fff',
-        lineWidth: 1
-      },
-      itemTpl: (value, color, checked, index) => {
-    const obj = dv.rows[index];
-    checked = checked ? 'checked' : 'unChecked';
-    return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
-      '" data-value="' + value + '" data-color=' + color +
-      ' style="cursor: pointer;font-size: 14px;">' +
-      '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
-      '<span class="g2-legend-text">' + value + '</span></td>' +
-      '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
-      '</tr>';
-  },
-      
-      // data
-      
-      
       operationColumns: [
-        {
-          title: '编号',
-          dataIndex: 'type',
-          key: 'type'
-        },
-        {
-          title: '活动名称',
-          dataIndex: 'name',
-          key: 'name'
-        },
-        
-        {
-          title: '开始时间',
-          dataIndex: 'updatedAt',
-          key: 'updatedAt'
-        },
-        {
-          title: '活动分类',
-          dataIndex: 'remark',
-          key: 'remark'
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          key: 'status',
-          scopedSlots: { customRender: 'status' }
-        },
+         {
+                title: '编号',
+                dataIndex: 'key'
+          },
+          {
+                title: '活动名称',
+                dataIndex: 'name'
+          },
+          {
+                title: '活动类型',
+                dataIndex: 'campCatalogVal',
+          },
+          {
+                title: '状态',
+                dataIndex: 'status',
+                scopedSlots: { customRender: 'status' }
+          },
+          {
+                title: '描述',
+                dataIndex: 'content',
+          },
       ],
-      operation1: [
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op1',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op2',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'reject'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op3',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'authen'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op4',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agreeing'
-        },
-        {
-          type: '01',
-          name: '篮球比赛',
-          key: 'op5',
-          updatedAt: '2017-10-03  19:23:12',
-          remark: '篮球',
-          status: 'agree'
-        }
-        
-        
-        
-        
-      ],
-      
+      operation1: [],
     }
   },
   computed: {
@@ -229,40 +134,37 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-
-    
   },
   mounted () {
-    this.getProjects()
+    this.getHeadMsg();
+    this.getSearchCampList('',1)
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome','notice']),
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
+    ...mapGetters(['nickname', 'welcome']),
+    
+    getHeadMsg(){
+      headMsg().then(res => {
+        if(res.code == 1000){
+          this.infoList = res.data
           this.loading = false
-        })
+        }
+      })
+    },
+    getSearchCampList(key,page){
+      searchCampList(key,page).then(res => {
+        if(res.code == 1000){
+          this.tableLoading = false;
+          this.operation1 = res.page.rows
+        }
+      })
     },
   },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        'agree': '已审批',
-        'reject': '驳回',
-        'authen': '已认证',
-        'agreeing': '未审批'
-      }
-      return statusMap[status]
+    statusFilter (type) {
+          return statusMap[type].text
     },
     statusTypeFilter (type) {
-      const statusTypeMap = {
-        'agree': 'success',
-        'reject': 'error',
-        'authen': 'processing',
-        'agreeing': 'warning'
-      }
-      return statusTypeMap[type]
+          return statusMap[type].status
     }
   }
 }

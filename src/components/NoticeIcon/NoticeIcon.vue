@@ -14,7 +14,7 @@
           <a-tab-pane tab="通知" key="1">
             <a-list v-for="(item,index) in notice" :key="index">
               <a-list-item >
-                <a-list-item-meta :title="item.title" :description="item.time">
+                <a-list-item-meta :title="item.title" :description="item.createtime">
                   <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
                 </a-list-item-meta>
               </a-list-item>
@@ -25,7 +25,7 @@
       </a-spin>
     </template>
     <span @click="fetchNotice" class="header-notice">
-      <a-badge :count="newsLength">
+      <a-badge :count="count" showZero>
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -34,7 +34,7 @@
 
 <script>
 import { mapActions,mapGetters } from 'vuex'
-import { unread } from '@/api/common'
+import { unread,headMsg } from '@/api/common'
 import api from "@/api/index";
 export default {
   name: 'HeaderNotice',
@@ -42,13 +42,12 @@ export default {
     return {
       loadding: false,
       visible: false,
-      newsLength: '',
-      msg:[],
+      count: 0,
       notice:[]
     }
   },
   mounted(){
-    
+    this.getHeadMsg();
     this.getUnread();
   },
   filters: {
@@ -75,8 +74,14 @@ export default {
     getUnread(){
       unread().then(res => {
         if(res.code == 1000){
-          this.newsLength = res.data
-          console.log(this.newsLength)
+          this.count = res.data
+        }
+      })
+    },
+    getHeadMsg(){
+      headMsg().then(res => {
+        if(res.code == 1000){
+          this.notice = res.data
         }
       })
     },

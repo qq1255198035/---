@@ -60,11 +60,11 @@
                       <a>{{ item.title }}</a>
                     </div>
                     <div slot="description" class="card-description">
-                      {{ item.description }}
+                      {{ item.content }}
                     </div>
                   </a-card-meta>
                   <div class="project-item">
-                    <span class="datetime">9小时前</span>
+                    <span class="datetime">{{ item.createtime }}</span>
                   </div>
                 </a-card>
               </a-card-grid>
@@ -79,7 +79,7 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapGetters } from 'vuex'
-
+import { headMsg } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
@@ -265,16 +265,17 @@ export default {
     
   },
   mounted () {
-    this.getProjects()
+    this.getHeadMsg()
   },
   methods: {
     ...mapGetters(['nickname', 'welcome']),
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
+    getHeadMsg(){
+      headMsg().then(res => {
+        if(res.code == 1000){
+          this.projects = res.data
           this.loading = false
-        })
+        }
+      })
     },
   },
   filters: {

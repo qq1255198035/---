@@ -35,7 +35,7 @@
                   <a-col :md="24" :lg="17">
                         <div class="info-box">
                               <div class="title">
-                                    <a-button type="primary" @click="$router.push({name: 'accountSet'})">账户设置</a-button>
+                                    <a-button type="primary" @click="$router.push({name: 'zhsz'})">账户设置</a-button>
                               </div>
                               <a-divider :dashed="true"/>
                               <div class="content">

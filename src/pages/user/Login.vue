@@ -40,9 +40,9 @@
         
         
       
-      <a-form-item>
+      <!-- <a-form-item>
         <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
-      </a-form-item>
+      </a-form-item> -->
 
       <a-form-item style="margin-top:24px">
         <a-button
@@ -110,17 +110,6 @@ export default {
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
-    // handler
-    // handleUsernameOrEmail (rule, value, callback) {
-    //   const { state } = this
-    //   const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-    //   if (regex.test(value)) {
-    //     state.loginType = 0
-    //   } else {
-    //     state.loginType = 1
-    //   }
-    //   callback()
-    // },
     handleTabClick (key) {
       this.customActiveKey = key
       // this.form.resetFields()

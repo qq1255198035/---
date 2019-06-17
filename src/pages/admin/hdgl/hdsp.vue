@@ -3,13 +3,13 @@
     <a-card :bordered="false">
       <a-row>
         <a-col :sm="8" :xs="24">
-          <head-info title="待审批" content="8个活动" :bordered="true"/>
+          <head-info title="待审批" :content="notApprovalNum + '个活动'" :bordered="true"/>
         </a-col>
         <a-col :sm="8" :xs="24">
-          <head-info title="已审批" content="32个活动" :bordered="true"/>
+          <head-info title="已审批" :content="approvalNum + '个活动'" :bordered="true"/>
         </a-col>
         <a-col :sm="8" :xs="24">
-          <head-info title="总计" content="24个活动"/>
+          <head-info title="总计" :content="allNum + '个活动'"/>
         </a-col>
       </a-row>
     </a-card>
@@ -20,40 +20,42 @@
       title="活动列表">
 
       <div slot="extra">
-        <a-radio-group>
-          <!-- <a-radio-button>全部</a-radio-button>
-          <a-radio-button>待审批</a-radio-button>
-          <a-radio-button>已审批</a-radio-button> -->
-          <a-radio-button value="全部">
+        <a-radio-group v-model="radioval" @change="onChange">
+          <a-radio-button value="9">
           全部
         </a-radio-button>
-        <a-radio-button value="待审批">
+        <a-radio-button value="0">
           待审批
         </a-radio-button>
-        <a-radio-button value="已审批">
+        <a-radio-button value="20">
           已审批
         </a-radio-button>
+        <a-radio-button value="30">
+          驳回
+        </a-radio-button>
         </a-radio-group>
-        <a-input-search style="margin-left: 16px; width: 272px;" />
+        <a-input-search style="margin-left: 16px; width: 272px;" @search="onSearch"/>
       </div>
       <div class="my-stable">
-            <a-table :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :columns="columns" :dataSource="data">
+            <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
                   <span slot="status" slot-scope="text">
                         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                   </span>
-                  <template slot="operation">
-                        <a href="javascript:;" @click="$router.push({name: 'ckhd'})">查 看</a>
-                        <a-divider type="vertical" />
-                        <a-popconfirm
-                              title="选择操作"
-                              @confirm="confirm"
-                              @cancel="cancel"
-                              okText="通过" 
-                              cancelText="驳回"
-                              
-                        >
-                              <a href="javascript:;" v-if="popconfirmShow">审 批</a>
-                        </a-popconfirm>
+                  <template slot="operation" slot-scope="text,record">
+                        <a href="javascript:;" @click="$router.push({name: 'ckhd',params: { id: record.key}})">查 看</a>
+                        <div style="display: inline-block;" v-if="record.status == 0">
+                              <a-divider type="vertical"/>
+                              <a-popconfirm
+                                    title="选择操作"
+                                    @confirm="confirm"
+                                    @cancel="cancel"
+                                    okText="通过" 
+                                    cancelText="驳回"
+                              >
+                                    <a href="javascript:;" @click="recordKey = record.key">审 批</a>
+                              </a-popconfirm>
+                        </div>
+                        
                   </template>
             </a-table>
       </div>
@@ -66,7 +68,7 @@
                   @cancel="handleCancel"
             >
                   <a-form-item label="原因">
-                        <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }"/>
+                        <a-textarea placeholder="请输入原因" :autosize="{ minRows: 4 }" v-model="cancelReason"/>
                   </a-form-item>
             </a-modal>
       </div>
@@ -74,128 +76,78 @@
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-
+import { approvalNumber,searchCampList,campApproval,campInformation } from '@/api/admin'
 const statusMap = {
       0: {
-            status: 'default',
-            text: '关闭'
-      },
-      1: {
             status: 'processing',
             text: '待审批'
       },
-      2: {
+      20: {
             status: 'success',
             text: '已审批'
       },
-      3: {
+      30: {
             status: 'error',
             text: '驳回'
       },
-      4: {
-            status: 'processing',
-            text: '已认证'
-      }
 }
-
 export default {
-      
       components: {
-            
             HeadInfo
       },
+
       data () {
             return {
-                        visible: false,
-                        confirmLoading: false,
-                        selectedRowKeys: [],
-                        columns: [
-                              {
-                                    title: '编号',
-                                    dataIndex: 'number'
-                              },
-                              {
-                                    title: '活动名称',
-                                    dataIndex: 'hdmc'
-                              },
-                              {
-                                    title: '活动类型',
-                                    dataIndex: 'hdlx',
-                              },
-                              {
-                                    title: '状态',
-                                    dataIndex: 'status',
-                                    scopedSlots: { customRender: 'status' }
-                              },
-                              {
-                                    title: '描述',
-                                    dataIndex: 'desc',
-                              },
-                              {
-                                    title: '操作',
-                                    dataIndex: 'operation',
-                                    scopedSlots: { customRender: 'operation' },
-                              }
-                        ],
-                        // 加载数据方法 必须为 Promise 对象
+                  visible: false,
+                  confirmLoading: false,
+                  loading: true,
+                  offset: 1,
+                  radioval: '9',
+                  allNum: 0,
+                  approvalNum: 0,
+                  notApprovalNum: 0,
+                  pagination:{
+                        total:0,
+                        pageSize:10,
+                  },
+                  columns: [
+                        {
+                              title: '编号',
+                              dataIndex: 'num'
+                        },
+                        {
+                              title: '活动名称',
+                              dataIndex: 'name'
+                        },
+                        {
+                              title: '活动类型',
+                              dataIndex: 'campCatalogVal',
+                        },
+                        {
+                              title: '状态',
+                              dataIndex: 'status',
+                              scopedSlots: { customRender: 'status' }
+                        },
+                        {
+                              title: '描述',
+                              dataIndex: 'content',
+                        },
+                        {
+                              title: '操作',
+                              dataIndex: 'operation',
+                              scopedSlots: { customRender: 'operation' }
+                            
+                        },
+                       
+                              
+                      
                         
-                        // return this.$http.get('/service', {
-                        //       params: Object.assign(parameter, this.queryParam)
-                        // }).then(res => {
-                        //       return res.result
-                        // })
-                        data: [
-                              {
-                                    key: 0,
-                                    number: '01',
-                                    hdmc: '篮球比赛',
-                                    hdlx: '篮球',
-                                    status: '0',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: 1,
-                                    number: '01',
-                                    hdmc: '篮球比赛',
-                                    hdlx: '篮球',
-                                    status: '1',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: 2,
-                                    number: '01',
-                                    hdmc: '篮球比赛',
-                                    hdlx: '篮球',
-                                    status: '2',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: 3,
-                                    number: '01',
-                                    hdmc: '篮球比赛',
-                                    hdlx: '篮球',
-                                    status: '3',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: 4,
-                                    number: '01',
-                                    hdmc: '篮球比赛',
-                                    hdlx: '篮球',
-                                    status: '4',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                              {
-                                    key: 5,
-                                    number: '01',
-                                    hdmc: '篮球比赛',
-                                    hdlx: '篮球',
-                                    status: '1',
-                                    desc: '2016-09-21  08:50:08',
-                              },
-                        ],
-                        
-                  }
+                  ],
+                  data: [],
+                  searchkey: '',
+                  cancelReason: '',
+                  recordKey: ''
+            }
       },
       filters: {
             statusFilter (type) {
@@ -206,59 +158,89 @@ export default {
             }
       },
       computed:{
-            popconfirmShow(){
-                  
-                  var res = this.data.map((item,index) =>{
-                        return item.status == '1'
-                  })
-                  return res
-                  
-            },
-            //todo
-            getDataIndex(){
-                  for(var i=0;i < this.data.length;i++){
-                        return i
-                  }
-            }
+           
       },
       mounted(){
-            console.log(...this.popconfirmShow)
-            console.log(this.getDataIndex)
+            this.getApprovalNumber();
+            this.getSearchCampList(this.searchkey,this.offset,this.radioval);
+            //console.log(this.data)
       },
       methods:{
-            confirm () {
-                  this.$message.success('操作成功 ！');
+            //获取活动审批与待审批数量
+            getApprovalNumber(){
+                  approvalNumber().then(res => {
+                        if(res.code == 1000){
+                              this.allNum = res.allNum;
+                              this.approvalNum = res.approvalNum
+                              this.notApprovalNum = res.notApprovalNum
+                        }
+                  })
             },
+            //获取活动列表
+            getSearchCampList(key,page,filter){
+                  searchCampList(key,page,filter).then(res => {
+                        if(res.code == 1000){
+                              let key = "num";
+                              this.pagination.total = parseInt(res.page.total)
+                              this.loading = false;
+                              this.data = res.page.rows
+                              this.data.map((item,index)=>{
+                                    item[key] = (res.page.offset - 1).toString() + index
+                              })
+                        }
+                  })
+            },
+            //点击分页
+            handleTableChange (pagination) {
+                  this.loading = true;
+                  this.offset = pagination.current;
+                  this.getSearchCampList(this.searchkey,this.offset,this.radioval);
+            },
+             //搜索
+            onSearch (value) {
+                  this.loading = true;
+                  this.searchkey = value
+                  this.getSearchCampList(this.searchkey,this.offset,this.radioval);
+            },
+            //过滤
+            onChange(e){
+                  this.loading = true;
+                  this.getSearchCampList(this.searchkey,this.offset,this.radioval);
+            },
+            //提交审批
+            postCampApproval(campId, reject, agreement){
+                  this.loading = true;
+                  campApproval(campId, reject, agreement).then(res=>{
+                        if (res.code == 1000) {
+                              this.$message.success('操作成功 ！');
+                              this.getApprovalNumber();
+                              this.getSearchCampList(this.searchkey,this.offset,this.radioval);
+                              this.loading = false;
+                        }
+                  })
+            },
+            // 通过审批
+            confirm(){
+                  this.postCampApproval(this.recordKey,'',20)
+                  
+            },
+            // 驳回审批 拉取驳回原因弹窗
             cancel() {
                   this.visible = true
             },
+            // 提交驳回原因
             handleOk(e) {
-                  this.ModalText = 'The modal will be closed after two seconds';
                   this.confirmLoading = true;
-                  setTimeout(() => {
                   this.visible = false;
                   this.confirmLoading = false;
-                  this.$message.success('操作成功');
-                  //失败提示
-                  //this.$message.error('This is a message of error');
-                  }, 2000);
+                  this.postCampApproval(this.recordKey,this.cancelReason,30)
             },
+            // 取消弹窗
             handleCancel(e) {
-                  console.log('Clicked cancel button');
                   this.visible = false
             },
-            success () {
-                  this.loading = true;
-                  setTimeout(() => {
-                        this.loading = false;
-                        this.$message.success('操作成功');
-                  }, 2000);
-                  
-            },
-            onSelectChange (selectedRowKeys) {
-                  console.log('selectedRowKeys changed: ', selectedRowKeys);
-                  this.selectedRowKeys = selectedRowKeys
-            }
+           
+            
       }
 }
 </script>
