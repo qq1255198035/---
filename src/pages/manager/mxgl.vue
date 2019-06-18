@@ -4,37 +4,43 @@
             <div class="mxgl-header">
                   <div class="input-box">
                         <a-form-item label="明星名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="Basic usage"/>
+                              <a-input placeholder="Basic usage" v-model="name"/>
                         </a-form-item>
-                        <a-button type="primary" icon="search">搜 索</a-button>
+                        <a-button type="primary" icon="search" @click="search">搜 索</a-button>
                   </div>
                   <div class="btn-box">
                         <a-divider class="my-divider"/>
-                        <a-button type="primary" icon="plus" @click="showModal">新建</a-button>
+                        <a-button type="primary" icon="plus" @click="showModal($event)">新建</a-button>
                   </div>
             </div>
             <div class="mxgl-content">
-                  <div class="my-cards">
+                  <div class="my-cards" v-if="cardItemData.length > 0">
                         <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
                               <div class="title">
                                     <h5>{{item.name}}</h5>
-                                    <span>{{item.enName}}</span>
-                                    <a-avatar :size="64" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
+                                    <span>{{item.en_name}}</span>
+                                    <a-avatar :size="64" :src="host + item.avatar"/>
                                     <div class="bottom">
-                                          <span>{{item.job}}</span>
-                                          <span>{{item.desc}}</span>
-                                          <span>{{item.erea}}</span>
+                                          <span>{{item.catalogVal}}</span>
+                                          <span>{{item.birth}} | {{item.height}} cm</span>
+                                          <span>{{item.addr}}</span>
                                     </div>    
                               </div>
                               <div class="footer">
                                     <transition name="fade">
                                           <div class="button-box" v-show= "btnShow == index" key="1">
                                                 <a-button type="danger" class="danger" @click="showDeleteConfirm">删除</a-button>
-                                                <a-button type="primary" class="primary" @click="showModal" :loading="loading">修改</a-button>
+                                                <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">修改</a-button>
                                           </div>
                                     </transition>
                               </div>
                         </div>
+                  </div>
+                  <p v-else style="text-align: center; color: #ccc;">
+                        暂无数据
+                  </p>
+                  <div style="text-align: center; margin-top: 16px;">
+                        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
                   </div>
             </div>
             <a-modal
@@ -46,113 +52,129 @@
                   :width="1040"
             >
                   <div class="info-item">
-                        <div class="left">
-                              <div class="section">
-                                    <a-form-item label="姓" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 2}">
-                                          <a-input placeholder="请输入" class="my-input"/>
+                        <a-form :form="form">
+                              <div class="left">
+                                    <div class="section">
+                                          <a-form-item label="姓" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 3}">
+                                                <a-input placeholder="请输入" class="my-input" v-decorator="[
+                                                'lastname',{rules: [{ required: true, message: '请填写姓氏'}]}]"/>
+                                          </a-form-item>
+                                          <a-form-item label="名" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 3}">
+                                                <a-input placeholder="请输入" class="my-input" v-decorator="[
+                                                'firstname',{rules: [{ required: true, message: '请填写名字' }]}]"/>
+                                          </a-form-item>
+                                    </div>
+                                    
+                                    <a-form-item label="英文名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input placeholder="请输入英文名称" class="my-input" v-decorator="[
+                                                'enname',{rules: [{ required: true, message: '请填写英文名称' }]}]"/>
                                     </a-form-item>
-                                    <a-form-item label="名" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 2}">
-                                          <a-input placeholder="请输入" class="my-input"/>
+                                    <a-form-item label="职业" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
+                                          <a-select class="my-select" placeholder="请选择" v-decorator="[
+                                                'works',{rules: [{ required: true, message: '请选择活职业' }]}]">
+                                                <a-select-option v-for="(item,index) in works" :value="item.id" :key="index">{{ item.name }}</a-select-option>
+                                          </a-select>
+                                    </a-form-item>
+                                    <a-form-item label="国籍" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
+                                          <a-select class="my-select" placeholder="请选择" v-decorator="[
+                                                'country',{rules: [{ required: true, message: '请选择国籍' }]}]">
+                                                <a-select-option v-for="(item,index) in country" :value="item.id" :key="index">{{ item.name }}</a-select-option>
+                                          </a-select>
+                                    </a-form-item>
+                                    <a-form-item label="出生日期" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}" class="my-form-item">
+                                          <a-date-picker class="my-picker" v-decorator="[
+                                                'birthday',{rules: [{ required: true, message: '请选择出生日期' }]}]"/>
+                                    </a-form-item>
+                                    <a-form-item label="身高" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input addonAfter="cm" placeholder="请输入" v-decorator="[
+                                                'height',{rules: [{ required: true, message: '请填写身高' }]}]"/>
+                                    </a-form-item>
+                                    <a-form-item label="体重" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input addonAfter="公斤" placeholder="请输入" v-decorator="[
+                                                'heavy',{rules: [{ required: true, message: '请填写体重' }]}]"/>
+                                    </a-form-item>
+                                    <a-form-item label="出生地" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input placeholder="请输入" class="my-input" v-decorator="[
+                                                'home',{rules: [{ required: true, message: '请填写出生地址' }]}]"/>
+                                    </a-form-item>
+                                    <a-form-item label="简介" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-textarea placeholder="请输入简介" :rows="6" v-decorator="[
+                                                'desc',{rules: [{ required: true, message: '请输入简介' }]}]"></a-textarea>
                                     </a-form-item>
                               </div>
-                              
-                              <a-form-item label="英文名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-input placeholder="请输入英文名称" class="my-input"/>
-                              </a-form-item>
-                              <a-form-item label="职业" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
-                                    <a-select defaultValue="请选择" class="my-select">
-                                          <a-select-option value="Zhejiang">Zhejiang</a-select-option>
-                                          <a-select-option value="Jiangsu">Jiangsu</a-select-option>
-                                    </a-select>
-                              </a-form-item>
-                              <a-form-item label="国籍" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
-                                    <a-select defaultValue="请选择" class="my-select">
-                                          <a-select-option value="Zhejiang">Zhejiang</a-select-option>
-                                          <a-select-option value="Jiangsu">Jiangsu</a-select-option>
-                                    </a-select>
-                              </a-form-item>
-                              <a-form-item label="出生日期" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}" class="my-form-item">
-                                    <a-date-picker class="my-picker"/>
-                              </a-form-item>
-                              <a-form-item label="身高" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-input addonAfter="cm" defaultValue="请输入" />
-                              </a-form-item>
-                              <a-form-item label="体重" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-input addonAfter="公斤" defaultValue="请输入" />
-                              </a-form-item>
-                              <a-form-item label="出生地" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-input placeholder="请输入" class="my-input"/>
-                              </a-form-item>
-                              <a-form-item label="简介" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-textarea placeholder="请输入简介" :rows="6"></a-textarea>
-                              </a-form-item>
-                        </div>
-                        <div class="right">
-                              <a-form-item label="性别" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-radio-group>
-                                          <a-radio value="a">
-                                          男
-                                          </a-radio>
-                                          <a-radio value="b">
-                                          女
-                                          </a-radio>
-                                    </a-radio-group>
-                              </a-form-item>
-                              <a-form-item label="授权证书" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-upload
-                                          name="avatar"
-                                          listType="picture-card"
-                                          class="avatar-uploader"
-                                          :showUploadList="false"
-                                          action="//jsonplaceholder.typicode.com/posts/"
-                                          :beforeUpload="beforeUpload"
-                                          @change="handleChange"
-                                          >
-                                          <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-                                          <div v-else>
-                                                <a-icon :type="loading ? 'loading' : 'plus'" />
-                                                <div class="ant-upload-text">上传</div>
-                                          </div>
+                              <div class="right">
+                                    <a-form-item label="性别" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-radio-group v-decorator="[
+                                                'sex',{rules: [{ required: true, message: '请输入性别' }]}]">
+                                                <a-radio value="1">
+                                                男
+                                                </a-radio>
+                                                <a-radio value="2">
+                                                女
+                                                </a-radio>
+                                          </a-radio-group>
+                                    </a-form-item>
+                                    <a-form-item label="授权证书" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-upload
+                                                name="avatar"
+                                                listType="picture-card"
+                                                class="avatar-uploader"
+                                                :showUploadList="false"
+                                                :beforeUpload="beforeUpload"
+                                                @change="handleChange1"
+                                                v-decorator="[
+                                                'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
+                                                >
+                                                <img v-if="imageUrl1" :src="imageUrl1" alt="avatar" />
+                                                <div v-else>
+                                                      <a-icon :type="loading ? 'loading' : 'plus'" />
+                                                      <div class="ant-upload-text">上传</div>
+                                                </div>
                                           </a-upload>
                                           <span>建议尺寸 200 * 300</span>
-                              </a-form-item>
-                              <a-form-item label="上传头像" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-upload
-                                          name="avatar"
-                                          listType="picture-card"
-                                          class="avatar-uploader"
-                                          :showUploadList="false"
-                                          action="//jsonplaceholder.typicode.com/posts/"
-                                          :beforeUpload="beforeUpload"
-                                          @change="handleChange"
-                                          >
-                                          <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-                                          <div v-else>
-                                                <a-icon :type="loading ? 'loading' : 'plus'" />
-                                                <div class="ant-upload-text">上传</div>
-                                          </div>
-                                          </a-upload>
-                                          <span>建议尺寸 200 * 300</span>
-                              </a-form-item>
-                              <a-form-item label="上传图片" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                    <a-upload
-                                          name="avatar"
-                                          listType="picture-card"
-                                          class="avatar-uploader"
-                                          :showUploadList="false"
-                                          action="//jsonplaceholder.typicode.com/posts/"
-                                          :beforeUpload="beforeUpload"
-                                          @change="handleChange"
-                                          >
-                                          <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-                                          <div v-else>
-                                                <a-icon :type="loading ? 'loading' : 'plus'" />
-                                                <div class="ant-upload-text">上传</div>
-                                          </div>
-                                          </a-upload>
-                                          <span>建议尺寸 200 * 300</span>
-                              </a-form-item>
-                        </div>
+                                    </a-form-item>
+                                    <a-form-item label="上传头像" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-upload
+                                                name="avatar"
+                                                listType="picture-card"
+                                                class="avatar-uploader"
+                                                :showUploadList="false"
+                                                :beforeUpload="beforeUpload"
+                                                @change="handleChange2"
+                                                v-decorator="[
+                                                'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
+                                                >
+                                                
+                                                <img v-if="imageUrl2" :src="imageUrl2" alt="avatar" />
+                                                <div v-else>
+                                                      <a-icon :type="loading ? 'loading' : 'plus'" />
+                                                      <div class="ant-upload-text">上传</div>
+                                                </div>
+                                                </a-upload>
+                                                <span>建议尺寸 200 * 300</span>
+                                    </a-form-item>
+                                    <a-form-item label="上传图片" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-upload
+                                                name="avatar"
+                                                listType="picture-card"
+                                                class="avatar-uploader"
+                                                :showUploadList="false"
+                                                :beforeUpload="beforeUpload"
+                                                @change="handleChange3"
+                                                v-decorator="[
+                                                'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
+                                                >
+                                                
+                                                <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" />
+                                                <div v-else>
+                                                      <a-icon :type="loading ? 'loading' : 'plus'" />
+                                                      <div class="ant-upload-text">上传</div>
+                                                </div>
+                                                </a-upload>
+                                                <span>建议尺寸 200 * 300</span>
+                                    </a-form-item>
+                              </div>
+                        </a-form>
                   </div>
             </a-modal>
       </div>
@@ -183,14 +205,14 @@
       .mxgl-content{
             .my-cards{
                   display: flex;
-                  justify-content: space-between;
+                  justify-content: flex-start;
                   flex-wrap: wrap;
-                  padding: 0 120px 50px;
-                  
+                  padding: 30px 120px 50px;
+                  background-color: #fff;
                   .card-item{
                         width: 22%;
                         height: 315px;
-                        margin: 10px 0;
+                        margin: 10px 1%;
                         border:1px solid #ccc;
                         border-radius: 5px;
                         padding: 20px;
@@ -244,110 +266,168 @@
       }
 }
 .info-item{
-      display: flex;
-      justify-content: space-between;
-      .section{
+      
+      form{
             display: flex;
-            padding-left: 12px;
-      }
-      > div{
-            width: 49%;
-            .my-form-item{
-                  width: 100%;
+            justify-content: space-between;
+            .section{
                   display: flex;
-                  margin-bottom: 15px;
-                  .my-select{
+                  padding-left: 12px;
+            }
+            > div{
+                  width: 49%;
+                  .my-form-item{
                         width: 100%;
-                  }
-                  .my-picker{
-                        width: 100%;
-                  }
-                  .my-tag-box{
                         display: flex;
-                        > span{
-                              margin-right: 10px;
-                              min-width: 56px;
-                              text-align: right;
+                        margin-bottom: 15px;
+                        .my-select{
+                              width: 100%;
                         }
-                        .my-tag{
-                              border: 1px solid #ccc;
+                        .my-picker{
+                              width: 100%;
                         }
-                  }
-                  
-                  .ant-form-item-control-wrapper{
-                        width: 90%;
-                  }
-                  .avatar-uploader{
-                        img{
-                              width: 128px;
-                              height: 128px;
+                        .my-tag-box{
+                              display: flex;
+                              > span{
+                                    margin-right: 10px;
+                                    min-width: 56px;
+                                    text-align: right;
+                              }
+                              .my-tag{
+                                    border: 1px solid #ccc;
+                              }
                         }
+                        
+                        .ant-form-item-control-wrapper{
+                              width: 90%;
+                        }
+                        .avatar-uploader{
+                              img{
+                                    width: 128px;
+                                    height: 128px;
+                              }
+                        }
+                        
                   }
-                  
             }
       }
+      
 }
 </style>
 <script>
-import PageHeader from '@/components/PageHeader' 
+import { starsList,getProfession,getCountry,searchStarInfo } from "@/api/manager";
+import { mixinsTitle } from "@/utils/mixin";
+import moment from 'moment';
 export default {
-      components: {
-            'page-header': PageHeader,
-      },
+      mixins:[mixinsTitle],
       data(){
             return{
                   pageTitle: null,
                   btnShow: -1,
                   visible: false,
                   confirmLoading: false,
+                  loadingMore:true,
                   loading:false,
-                  imageUrl: '',
-                  cardItemData:[
-                        {
-                              name:"马布里",
-                              enName: 'Stephon Xavier Marbury',
-                              job: '篮球运动员',
-                              desc:"1977年2月20日 | 188cm",
-                              erea:"美国纽约州纽约市布鲁克林区科尼岛",
-                        },
-                        {
-                              name:"马布里",
-                              enName: 'Stephon Xavier Marbury',
-                              job: '篮球运动员',
-                              desc:"1977年2月20日 | 188cm",
-                              erea:"美国纽约州纽约市布鲁克林区科尼岛",
-                        },
-                        {
-                              name:"马布里",
-                              enName: 'Stephon Xavier Marbury',
-                              job: '篮球运动员',
-                              desc:"1977年2月20日 | 188cm",
-                              erea:"美国纽约州纽约市布鲁克林区科尼岛",
-                        },
-                        {
-                              name:"马布里",
-                              enName: 'Stephon Xavier Marbury',
-                              job: '篮球运动员',
-                              desc:"1977年2月20日 | 188cm",
-                              erea:"美国纽约州纽约市布鲁克林区科尼岛",
-                        },
-                        {
-                              name:"马布里",
-                              enName: 'Stephon Xavier Marbury',
-                              job: '篮球运动员',
-                              desc:"1977年2月20日 | 188cm",
-                              erea:"美国纽约州纽约市布鲁克林区科尼岛",
-                        },
-                  ],
+                  btnDsiable: false,
+                  imageUrl1: '',
+                  imageUrl2: '',
+                  imageUrl3: '',
+                  cardItemData:[],
+                  name: '',
+                  offset: 1,
+                  host:'',
+                  form: this.$form.createForm(this),
+                  works:[],
+                  country:[],
+                  
+                 
             }
       },
+      mounted () {
+            this.getStarsList(this.name,this.offset); 
+            this.getProfessionList();
+            this.getCountryList();
+            this.host = this.$host
+      },
       methods:{
-            getPageMeta () {
-                  // eslint-disable-next-line
-                  this.pageTitle = this.$route.meta.title
+            getSearchStarInfo(athleteId){
+                  searchStarInfo(athleteId).then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.form.setFieldsValue({
+                                    lastname: res.data.surname,
+                                    firstname: res.data.monicker,
+                                    enname: res.data.enName,
+                                    works: res.data.catalog,
+                                    country : res.data.nationality,
+                                    birthday: moment(res.data.birth, 'YYYY-MM-DD'),
+                                    height: res.data.height,
+                                    heavy: res.data.weight,
+                                    home: res.data.addr,
+                                    desc: res.data.introduction,
+                                    sex: res.data.sex,
+                                    
+                              });
+                              this.imageUrl1 = this.host + res.data.credential;
+                              this.imageUrl2 = this.host + res.data.avatar;
+                              this.imageUrl3 = this.host + res.data.imgs
+                        }
+                  })
             },
-            showModal() {
+            getProfessionList(){
+                  getProfession().then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.works = res.data
+                        }
+                  })
+            },
+            getCountryList(){
+                  getCountry().then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.country = res.data
+                        }
+                  })
+            },
+            getStarsList(name, offset){
+                  starsList(name, offset).then(res=>{
+                        if (res.code == 1000) {
+                              
+                              this.cardItemData = res.page.rows;
+                              this.loadingMore = false
+                        }
+                  })
+            },
+            search(){
+                  this.getStarsList(this.name,1);
+            },
+            loadMore(){
+                  this.offset++;
+                  this.loadingMore = true;
+                  starsList('', this.offset).then(res=>{
+                        if (res.code == 1000) {
+                              if (this.offset > res.page.pages) {
+                                    this.$message.warning('已加载全部数据');
+                                    this.loadingMore = false;
+                                    this.btnDsiable = true;
+                                    return;
+                              }
+                              console.log(res)
+                              this.cardItemData = this.cardItemData.concat(res.page.rows);
+                              this.loadingMore = false
+                        }
+                  })
+
+            },
+            showModal(e,id) {
                   this.visible = true
+                  setTimeout(() => {
+                        if(e.target.innerText === '修 改'){
+                              this.getSearchStarInfo(id)
+                        }
+                  }, 500);
+                  
             },
             handleOk(e) {
                   this.ModalText = 'The modal will be closed after two seconds';
@@ -361,8 +441,23 @@ export default {
                   }, 2000);
             },
             handleCancel(e) {
-                  console.log('Clicked cancel button');
                   this.visible = false
+                  this.form.setFieldsValue({
+                        lastname: '',
+                        firstname: '',
+                        enname: '',
+                        works: '',
+                        country : '',
+                        birthday: moment(),
+                        height: '',
+                        heavy: '',
+                        home: '',
+                        desc: '',
+                        sex: '',
+                  });
+                  this.imageUrl1 = '';
+                  this.imageUrl2 = '';
+                  this.imageUrl3 = ''
             },
             
             showDeleteConfirm() {
@@ -383,7 +478,8 @@ export default {
             },
             beforeUpload (file) {
                   const isJPG = file.type === 'image/jpeg'
-                  if (!isJPG) {
+                  const isPNG = file.type === 'image/png'
+                  if (!isJPG || !isPNG) {
                   this.$message.error('You can only upload JPG file!')
                   }
                   const isLt2M = file.size / 1024 / 1024 < 2
@@ -392,24 +488,46 @@ export default {
                   }
                   return isJPG && isLt2M
             },
-            handleChange (info) {
+            handleChange1 (info) {
                   if (info.file.status === 'uploading') {
-                  this.loading = true
-                  return
+                        this.loading = true
+                        return
                   }
                   if (info.file.status === 'done') {
                   // Get this url from response in real world.
-                  getBase64(info.file.originFileObj, (imageUrl) => {
-                  this.imageUrl = imageUrl
-                  this.loading = false
-                  })
+                        getBase64(info.file.originFileObj, (imageUrl) => {
+                              this.imageUrl1 = imageUrl
+                              this.loading = false
+                        })
+                  }
+            },
+            handleChange2 (info) {
+                  if (info.file.status === 'uploading') {
+                        this.loading = true
+                        return
+                  }
+                  if (info.file.status === 'done') {
+                  // Get this url from response in real world.
+                        getBase64(info.file.originFileObj, (imageUrl) => {
+                              this.imageUrl2 = imageUrl
+                              this.loading = false
+                        })
+                  }
+            },
+            handleChange3 (info) {
+                  if (info.file.status === 'uploading') {
+                        this.loading = true
+                        return
+                  }
+                  if (info.file.status === 'done') {
+                  // Get this url from response in real world.
+                        getBase64(info.file.originFileObj, (imageUrl) => {
+                              this.imageUrl3 = imageUrl
+                              this.loading = false
+                        })
                   }
             },
       },
-      mounted () {
-            this.getPageMeta();
-            
-            
-      },
+      
 }
 </script>

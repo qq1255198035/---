@@ -48,11 +48,11 @@
                       <a>{{ item.title }}</a>
                     </div>
                     <div slot="description" class="card-description">
-                      {{ item.description }}
+                      {{ item.content }}
                     </div>
                   </a-card-meta>
                   <div class="project-item">
-                    <span class="datetime">9小时前</span>
+                    <span class="datetime">{{ item.createtime }}</span>
                   </div>
                 </a-card>
               </a-card-grid>
@@ -71,27 +71,14 @@ import { mapActions } from 'vuex'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
-
-import { getRoleList, getServiceList } from '@/api/manage'
-const sourceData = [
-  { item: '现金', count: 32.2 },
-  { item: '实物', count: 21 },
-  
-]
+import { headMsg } from '@/api/common'
 const sourceData1 = [
   { item: '未付', count: 60 },
   { item: '已付', count: 10 },
   
 ]
 const DataSet = require('@antv/data-set')
-const dv = new DataSet.View().source(sourceData)
 const dv1 = new DataSet.View().source(sourceData1)
-dv.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
 dv1.transform({
   type: 'percent',
   field: 'count',
@@ -103,7 +90,7 @@ const pieScale = [{
   min: 0,
   formatter: '.0%'
 }]
-const pieData = dv.rows
+
 const pieData1 = dv1.rows
 export default {
   name: 'Workplace',
@@ -117,9 +104,7 @@ export default {
       timeFix: timeFix(),
       avatar: '',
       user: {},
-      pieData,
       pieData1,
-      sourceData,
       sourceData1,
       c1:["item", ["#F56367","#FFB535",]],
       projects: [],
@@ -133,20 +118,17 @@ export default {
         lineWidth: 1
       },
       itemTpl: (value, color, checked, index) => {
-    const obj = dv.rows[index];
-    checked = checked ? 'checked' : 'unChecked';
-    return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
-      '" data-value="' + value + '" data-color=' + color +
-      ' style="cursor: pointer;font-size: 14px;">' +
-      '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
-      '<span class="g2-legend-text">' + value + '</span></td>' +
-      '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
-      '</tr>';
+      const obj = dv1.rows[index];
+      checked = checked ? 'checked' : 'unChecked';
+      return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
+        '" data-value="' + value + '" data-color=' + color +
+        ' style="cursor: pointer;font-size: 14px;">' +
+        '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
+        '<span class="g2-legend-text">' + value + '</span></td>' +
+        '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
+        '</tr>';
   },
-      
       // data
-      
-      
       operationColumns: [
         {
           title: '编号',
@@ -244,18 +226,18 @@ export default {
     
   },
   mounted () {
-    this.getProjects()
+    this.getHeadMsg()
     // this.conlog();
   },
   methods: {
     ...mapGetters(['nickname', 'welcome']),
-    // ...mapActions(['conlog']),
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
+    getHeadMsg(){
+      headMsg().then(res => {
+        if(res.code == 1000){
+          this.projects = res.data
           this.loading = false
-        })
+        }
+      })
     },
   },
   filters: {

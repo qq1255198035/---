@@ -250,3 +250,62 @@ export function sendMessage(title, content, recipients) {
            })
       })
 }
+// 打款记录列表
+export function transferMoneyList(condition, offset, starttime, endtime) {
+      return axios({
+            url: '/vue/admin/transferMoneyList',
+            method: 'post',
+            data: qs.stringify({
+                  token: Vue.ls.get(ACCESS_TOKEN),
+                  condition: condition,
+                  stutus: 9,
+                  limit: 10,
+                  offset: offset,
+                  starttime: starttime,
+                  endtime: endtime
+            })
+      })
+}
+// 打款记录选择活动接口
+export function allCamp() {
+      return axios({
+            url: '/vue/admin/getAllCamp',
+            method: 'post',
+            data: qs.stringify({
+                  token: Vue.ls.get(ACCESS_TOKEN),
+            })
+      })
+}
+// 选择汇款方式
+export function allCampway(campId) {
+      return axios({
+        url: '/vue/admin/getAllPurpose',
+        method: 'post',
+        data: qs.stringify({
+          token: Vue.ls.get(ACCESS_TOKEN),
+          campId: campId
+        })
+      })
+}
+// 新增打款记录接口
+export function addTransferMoney(payCompany, receiveCompany, payment, balance, payAccount, bz, receiveAccount, receiveBank, serviceCharge, campId, type, recordId) {
+         return axios({
+           url: '/vue/admin/addTransferMoney',
+           method: 'post',
+           data: qs.stringify({
+                  token: Vue.ls.get(ACCESS_TOKEN),
+                  payCompany: payCompany,
+                  receiveCompany: receiveCompany,
+                  payment: payment,
+                  balance: balance,
+                  payAccount: payAccount,
+                  receiveAccount: receiveAccount,
+                  bz: bz,
+                  receiveBank: receiveBank,
+                  serviceCharge: serviceCharge,
+                  campId: campId,
+                  type: type,
+                  recordId: recordId
+            })
+      })
+}

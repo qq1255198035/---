@@ -18,8 +18,8 @@ const constantRouterComponents = {
   issuerHdgl: () => import('@/pages/Issuer/activies/hdgl'),
   zzsp: () => import('@/pages/Issuer/activies/zzgl'),
   issuerMxsp: () => import('@/pages/Issuer/activies/hdgl'),
-  cjhd: () => import('@/pages/Issuer/activies/cjhd'),
-  ckhd: () => import('@/pages/Issuer/activies/details'),
+  issuerCjhd: () => import('@/pages/Issuer/activies/cjhd'),
+  issuerCkhd: () => import('@/pages/Issuer/activies/details'),
   issuerMxxq: () => import('@/pages/Issuer/activies/starsdetail'),
   // 管理员路由
   adminHome: () => import('@/pages/admin/index'),
@@ -36,6 +36,7 @@ const constantRouterComponents = {
   mxxq: () => import('@/pages/admin/khgl/mxxq'),
   dkjl: () => import('@/pages/admin/dkjl/dkjl'),
   dkxq: () => import('@/pages/admin/dkjl/dkxq'),
+  dkxx: () => import('@/pages/admin/dkjl/dkxx'),
   admintzxx: () => import('@/pages/admin/tzxx'),
   // 贊助商路由
   sponsorHome: () => import('@/pages/sponsor/index'),

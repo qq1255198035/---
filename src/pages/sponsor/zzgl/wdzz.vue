@@ -7,7 +7,7 @@
                   <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wdzz-content">
-                  <div class="items" v-for="(item,index) in data">
+                  <div class="items" v-for="(item,index) in data" :key="index">
                         <div class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
