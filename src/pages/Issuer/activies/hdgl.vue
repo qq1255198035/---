@@ -72,8 +72,16 @@
                   @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
                 <div>
-                  <a-button ghost class="btn-primary" @click="$router.push({name: 'zzsp', params: {campId: item.campId}})">赞助审批</a-button>
-                  <a-button ghost class="btn-info" @click="$router.push({name: 'issuerMxsp', params: {campId: item.campId}})">明星审批</a-button>
+                  <a-button
+                    ghost
+                    class="btn-primary"
+                    @click="$router.push({name: 'zzsp', params: {campId: item.campId}})"
+                  >赞助审批</a-button>
+                  <a-button
+                    ghost
+                    class="btn-info"
+                    @click="$router.push({name: 'issuerMxsp', params: {campId: item.campId}})"
+                  >明星审批</a-button>
                 </div>
               </div>
               <div class="button-box" v-if="item.status == 0">
@@ -143,7 +151,7 @@ export default {
       avtiveityDate: '',
       searchPlace: '',
       searchClassify: '',
-      searchText: '',
+      searchText: ''
     }
   },
   created() {
@@ -180,16 +188,16 @@ export default {
       console.log(value)
       const token = this.$ls.get('Access-Token')
       const params = {
-          token: token,
-          startime: this.avtiveityDate ? this.avtiveityDate : '',
-          area: this.searchPlace ? this.searchPlace : '',
-          campCatalog: this.searchClassify ? this.searchClassify : '',
-          content: this.searchText ? this.searchText : ''
+        token: token,
+        startime: this.avtiveityDate ? this.avtiveityDate : '',
+        area: this.searchPlace ? this.searchPlace : '',
+        campCatalog: this.searchClassify ? this.searchClassify : '',
+        content: this.searchText ? this.searchText : ''
       }
       console.log(params)
       getHandActivities(params).then(res => {
-          console.log(res)
-          this.cardList = res.page.rows
+        console.log(res)
+        this.cardList = res.page.rows
       })
     },
     // 日期搜索
@@ -198,6 +206,7 @@ export default {
       this.avtiveityDate = dateString
     },
     showDeleteConfirm(item, index) {
+      const that = this
       const token = this.$ls.get('Access-Token')
       const campId = item
       const params = {
@@ -214,9 +223,9 @@ export default {
         onOk() {
           console.log('OK')
           getDetele(params).then(res => {
-        console.log(res)
-        this.cardList.splice('index', 1)
-      })
+            console.log(res)
+            that.cardList.splice('index', 1)
+          })
         },
         onCancel() {
           console.log('Cancel')
@@ -312,7 +321,7 @@ export default {
             color: #21c5c7;
             padding-right: 40px;
             overflow: hidden;
-            text-overflow:ellipsis;
+            text-overflow: ellipsis;
             white-space: nowrap;
           }
           .my-text {

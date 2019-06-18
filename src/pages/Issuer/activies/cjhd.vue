@@ -60,10 +60,9 @@
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  :placeholder="chinese"
+                  placeholder="chinese"
                   class="my-input"
-                  autocomplete="false"
-                  v-decorator="['chineseName',{rules: [{ required: false, message: '请输入中文名称' }, { validator: this.testChinese }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['chineseName',{rules: [{ required: true, message: '请输入中文名称' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -73,25 +72,23 @@
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  :placeholder="english"
+                  placeholder="english"
                   class="my-input"
                   autocomplete="false"
-                  v-decorator="['englishName',{rules: [{ required: false, message: '请输入英文' }, { validator: this.testEnglish }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['englishName',{rules: [{ required: true, message: '请输入英文' }]}]"
                 />
               </a-form-item>
               <a-form-item label="选择日期" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                 <a-range-picker
                   style="width: 100%;"
                   @change="onChangeDate"
-                  :placeholder="times"
-                  v-decorator="['startName',{rules: [{ required: false, message: '请输入时间' }]}]"
+                  v-decorator="['range-picker', {rules: [{ required: true, message: '请选择日期' }]}]"
                 />
               </a-form-item>
               <a-form-item label="选择时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
                 <a-time-picker
                   @change="onChangeTime"
-                  :placeholder="concreteTime"
-                  v-decorator="['changetimer',{rules: [{ required: false, message: '请输入时间' }]}]"
+                  v-decorator="['time-picker', {rules: [{ required: true, message: '请选择时间' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -101,7 +98,11 @@
                 :required="true"
               >
                 <a-input-group compact style="width: 93%; margin-right: 8px">
-                  <a-select labelInValue :defaultValue="{key: '请选择'}" @change="onChangepro">
+                  <a-select
+                    :defaultValue="{key: '请选择'}"
+                    labelInValue
+                    v-decorator="['placeName',{rules: [{ required: true, message: '请输入地址' }]}]"
+                  >
                     <a-select-option
                       v-for="(item, index) in cityPlace"
                       :key="index"
@@ -111,7 +112,7 @@
                   <a-input
                     style="width: 68%"
                     placeholder="北京市"
-                    v-decorator="['placeName',{rules: [{ required: false, message: '请输入地址' }, { validator: this.handPlace }], validateTrigger: ['change', 'blur']}]"
+                    v-decorator="['addressName',{rules: [{ required: true, message: '请输入地址' }]}]"
                   />
                 </a-input-group>
               </a-form-item>
@@ -120,8 +121,12 @@
                   <a-list-item slot="renderItem" slot-scope="item, index">
                     <a slot="actions" @click="detelList(index)">删除</a>
                     <a-list-item-meta>
-                      <a slot="title">{{item.titleValue}}</a>
-                      <a slot="title" class="addressPaading">{{item.address}}</a>
+                      <a slot="title">{{item.area_name}}</a>
+                      <a
+                        slot="title"
+                        class="addressPaading"
+                        v-decorator="['addressName',{rules: [{ required: true, message: '请输入地址' }]}]"
+                      >{{item.addr}}</a>
                     </a-list-item-meta>
                   </a-list-item>
                 </a-list>
@@ -130,13 +135,24 @@
                 v-for="(k, index) in form.getFieldValue('keys')"
                 :key="k"
                 v-bind="index === 0 ? formItemLayout : formItemLayoutWithOutLabel"
+                label="请选择"
                 :required="false"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 1}"
               >
-                <a-input-group compact style="width: 93%; margin-right: 8px">
-                  <a-select labelInValue :defaultValue="{key: '请选择'}" @change="onChangepro1">
-                    <a-select-option v-for="(item, index) in cityPlace" :key="index" :value="item.value">{{item.value}}</a-select-option>
+                <a-input-group compact style="width: 93%; margin-right: 8px"
+                  v-decorator="[
+                    `names[${k}]`
+                    ]"  
+                >
+                  <a-select labelInValue :defaultValue="{key: '请选择'}" v-decorator="['addressName',{rules: [{ required: true, message: '请输入地址' }]}]">
+                    <a-select-option
+                      v-for="(item, index) in cityPlace"
+                      :key="index"
+                      :value="item.value"
+                    >{{item.value}}</a-select-option>
                   </a-select>
-                  <a-input style="width: 70%" defaultValue="北京市"/>
+                  <a-input style="width: 70%" defaultValue="北京市" v-decorator="['placeName',{rules: [{ required: true, message: '请输入地址' }]}]"/>
                 </a-input-group>
                 <a-icon
                   v-if="form.getFieldValue('keys').length >= 0 "
@@ -158,10 +174,10 @@
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  :placeholder="email"
+                  placeholder="email"
                   class="my-input"
                   type="email"
-                  v-decorator="['emailName',{rules: [{ required: false, message: '请输入电子邮箱' }, { validator: this.testEmail }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['emailName',{rules: [{ required: true, message: '请输入电子邮箱' }]}]"
                 />
               </a-form-item>
             </div>
@@ -173,9 +189,7 @@
                 :labelCol="{span: 4}"
               >
                 <a-select
-                  labelInValue
-                  :defaultValue="{key: `${campName}`}"
-                  @change="onChangeClassify"
+                  v-decorator="['HuoDongName',{rules: [{ required: true, message: '请填写活动' }]}]"
                 >
                   <a-select-option
                     v-for="(item, index) in classify"
@@ -190,8 +204,12 @@
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
-                <a-input placeholder="1" type="number" class="my-input" :min="1" @change="handCampNum"
-                   v-decorator="['testNum',{rules: [{ required: true, message: '请输入数字' }]}]"
+                <a-input
+                  placeholder="1"
+                  type="number"
+                  class="my-input"
+                  :min="1"
+                  v-decorator="['testNum',{rules: [{ required: true, message: '请输入数字' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -201,9 +219,9 @@
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  :placeholder="contact"
+                  placeholder="contact"
                   class="my-input"
-                  v-decorator="['testName',{rules: [{ required: false, message: '请输入名字' }, { validator: this.handName }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['testName',{rules: [{ required: true, message: '请输入名字' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -229,9 +247,8 @@
                   </a-col>-->
                   <a-col :span="18">
                     <a-input
-                      :placeholder="phone"
-                      defaultValue="26888888"
-                      v-decorator="['phoneName',{rules: [{ required: false, message: '请输入电话号' }, { validator: this.handPhoneLast }], validateTrigger: ['change', 'blur']}]"
+                      placeholder="phone"
+                      v-decorator="['phoneName',{rules: [{ required: true, message: '请输入电话号' }]}]"
                     />
                   </a-col>
                 </a-input-group>
@@ -259,6 +276,8 @@
               </a-form-item>
             </div>
           </div>
+        </a-form>
+        <a-form layout="horizontal" :form="form1">
           <!--活动详情-->
           <div class="info-item-column" v-if="formShow == 1">
             <a-form-item
@@ -268,10 +287,10 @@
               :labelCol="{span: 4}"
             >
               <a-textarea
-                :placeholder="activityContent"
+                placeholder="activityContent"
                 class="my-input"
                 maxlength="300"
-                v-decorator="['textName',{rules: [{ required: false, message: '请输入公司名称' }, { validator: this.handTextarea }], validateTrigger: ['change', 'blur']}]"
+                v-decorator="['textName',{rules: [{ required: true, message: '请输入公司名称' }]}]"
                 :autosize="{ minRows: 4, maxRows: 6 }"
               />
             </a-form-item>
@@ -312,6 +331,8 @@
               </a-modal>
             </a-form-item>
           </div>
+        </a-form>
+        <a-form layout="horizontal" :form="form2">
           <!---->
           <div class="info-item" v-if="formShow == 2">
             <div class="left">
@@ -322,7 +343,7 @@
                 class="my-form-item"
               >
                 <a-input-group compact style="width: 93%; margin-right: 8px">
-                  <a-select labelInValue :defaultValue="{key: '请选择'}" @change="companyBtn">
+                  <a-select labelInValue @change="companyBtn">
                     <a-select-option
                       v-for="(item, index) in organizerTypeList"
                       :key="index"
@@ -331,8 +352,7 @@
                   </a-select>
                   <a-input
                     style="width: 66%"
-                    defaultValue="公司名称"
-                    v-decorator="['companyName',{rules: [{ required: false, message: '请输入公司名称' }, { validator: this.handCompany }], validateTrigger: ['change', 'blur']}]"
+                    v-decorator="['companyName',{rules: [{ required: true, message: '请输入公司名称' }]}]"
                   />
                 </a-input-group>
               </a-form-item>
@@ -358,8 +378,11 @@
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
-                <a-input placeholder="请输入播放平台" class="my-input" v-model="palyPlatfrom"
-                   v-decorator="['pingName',{rules: [{ required: false, message: '请输入播放平台' }, { validator: this.handPing }], validateTrigger: ['change', 'blur']}]"
+                <a-input
+                  placeholder="请输入播放平台"
+                  class="my-input"
+                  v-model="palyPlatfrom"
+                  v-decorator="['pingName',{rules: [{ required: true, message: '请输入播放平台' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -489,6 +512,8 @@
             </div>
           </div>
           <!---->
+        </a-form>
+        <a-form layout="horizontal" :form="form3">
           <div class="info-item-column" v-if="formShow == 3">
             <a-form-item
               label="招商截止日期"
@@ -497,9 +522,9 @@
               :labelCol="{span: 3}"
             >
               <a-date-picker
-                :placeholder="closingDate"
+                placeholder="closingDate"
                 @change="onClosingDate"
-                v-decorator="['closingDate',{rules: [{ required: false, message: '请输入时间' }]}]"
+                v-decorator="['closingDate',{rules: [{ required: true, message: '请输入时间' }]}]"
               />
             </a-form-item>
             <a-form-item
@@ -524,8 +549,8 @@
                     v-if="record.editable"
                     style="margin: -5px 0"
                     :value="text"
-                    :placeholder="columns[i].title"
-                    v-decorator="['requireName',{rules: [{ required: false, message: '请输入时间' }]}]"
+                    placeholder="columns[i].title"
+                    v-decorator="['requireName',{rules: [{ required: true, message: '请输入时间' }]}]"
                     @change="e => handleChange2(e.target.value, record.key, col)"
                   />
                   <template v-else>{{ text }}</template>
@@ -568,10 +593,10 @@
               :labelCol="{span: 3}"
             >
               <a-textarea
-                :placeholder="requirdContent"
+                placeholder="requirdContent"
                 class="my-input"
                 :autosize="{ minRows: 4, maxRows: 6 }"
-                v-decorator="['textYao',{rules: [{ required: false, message: '请输入公司名称' }, { validator: this.handYao }], validateTrigger: ['change', 'blur']}]"
+                v-decorator="['textYao',{rules: [{ required: true, message: '请输入公司名称' }]}]"
               />
             </a-form-item>
           </div>
@@ -681,7 +706,6 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
-      form: this.$form.createForm(this),
       visible: false,
       confirmLoading: false,
       times: [],
@@ -697,7 +721,7 @@ export default {
       concreteTime: '', //选择时间
       area1: '', //地点id
       areaList: [],
-      areaKeys: [],
+      areaKeys: '',
       addressArry: [],
       code: '',
       phone: '',
@@ -721,6 +745,7 @@ export default {
       companyList1: [],
       companyKey: '',
       companyJson: {},
+      addressJson: {},
       palyPlatfrom: '', //播放平台
       characteristic: '', // 活动特点
       closingDate: '', // 招商截止时间
@@ -856,14 +881,14 @@ export default {
       })
     },
     dataTitle() {
-      if (this.$route.query.campId) {
+      if (this.$route.params.campId) {
         this.findIndex = 1
       } else {
         this.findIndex = 0
       }
       for (let i = 0; i < this.data.length; i++) {
-        console.log(this.$route.query.campId)
-        if (this.$route.query.campId) {
+        console.log(this.$route.params.campId)
+        if (this.$route.params.campId) {
           this.data[i].actions.title = '修改'
         } else {
           this.data[i].actions.title = '新增'
@@ -896,7 +921,7 @@ export default {
         console.log(error)
         console.log(values)
         const params = { ...values }
-        let campId = this.$route.query.campId ? this.$route.query.campId : ''
+        let campId = this.$route.params.campId ? this.$route.params.campId : ''
         console.log(this.findIndex)
         if (!error) {
           const params = {
@@ -977,10 +1002,6 @@ export default {
     handPhoneLast(rule, value, callback) {
       this.phone = value
     },
-    //详细地址
-    handPlace(rule, value, callback) {
-      this.address = value
-    },
     //人数
     handCampNum(value) {
       this.campNum = value
@@ -1010,7 +1031,7 @@ export default {
     },
     showModal(index, item) {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId ? this.$route.query.campId : ''
+      const campId = this.$route.params.campId ? this.$route.params.campId : ''
       const params = {
         token: token,
         campId: campId
@@ -1027,7 +1048,20 @@ export default {
         // 活动基本信息
         getActivityInformation(params).then(res => {
           console.log(res)
-          if(!this.$route.query.campId) {
+          this.form.setFieldsValue({
+            chineseName: res.data[0].name,
+            englishName: res.data[0].enName,
+            emailName: res.data[0].email,
+            HuoDongName: res.data[0].capName,
+            testNum: res.data[0].campNum,
+            testName: res.data[0].contact,
+            phoneName: res.data[0].phone,
+            placeName: res.data[0].name,
+            addressName: res.data[0].name,
+            rangePicker: res.data[0].name,
+            rtimePicker: res.data[0].concreteTime
+          })
+          if (!this.$route.params.campId) {
             this.activeityDetail = ''
           }
           this.activeityDetail = res.data[0]
@@ -1173,8 +1207,8 @@ export default {
 
       console.log(index)
       this.title = item.title
-      console.log(this.$route.query.campId,this.$ls.get('code') == '1000')
-      if (this.$route.query.campId) {
+      console.log(this.$route.params.campId, this.$ls.get('code') == '1000')
+      if (this.$route.params.campId) {
         this.findIndex = 1
       } else {
         this.findIndex = 0
@@ -1198,11 +1232,6 @@ export default {
 
       console.log(this.findIndex)
     },
-    onChangepro(value) {
-      console.log(value)
-      this.areaValue = value.label
-      this.areaKeys = value.key
-    },
     // 公司
     companyBtn(value) {
       console.log(value)
@@ -1213,16 +1242,6 @@ export default {
       console.log(value)
       this.companyPlace = value
     },
-    /*onChangepro1(value) {
-      console.log(this.listKey.length+1)
-      for(let i = 0; i < this.listKey.length+1; i++) {
-        if(value.label) { 
-          let areaList = []
-          areaList.push(value.label)
-          console.log(areaList)
-        }
-      }
-    },*/
     onChangeClassify(value) {
       console.log(value)
       this.campCatalog = value.key
@@ -1255,17 +1274,31 @@ export default {
     },
     //地点添加
     addList() {
+      // can use data-binding to get
+      /*console.log(this.form.getFieldValue('keys'))
+      const keys = this.form.getFieldValue('keys')
+      console.log(keys)
+      console.log(++id)
+      const nextKeys = keys.concat(++id)
+      console.log(nextKeys)
+      // can use data-binding to set
+      // important! notify form to detect changes
+      this.form.setFieldsValue({
+        keys: nextKeys
+      })*/
+      console.log(this.form.getFieldValue('placeName'))
+      this.areaValue = this.form.getFieldValue('placeName').key
+      this.address = this.form.getFieldValue('addressName')
+      this.areaKeys = this.form.getFieldValue('placeName').label
+      
       if (this.areaValue && this.address) {
         this.areaList.push({
-          titleValue: this.areaValue,
-          address: this.address
+          area_cd: this.areaValue,
+          area_name: this.areaKeys,
+          addr: this.address
         })
-        this.area.push(this.areaKeys)
-        this.addressArry.push(this.address)
-        console.log(this.areaList)
-        console.log(this.area)
-        console.log(this.addressArry)
       }
+      this.addressJson.data = this.areaList
     },
     detelCompany(index) {
       this.companyList.splice(index, 1)
@@ -1275,8 +1308,6 @@ export default {
     detelList(index) {
       console.log(index)
       this.areaList.splice(index, 1)
-      this.area.splice(index, 1)
-      this.addressArry.splice(index, 1)
     },
     // 报名截止日期
     onClosingDate(date, dateString) {
@@ -1289,9 +1320,35 @@ export default {
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
       const token = this.$ls.get('Access-Token')
-      let campId = this.$route.query.campId ? this.$route.query.campId : ''
+      let campId = this.$route.params.campId ? this.$route.params.campId : ''
+      console.log(this.form.validateFields)
       //活动基本信息
       if (this.formShow == 0) {
+        this.form.validateFields((err, values) => {
+          console.log(values)
+          if (!err) {
+            console.log(11)
+            const dateList = values['range-picker']
+            const dateValue = {
+              'range-picker': [dateList[0].format('YYYY-MM-DD'), dateList[1].format('YYYY-MM-DD')],
+              'time-picker': values['time-picker'].format('HH:mm:ss')
+            }
+            console.log(values)
+            this.chinese = values.chineseName
+            this.english = values.englishName
+            this.email = values.emailName
+            this.campCatalog = values.HuoDongName
+            this.campNum = values.testNum
+            this.contact = values.testName
+            this.phone = values.phoneName
+            this.fileUrl = values.chineseName
+            this.address = values.placeName
+            this.areaValue = values.addressName
+            this.endTime = dateValue.range - picker[1]
+            this.concreteTime = dateValue.rtime - picker
+            this.publishTime = dateValue.range - picker[0]
+          }
+        })
         const params = {
           campId: campId,
           token: token,
@@ -1300,25 +1357,30 @@ export default {
           publishTime: this.publishTime,
           endTime: this.endTime,
           concreteTime: this.concreteTime,
-          area: this.area.join(','),
-          address: this.addressArry.join(','),
+
+          /*area: this.area.join(','),
+          address: this.addressArry.join(','),*/
           email: this.email,
           campCatalog: this.campCatalog,
           campNum: this.campNum,
           contact: this.contact,
           phone: this.phone,
-          coverImg: this.fileUrl
+          coverImg: this.fileUrl,
+          jsonDataAddress: JSON.stringify(this.addressJson)
         }
         console.log(params)
-        if (this.chinese) {
-        }
         getActivityModification(params).then(res => {
           console.log(res)
           this.$ls.set('code', res.data.code)
           this.code = res.data.code
+          if (this.code == '1000' || this.code == '1001') {
+            setTimeout(() => {
+              this.visible = false
+              this.confirmLoading = false
+            }, 2000)
+          }
         })
       }
-      console.log(this.$ls.get('code'))
       if (this.code == '1000' || this.code == '1001') {
         this.findIndex = 1
         console.log(this.findIndex)
@@ -1327,6 +1389,21 @@ export default {
       }
       // 活动详情
       if (this.formShow == 1) {
+        this.form1.validateFields((err, values) => {
+          console.log(values)
+          if (!err) {
+            console.log(11)
+            const dateList = values['range-picker']
+            const dateValue = {
+              'range-picker': [dateList[0].format('YYYY-MM-DD'), dateList[1].format('YYYY-MM-DD')],
+              'time-picker': values['time-picker'].format('HH:mm:ss')
+            }
+            console.log(values)
+            this.activityContent = values.chineseName
+            this.videoUrls = values.englishName
+            this.detailImgs = dateValue.range - picker[1]
+          }
+        })
         const params = {
           token: token,
           campId: campId,
@@ -1341,6 +1418,21 @@ export default {
       }
       // 活动推广
       if (this.formShow == 2) {
+        this.form2.validateFields((err, values) => {
+          console.log(values)
+          if (!err) {
+            console.log(11)
+            const dateList = values['range-picker']
+            const dateValue = {
+              'range-picker': [dateList[0].format('YYYY-MM-DD'), dateList[1].format('YYYY-MM-DD')],
+              'time-picker': values['time-picker'].format('HH:mm:ss')
+            }
+            console.log(values)
+            this.palyPlatfrom = values.chineseName
+            this.characteristic = values.englishName
+            this.pids = dateValue.range - picker[1]
+          }
+        })
         const params = {
           token: token,
           campId: campId,
@@ -1356,6 +1448,31 @@ export default {
       }
       // 活动赞助
       if (this.formShow == 3) {
+        this.form3.validateFields((err, values) => {
+          console.log(values)
+          if (!err) {
+            console.log(11)
+            const dateList = values['range-picker']
+            const dateValue = {
+              'range-picker': [dateList[0].format('YYYY-MM-DD'), dateList[1].format('YYYY-MM-DD')],
+              'time-picker': values['time-picker'].format('HH:mm:ss')
+            }
+            console.log(values)
+            this.chinese = values.chineseName
+            this.english = values.englishName
+            this.endTime = dateValue.range - picker[1]
+            this.concreteTime = dateValue.rtime - picker
+            this.publishTime = dateValue.range - picker[0]
+            this.email = values.emailName
+            this.campCatalog = alues.HuoDongName
+            this.campNum = values.testNum
+            this.contact = values.testName
+            this.phone = values.phoneName
+            this.fileUrl = values.chineseName
+            this.address = values.placeName
+            this.areaValue = values.addressName
+          }
+        })
         const params = {
           token: token,
           campId: campId,
@@ -1368,10 +1485,6 @@ export default {
           console.log(res)
         })
       }
-      setTimeout(() => {
-        this.visible = false
-        this.confirmLoading = false
-      }, 2000)
     },
     handleCancel(e) {
       console.log('Clicked cancel button')
@@ -1572,8 +1685,15 @@ export default {
   },
   beforeCreate() {
     this.form = this.$form.createForm(this)
+    this.form1 = this.$form.createForm(this)
+    this.form2 =this.$form.createForm(this)
+    this.form3=this.$form.createForm(this)
     console.log(this.form)
     this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    this.form1.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    this.form2.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    this.form3.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    
   }
 }
 </script>
