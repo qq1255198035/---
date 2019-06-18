@@ -18,8 +18,8 @@ const constantRouterComponents = {
   issuerHdgl: () => import('@/pages/Issuer/activies/hdgl'),
   zzsp: () => import('@/pages/Issuer/activies/zzgl'),
   issuerMxsp: () => import('@/pages/Issuer/activies/hdgl'),
-  cjhd: () => import('@/pages/Issuer/activies/cjhd'),
-  ckhd: () => import('@/pages/Issuer/activies/details'),
+  issuercjhd: () => import('@/pages/Issuer/activies/cjhd'),
+  issuerckhd: () => import('@/pages/Issuer/activies/details'),
   issuerMxxq: () => import('@/pages/Issuer/activies/starsdetail'),
   // 管理员路由
   adminHome: () => import('@/pages/admin/index'),
