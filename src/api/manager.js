@@ -33,3 +33,51 @@ export function searchStarInfo(athleteId) {
     data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), athleteId: athleteId })
   })
 }
+// 图片上传地址
+export function getUpload(parameter) {
+  return axios({
+      url: '/vue/organize/upload',
+      method: 'post',
+      headers: { "Content-Type": "multipart/form-data" },
+      data: parameter
+  })
+}
+// 经纪人修改明星提交接口
+export function starUpdate(
+         surname,
+         monicker,
+         catalog,
+         nationality,
+         birth,
+         height,
+         weight,
+         addr,
+         introduction,
+         sex,
+         avatar,
+         imgs,
+         credential,
+         athleteId
+       ) {
+         return axios({
+           url: '/vue/agent/starUpdate',
+           method: 'post',
+           data: qs.stringify({
+             token: Vue.ls.get(ACCESS_TOKEN),
+             surname: surname,
+             monicker: monicker,
+             catalog: catalog,
+             nationality: nationality,
+             birth: birth,
+             height: height,
+             weight: weight,
+             addr: addr,
+             introduction: introduction,
+             sex: sex,
+             avatar: avatar,
+             imgs: imgs,
+             credential: credential,
+             athleteId: athleteId
+           })
+         })
+       }
