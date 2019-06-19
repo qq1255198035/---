@@ -29,7 +29,7 @@
                               <div class="footer">
                                     <transition name="fade">
                                           <div class="button-box" v-show= "btnShow == index" key="1">
-                                                <a-button type="danger" class="danger" @click="showDeleteConfirm">删除</a-button>
+                                                <a-button type="danger" class="danger" @click="showDeleteConfirm(item.athlete_id)">删除</a-button>
                                                 <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">修改</a-button>
                                           </div>
                                     </transition>
@@ -120,8 +120,8 @@
                                                 listType="picture-card"
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
-                                                :beforeUpload="beforeUpload"
-                                                @change="handleChange1"
+                                                :beforeUpload="beforeUpload1"
+                                                :fileList="fileList"
                                                 v-decorator="[
                                                 'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
                                                 >
@@ -139,8 +139,7 @@
                                                 listType="picture-card"
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
-                                                :beforeUpload="beforeUpload"
-                                                @change="handleChange2"
+                                                :beforeUpload="beforeUpload2"
                                                 v-decorator="[
                                                 'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
                                                 >
@@ -159,8 +158,7 @@
                                                 listType="picture-card"
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
-                                                :beforeUpload="beforeUpload"
-                                                @change="handleChange3"
+                                                :beforeUpload="beforeUpload3"
                                                 v-decorator="[
                                                 'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
                                                 >
@@ -315,9 +313,14 @@
 }
 </style>
 <script>
-import { starsList,getProfession,getCountry,searchStarInfo } from "@/api/manager";
+import { starsList,getProfession,getCountry,searchStarInfo,starUpdate,getUpload,starDel } from "@/api/manager";
 import { mixinsTitle } from "@/utils/mixin";
 import moment from 'moment';
+function getBase64 (img, callback) {
+      const reader = new FileReader()
+      reader.addEventListener('load', () => callback(reader.result))
+      reader.readAsDataURL(img)
+}
 export default {
       mixins:[mixinsTitle],
       data(){
@@ -339,8 +342,16 @@ export default {
                   form: this.$form.createForm(this),
                   works:[],
                   country:[],
-                  
-                 
+                  postImg1:'',
+                  postImg2:'',
+                  postImg3:'',
+                  stasId:'',
+                  fileList: [{
+                        uid: '1',
+                        name: '1',
+                        status: 'uploading',
+                        url: this.$host,
+                  }],
             }
       },
       mounted () {
@@ -348,8 +359,21 @@ export default {
             this.getProfessionList();
             this.getCountryList();
             this.host = this.$host
+            
       },
       methods:{
+            postStarUpdatea(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId){
+                  console.log(222)
+                  starUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId).then(res=>{
+                        if (res.code == 1000) {
+                              this.$message.success('操作成功！')
+                              this.visible = false;
+                              this.confirmLoading = false;
+                              
+                        }
+                  })
+            },
+            
             getSearchStarInfo(athleteId){
                   searchStarInfo(athleteId).then(res=>{
                         if (res.code == 1000) {
@@ -370,7 +394,9 @@ export default {
                               });
                               this.imageUrl1 = this.host + res.data.credential;
                               this.imageUrl2 = this.host + res.data.avatar;
-                              this.imageUrl3 = this.host + res.data.imgs
+                              this.imageUrl3 = this.host + res.data.imgs;
+                              this.fileList[0].name = res.data.credential;
+                              console.log(this.fileList)
                         }
                   })
             },
@@ -422,23 +448,24 @@ export default {
             },
             showModal(e,id) {
                   this.visible = true
-                  setTimeout(() => {
-                        if(e.target.innerText === '修 改'){
-                              this.getSearchStarInfo(id)
-                        }
-                  }, 500);
+                  this.stasId = id
+                  if(e.target.innerText === '修 改'){
+                        this.getSearchStarInfo(id)
+                  }
+                  
                   
             },
             handleOk(e) {
-                  this.ModalText = 'The modal will be closed after two seconds';
                   this.confirmLoading = true;
-                  setTimeout(() => {
-                  this.visible = false;
-                  this.confirmLoading = false;
-                  this.$message.success('操作成功');
-                  //失败提示
-                  //this.$message.error('This is a message of error');
-                  }, 2000);
+                  this.form.validateFields((err,values) => {
+                        if (!err) {
+                              console.log(11)
+                              console.log(values)
+                              this.a()
+                              this.postStarUpdatea(values.lastname)
+                              
+                        }
+                  },);
             },
             handleCancel(e) {
                   this.visible = false
@@ -460,7 +487,7 @@ export default {
                   this.imageUrl3 = ''
             },
             
-            showDeleteConfirm() {
+            showDeleteConfirm(id) {
                   var that = this;
                   that.$confirm({
                         title: '确定删除吗？',
@@ -468,64 +495,93 @@ export default {
                         okType: 'danger',
                         cancelText: '取消',
                         onOk() {
-                              console.log('OK');
-                              that.$message.success('操作成功');
+                              starDel(id).then(res=>{
+                                    if (res.code == 1000) {
+                                          that.$message.success('操作成功');
+                                          that.getStarsList(that.name,that.offset);
+                                    }
+                              })
                         },
                         onCancel() {
-                              console.log('Cancel');
+                              
                         },
                   });
             },
-            beforeUpload (file) {
-                  const isJPG = file.type === 'image/jpeg'
-                  const isPNG = file.type === 'image/png'
-                  if (!isJPG || !isPNG) {
-                  this.$message.error('You can only upload JPG file!')
-                  }
+            beforeUpload1(file) {
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
-                  this.$message.error('Image must smaller than 2MB!')
-                  }
-                  return isJPG && isLt2M
-            },
-            handleChange1 (info) {
-                  if (info.file.status === 'uploading') {
-                        this.loading = true
+                        this.$message.error('Image must smaller than 2MB!')
                         return
                   }
-                  if (info.file.status === 'done') {
-                  // Get this url from response in real world.
-                        getBase64(info.file.originFileObj, (imageUrl) => {
-                              this.imageUrl1 = imageUrl
-                              this.loading = false
-                        })
-                  }
+                  getBase64(file, (imageUrl) => {
+                        this.imageUrl1 = imageUrl
+                        this.loading = false
+                  })
+                  const formData = new FormData();
+                  formData.append('file',file)
+                  getUpload(formData).then(res=>{
+                        this.postImg1 = res
+                        
+                  })
+                  // const isJPG = file.type === 'image/jpeg'
+                  // const isPNG = file.type === 'image/png'
+                  // if (!isJPG || !isPNG) {
+                  //       this.$message.error('You can only upload JPG file!')
+                  // }
+                  
+                  
             },
-            handleChange2 (info) {
-                  if (info.file.status === 'uploading') {
-                        this.loading = true
+            beforeUpload2(file) {
+                  const isLt2M = file.size / 1024 / 1024 < 2
+                  if (!isLt2M) {
+                        this.$message.error('Image must smaller than 2MB!')
                         return
                   }
-                  if (info.file.status === 'done') {
-                  // Get this url from response in real world.
-                        getBase64(info.file.originFileObj, (imageUrl) => {
-                              this.imageUrl2 = imageUrl
-                              this.loading = false
-                        })
-                  }
+                  getBase64(file, (imageUrl) => {
+                        this.imageUrl2 = imageUrl
+                        this.loading = false
+                  })
+                  const formData = new FormData();
+                  formData.append('file',file)
+                  getUpload(formData).then(res=>{
+                        this.postImg2 = res
+                  })
+                  // const isJPG = file.type === 'image/jpeg'
+                  // const isPNG = file.type === 'image/png'
+                  // if (!isJPG || !isPNG) {
+                  // this.$message.error('You can only upload JPG file!')
+                  // }
+                  // const isLt2M = file.size / 1024 / 1024 < 2
+                  // if (!isLt2M) {
+                  // this.$message.error('Image must smaller than 2MB!')
+                  // }
+                  // return isJPG && isLt2M
             },
-            handleChange3 (info) {
-                  if (info.file.status === 'uploading') {
-                        this.loading = true
+            beforeUpload3(file) {
+                  const isLt2M = file.size / 1024 / 1024 < 2
+                  if (!isLt2M) {
+                        this.$message.error('Image must smaller than 2MB!')
                         return
                   }
-                  if (info.file.status === 'done') {
-                  // Get this url from response in real world.
-                        getBase64(info.file.originFileObj, (imageUrl) => {
-                              this.imageUrl3 = imageUrl
-                              this.loading = false
-                        })
-                  }
+                  getBase64(file, (imageUrl) => {
+                        this.imageUrl3 = imageUrl
+                        this.loading = false
+                  })
+                  const formData = new FormData();
+                  formData.append('file',file)
+                  getUpload(formData).then(res=>{
+                        this.postImg3 = res
+                  })
+                  // const isJPG = file.type === 'image/jpeg'
+                  // const isPNG = file.type === 'image/png'
+                  // if (!isJPG || !isPNG) {
+                  // this.$message.error('You can only upload JPG file!')
+                  // }
+                  // const isLt2M = file.size / 1024 / 1024 < 2
+                  // if (!isLt2M) {
+                  // this.$message.error('Image must smaller than 2MB!')
+                  // }
+                  // return isJPG && isLt2M
             },
       },
       

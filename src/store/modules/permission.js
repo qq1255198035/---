@@ -21,9 +21,9 @@ const permission = {
      * @returns {Promise<any>}
      * @constructor
      */
-    GenerateRoutes({ commit }, data) {
+    GenerateRoutes({ commit }) {
       return new Promise(resolve => {
-        generatorDynamicRouter(data).then(routers => {
+        generatorDynamicRouter().then(routers => {
           commit('SET_ROUTERS', routers)
           resolve()
         })

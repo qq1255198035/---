@@ -81,3 +81,11 @@ export function starUpdate(
            })
          })
        }
+// 经纪人删除明星
+export function starDel(athleteId) {
+         return axios({
+           url: '/vue/agent/starDel',
+           method: 'post',
+           data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), athleteId: athleteId })
+         })
+       }

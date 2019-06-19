@@ -23,12 +23,14 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       if (store.getters.roles.length === 0) {
+        console.log(11)
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.result.role
-            //console.log(roles)
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
+            console.log(11)
+            console.log(res)
+            // 动态菜单与用户信息解耦
+            store.dispatch('GenerateRoutes').then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
               router.addRoutes(store.getters.addRouters)

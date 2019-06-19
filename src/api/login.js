@@ -42,34 +42,16 @@ export function getSmsCaptcha (parameter) {
     data: qs.stringify(parameter)
   })
 }
-export function getProjects(api) {
-  return axios({
-    url: api,
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
-export function getInfo () {
-  return axios({
-    url: '/user/info',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
 
-export function logout () {
-  return axios({
-    url: '/auth/logout',
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
+// export function logout () {
+//   return axios({
+//     url: '/auth/logout',
+//     method: 'post',
+//     headers: {
+//       'Content-Type': 'application/json;charset=UTF-8'
+//     }
+//   })
+// }
 
 /**
  * get user 2step code open?

@@ -1,8 +1,9 @@
 import Vue from 'vue'
-import { login, getInfo, logout, getProjects } from '@/api/login'
+import { login } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 import { loadLanguageAsync } from '@/lang'
+import { getRouterByUser } from '@/utils/routerUtil'
 const user = {
   state: {
     token: '',
@@ -52,6 +53,9 @@ const user = {
              Vue.ls.set(ACCESS_TOKEN, res.token, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', res.token)
             console.log(res)
+            commit('SET_AVATAR', res.avatar)
+            commit('SET_NAME', { name: res.user.name, welcome: welcome() })
+            commit('SET_INFO', res.user)
             resolve()
           })
           .catch(error => {
@@ -63,38 +67,14 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, dispatch }) {
       return new Promise((resolve, reject) => {
-        getInfo()
-          .then(response => {
-            const result = response.result
-            if (result.role && result.role.permissions.length > 0) {
-              const role = result.role
-              role.permissions = result.role.permissions
-              role.permissions.map(per => {
-                if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                  const action = per.actionEntitySet.map(action => {
-                    return action.action
-                  })
-                  per.actionList = action
-                }
-              })
-              role.permissionList = role.permissions.map(permission => {
-                return permission.permissionId
-              })
-              commit('SET_ROLES', result.role)
-              commit('SET_INFO', result)
-            } else {
-              reject(new Error('getInfo: roles must be a non-null array !'))
-            }
-
-            commit('SET_NAME', { name: result.name, welcome: welcome() })
-            commit('SET_AVATAR', result.avatar)
-            commit('SET_TEL', result.telephone)
-            //dispatch('SetLang', result.lang)
-            resolve(response)
-          })
-          .catch(error => {
-            reject(error)
-          })
+        getRouterByUser().then(res => {
+          const result = res.data
+          commit('SET_ROLES', result)
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      
       })
     },
 
@@ -104,14 +84,6 @@ const user = {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         Vue.ls.remove(ACCESS_TOKEN)
-
-        logout(state.token)
-          .then(() => {
-            resolve()
-          })
-          .catch(() => {
-            resolve()
-          })
       })
     },
     SetLang({ commit }, lang) {
