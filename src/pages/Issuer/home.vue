@@ -68,11 +68,11 @@
             <div class="item-group">
               <h6>{{$t('issuer.index.title')}}</h6>
               <p>{{$t('issuer.index.desc')}}</p>
-              <a-button type="primary" @click="$router.push({name: 'cjhd'})">{{$t('issuer.index.fbhd')}}</a-button>
+              <a-button type="primary" @click="$router.push({name: 'issuerCjhd'})">{{$t('issuer.index.fbhd')}}</a-button>
             </div>
         </a-card>
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
-            <a slot="extra" @click="$router.push({name: 'notices'})">{{$t('issuer.index.qbxx')}}</a>
+            <a slot="extra" @click="$router.push({name: 'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in newsList">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">

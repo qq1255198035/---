@@ -2,11 +2,11 @@ import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { axios } from '@/utils/request'
 import qs from 'qs'
-
+//const baseUrl = 'server'
 //管理员活动审批页活动待审批，已审批，总计数据
 export function approvalNumber() {
       return axios({
-            url: '/vue/admin/approvalNumber',
+            url:baseUrl+ '/vue/admin/approvalNumber',
             method: 'post',
             data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) })
       })
@@ -14,7 +14,7 @@ export function approvalNumber() {
 // 管理员活动审批列表
 export function searchCampList(content, offset, status) {
       return axios({
-            url: '/vue/admin/searchCampList',
+            url:'/vue/admin/searchCampList',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -41,7 +41,7 @@ export function campApproval(campId, reject, agreement) {
 // 管理员活动审批页活动待认证，已认证，总计数据
 export function authenNumber() {
       return axios({
-            url: '/vue/admin/authenticationNumber',
+            url:'/vue/admin/authenticationNumber',
             method: 'post',
             data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) })
       })
@@ -130,7 +130,7 @@ export function gsspList(condition, offset, starttime, endtime) {
 // 经纪人审批列表
 export function jjrspList(condition, offset, starttime, endtime) {
       return axios({
-            url: '/vue/admin/agentExamineList',
+            url:'/vue/admin/agentExamineList',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -146,7 +146,7 @@ export function jjrspList(condition, offset, starttime, endtime) {
 // 赞助商审批列表
 export function zzsspList(condition, offset, starttime, endtime) {
       return axios({
-            url: '/vue/admin/sponsorExamineList',
+            url:'/vue/admin/sponsorExamineList',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -191,7 +191,7 @@ export function organizeApproval(orgId, reject, agreement) {
 //经纪人审批接口
 export function agentApproval(agentId, reject, agreement) {
       return axios({
-           url: '/vue/admin/agentApproval',
+           url:'/vue/admin/agentApproval',
            method: 'post',
            data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -204,7 +204,7 @@ export function agentApproval(agentId, reject, agreement) {
 //经纪人审批接口
 export function sponsorApproval(brandId, reject, agreement) {
          return axios({
-           url: '/vue/admin/sponsorApproval',
+           url:'/vue/admin/sponsorApproval',
            method: 'post',
            data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),

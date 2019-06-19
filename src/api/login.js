@@ -13,12 +13,11 @@ import qs from 'qs'
  * @returns {*}
  */
 
-
+//const baseUrl = 'server'
 //注册
-
 export function register(api, parameter) {
   return axios({
-    url: api,
+    url:api,
     method: 'post',
     data: qs.stringify(parameter)
   })
@@ -28,7 +27,7 @@ export function register(api, parameter) {
 
 export function login (parameter) {
   return axios({
-    url: '/vue/login',
+    url:'/vue/login',
     method: 'post',
     data: qs.stringify(parameter)
   })
@@ -44,7 +43,7 @@ export function getSmsCaptcha (parameter) {
 }
 export function getProjects(api) {
   return axios({
-    url: api,
+    url:api,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -63,7 +62,7 @@ export function getInfo () {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url:'/auth/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

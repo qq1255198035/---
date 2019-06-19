@@ -2,11 +2,11 @@ import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { axios } from '@/utils/request'
 import qs from 'qs'
-
+//const baseUrl = 'server'
 // 我要赞助列表
 export function searchCampList(startime, endtime, offset) {
       return axios({
-            url: '/vue/sponsor/searchCampListForSponsor',
+            url:'/vue/sponsor/searchCampListForSponsor',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -20,7 +20,7 @@ export function searchCampList(startime, endtime, offset) {
 // 提交赞助
 export function saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz) {
       return axios({
-           url: '/vue/sponsor/saveMySponsor',
+           url:'/vue/sponsor/saveMySponsor',
            method: 'post',
            data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -37,7 +37,7 @@ export function saveMySponsor(ssId, price, productName, productNum, productVal, 
 // 我的赞助
 export function searchMySponsor(startime, endtime, offset) {
       return axios({
-            url: '/vue/sponsor/searchMySponsor',
+            url:'/vue/sponsor/searchMySponsor',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -51,7 +51,7 @@ export function searchMySponsor(startime, endtime, offset) {
 // 赞助记录列表
 export function searchSponsor(name,startime, endtime, offset) {
       return axios({
-            url: '/vue/sponsor/searchSponsorRecord',
+            url:'/vue/sponsor/searchSponsorRecord',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
