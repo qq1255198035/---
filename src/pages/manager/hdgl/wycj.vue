@@ -2,44 +2,50 @@
       <div id="wycj">
             <div class="input-box">
                   <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-date-picker class="my-picker"/>
+                        <a-range-picker @change="changeDate" class="my-picker"/>
                   </a-form-item>
-                  <a-button type="primary" icon="search">搜 索</a-button>
+                  <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wycj-content">
-                  <div class="items" v-for="(item, index) in listInfo" :key="index" @mouseenter="showItem = index" @mouseleave="showItem = -1">
-                        <div class="title">
-                              <a-col :span="14" class="item">
-                                    <div class="profile-image">
-                                    <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
-                                    </div>
-                                    <div class="profile-info">
-                                          <h2 class="no-margins">
-                                          STEPHON MARBURY: THE NEXT CHAPTER / 馬布里: 我的下一章
-                                          </h2>
-                                          <p>时间：2019-01-02 11:50:00</p>
-                                          <span>
-                                                <a-icon type="environment" class="my-icon"/>
-                                                吉林省 长春市长春市南关区卫星广场明珠花园
-                                          </span>
-                                    </div>
-                              </a-col>
-                              <a-col :span="8" class="item">
-                                    <p>分类：篮球</p>
-                                    <p>参赛人数：1300人</p>
-                              </a-col>
+                  <div class="items-box">
+                        <div class="items" v-for="(item, index) in listInfo" :key="index" @mouseenter="showItem = index" @mouseleave="showItem = -1">
+                              <div class="title">
+                                    <a-col :span="14" class="item">
+                                          <div class="profile-image">
+                                          <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
+                                          </div>
+                                          <div class="profile-info">
+                                                <h2 class="no-margins">
+                                                      {{item.name}}
+                                                </h2>
+                                                <p>时间：{{item.publishTime}}</p>
+                                                <span>
+                                                      <a-icon type="environment" class="my-icon"/>
+                                                      {{item.address}}
+                                                </span>
+                                          </div>
+                                    </a-col>
+                                    <a-col :span="8" class="item">
+                                          <p>分类：{{item.campCatalogVal}}</p>
+                                          <p>参赛人数：{{item.campNum}}人</p>
+                                    </a-col>
+                              </div>
+                              <div class="main">
+                                    <ul>
+                                          <li>公司：{{item.company}}</li>
+                                          <li>联系人：{{item.contact}}</li>
+                                          <li>邮箱：{{item.email}}</li>
+                                          <li>联系电话：{{item.phone}}</li>
+                                    </ul>
+                              </div>
+                              <div class="footer" v-show="showItem == index">
+                                    <a-button type="primary" @click="showModal(item.campId)">我要参加</a-button>
+                              </div>
                         </div>
-                        <div class="main">
-                              <ul>
-                                    <li>公司：{{item.company}}</li>
-                                    <li>联系人：{{item.contect}}</li>
-                                    <li>邮箱：{{item.email}}</li>
-                                    <li>联系电话：{{item.tel}}</li>
-                              </ul>
-                        </div>
-                        <div class="footer" v-show="showItem == index">
-                              <a-button type="primary" @click="showModal">我要参加</a-button>
-                        </div>
+                  </div>
+                  
+                  <div style="text-align: center; margin-top: 30px;">
+                        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || listInfo.length == 0">加载更多</a-button>
                   </div>
             </div>
             <a-modal
@@ -50,35 +56,34 @@
                   @cancel="handleCancel"
                   wrapClassName="my-modal"
             >
-                  <a-form-item label="出场费用" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-input
-                              v-decorator="[
-                                    'note',
-                                    {rules: [{ required: true, message: 'Please input your note!' }]}
-                              ]"
-                        />
-                  </a-form-item>
-                  <a-form-item label="选择明星" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-select
-                              v-decorator="[
-                                          'gender',
-                                          {rules: [{ required: true, message: 'Please select your gender!' }]}
+                  <a-form :form="form">
+                        <a-form-item label="出场费用" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                              <a-input type="number"
+                                    v-decorator="[
+                                          'ccfy',
+                                          {rules: [{ required: true, message: '请填写出场费用!' }]}
+                                    ]"
+                              />
+                        </a-form-item>
+                        <a-form-item label="选择明星" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                              <a-select
+                                    v-decorator="[
+                                          'stars',
+                                          {rules: [{ required: true, message: '请选择明星!' }]}
                                           ]"
                                           placeholder="请选择"
-                                          @change="handleSelectChange"
                                           class="my-select"
-                                    >
-                                    <a-select-option value="male">
-                                    male
-                                    </a-select-option>
-                                    <a-select-option value="female">
-                                    female
-                                    </a-select-option>
-                        </a-select>
-                  </a-form-item>
-                  <a-form-item label="详情" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                        <a-textarea class="my-input"/>
-                  </a-form-item>
+                              >
+                                          <a-select-option :value="item.athleteId" v-for="(item,index) in starsList" :key="index">{{item.name}}</a-select-option>    
+                              </a-select>
+                        </a-form-item>
+                        <a-form-item label="详情" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                              <a-textarea class="my-input" v-decorator="[
+                                          'desc',
+                                          {rules: [{ required: false, }]}
+                                          ]"/>
+                        </a-form-item>
+                  </a-form>
             </a-modal>
       </div>
 </template>
@@ -99,11 +104,13 @@
             }
       }
       .wycj-content{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
             padding: 30px;
-            .items{
+            .items-box{
+                  display: flex;
+                  justify-content: space-between;
+                  flex-wrap: wrap;
+                  background-color: #fff;
+                  .items{
                   background-color: #fff;
                   border: 1px solid #ccc;
                   border-radius: 5px;
@@ -166,6 +173,8 @@
                         margin-top: 10px;
                   }
             }
+            }
+            
       }
 }
 .my-select{
@@ -173,61 +182,97 @@
 }
 </style>
 <script>
+import { searchCampList,chooseStar,wantJoin } from "@/api/manager";
 export default {
       data(){
             return{
                   showItem: -1,
                   visible: false,
                   confirmLoading: false,
+                  loadingMore: false,
+                  btnDsiable:false,
+                  startime:'',
+                  endtime:'',
+                  offset:1,
                   form: this.$form.createForm(this),
-                  listInfo:[
-                        {
-                              company: '北京大学附属中学初中男篮',
-                              contect: '张 **',
-                              email: '**** @mlsports.com.hk',
-                              tel: '155 **** 0000'
-                        },
-                        {
-                              company: '北京大学附属中学初中男篮',
-                              contect: '张 **',
-                              email: '**** @mlsports.com.hk',
-                              tel: '155 **** 0000'
-                        },
-                        {
-                              company: '北京大学附属中学初中男篮',
-                              contect: '张 **',
-                              email: '**** @mlsports.com.hk',
-                              tel: '155 **** 0000'
-                        },
-                  ]
+                  listInfo:[],
+                  key:'',
+                  starsList:[],
+                  form: this.$form.createForm(this),
+                  
             }
       },
+      mounted(){
+            this.getSearchCampList(this.startime,this.endtime,this.offset);
+            this.getChooseStar();
+      },
       methods: {
-            showModal() {
+            postWantJoin(campId, athleteId, cost, details){
+                  wantJoin(campId, athleteId, cost, details).then(res=>{
+                        if (res.code == 1000) {
+                              this.$message.success('操作成功！');
+                              this.visible = false;
+                              this.confirmLoading = false;
+                        }
+                  })
+            },
+            getChooseStar(){
+                  chooseStar().then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.starsList = res.data
+                        }
+                  })
+            },
+            getSearchCampList(startime, endtime, offset){
+                  searchCampList(startime, endtime, offset).then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.listInfo = res.page.rows
+                        }
+                  })
+            },
+            showModal(id) {
                   this.visible = true
+                  this.key = id
             },
             handleOk(e) {
-                  this.ModalText = 'The modal will be closed after two seconds';
-                  this.confirmLoading = true;
-                  setTimeout(() => {
-                        this.visible = false;
-                        this.confirmLoading = false;
-                        this.$message.success('操作成功！');
-                  }, 2000);
+                  this.form.validateFields((err,values) => {
+                        if (!err) {
+                              this.postWantJoin(this.key,values.stars,values.ccfy,values.desc)
+                        }
+                  },);
             },
             handleCancel(e) {
                   console.log('Clicked cancel button');
                   this.visible = false
             },
-            onChange(value) {
-                  console.log('changed', value);
+           
+           
+            changeDate(val,date){
+                  this.starttime = date[0];
+                  this.endtime = date[1]
             },
-            handleSelectChange (value) {
-                  console.log(value);
-                  this.form.setFieldsValue({
-                        note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
-                  });
+            loadMore(){
+                  this.offset++;
+                  this.loadingMore = true;
+                  searchCampList('', '', this.offset).then(res=>{
+                        if (res.code == 1000) {
+                              if (this.offset > res.page.pages) {
+                                    this.$message.warning('已加载全部数据');
+                                    this.loadingMore = false;
+                                    this.btnDsiable = true;
+                                    return;
+                              }
+                              console.log(res)
+                              this.listInfo = this.listInfo.concat(res.page.rows);
+                              this.loadingMore = false
+                        }
+                  })
             },
+            search(){
+                  this.getSearchCampList(this.startime,this.endtime,this.offset)
+            }
       }
 }
 </script>

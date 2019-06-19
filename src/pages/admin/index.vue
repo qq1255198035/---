@@ -133,7 +133,7 @@ export default {
   },
   created () {
     this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+    this.avatar = this.$store.getters.avatar
   },
   mounted () {
     this.getHeadMsg();

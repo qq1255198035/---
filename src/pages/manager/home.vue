@@ -221,7 +221,7 @@ export default {
   },
   created () {
     this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+    this.avatar = this.$host + this.$store.getters.avatar
 
     
   },

@@ -12,8 +12,6 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
-    tel: '',
-    
     lang: 'zh-TW'
   },
 
@@ -34,9 +32,6 @@ const user = {
     SET_INFO: (state, info) => {
       state.info = info
     },
-    SET_TEL: (state, tel) => {
-      state.tel = tel
-    },
    
     SET_LANG: (state, lang) => {
       state.lang = lang
@@ -50,10 +45,12 @@ const user = {
         login(userInfo)
           .then(res => {
             // const result = response.result
-             Vue.ls.set(ACCESS_TOKEN, res.token, 7 * 24 * 60 * 60 * 1000)
+            Vue.ls.set(ACCESS_TOKEN, res.token, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', res.token)
             console.log(res)
-            commit('SET_AVATAR', res.avatar)
+            console.log(res.avatar)
+            
+            commit('SET_AVATAR',res.avatar)
             commit('SET_NAME', { name: res.user.name, welcome: welcome() })
             commit('SET_INFO', res.user)
             resolve()
@@ -70,7 +67,7 @@ const user = {
         getRouterByUser().then(res => {
           const result = res.data
           commit('SET_ROLES', result)
-          resolve(res)
+          resolve(res.data)
         }).catch(err => {
           reject(err)
         })

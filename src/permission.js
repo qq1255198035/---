@@ -18,11 +18,12 @@ router.beforeEach((to, from, next) => {
   if (Vue.ls.get(ACCESS_TOKEN)) {
     /* has token */
     if (to.path === '/user/login') {
-      
       next()
       NProgress.done()
+      console.log(11)
     } else {
-      if (store.getters.roles.length === 0) {
+      console.log(11)
+      if (store.getters.roles.length === 0){
         console.log(11)
         store
           .dispatch('GetInfo')

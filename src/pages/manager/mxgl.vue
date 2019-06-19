@@ -362,14 +362,14 @@ export default {
             
       },
       methods:{
-            postStarUpdatea(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId){
-                  console.log(222)
+            postStarUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId){
                   starUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！')
                               this.visible = false;
                               this.confirmLoading = false;
-                              
+                              this.getStarsList('',this.offset);
+                              console.log(222)
                         }
                   })
             },
@@ -456,13 +456,13 @@ export default {
                   
             },
             handleOk(e) {
-                  this.confirmLoading = true;
+                  
                   this.form.validateFields((err,values) => {
                         if (!err) {
-                              console.log(11)
+                        
                               console.log(values)
-                              this.a()
-                              this.postStarUpdatea(values.lastname)
+                              
+                              this.postStarUpdate(values.lastname,values.firstname,values.works,values.country,values.birthday._i,values.height,values.heavy,values.home,values.desc,values.sex,this.postImg1,this.postImg2,this.postImg3,this.stasId)
                               
                         }
                   },);

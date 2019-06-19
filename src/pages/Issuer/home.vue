@@ -1,8 +1,7 @@
-
 <template>
-  <page-view :avatar="avatar" :title="false">
+  <page-view :avatar="personInfo.logo" :title="false">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div class="title">{{ timeFix }}，{{ personInfo.contact }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>搞手</div>
     </div>
     <div slot="extra">
@@ -35,7 +34,7 @@
                         </v-chart>
                         <div class="calc-price">
                           总计：￥
-                          <span>10000</span>
+                          <span>{{sponSor.tolMoney}}</span>
                         </div>
                         
                     </a-col>
@@ -49,7 +48,7 @@
                       </v-chart>
                       <div class="calc-price">
                           总计：￥
-                          <span>10000</span>
+                          <span>{{sponSor.tolMoney}}</span>
                       </div>
                     </a-col>
                   </a-row>
@@ -69,24 +68,24 @@
             <div class="item-group">
               <h6>{{$t('issuer.index.title')}}</h6>
               <p>{{$t('issuer.index.desc')}}</p>
-              <a-button type="primary" @click="$router.push({name: 'cjhd'})">{{$t('issuer.index.fbhd')}}</a-button>
+              <a-button type="primary" @click="$router.push({name: 'issuerCjhd'})">{{$t('issuer.index.fbhd')}}</a-button>
             </div>
         </a-card>
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
-            <a slot="extra" @click="$router.push({name: 'notices'})">{{$t('issuer.index.qbxx')}}</a>
+            <a slot="extra" @click="$router.push({name: 'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in notice">
+              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in newsList">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
                       <a>{{ item.title }}</a>
                     </div>
                     <div slot="description" class="card-description">
-                      {{ item.description }}
+                      {{ item.content }}
                     </div>
                   </a-card-meta>
                   <div class="project-item">
-                    <span class="datetime">{{item.time}}</span>
+                    <span class="datetime">{{item.createtime}}</span>
                   </div>
                 </a-card>
               </a-card-grid>
@@ -100,6 +99,7 @@
 
 <script>
 import { timeFix } from '@/utils/util'
+import { getSponsorshipdetails, getUserInformation, getSponsoredTweets, getMyFiveNews, getMyAllNews } from '@api/hand'
 import { mapActions,mapGetters } from 'vuex'
 import api from "@/api/index";
 import { PageView } from '@/layouts'
@@ -138,10 +138,13 @@ export default {
   },
   data () {
     return {
+      sponSor: '', //赞助商
       timeFix: timeFix(),
+      personInfo: '', // 搞手用户信息
       avatar: '',
       number:{},
       user: {},
+      newsList: [], // 5条消息
       pieData,
       pieData1,
       operation:[],
@@ -219,51 +222,50 @@ export default {
     ...mapGetters(['notice']),
   },
   created () {
+    this._getSponsorshipdetails()
+    this._getUserInformation()
+    this._getSponsoredTweets()
+    this._getMyFiveNews()
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
   },
   mounted () {
-    this.getTable()
-    this.getPie()
-    this.getProjects()
-    this.getNumber()
+  
   },
   methods: {
-    
-    getProjects () {
-      this.$http.get(api.IssHomeMsg)
-        .then(res => {
-          if(res.status == 200){
-            
-            this.loading = false
-          }
-        })
+    _getMyFiveNews() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getMyFiveNews(params).then(res => {
+        console.log(res)
+        this.newsList = res.data
+      })
     },
-    getNumber () {
-      this.$http.get(api.IssHomeNum)
-        .then(res => {
-          if(res.status == 200){
-            //console.log(res)
-            this.number = res.data
-          }
-        })
+    //赞助消息接口
+    _getSponsoredTweets() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getSponsoredTweets(params).then(res => {
+        console.log(res)
+      })
     },
-    getTable(){
-      this.$http.get(api.IssHomeTable)
-        .then(res => {
-            if(res.status == 200){
-              this.operation = res.data
-            }
-        })
-    },
-    getPie(){
-      this.$http.get(api.IssHomePie)
-        .then(res => {
-            if(res.status == 200){
-              this.pieData[0].count= res.data.pie1[0].count
-              this.pieData[1].count= res.data.pie1[1].count
-              this.pieData1[0].count= res.data.pie2[0].count
-              this.pieData1[1].count= res.data.pie2[1].count
+    _getSponsorshipdetails() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getSponsorshipdetails(params).then(res => {
+        console.log(res)
+        this.sponSor = res
+        if(res.code == 1000){
+              this.pieData[0].count= res.cash
+              this.pieData[1].count= res.product
+              this.pieData1[0].count= res.noPaid
+              this.pieData1[1].count= res.paid
               dv.transform({
                 type: 'percent',
                 field: 'count',
@@ -278,7 +280,18 @@ export default {
               })
               
             }
-        })
+      })
+    },
+    // 搞手用户信息
+    _getUserInformation() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getUserInformation(params).then(res => {
+        console.log(res)
+        this.personInfo = res.data
+      })
     },
   },
   filters: {

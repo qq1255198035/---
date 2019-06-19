@@ -1,7 +1,7 @@
 <template>
       <div id="cjdhd">
             <div class="my-calendar">
-                  <a-calendar class="">
+                  <a-calendar @panelChange="onPanelChange">
                         <ul class="events" slot="dateCellRender" slot-scope="value">
                               <li v-for="item in getListData(value)" :key="item.content" @click="showModal(value)">
                                     <a-badge :status="item.type" :text="item.content" />
@@ -147,7 +147,7 @@ export default {
                   let listData;
                   //value.month()
                   //var date = value.year() 
-                  console.log(value.year(),value.date(),value.month()  )
+                  //console.log(value.year(),value.date(),value.month()  )
                   if(value.month() === 4){
                          switch (value.date()) {
                   case 8:
@@ -187,6 +187,9 @@ export default {
             hideModal() {
                   this.visible = false
             },
+            onPanelChange(value, mode) {
+                  console.log(value, mode);
+            }
       }
 }
             
