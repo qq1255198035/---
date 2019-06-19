@@ -4,14 +4,15 @@
             <div class="dkjl-content">
                   <div class="input-box">
                         <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                              <a-date-picker class="my-picker"/>
+                              <a-range-picker @change="changeDate" class="my-picker"/>
                         </a-form-item>
-                        <a-button type="primary" icon="search">搜 索</a-button>
+                        <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                        <a-button type="primary" @click="$router.push({name:'dkxx'})" style="margin-left: 20px;">添加打款信息</a-button>
                   </div>
                   <div class="my-stable">
-                        <a-table :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :columns="columns" :dataSource="data">
-                              <template slot="action">
-                                    <a-button type="primary" ghost @click="$router.push({name: 'dkxq'})">查 看</a-button>
+                        <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
+                              <template slot="action" slot-scope="text,record">
+                                    <a-button type="primary" ghost @click="$router.push({name: 'dkxq',params:{data:record}})">查 看</a-button>
                               </template>
                         </a-table>
                   </div>
@@ -50,6 +51,7 @@ import { mixinsTitle } from "@/utils/mixin.js";
 import HeadInfo from '@/components/tools/HeadInfo'
 import { STable } from '@/components'
 import { getServiceList } from '@/api/manage'
+import { transferMoneyList } from "@/api/admin";
 export default {
       components: {
             STable,
@@ -60,29 +62,38 @@ export default {
             return{
                   pageTitle: null,
                   selectedRowKeys: [],
+                  condition:'',
+                  offset:'',
+                  starttime: '',
+                  endtime: '',
+                  loading: true,
+                  pagination:{
+                        total:0,
+                        pageSize:10,
+                  },
                   columns: [
                               
                               {
                                     title: '汇款公司',
-                                    dataIndex: 'hkgs'
+                                    dataIndex: 'payCompany'
                               },
                               {
                                     title: '收款公司',
-                                    dataIndex: 'skgs'
+                                    dataIndex: 'receiveCompany'
                               },
                               {
                                     title: '汇款时间',
-                                    dataIndex: 'hksj',
+                                    dataIndex: 'createTime',
                                    
                               },
                               {
-                                    title: '收款时间',
-                                    dataIndex: 'skss',
+                                    title: '未付款',
+                                    dataIndex: 'balance',
                                     
                               },
                               {
                                     title: '已付款',
-                                    dataIndex: 'yfk',
+                                    dataIndex: 'payment',
                               
                               },
                               {
@@ -98,63 +109,40 @@ export default {
                   ],
                         // 加载数据方法 必须为 Promise 对象
                         
-                        data: [
-                              {
-                                    key: '1',
-                                    hkgs: '李宁体育用品有限公司',
-                                    skgs: '吉林省热动体育有限公司',
-                                    hksj: '2019-3-25 15:45',
-                                    skss: '2019-3-27 15:45',
-                                    yfk: '$30000',
-                                    bz: '明星出场费'
-                              },
-                              {
-                                    key: '2',
-                                    hkgs: '李宁体育用品有限公司',
-                                    skgs: '吉林省热动体育有限公司',
-                                    hksj: '2019-3-25 15:45',
-                                    skss: '2019-3-27 15:45',
-                                    yfk: '$30000',
-                                    bz: '明星出场费'
-                              },
-                              {
-                                    key: '3',
-                                    hkgs: '李宁体育用品有限公司',
-                                    skgs: '吉林省热动体育有限公司',
-                                    hksj: '2019-3-25 15:45',
-                                    skss: '2019-3-27 15:45',
-                                    yfk: '$30000',
-                                    bz: '明星出场费'
-                              },
-                              {
-                                    key: '4',
-                                    hkgs: '李宁体育用品有限公司',
-                                    skgs: '吉林省热动体育有限公司',
-                                    hksj: '2019-3-25 15:45',
-                                    skss: '2019-3-27 15:45',
-                                    yfk: '$30000',
-                                    bz: '明星出场费'
-                              },
-                              {
-                                    key: '5',
-                                    hkgs: '李宁体育用品有限公司',
-                                    skgs: '吉林省热动体育有限公司',
-                                    hksj: '2019-3-25 15:45',
-                                    skss: '2019-3-27 15:45',
-                                    yfk: '$30000',
-                                    bz: '明星出场费'
-                              },
-                        ],
+                  data: [],
             }
       },
       methods:{
-           
-            onSelectChange (selectedRowKeys) {
-                  console.log('selectedRowKeys changed: ', selectedRowKeys);
-                  this.selectedRowKeys = selectedRowKeys
-            }
+            getMoneyList(condition, offset, starttime, endtime){
+                  transferMoneyList(condition, offset, starttime, endtime).then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              let key = 'key'
+                              this.loading = false;
+                              this.data = res.page.rows
+                              this.data.map((item,index)=>{
+                                    item[key] = index
+                              })
+                        }
+                  })
+            },
+            changeDate(val,date){
+                  this.starttime = date[0];
+                  this.endtime = date[1]
+            },
+            search(){
+                  this.loading = true;
+                  this.getMoneyList(this.condition,this.offset,this.starttime,this.endtime)
+            },
+            handleTableChange (pagination) {
+                  this.loading = true;
+                  this.offset = pagination.current;
+                  this.getMoneyList(this.condition,this.offset,this.starttime,this.endtime)
+            },
       },
-      
+      mounted(){
+            this.getMoneyList(this.condition,this.offset,this.starttime,this.endtime)
+      },
       filters: {
             
       },

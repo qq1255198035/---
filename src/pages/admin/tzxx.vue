@@ -3,13 +3,14 @@
             <page-header :title="pageTitle"></page-header>
             <div class="tzxx-content">
                   <div class="left">
-                        <a-form layout="vertical">
+                        <a-form layout="vertical" :form="form">
                               <a-form-item
                                     label="标题："
                                     :label-col="{ span: 3 }"
                                     :wrapper-col="{ span: 24 }"
                               >
-                                    <a-input placeholder="请输入标题" v-model="title"/>
+                                    <a-input placeholder="请输入标题" v-decorator="[
+                                    'title',{rules: [{ required: true, message: '请输入标题' }]}]"/>
                               </a-form-item>
                               <a-form-item
                                     label="发送至："
@@ -20,9 +21,10 @@
                                           showSearch
                                           placeholder="Select a person"
                                           optionFilterProp="children"
-                                          @change="handleChange"
                                           :filterOption="filterOption"
                                           allowClear
+                                          v-decorator="[
+                                    'person',{rules: [{ required: true, message: '请选择发送人' }]}]"
                                     >
                                           <a-select-option v-for="item in actor" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
                                     </a-select>
@@ -32,7 +34,8 @@
                                     :label-col="{ span: 3 }"
                                     :wrapper-col="{ span: 24 }"
                               >
-                                    <a-textarea placeholder="" :rows="8" v-model="messages"/>
+                                    <a-textarea placeholder="" :rows="8" v-decorator="[
+                                    'message',{rules: [{ required: true, message: '请输入内容' }]}]"/>
                               </a-form-item>
                               <a-button type="primary" block @click="sendMessages">发 送</a-button>
                         </a-form>
@@ -101,9 +104,7 @@ export default {
                   btnDsiable:false,
                   pages:0,
                   actor:[],
-                  selector:'',
-                  messages:'',
-                  title:'',
+                  form: this.$form.createForm(this),
                  
             }
       },
@@ -159,9 +160,7 @@ export default {
                   })
             },
             postSendMessage(title, content, recipients){
-                  if (recipients) {
                         sendMessage(title, content, recipients).then(res=>{
-                        
                               if(res.code == 1000){
                                     this.$message.success('发送成功！');
                                     setTimeout(() => {
@@ -169,13 +168,16 @@ export default {
                                     }, 1000);
                               }
                         })
-                  }else{
-                        this.$message.error('请选择发送人！');
-                  }
+                  
                   
             },
             sendMessages(){
-                  this.postSendMessage(this.title,this.messages,this.selector)
+                  this.form.validateFields((err,values) => {
+                        if (!err) {
+                              this.postSendMessage(values.title,values.message,values.person)
+                        }
+                  },);
+                 
             }
       },
       mounted () {

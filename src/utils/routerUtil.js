@@ -2,8 +2,7 @@ import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { axios } from '@/utils/request'
 import qs from 'qs'
-// eslint-disable-next-line
-import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
+
 
 // 前端路由表
 const constantRouterComponents = {
@@ -36,6 +35,7 @@ const constantRouterComponents = {
   mxxq: () => import('@/pages/admin/khgl/mxxq'),
   dkjl: () => import('@/pages/admin/dkjl/dkjl'),
   dkxq: () => import('@/pages/admin/dkjl/dkxq'),
+  dkxx: () => import('@/pages/admin/dkjl/dkxx'),
   admintzxx: () => import('@/pages/admin/tzxx'),
   // 贊助商路由
   sponsorHome: () => import('@/pages/sponsor/index'),

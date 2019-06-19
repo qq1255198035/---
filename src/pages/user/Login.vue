@@ -60,12 +60,12 @@
       </div>
     </a-form>
 
-    <two-step-captcha
+    <!-- <two-step-captcha
       v-if="requiredTwoStepCaptcha"
       :visible="stepCaptchaVisible"
       @success="stepCaptchaSuccess"
       @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
+    ></two-step-captcha> -->
   </div>
 </template>
 
@@ -74,7 +74,7 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha } from '@/api/login'
 
 export default {
   components: {
@@ -86,8 +86,8 @@ export default {
       loginBtn: false,
       // login type: 0 email, 1 username, 2 telephone
       loginType: 0,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
+      
+      // stepCaptchaVisible: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
@@ -99,14 +99,14 @@ export default {
     }
   },
   created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
-    // this.requiredTwoStepCaptcha = true
+    // get2step({ })
+    //   .then(res => {
+    //     this.requiredTwoStepCaptcha = res.result.stepCode
+    //   })
+    //   .catch(() => {
+    //     this.requiredTwoStepCaptcha = false
+    //   })
+    // // this.requiredTwoStepCaptcha = true
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
@@ -148,15 +148,15 @@ export default {
       })
     },
     
-    stepCaptchaSuccess () {
-      this.loginSuccess()
-    },
-    stepCaptchaCancel () {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
-      })
-    },
+    // stepCaptchaSuccess () {
+    //   this.loginSuccess()
+    // },
+    // stepCaptchaCancel () {
+    //   this.Logout().then(() => {
+    //     this.loginBtn = false
+    //     // this.stepCaptchaVisible = false
+    //   })
+    // },
     loginSuccess (res) {
       console.log(res)
       this.$router.push({ name: 'index' })

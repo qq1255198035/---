@@ -3,16 +3,16 @@
             <page-header :title="pageTitle"></page-header>
             <div class="dkxq-content">
                   <ul>
-                        <li><span>交易日期： </span>2019-3-25 16:15</li>
-                        <li><span>付款公司： </span>李宁体育用品有限公司</li>
-                        <li><span>付款账户： </span>6200 0000 0000 000</li>
-                        <li><span>收款公司： </span>吉林省热动体育发展有限公司</li>
-                        <li><span>收款账户： </span>6200 0000 0000 000</li>
-                        <li><span>收款银行开户行： </span>中国工商银行景阳大路支行</li>
-                        <li><span>预付金额： </span>$ 300,000</li>
-                        <li><span>手续费： </span>$ 30,000</li>
-                        <li><span>尾款： </span></li>
-                        <li><span>汇款人附言： </span>汇款给XXXX经济公司</li>
+                        <li><span>交易日期： </span>{{list.createTime}}</li>
+                        <li><span>付款公司： </span>{{list.payCompany}}</li>
+                        <li><span>付款账户： </span>{{list.payAccount}}</li>
+                        <li><span>收款公司： </span>{{list.receiveCompany}}</li>
+                        <li><span>收款账户： </span>{{list.receiveAccount}}</li>
+                        <li><span>收款银行开户行： </span>{{list.receiveBank}}</li>
+                        <li><span>预付金额： </span>{{list.payment}}</li>
+                        <li><span>手续费： </span>{{list.serviceCharge}}</li>
+                        <li><span>尾款： </span>{{list.balance}}</li>
+                        <li><span>汇款人附言： </span>{{list.bz}}</li>
                         <li><span>交易状态： </span>交易成功</li>
                   </ul>
                   <div class="btn-box">
@@ -47,25 +47,22 @@
 }
 </style>
 <script>
-import PageHeader from '@/components/PageHeader' 
+import { mixinsTitle } from "@/utils/mixin";
 export default {
-      components: {
-            'page-header': PageHeader,
-      },
+      
+      mixins:[mixinsTitle],
       data(){
             return{
                   pageTitle: null,
+                  list:{}
             }
       },
       methods:{
-            getPageMeta () {
-                  // eslint-disable-next-line
-                  this.pageTitle = this.$route.meta.title
-            },
+            
       },
       mounted () {
-            this.getPageMeta();
             
+            this.list = this.$route.params.data
       },
 }
 </script>

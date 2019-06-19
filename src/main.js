@@ -8,7 +8,7 @@ import store from './store/'
 import i18n from './lang'
 import { VueAxios } from './utils/request'
 // mock
-import './mock'
+
 import bootstrap from './core/bootstrap'
 import './core/use'
 import './permission' // permission control

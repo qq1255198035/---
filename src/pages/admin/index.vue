@@ -154,7 +154,12 @@ export default {
       searchCampList(key,page).then(res => {
         if(res.code == 1000){
           this.tableLoading = false;
+          let key = 'key'
+          console.log(res.page.rows)
           this.operation1 = res.page.rows
+          this.operation1.map((item,index)=>{
+            item[key] = index
+          })
         }
       })
     },
