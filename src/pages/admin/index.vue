@@ -149,7 +149,7 @@ export default {
     this.getRightInfo();
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome']),
+    ...mapGetters(['nickname']),
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){

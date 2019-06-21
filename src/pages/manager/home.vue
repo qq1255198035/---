@@ -230,7 +230,7 @@ export default {
     // this.conlog();
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome']),
+    ...mapGetters(['nickname']),
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){

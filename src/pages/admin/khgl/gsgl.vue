@@ -212,7 +212,7 @@ export default {
                   loading:false,
                   btnDsiable1: false,
                   btnDsiable2: false,
-                  loadingMore: true,
+                  loadingMore: false,
                   cardItemData1:[],  
                   cardItemData2:[],  
                   condition: '',

@@ -271,7 +271,7 @@ export default {
     this.getPiesData()
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome']),
+    ...mapGetters(['nickname']),
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){

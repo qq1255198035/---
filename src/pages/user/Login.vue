@@ -137,12 +137,18 @@ export default {
       console.log(res)
       this.$router.push({ name: 'index' })
       // 延迟 1 秒显示欢迎信息
-      setTimeout(() => {
+      if(res.code !=1000) {
+          this.$notification['error']({
+          message: '错误',
+          description: (res.msg || '请求出现错误，请稍后再试'),
+          duration: 4
+        })
+      }else{
         this.$notification.success({
           message: '欢迎',
           description: `${timeFix()}，欢迎回来`
         })
-      }, 1000)
+      }
     },
     requestFailed (err) {
       this.$notification['error']({

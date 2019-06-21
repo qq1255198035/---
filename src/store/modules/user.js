@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import { login } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { welcome } from '@/utils/util'
+
 import { loadLanguageAsync } from '@/lang'
 import { getRouterByUser } from '@/utils/routerUtil'
 const user = {
   state: {
     token: '',
     name: '',
-    welcome: '',
+    
     avatar: '',
     roles: [],
     info: {},
@@ -19,9 +19,9 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, { name, welcome }) => {
+    SET_NAME: (state, { name }) => {
       state.name = name
-      state.welcome = welcome
+     
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -45,18 +45,21 @@ const user = {
         login(userInfo)
           .then(res => {
             // const result = response.result
-            Vue.ls.set(ACCESS_TOKEN, res.token, 7 * 24 * 60 * 60 * 1000)
-            commit('SET_TOKEN', res.token)
-            console.log(res)
-            console.log(res.avatar)
-            
-            commit('SET_AVATAR',res.avatar)
-            commit('SET_NAME', { name: res.user.name, welcome: welcome() })
-            commit('SET_INFO', res.user)
-            resolve()
+            if (res.code == 1000) {
+              Vue.ls.set(ACCESS_TOKEN, res.token, 7 * 24 * 60 * 60 * 1000)
+              commit('SET_TOKEN', res.token)
+              console.log(res)
+              console.log(res.avatar)
+              commit('SET_AVATAR', res.avatar)
+              commit('SET_NAME', { name: res.user.name })
+              commit('SET_INFO', res.user)
+              
+            }
+            resolve(res)
           })
           .catch(error => {
             reject(error)
+            console.log(error)
           })
       })
     },

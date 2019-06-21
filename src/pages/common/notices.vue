@@ -34,8 +34,8 @@
 #notices{
       .page-menu-search{
             display: flex;
-            justify-content: center;
-            padding: 0 0 50px;
+            justify-content: flex-start;
+            padding: 50px 0;
       }
 }
 

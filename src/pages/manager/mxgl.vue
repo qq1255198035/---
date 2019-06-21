@@ -526,6 +526,9 @@ export default {
                   getBase64(file, (imageUrl) => {
                         this.imageUrl1 = imageUrl
                         this.loading = false
+                        this.form.setFieldsValue({  
+                              uploader: imageUrl,
+                        });
                   })
                   const formData = new FormData();
                   formData.append('file',file)
@@ -549,7 +552,10 @@ export default {
                   }
                   getBase64(file, (imageUrl) => {
                         this.imageUrl2 = imageUrl
-                        this.loading = false
+                        this.loading = false;
+                        this.form.setFieldsValue({
+                              avatar: imageUrl,
+                        });
                   })
                   const formData = new FormData();
                   formData.append('file',file)
@@ -575,7 +581,10 @@ export default {
                   }
                   getBase64(file, (imageUrl) => {
                         this.imageUrl3 = imageUrl
-                        this.loading = false
+                        this.loading = false;
+                        this.form.setFieldsValue({
+                              imgs: imageUrl,
+                        });
                   })
                   const formData = new FormData();
                   formData.append('file',file)
