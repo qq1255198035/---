@@ -1,12 +1,23 @@
 <template>
   <div id="details">
     <page-header :title="pageTitle"></page-header>
-    <glTitle></glTitle>
+    <glTitle
+      :logo="logo"
+      :title="name"
+      :start="start"
+      :type="capName"
+      :num="campNum"
+      :stars="starList"
+      :sponsors="sponsorList"
+      :status="status"
+      :price="price"
+      :adress="adress"
+    ></glTitle>
     <div class="details-content">
       <div class="details-header">
         <a-card title="活动进度">
           <div class="secetion">
-            <a-steps :current="2">
+            <a-steps :current="current">
               <a-popover slot="progressDot" slot-scope="{index, status, prefixCls}">
                 <template slot="content">
                   <span>step {{index}} status: {{status}}</span>
@@ -26,14 +37,14 @@
           <a-tab-pane key="1" tab="活动信息">
             <a-card :bordered="false">
               <detail-list title="活动基本信息">
-                <detail-list-item term="活动中文名称">馬布里: 我的下一章</detail-list-item>
-                <detail-list-item term="活动分类">篮球</detail-list-item>
-                <detail-list-item term="参赛人数">1200人</detail-list-item>
-                <detail-list-item term="活动英文名称">STEPHON MARBURY: THE NEXT CHAPTER /</detail-list-item>
-                <detail-list-item term="活动时间">2019-04-18 10:00 ~ 17:00</detail-list-item>
-                <detail-list-item term="联系人">万启源</detail-list-item>
-                <detail-list-item term="电子邮件">446996141@qq.com</detail-list-item>
-                <detail-list-item term="联系电话">150 0000 0000</detail-list-item>
+                <detail-list-item term="活动中文名称">{{name}}</detail-list-item>
+                <detail-list-item term="活动分类">{{capName}}</detail-list-item>
+                <detail-list-item term="参赛人数">{{campNum}}人</detail-list-item>
+                <detail-list-item term="活动英文名称">{{enName}}</detail-list-item>
+                <detail-list-item term="活动时间">{{start}}</detail-list-item>
+                <detail-list-item term="联系人">{{contact}}</detail-list-item>
+                <detail-list-item term="电子邮件">{{email}}</detail-list-item>
+                <detail-list-item term="联系电话">{{phone}}</detail-list-item>
               </detail-list>
               <detail-list>
                 <detail-list-item term="活动地区" class="my-item">
@@ -55,12 +66,12 @@
               <ul>
                 <li>
                   <span>活动内容：</span>
-                  <p>这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长</p>
+                  <p>{{activityContent}}</p>
                 </li>
                 <li>
                   <span>活动视频：</span>
                   <video
-                    src
+                    :src="videoUrls"
                     controls
                     poster="./../../../assets/a1.jpg"
                     width="200px"
@@ -69,10 +80,7 @@
                 </li>
                 <li>
                   <span>活动照片：</span>
-                  <img :src="imgUrl" alt>
-                  <img :src="imgUrl" alt>
-                  <img :src="imgUrl" alt>
-                  <img :src="imgUrl" alt>
+                  <img v-for="item in detailImgs" :src="item" :key="item" alt>
                 </li>
               </ul>
             </div>
@@ -83,7 +91,7 @@
                   <span>主办承办方：</span>
                   <a-table
                     :columns="columns1"
-                    :dataSource="data1"
+                    :dataSource="companyList1"
                     size="small"
                     :pagination="false"
                     class="my-table"
@@ -120,13 +128,13 @@
               <ul>
                 <li>
                   <span>招商截止日期：</span>
-                  <p>2019-04-18 20:00</p>
+                  <p>{{closingDate}}</p>
                 </li>
                 <li>
                   <span>赞助要求：</span>
                   <a-table
                     :columns="columns2"
-                    :dataSource="data2"
+                    :dataSource="dataTable"
                     size="small"
                     :pagination="false"
                     class="my-table"
@@ -134,7 +142,7 @@
                 </li>
                 <li>
                   <span>活动要求：</span>
-                  <p>这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...这段描述很长很长很长很长很长很长很长很长</p>
+                  <p>{{requirdContent}}</p>
                 </li>
               </ul>
             </div>
@@ -143,28 +151,28 @@
             <div class="my-tables">
               <h3>
                 冠名赞助
-                <span>（ 2 ）</span>
+                <span>（ {{dataName.length}} ）</span>
               </h3>
-              <a-table :columns="columns3" :dataSource="data3" size="middle"></a-table>
+              <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>
             </div>
             <div class="my-tables">
               <h3>
                 非冠名赞助
-                <span>（ 2 ）</span>
+                <span>（ {{dataNoName.length}} ）</span>
               </h3>
-              <a-table :columns="columns3" :dataSource="data3" size="middle"></a-table>
+              <a-table :columns="columns3" :dataSource="dataNoName" size="middle"></a-table>
             </div>
             <div class="my-tables">
               <h3>
                 其他赞助
-                <span>（ 2 ）</span>
+                <span>（ {{dataOther.length}} ）</span>
               </h3>
-              <a-table :columns="columns3" :dataSource="data3" size="middle"></a-table>
+              <a-table :columns="columns3" :dataSource="dataOther" size="middle"></a-table>
             </div>
           </a-tab-pane>
           <a-tab-pane key="3" tab="明星信息">
             <div class="my-tables">
-              <a-table :columns="columns4" :dataSource="data4" size="middle"></a-table>
+              <a-table :columns="columns4" :dataSource="starList" size="middle"></a-table>
             </div>
           </a-tab-pane>
         </a-tabs>
@@ -255,7 +263,15 @@
 <script>
 import glTitle from '@/components/glTitle/glTitle'
 import DetailList from '@/components/tools/DetailList'
-import { getCheckActivitiesDetail } from '@api/hand'
+import {
+  getCheckActivitiesDetail,
+  getExtension,
+  getPress,
+  getActivityInformation,
+  getSponsor,
+  getStarsDeails,
+  getApprovalList
+} from '@api/hand'
 import imgUrl from '@/assets/a1.jpg'
 
 import { mixinsTitle } from '@/utils/mixin.js'
@@ -363,7 +379,7 @@ const data2 = [
 const columns3 = [
   {
     title: '编号',
-    dataIndex: 'num',
+    dataIndex: 'key',
     align: 'center'
   },
   {
@@ -410,17 +426,17 @@ const columns4 = [
   },
   {
     title: '出厂费用',
-    dataIndex: 'price',
+    dataIndex: 'cost',
     align: 'center'
   },
   {
     title: '联系人',
-    dataIndex: 'lxr',
+    dataIndex: 'contact',
     align: 'center'
   },
   {
     title: '联系电话',
-    dataIndex: 'tel',
+    dataIndex: 'phone',
     align: 'center'
   },
   {
@@ -434,167 +450,6 @@ const columns4 = [
     align: 'center'
   }
 ]
-const data3 = [
-  {
-    key: '1',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '2',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '3',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '4',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '5',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '6',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '7',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '8',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '9',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '10',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  },
-  {
-    key: '11',
-    num: '01',
-    name: '李宁体育用品公司',
-    way: '现金 + 实物',
-    isPrice: '否',
-    cash: '2.00',
-    pro: '1 * 衣物',
-    calPrice: '28.00',
-    payPrice: '23.00'
-  }
-]
-const data4 = [
-  {
-    key: '1',
-    name: '斯蒂芬·赛维尔·马布里',
-    price: '$39999',
-    lxr: '张 **',
-    tel: '155 **** 0000',
-    email: '**** @mlsports.com.hk',
-    company: '北京大学附属中学初中男'
-  },
-  {
-    key: '2',
-    name: '斯蒂芬·赛维尔·马布里',
-    price: '$39999',
-    lxr: '张 **',
-    tel: '155 **** 0000',
-    email: '**** @mlsports.com.hk',
-    company: '北京大学附属中学初中男'
-  },
-  {
-    key: '3',
-    name: '斯蒂芬·赛维尔·马布里',
-    price: '$39999',
-    lxr: '张 **',
-    tel: '155 **** 0000',
-    email: '**** @mlsports.com.hk',
-    company: '北京大学附属中学初中男'
-  },
-  {
-    key: '4',
-    name: '斯蒂芬·赛维尔·马布里',
-    price: '$39999',
-    lxr: '张 **',
-    tel: '155 **** 0000',
-    email: '**** @mlsports.com.hk',
-    company: '北京大学附属中学初中男'
-  }
-]
 export default {
   mixins: [mixinsTitle],
   components: {
@@ -604,63 +459,207 @@ export default {
   },
   data() {
     return {
+      activitiesList: '',
+      current: '',
+      status: '',
+      starList: [],
+      sponsorList: [],
+      dataName: [],
+      dataNoName: [],
+      dataOther: [],
+      name: '',
+      start: '',
+      address: '',
+      capName: '',
+      campNum: '',
+      price: '',
+      email: '',
+      enName: '',
+      contact: '',
+      phone: '',
       data,
       columns,
       data1,
       columns1,
       data2,
       columns2,
-      data3,
       columns3,
-      data4,
       columns4,
       imgUrl,
       btnShow: -1,
-      cardItemData: [
-        {
-          name: '李丽丽',
-          tel: '13456874565',
-          email: '11222222@163.com',
-          desc: '无'
-        },
-        {
-          name: '李丽丽',
-          tel: '13456874565',
-          email: '11222222@163.com',
-          desc: '无'
-        },
-        {
-          name: '李丽丽',
-          tel: '13456874565',
-          email: '11222222@163.com',
-          desc: '无'
-        },
-        {
-          name: '李丽丽',
-          tel: '13456874565',
-          email: '11222222@163.com',
-          desc: '无'
-        },
-        {
-          name: '李丽丽',
-          tel: '13456874565',
-          email: '11222222@163.com',
-          desc: '无'
-        }
-      ]
+      activityContent: '',
+      detailImgs: '',
+      videoUrls: '',
+      palyPlatfrom: '',
+      selectedTags: '',
+      companyList1: '',
+      closingDate: '',
+      requirdContent: '',
+      dataTable: '',
+
     }
   },
   created() {
+    
+  },
+  mounted() {
     this._getCheckActivitiesDetail()
+    this._getPress()
+    this._getActivityInformation()
+    this._getSponsor()
+    this._getStarsDeails()
+    this._getApprovalList()
+    this._getExtension()
   },
   methods: {
+    _getApprovalList() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      console.log(params)
+      getApprovalList(params).then(res => {
+        console.log(res)
+        let key = 'key'
+        this.dataName = res.data.namingCampSponsor
+        this.dataNoName = res.data.noNamingCampSponsor
+        this.dataOther = res.data.otherCampSponsor
+        this.dataName.map((item, index) => {
+          item[key] = index
+        })
+        this.dataNoName.map((item, index) => {
+          item[key] = index
+        })
+        this.dataOther.map((item, index) => {
+          item[key] = index
+        })
+      })
+    },
+    _getActivityInformation() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      getActivityInformation(params).then(res => {
+        console.log(res)
+        this.activitiesList = res.data[0]
+        this.name = this.activitiesList.name
+        this.start = this.activitiesList.createTime
+        this.address = this.activitiesList.address
+        this.capName = this.activitiesList.capName
+        this.campNum = this.activitiesList.campNum
+        this.price = this.activitiesList.price
+        this.email = this.activitiesList.email
+        this.phone = this.activitiesList.phone
+        this.enName = this.activitiesList.enName
+        this.contact = this.activitiesList.contact
+        if (this.activitiesList.status == 10) {
+          this.status = '创建中'
+        }
+        if (this.activitiesList.status == 0) {
+          this.status = '申请中'
+        }
+        if (this.activitiesList.status == 20) {
+          this.status = '成功'
+        }
+        if (this.activitiesList.status == 30) {
+          this.status = '驳回'
+        }
+        if (this.activitiesList.status == 50) {
+          this.status = '关闭'
+        }
+      })
+    },
+    _getStarsDeails() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      getStarsDeails(params).then(res => {
+        console.log(res)
+        this.starList = res.data
+      })
+    },
+    _getSponsor() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      getSponsor(params).then(res => {
+        this.sponsorList = res.data
+        this.closingDate = res.endTime
+          this.requirdContent = res.demand
+          const dataArrty = res.data
+          for (let i = 0; i < dataArrty.length; i++) {
+            this.dataTable.push({
+              key: length === 0 ? '1' : (parseInt(this.dataTable[length - 1].key) + 1).toString(),
+              tgWay: dataArrty[i].sponsorship,
+              zzWay: dataArrty[i].ss_kind,
+              zzPrice: dataArrty[i].money,
+              zzNum: dataArrty[i].num,
+              remarks: dataArrty[i].bz,
+              editable: false,
+              isNew: false
+            })
+          }
+      })
+    },
+    _getPress() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      getPress(params).then(res => {
+        console.log(res)
+        this.current = res.data.schedule
+      })
+    },
     _getCheckActivitiesDetail() {
       const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
       const params = {
-        token: token
+        token: token,
+        campId: campId
       }
       getCheckActivitiesDetail(params).then(res => {
+        this.activeityInfo = res.data[0]
+        this.activityContent = res.data[0].content
+        console.log(this.activityContent)
+        this.videoUrls = res.data[0].video
+        this.detailImgs = res.data[0].imgs
+      })
+    },
+    _getExtension() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.params.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      getExtension(params).then(res => {
         console.log(res)
+        this.palyPlatfrom = res.platform
+        const selectArry = res.campFeature.split(',')
+        const companyArry = res.data
+        for (let i = 0; i < selectArry.length; i++) {
+          this.selectedTags.push(parseInt(selectArry[i]))
+        }
+        for (let i = 0; i < companyArry.length; i++) {
+          this.companyList1.push({
+            name: companyArry[i].name,
+            workType: companyArry[i].work_name
+          })
+        }
       })
     }
   }

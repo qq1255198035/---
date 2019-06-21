@@ -6,7 +6,7 @@ import qs from 'qs'
 //管理员活动审批页活动待审批，已审批，总计数据
 export function approvalNumber() {
       return axios({
-            url:baseUrl+ '/vue/admin/approvalNumber',
+            url:'/vue/admin/approvalNumber',
             method: 'post',
             data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) })
       })
@@ -28,7 +28,7 @@ export function searchCampList(content, offset, status) {
 // 审批活动接口
 export function campApproval(campId, reject, agreement) {
       return axios({
-            url: '/vue/admin/campApproval',
+            url:'/vue/admin/campApproval',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -57,7 +57,7 @@ export function searchAuthenCampList(content, offset,status) {
 // 认证活动接口
 export function campAuthen(campId, reject, agreement) {
       return axios({
-            url: '/vue/admin/campAuthentication',
+            url:'/vue/admin/campAuthentication',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -70,7 +70,7 @@ export function campAuthen(campId, reject, agreement) {
 // 查看活动信息
 export function campInformation(campId) {
       return axios({
-            url: '/vue/admin/searchCampInformation',
+            url:'/vue/admin/searchCampInformation',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -81,7 +81,7 @@ export function campInformation(campId) {
 // 查看贊助信息
 export function searchCampSponsor(campId) {
       return axios({
-            url: '/vue/admin/searchCampSponsor',
+            url:'/vue/admin/searchCampSponsor',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -103,7 +103,7 @@ export function searchCampStar(campId) {
 // 查看活动头部信息
 export function campHeadInfo(campId) {
       return axios({
-            url: '/vue/admin/campHeadInfo',
+            url:'/vue/admin/campHeadInfo',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -114,7 +114,7 @@ export function campHeadInfo(campId) {
 // 搞手审批列表
 export function gsspList(condition, offset, starttime, endtime) {
       return axios({
-            url: '/vue/admin/organizeExamineList',
+            url:'/vue/admin/organizeExamineList',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -162,7 +162,7 @@ export function zzsspList(condition, offset, starttime, endtime) {
 // 明星审批列表
 export function mxspList(condition, offset, starttime, endtime) {
       return axios({
-            url: '/vue/admin/starExamineList',
+            url:'/vue/admin/starExamineList',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -178,7 +178,7 @@ export function mxspList(condition, offset, starttime, endtime) {
 // 搞手审批接口
 export function organizeApproval(orgId, reject, agreement) {
       return axios({
-           url: '/vue/admin/organizeApproval',
+           url:'/vue/admin/organizeApproval',
            method: 'post',
            data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -217,7 +217,7 @@ export function sponsorApproval(brandId, reject, agreement) {
 //明星审批接口
 export function starApproval(athleteId, reject, agreement) {
       return axios({
-           url: '/vue/admin/starApproval',
+           url:'/vue/admin/starApproval',
            method: 'post',
            data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -240,7 +240,7 @@ export function selectActor(){
 // 发送消息接口
 export function sendMessage(title, content, recipients) {
       return axios({
-            url: '/vue/admin/sendMessage',
+            url:'/vue/admin/sendMessage',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -253,7 +253,7 @@ export function sendMessage(title, content, recipients) {
 // 打款记录列表
 export function transferMoneyList(condition, offset, starttime, endtime) {
       return axios({
-            url: '/vue/admin/transferMoneyList',
+            url:'/vue/admin/transferMoneyList',
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
@@ -279,7 +279,7 @@ export function allCamp() {
 // 选择汇款方式
 export function allCampway(campId) {
       return axios({
-        url: '/vue/admin/getAllPurpose',
+        url:'/vue/admin/getAllPurpose',
         method: 'post',
         data: qs.stringify({
           token: Vue.ls.get(ACCESS_TOKEN),
@@ -290,7 +290,7 @@ export function allCampway(campId) {
 // 新增打款记录接口
 export function addTransferMoney(payCompany, receiveCompany, payment, balance, payAccount, bz, receiveAccount, receiveBank, serviceCharge, campId, type, recordId) {
          return axios({
-           url: '/vue/admin/addTransferMoney',
+           url:'/vue/admin/addTransferMoney',
            method: 'post',
            data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),

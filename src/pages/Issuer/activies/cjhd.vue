@@ -4,7 +4,7 @@
     <div class="cjhd-header">
       <a-card title="活动进度">
         <div class="secetion">
-          <a-steps :current="0">
+          <a-steps :current="current">
             <a-popover slot="progressDot" slot-scope="{index, status, prefixCls}">
               <template slot="content">
                 <span>step {{index}} status: {{status}}</span>
@@ -37,9 +37,9 @@
       </a-list>
       <div class="btn-bottom">
         <a-button>取消</a-button>
-        <a-button type="primary" @click="sunmitBtn">提交审批</a-button>
+        <a-button type="primary" @click="handleSubmit">提交审批</a-button>
       </div>
-      <a-alert v-if="alertVisible" banner description="必须先填写活动基本信息" showIcon/>
+      <a-alert v-if="alertVisible" banner :description="alertText" showIcon/>
       <a-modal
         :title="title"
         :visible="visible"
@@ -50,7 +50,7 @@
         wrapClassName="info-box"
         :getContainer="getContainer"
       >
-        <a-form layout="horizontal" :form="form" @submit="handleSubmit">
+        <a-form layout="horizontal" :form="form">
           <div class="info-item" v-if="formShow == 0">
             <div class="left">
               <a-form-item
@@ -63,7 +63,7 @@
                   :placeholder="chinese"
                   class="my-input"
                   autocomplete="false"
-                  v-decorator="['chineseName',{rules: [{ required: true, message: '请输入中文名称' }, { validator: this.testChinese }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['chineseName',{rules: [{ required: false, message: '请输入中文名称' }, { validator: this.testChinese }], validateTrigger: ['change', 'blur']}]"
                 />
               </a-form-item>
               <a-form-item
@@ -76,7 +76,7 @@
                   :placeholder="english"
                   class="my-input"
                   autocomplete="false"
-                  v-decorator="['englishName',{rules: [{ required: true, message: '请输入英文' }, { validator: this.testEnglish }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['englishName',{rules: [{ required: false, message: '请输入英文' }, { validator: this.testEnglish }], validateTrigger: ['change', 'blur']}]"
                 />
               </a-form-item>
               <a-form-item label="选择日期" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
@@ -84,14 +84,14 @@
                   style="width: 100%;"
                   @change="onChangeDate"
                   :placeholder="times"
-                  v-decorator="['startName',{rules: [{ required: true, message: '请输入时间' }]}]"
+                  v-decorator="['startName',{rules: [{ required: false, message: '请输入时间' }]}]"
                 />
               </a-form-item>
               <a-form-item label="选择时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
                 <a-time-picker
                   @change="onChangeTime"
                   :placeholder="concreteTime"
-                  v-decorator="['changetimer',{rules: [{ required: true, message: '请输入时间' }]}]"
+                  v-decorator="['changetimer',{rules: [{ required: false, message: '请输入时间' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -111,7 +111,7 @@
                   <a-input
                     style="width: 68%"
                     placeholder="北京市"
-                    v-decorator="['placeName',{rules: [{ required: true, message: '请输入地址' }, { validator: this.handPlace }], validateTrigger: ['change', 'blur']}]"
+                    v-decorator="['placeName',{rules: [{ required: false, message: '请输入地址' }, { validator: this.handPlace }], validateTrigger: ['change', 'blur']}]"
                   />
                 </a-input-group>
               </a-form-item>
@@ -161,7 +161,7 @@
                   :placeholder="email"
                   class="my-input"
                   type="email"
-                  v-decorator="['emailName',{rules: [{ required: true, message: '请输入电子邮箱' }, { validator: this.testEmail }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['emailName',{rules: [{ required: false, message: '请输入电子邮箱' }, { validator: this.testEmail }], validateTrigger: ['change', 'blur']}]"
                 />
               </a-form-item>
             </div>
@@ -190,7 +190,9 @@
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
-                <a-input-number v-model="campNum" class="my-input" :min="1" @change="handCampNum"/>
+                <a-input placeholder="1" type="number" class="my-input" :min="1" @change="handCampNum"
+                   v-decorator="['testNum',{rules: [{ required: true, message: '请输入数字' }]}]"
+                />
               </a-form-item>
               <a-form-item
                 label="联系人"
@@ -201,7 +203,7 @@
                 <a-input
                   :placeholder="contact"
                   class="my-input"
-                  v-decorator="['testName',{rules: [{ required: true, message: '请输入名字' }, { validator: this.handName }], validateTrigger: ['change', 'blur']}]"
+                  v-decorator="['testName',{rules: [{ required: false, message: '请输入名字' }, { validator: this.handName }], validateTrigger: ['change', 'blur']}]"
                 />
               </a-form-item>
               <a-form-item
@@ -211,7 +213,7 @@
                 :labelCol="{span: 4}"
               >
                 <a-input-group>
-                  <a-col :span="8">
+                  <!--<a-col :span="8">
                     <a-input
                       defaultValue="0571"
                       :placeholder="phoneFirst"
@@ -223,6 +225,13 @@
                       :placeholder="phoneLast"
                       defaultValue="26888888"
                       v-decorator="['phoneLast',{rules: [{ required: true, message: '请输入电话号' }, { validator: this.handPhoneLast }], validateTrigger: ['change', 'blur']}]"
+                    />
+                  </a-col>-->
+                  <a-col :span="18">
+                    <a-input
+                      :placeholder="phone"
+                      defaultValue="26888888"
+                      v-decorator="['phoneName',{rules: [{ required: false, message: '请输入电话号' }, { validator: this.handPhoneLast }], validateTrigger: ['change', 'blur']}]"
                     />
                   </a-col>
                 </a-input-group>
@@ -240,7 +249,7 @@
                   :showUploadList="false"
                   :beforeUpload="beforeUpload"
                 >
-                  <img v-if="imageUrl" :src="imageUrl" alt="avatar">
+                  <img v-if="fileUrl" :src="fileUrl" alt="avatar">
                   <div v-else>
                     <a-icon :type="loading ? 'loading' : 'plus'"/>
                     <div class="ant-upload-text">上传</div>
@@ -262,7 +271,7 @@
                 :placeholder="activityContent"
                 class="my-input"
                 maxlength="300"
-                v-decorator="['textName',{rules: [{ required: true, message: '请输入公司名称' }, { validator: this.handTextarea }], validateTrigger: ['change', 'blur']}]"
+                v-decorator="['textName',{rules: [{ required: false, message: '请输入公司名称' }, { validator: this.handTextarea }], validateTrigger: ['change', 'blur']}]"
                 :autosize="{ minRows: 4, maxRows: 6 }"
               />
             </a-form-item>
@@ -279,7 +288,7 @@
                 :showUploadList="false"
                 :beforeUpload="beforeUploadVideo"
               >
-                <video v-if="videoUrl" height="180" width="180" :src="videoUrl" controls></video>
+                <video v-if="videoUrls" height="180" width="180" :src="videoUrls" controls></video>
                 <div v-else>
                   <a-icon :type="loading ? 'loading' : 'plus'"/>
                   <div class="ant-upload-text">上传</div>
@@ -299,7 +308,7 @@
                 </div>
               </a-upload>
               <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancelImg">
-                <img alt="example" style="width: 100%" :src="previewImage">
+                <img alt="example" style="width: 100%" :src="detailImgs">
               </a-modal>
             </a-form-item>
           </div>
@@ -323,7 +332,7 @@
                   <a-input
                     style="width: 66%"
                     defaultValue="公司名称"
-                    v-decorator="['companyName',{rules: [{ required: true, message: '请输入公司名称' }, { validator: this.handCompany }], validateTrigger: ['change', 'blur']}]"
+                    v-decorator="['companyName',{rules: [{ required: false, message: '请输入公司名称' }, { validator: this.handCompany }], validateTrigger: ['change', 'blur']}]"
                   />
                 </a-input-group>
               </a-form-item>
@@ -338,29 +347,6 @@
                   </a-list-item>
                 </a-list>
               </a-form-item>
-              <!--<a-form-item
-                v-for="(k, index) in form.getFieldValue('keys')"
-                :key="k"
-                v-bind="index === 0 ? formItemLayout : formItemLayoutWithOutLabel"
-                :required="false"
-                class="my-form-item"
-              >
-                <a-input-group compact style="width: 93%; margin-right: 8px">
-                  <a-select defaultValue="主办方">
-                    <a-select-option value="主办方">主办方</a-select-option>
-                    <a-select-option value="承办方">承办方</a-select-option>
-                    <a-select-option value="协办方">协办方</a-select-option>
-                  </a-select>
-                  <a-input style="width: 70%" defaultValue="公司名称"/>
-                </a-input-group>
-                <a-icon
-                  v-if="form.getFieldValue('keys').length > 1"
-                  class="dynamic-delete-button"
-                  type="minus-circle-o"
-                  :disabled="form.getFieldValue('keys').length === 1"
-                  @click="() => remove(k)"
-                />
-              </a-form-item>-->
               <a-form-item v-bind="formItemLayoutWithOutLabel">
                 <a-button type="dashed" style="width: 100%" @click="addCompany">
                   <a-icon type="plus"/>添加
@@ -372,7 +358,9 @@
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
-                <a-input placeholder="请输入播放平台" class="my-input" v-model="palyPlatfrom"/>
+                <a-input placeholder="请输入播放平台" class="my-input" v-model="palyPlatfrom"
+                   v-decorator="['pingName',{rules: [{ required: false, message: '请输入播放平台' }, { validator: this.handPing }], validateTrigger: ['change', 'blur']}]"
+                />
               </a-form-item>
               <a-form-item
                 label="活动特点"
@@ -511,7 +499,7 @@
               <a-date-picker
                 :placeholder="closingDate"
                 @change="onClosingDate"
-                v-decorator="['closingDate',{rules: [{ required: true, message: '请输入时间' }]}]"
+                v-decorator="['closingDate',{rules: [{ required: false, message: '请输入时间' }]}]"
               />
             </a-form-item>
             <a-form-item
@@ -527,7 +515,7 @@
                 :loading="memberLoading"
               >
                 <template
-                  v-for="(col, i) in ['tgWay', 'zzWay', 'zzPrice','zzNum','isPrice','remarks']"
+                  v-for="(col, i) in ['tgWay', 'zzWay', 'zzPrice','zzNum','remarks']"
                   :slot="col"
                   slot-scope="text, record"
                 >
@@ -537,6 +525,7 @@
                     style="margin: -5px 0"
                     :value="text"
                     :placeholder="columns[i].title"
+                    v-decorator="['requireName',{rules: [{ required: false, message: '请输入时间' }]}]"
                     @change="e => handleChange2(e.target.value, record.key, col)"
                   />
                   <template v-else>{{ text }}</template>
@@ -544,10 +533,10 @@
                 <template slot="operation" slot-scope="text, record">
                   <template v-if="record.editable">
                     <span v-if="record.isNew">
-                      <a @click="saveRow(record)">添加</a>
+                      <a @click="saveRow(record)">确定</a>
                       <a-divider type="vertical"/>
                       <a-popconfirm title="是否要删除此行？" @confirm="remove1(record.key)">
-                        <a>删除</a>
+                        <a>取消</a>
                       </a-popconfirm>
                     </span>
                     <span v-else>
@@ -560,7 +549,7 @@
                     <a @click="toggle(record.key)">编辑</a>
                     <a-divider type="vertical"/>
                     <a-popconfirm title="是否要删除此行？" @confirm="remove1(record.key)">
-                      <a>删除</a>
+                      <a>取消</a>
                     </a-popconfirm>
                   </span>
                 </template>
@@ -582,6 +571,7 @@
                 :placeholder="requirdContent"
                 class="my-input"
                 :autosize="{ minRows: 4, maxRows: 6 }"
+                v-decorator="['textYao',{rules: [{ required: false, message: '请输入公司名称' }, { validator: this.handYao }], validateTrigger: ['change', 'blur']}]"
               />
             </a-form-item>
           </div>
@@ -683,13 +673,15 @@ import {
   getActivityPromotion,
   getEventSponsorship,
   getSubmitAudit,
-  getCheckInformation
+  getCheckInformation,
+  getPress
 } from '@/api/hand'
 import { mapGetters } from 'vuex'
 export default {
   mixins: [mixinsTitle],
   data() {
     return {
+      form: this.$form.createForm(this),
       visible: false,
       confirmLoading: false,
       times: [],
@@ -707,6 +699,8 @@ export default {
       areaList: [],
       areaKeys: [],
       addressArry: [],
+      code: '',
+      phone: '',
       areaValue: '',
       area: [],
       fileUrl: '', //图片路径
@@ -730,6 +724,8 @@ export default {
       palyPlatfrom: '', //播放平台
       characteristic: '', // 活动特点
       closingDate: '', // 招商截止时间
+      alertText: '',
+      current: 0, //进度
       pids: '',
       pidsArrty: [],
       supportJson: {},
@@ -761,15 +757,15 @@ export default {
       organizerTypeList: [],
       fileList: [],
       data: [
-        { title: '活动基本信息', description: '活动详细内容编辑', value: '', actions: { title: '修改' } },
-        { title: '活动详情', description: '设置活动详细信息以及推广内容设置', value: '', actions: { title: '修改' } },
+        { title: '活动基本信息', description: '活动详细内容编辑', value: '', actions: { title: '' } },
+        { title: '活动详情', description: '设置活动详细信息以及推广内容设置', value: '', actions: { title: '' } },
         {
           title: '活动推广',
           description: '把自己的活动推广到社交平台以及微媒平台上',
           value: '',
-          actions: { title: '修改' }
+          actions: { title: '' }
         },
-        { title: '活动赞助', description: '把自己的活动赞助情况设置', value: '', actions: { title: '修改' } }
+        { title: '活动赞助', description: '把自己的活动赞助情况设置', value: '', actions: { title: '' } }
         //{ title: '报名', description: '设置报名信息，用户分组/售票等设置', value: '', actions: { title: '修改' } }
       ],
       formItemLayout: {
@@ -817,13 +813,13 @@ export default {
           width: '15%',
           scopedSlots: { customRender: 'zzNum' }
         },
-        {
+        /*{
           title: '是否议价',
           dataIndex: 'isPrice',
           key: 'isPrice',
           width: '15%',
           scopedSlots: { customRender: 'isPrice' }
-        },
+        },*/
         {
           title: '备注',
           dataIndex: 'remarks',
@@ -842,48 +838,39 @@ export default {
   },
   mounted() {},
   created() {
-    this._getPlace()
-    this._getClassify()
-    this._getActivityInformation()
     this._getActivityTest()
-    this._getCheckActivitiesDetail()
-    this._getExtension()
-    this._getSponsor()
-    this._getCheckInformation()
+    this.dataTitle()
+    //this._getPress()
   },
   methods: {
     ...mapGetters(['token']),
-    //活动推广
-    _getExtension() {
+    //进度
+    _getPress() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId ? this.$route.query.campId : ''
       const params = {
-        token: token,
-        campId: campId
+        token: token
       }
-      getExtension(params).then(res => {
+      getPress(params).then(res => {
         console.log(res)
-        this.palyPlatfrom = res.platform
-        console.log(res.campFeature.split(','))
-        const selectArry = res.campFeature.split(',')
-        const companyArry = res.data
-        for (let i = 0; i < selectArry.length; i++) {
-          this.selectedTags.push(parseInt(selectArry[i]))
-        }
-        for(let i = 0; i<companyArry.length; i++) {
-          this.companyList.push({
-            name: companyArry[i].name,
-            workType: companyArry[i].workType
-          })
-          this.companyList1.push({
-            name: companyArry[i].name,
-            workType: companyArry[i].workType
-          })
-        }
-        this.companyJson.data = this.companyList
-          console.log(this.companyJson)
+        this.current = res.data.schedule
       })
     },
+    dataTitle() {
+      if (this.$route.query.campId) {
+        this.findIndex = 1
+      } else {
+        this.findIndex = 0
+      }
+      for (let i = 0; i < this.data.length; i++) {
+        console.log(this.$route.query.campId)
+        if (this.$route.query.campId) {
+          this.data[i].actions.title = '修改'
+        } else {
+          this.data[i].actions.title = '新增'
+        }
+      }
+    },
+
     // 获取修改信息
     _getActivityTest() {
       const token = this.$ls.get('Access-Token')
@@ -895,140 +882,39 @@ export default {
         console.log(res)
       })
     },
-    // 活动详情
-    _getCheckActivitiesDetail() {
-      const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId ? this.$route.query.campId : ''
-      const params = {
-        token: token,
-        campId: campId
-      }
-      console.log(params)
-      getCheckActivitiesDetail(params).then(res => {
-        console.log(res)
-        this.activeityInfo = res.data[0]
-        this.activityContent = res.data[0].content
-        console.log(this.activityContent)
-        this.videoUrls = res.data[0].video
-        this.detailImgs = res.data[0].imgs
-      })
-    },
-    // 查询推广
-    _getCheckInformation() {
-      const token = this.$ls.get('Access-Token')
-      const params = {
-        token: token
-      }
-      getCheckInformation(params).then(res => {
-        console.log(res)
-        //this.palyPlatfrom = res.platform
-        console.log(res.data.campLevel)
-        this.tags = res.data.campLevel
-        this.tags1 = res.data.industryCategory
-        this.tags2 = res.data.coverScope
-        this.tags3 = res.data.campFeaturel
-        this.tags4 = res.data.ageGroup
-        this.tags5 = res.data.socialAttr
-        this.tags6 = res.data.consumeAttr
-        this.tags7 = res.data.jobAttr
-        this.organizerTypeList = res.data.organizerTypeList
-        /*this.companyList = res.data
-        console.log(this.companyList)
-        this.selectedTags = res.tabInfo.campFeaturel
-        this.characteristic = this.selectedTags.join(',')
-        this.activeityExtension = res.tabInfo.campFeaturel
-        for (let i = 0; i < res.data.length; i++) {
-          if (res.data.length > 0) {
-            this.companyList.push({
-              name: res.data[i].anme,
-              workType: res.data[i].workType
-            })
-          }
 
-          this.companyJson.data = this.companyList
-          console.log(this.companyJson)
-        }*/
-      })
-    },
-    // 活动赞助
-    _getSponsor() {
-      const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId ? this.$route.query.campId : ''
-      const params = {
-        token: token,
-        campId: campId
-      }
-      getSponsor(params).then(res => {
-        console.log(res)
-        this.activeitySponsor = res
-        this.closingDate = res.data
-        this.requirdContent = res.data
-      })
-    },
-    // 活动基本信息
-    _getActivityInformation() {
-      const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId ? this.$route.query.campId : ''
-      const params = {
-        token: token,
-        campId: campId
-      }
-      console.log(params)
-      getActivityInformation(params).then(res => {
-        console.log(res)
-        this.activeityDetail = res.data[0]
-        if (this.activeityDetail.address && this.activeityDetail.area) {
-          let address = this.activeityDetail.address.split(',')
-          let titleValue = this.activeityDetail.area.split(',')
-          console.log(titleValue)
-          for (let i = 0; i < titleValue.length; i++) {
-            if (address && titleValue) {
-              this.areaList.push({
-                titleValue: titleValue[i],
-                address: address[i]
-              })
-              this.area.push(titleValue[i])
-              this.addressArry.push(address[i])
-            }
-          }
-        }
-        this.campCatalog = parseInt(this.activeityDetail.campCatalog)
-        this.campName = this.activeityDetail.capName
-        console.log(this.campName)
-        console.log(this.campCatalog)
-        this.concreteTime = this.activeityDetail.concreteTime
-        this.contact = this.activeityDetail.contact
-        this.english = this.activeityDetail.enName
-        this.chinese = this.activeityDetail.name
-        this.email = this.activeityDetail.email
-        this.campNum = this.activeityDetail.campNum
-        this.phoneFirst = this.activeityDetail.phone.split('-')[0]
-        this.phoneLast = this.activeityDetail.phone.split('-')[1]
-        console.log(this.phoneFirst)
-        this.times.push(this.activeityDetail.publishTime, this.activeityDetail.endTime)
-        this.publishTime = this.times[0]
-        this.endTime = this.times[1]
-        console.log(this.times)
-        console.log(this.areaList)
-      })
-    },
-    _getPlace() {
-      getPlace().then(res => {
-        console.log(res)
-        this.cityPlace = res.data
-      })
-    },
-    _getClassify() {
-      getClassify().then(res => {
-        this.classify = res.data
-        console.log(res)
-      })
-    },
     handleSubmit(e) {
+      this.dataTitle()
+      console.log(223)
       e.preventDefault()
-      this.from.validateFields((error, values) => {
+      const {
+        form: { validateFields }
+      } = this
+      console.log(validateFields)
+      //const validateFieldsKey = ['chineseName', 'englishName', 'startName', 'changetimer', 'changetimer', 'placeName', 'emailName', 'testNum', 'testName', 'phoneName', 'textName', 'companyName', 'pingName', 'closingDate', 'requireName', 'textYao']
+      validateFields((error, values) => {
+        console.log(error)
         console.log(values)
         const params = { ...values }
+        let campId = this.$route.query.campId ? this.$route.query.campId : ''
+        console.log(this.findIndex)
+        if (!error) {
+          const params = {
+            token: this.$ls.get('Access-Token'),
+            campId: campId
+          }
+          console.log(params)
+          getSubmitAudit(params).then(res => {
+            console.log(res)
+            if (res.data.code == '1') {
+              this.alertVisible = true
+              this.alertText = '提交成功'
+              setTimeout(() => {
+                this.alertVisible = false
+              }, 1000)
+            }
+          })
+        }
         console.log(params)
       })
     },
@@ -1089,7 +975,7 @@ export default {
       }
     },
     handPhoneLast(rule, value, callback) {
-      this.phoneLast = value
+      this.phone = value
     },
     //详细地址
     handPlace(rule, value, callback) {
@@ -1118,8 +1004,176 @@ export default {
         callback(new Error('长度过长'))
       }
     },
+    // 赞助要求
+    handYao(rule, value, callback) {
+      this.requirdContent = value
+    },
     showModal(index, item) {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.query.campId ? this.$route.query.campId : ''
+      const params = {
+        token: token,
+        campId: campId
+      }
+      if (index == 0) {
+        getPlace().then(res => {
+          console.log(res)
+          this.cityPlace = res.data
+        })
+        getClassify().then(res => {
+          this.classify = res.data
+          console.log(res)
+        })
+        // 活动基本信息
+        getActivityInformation(params).then(res => {
+          console.log(res)
+          if(!this.$route.query.campId) {
+            this.activeityDetail = ''
+          }
+          this.activeityDetail = res.data[0]
+          if (this.activeityDetail.address && this.activeityDetail.area) {
+            let address = this.activeityDetail.address.split(',')
+            let titleValue = this.activeityDetail.area.split(',')
+            console.log(titleValue)
+            for (let i = 0; i < titleValue.length; i++) {
+              if (address && titleValue) {
+                this.areaList.push({
+                  titleValue: titleValue[i],
+                  address: address[i]
+                })
+                this.area.push(titleValue[i])
+                this.addressArry.push(address[i])
+              }
+            }
+          }
+          this.campCatalog = parseInt(this.activeityDetail.campCatalog)
+          this.campName = this.activeityDetail.capName
+          console.log(this.campName)
+          console.log(this.campCatalog)
+          this.concreteTime = this.activeityDetail.concreteTime
+          this.contact = this.activeityDetail.contact
+          this.english = this.activeityDetail.enName
+          this.chinese = this.activeityDetail.name
+          this.email = this.activeityDetail.email
+          this.campNum = this.activeityDetail.campNum
+          this.phone = this.activeityDetail.phone
+          /*this.phoneFirst = this.activeityDetail.phone.split('-')[0]
+        this.phoneLast = this.activeityDetail.phone.split('-')[1]*/
+          console.log(this.phoneFirst)
+          this.times.push(this.activeityDetail.publishTime, this.activeityDetail.endTime)
+          this.publishTime = this.times[0]
+          this.endTime = this.times[1]
+          console.log(this.times)
+          console.log(this.areaList)
+        })
+      }
+      if (index == 1) {
+        // 活动详情
+        getCheckActivitiesDetail(params).then(res => {
+          console.log(res)
+          this.activeityInfo = res.data[0]
+          this.activityContent = res.data[0].content
+          console.log(this.activityContent)
+          this.videoUrls = res.data[0].video
+          this.detailImgs = res.data[0].imgs
+        })
+      }
+      if (index == 2) {
+        // 查询推广
+        getCheckInformation(params).then(res => {
+          console.log(res)
+          //this.palyPlatfrom = res.platform
+          console.log(res.data.campLevel)
+          this.tags = res.data.campLevel
+          this.tags1 = res.data.industryCategory
+          this.tags2 = res.data.coverScope
+          this.tags3 = res.data.campFeaturel
+          this.tags4 = res.data.ageGroup
+          this.tags5 = res.data.socialAttr
+          this.tags6 = res.data.consumeAttr
+          this.tags7 = res.data.jobAttr
+          this.organizerTypeList = res.data.organizerTypeList
+          /*this.companyList = res.data
+        console.log(this.companyList)
+        this.selectedTags = res.tabInfo.campFeaturel
+        this.characteristic = this.selectedTags.join(',')
+        this.activeityExtension = res.tabInfo.campFeaturel
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data.length > 0) {
+            this.companyList.push({
+              name: res.data[i].anme,
+              workType: res.data[i].workType
+            })
+          }
+
+          this.companyJson.data = this.companyList
+          console.log(this.companyJson)
+        }*/
+        })
+        getExtension(params).then(res => {
+          console.log(res)
+          this.palyPlatfrom = res.platform
+          console.log(res.campFeature.split(','))
+          const selectArry = res.campFeature.split(',')
+          const companyArry = res.data
+          for (let i = 0; i < selectArry.length; i++) {
+            this.selectedTags.push(parseInt(selectArry[i]))
+          }
+          for (let i = 0; i < companyArry.length; i++) {
+            this.companyList.push({
+              name: companyArry[i].name,
+              workType: companyArry[i].work_type
+            })
+            this.companyList1.push({
+              name: companyArry[i].name,
+              workType: companyArry[i].work_name
+            })
+          }
+          console.log(this.companyList)
+          this.companyJson.data = this.companyList
+          console.log(this.companyJson)
+        })
+      }
+      if (index == 3) {
+        // 活动赞助
+        getSponsor(params).then(res => {
+          console.log(res)
+          this.activeitySponsor = res
+          this.closingDate = res.endTime
+          this.requirdContent = res.demand
+          const dataArrty = res.data
+          for (let i = 0; i < dataArrty.length; i++) {
+            this.supportAyyty.push({
+              ssKind: dataArrty[i].ss_kind,
+              sponsorship: dataArrty[i].sponsorship,
+              money: dataArrty[i].money,
+              num: dataArrty[i].num,
+              //bargain: isPrice,
+              bz: dataArrty[i].bz
+            })
+            const length = this.dataTable.length
+            this.dataTable.push({
+              key: length === 0 ? '1' : (parseInt(this.dataTable[length - 1].key) + 1).toString(),
+              tgWay: dataArrty[i].sponsorship,
+              zzWay: dataArrty[i].ss_kind,
+              zzPrice: dataArrty[i].money,
+              zzNum: dataArrty[i].num,
+              remarks: dataArrty[i].bz,
+              editable: false,
+              isNew: false
+            })
+          }
+          console.log(this.dataTable)
+          console.log(this.supportAyyty)
+          this.supportJson.data = this.supportAyyty
+
+          console.log(this.supportJson)
+        })
+      }
+
+      console.log(index)
       this.title = item.title
+      console.log(this.$route.query.campId,this.$ls.get('code') == '1000')
       if (this.$route.query.campId) {
         this.findIndex = 1
       } else {
@@ -1129,6 +1183,7 @@ export default {
         this.visible = true
       } else {
         this.alertVisible = true
+        this.alertText = '请先填写活动基本信息'
         setTimeout(() => {
           this.alertVisible = false
         }, 1000)
@@ -1136,6 +1191,7 @@ export default {
       if (this.findIndex == 1) {
         this.formShow = index
         this.visible = true
+        this.alertVisible = false
       } else if (this.findIndex == 0) {
         this.formShow = 0
       }
@@ -1197,6 +1253,7 @@ export default {
         console.log(this.companyJson)
       }
     },
+    //地点添加
     addList() {
       if (this.areaValue && this.address) {
         this.areaList.push({
@@ -1249,7 +1306,7 @@ export default {
           campCatalog: this.campCatalog,
           campNum: this.campNum,
           contact: this.contact,
-          phone: this.phoneFirst + '-' + this.phoneLast,
+          phone: this.phone,
           coverImg: this.fileUrl
         }
         console.log(params)
@@ -1258,11 +1315,13 @@ export default {
         getActivityModification(params).then(res => {
           console.log(res)
           this.$ls.set('code', res.data.code)
+          this.code = res.data.code
         })
       }
       console.log(this.$ls.get('code'))
-      if (this.$ls.get('code') == 1000) {
+      if (this.code == '1000' || this.code == '1001') {
         this.findIndex = 1
+        console.log(this.findIndex)
       } else {
         this.findIndex = 0
       }
@@ -1313,17 +1372,6 @@ export default {
         this.visible = false
         this.confirmLoading = false
       }, 2000)
-    },
-    // 提交审核
-    sunmitBtn() {
-      if (this.findIndex == 1) {
-        const params = {
-          token: this.$ls.get('Access-Token')
-        }
-        getSubmitAudit(params).then(res => {
-          console.log(res)
-        })
-      }
     },
     handleCancel(e) {
       console.log('Clicked cancel button')
@@ -1434,12 +1482,13 @@ export default {
         editable: true,
         isNew: true
       })
+      console.log(this.dataTable)
     },
     saveRow(record) {
       console.log(record)
       this.memberLoading = true
-      const { key, tgWay, zzWay, zzPrice, zzNum, isPrice, remarks } = record
-      if (!tgWay || !zzWay || !zzPrice || !zzNum || !isPrice) {
+      const { key, tgWay, zzWay, zzPrice, zzNum, remarks } = record
+      if (!tgWay || !zzWay || !zzPrice || !zzNum) {
         this.memberLoading = false
         this.$message.error('请填写完整成员信息。')
         return
@@ -1449,7 +1498,7 @@ export default {
           sponsorship: zzWay,
           money: zzPrice,
           num: zzNum,
-          bargain: isPrice,
+          //bargain: isPrice,
           bz: remarks
         })
         console.log(this.supportAyyty)
@@ -1472,6 +1521,7 @@ export default {
     remove1(key) {
       console.log(key)
       this.supportAyyty.splice(key - 1, 1)
+      this.dataTable.splice(key - 1, 1)
       this.supportJson.data = this.supportAyyty
       const newData = this.dataTable.filter(item => item.key !== key)
       this.dataTable = newData
@@ -1481,7 +1531,28 @@ export default {
       target.editable = !target.editable
     },
     handleChange2(value, key, column) {
-      console.log(value)
+      console.log(value, key, column)
+      if (column == 'tgWay') {
+        if (/^[0-9]*$/.test(value)) {
+          console.log('请输入文字')
+          value = ''
+        }
+      } else if (column == 'zzWay') {
+        if (/^[0-9]*$/.test(value)) {
+          console.log('请输入文字')
+          value = ''
+        }
+      } else if (column == 'zzPrice') {
+        console.log(/^\d+(\.\d{0,2})?$/.test(value))
+        if (!/^\d+(\.\d{0,2})?$/.test(value)) {
+          value = ''
+        }
+      } else if (column == 'zzNum') {
+        if (!/^[0-9]+(.[0-9]{2})?$/.test(value)) {
+          console.log('请输入文字')
+          value = ''
+        }
+      }
       const newData = [...this.dataTable]
       const target = newData.filter(item => key === item.key)[0]
       if (target) {

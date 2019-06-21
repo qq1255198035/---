@@ -11,8 +11,8 @@ import {
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: '/api', // api base_url
-  timeout: 6000 // 请求超时时间
+  baseURL: '/api' // api base_url
+  //timeout: 6000 // 请求超时时间
 })
 
 const err = (error) => {

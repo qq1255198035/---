@@ -42,20 +42,20 @@
           <div class="ibox float-e-margins">
             <div class="ibox-content">
               <div class="first-row">
-                <h2 class="ant-col-16 title">{{item.name}}</h2>
-                <h2 class="ant-col-5 my-text">
+                <h2 class="ant-col-12 title">{{item.name}}</h2>
+                <h2 class="ant-col-6 my-text">
                   ${{item.money}}
                   <span>万</span>
                 </h2>
-                <h2 class="ant-col-5 my-text">
+                <h2 class="ant-col-6 my-text">
                   {{item.people}}
                   <span>位</span>
                 </h2>
               </div>
               <div class="second-row">
-                <span class="ant-col-16">开始时间：{{item.publishTime}}</span>
-                <span class="ant-col-5">已赞助</span>
-                <span class="ant-col-5">参与明星</span>
+                <span class="ant-col-12">开始时间：{{item.publishTime}}</span>
+                <span class="ant-col-6">已赞助</span>
+                <span class="ant-col-6">参与明星</span>
               </div>
               <div class="third-row">
                 <span class="col-lg-12">
@@ -69,36 +69,36 @@
                 <a-button
                   ghost
                   class="btn-success"
-                  @click="$router.push({name:'issuerCkhd'})"
+                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
                 <div>
-                  <a-button ghost class="btn-primary" @click="$router.push({name: 'zzgl', query: {campId: item.campId}})">赞助审批</a-button>
-                  <a-button ghost class="btn-info" @click="$router.push({name: 'mxgl', query: {campId: item.campId}})">明星审批</a-button>
+                  <a-button ghost class="btn-primary" @click="$router.push({name: 'zzsp', params: {campId: item.campId}})">赞助审批</a-button>
+                  <a-button ghost class="btn-info" @click="$router.push({name: 'issuerMxsp', params: {campId: item.campId}})">明星审批</a-button>
                 </div>
-              </div>
-              <div class="button-box">
-                <a-button
-                  ghost
-                  class="btn-success"
-                  @click="$router.push({name:'issuerCkhd'})"
-                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
               </div>
               <div class="button-box" v-if="item.status == 0">
                 <a-button
                   ghost
                   class="btn-success"
-                  @click="$router.push({name:'issuerCkhd'})"
+                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
+                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
+              </div>
+              <div class="button-box" v-if="item.status == 10">
+                <a-button
+                  ghost
+                  class="btn-success"
+                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-warning"
-                    @click="$router.push({name: 'issuerCjhd', query: {campId: item.campId}})"
+                    @click="$router.push({name: 'issuerCjhd', params: {campId: item.campId}})"
                   >&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
                   <a-button
                     ghost
                     class="btn-danger"
-                    @click="showDeleteConfirm"
+                    @click="showDeleteConfirm(item.campId, index)"
                   >&nbsp;&nbsp; 删 除 &nbsp;&nbsp;</a-button>
                 </div>
               </div>
@@ -122,7 +122,7 @@
 </template>
 <script>
 import { mixinsTitle } from '@/utils/mixin.js'
-import { getHandActivities, getPlace, getClassify } from '@api/hand'
+import { getHandActivities, getPlace, getClassify, getDetele } from '@api/hand'
 import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
@@ -181,14 +181,15 @@ export default {
       const token = this.$ls.get('Access-Token')
       const params = {
           token: token,
-          startime: this.avtiveityDate,
-          area: this.searchPlace,
-          campCatalog: this.searchClassify,
-          content: this.searchText
+          startime: this.avtiveityDate ? this.avtiveityDate : '',
+          area: this.searchPlace ? this.searchPlace : '',
+          campCatalog: this.searchClassify ? this.searchClassify : '',
+          content: this.searchText ? this.searchText : ''
       }
       console.log(params)
       getHandActivities(params).then(res => {
           console.log(res)
+          this.cardList = res.page.rows
       })
     },
     // 日期搜索
@@ -196,7 +197,14 @@ export default {
       console.log(dateString)
       this.avtiveityDate = dateString
     },
-    showDeleteConfirm() {
+    showDeleteConfirm(item, index) {
+      const token = this.$ls.get('Access-Token')
+      const campId = item
+      const params = {
+        token: token,
+        campId: campId
+      }
+      console.log(params)
       this.$confirm({
         title: 'Are you sure delete this task?',
         content: 'Some descriptions',
@@ -205,17 +213,13 @@ export default {
         cancelText: 'No',
         onOk() {
           console.log('OK')
+          getDetele(params).then(res => {
+        console.log(res)
+        this.cardList.splice('index', 1)
+      })
         },
         onCancel() {
           console.log('Cancel')
-        }
-      })
-    },
-    getCardData() {
-      this.$http.get(api.IssHdglCard).then(res => {
-        if (res.status == 200) {
-          // console.log(res)
-          this.cardList = res.data
         }
       })
     },
@@ -307,6 +311,9 @@ export default {
             font-weight: bold;
             color: #21c5c7;
             padding-right: 40px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
           }
           .my-text {
             color: #333;

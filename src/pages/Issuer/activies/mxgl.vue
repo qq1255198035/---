@@ -1,7 +1,18 @@
 <template>
   <div id="mxgl">
     <page-header :title="pageTitle"></page-header>
-    <glTitle></glTitle>
+    <glTitle
+      :logo="logo"
+      :title="name"
+      :start="start"
+      :type="capName"
+      :num="campNum"
+      :stars="starList"
+      :sponsors="sponsorList"
+      :status="status"
+      :price="price"
+      :adress="adress"
+    ></glTitle>
     <div class="mxgl-content">
       <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
         <a-tab-pane key="1" tab="明星审批">
@@ -190,7 +201,7 @@
 </style>
 <script>
 import glTitle from '@/components/glTitle/glTitle'
-import { getStarList, getStarCheck, getJoinStar } from '@api/hand'
+import { getStarList, getStarCheck, getJoinStar, getActivityInformation} from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   mixins: [mixinsTitle],
@@ -205,14 +216,63 @@ export default {
       cardItemData: [],
       baseText: '',
       orderId: '',
-      joinStar: []
+      joinStar: [],
+      logo: '',
+      name: '',
+      start: '',
+      capName: '',
+      campNum: '',
+      starList: '',
+      sponsorList: '',
+      status: '',
+      price: '',
+      adress: '',
+      status: ''
     }
   },
   created() {
     this._getStarList()
     this._getJoinStar()
+    this._getActivityInformation()
   },
   methods: {
+    _getActivityInformation() {
+      const token = this.$ls.get('Access-Token')
+      const campId = this.$route.query.campId
+      const params = {
+        token: token,
+        campId: campId
+      }
+      getActivityInformation(params).then(res => {
+        console.log(res)
+        this.activitiesList = res.data[0]
+        this.name = this.activitiesList.name
+        this.start = this.activitiesList.createTime
+        this.address = this.activitiesList.address
+        this.capName = this.activitiesList.capName
+        this.campNum = this.activitiesList.campNum
+        this.price = this.activitiesList.price
+        this.email = this.activitiesList.email
+        this.phone = this.activitiesList.phone
+        this.enName = this.activitiesList.enName
+        this.contact = this.activitiesList.contact
+        if (this.activitiesList.status == 10) {
+          this.status = '创建中'
+        }
+        if (this.activitiesList.status == 0) {
+          this.status = '申请中'
+        }
+        if (this.activitiesList.status == 20) {
+          this.status = '成功'
+        }
+        if (this.activitiesList.status == 30) {
+          this.status = '驳回'
+        }
+        if (this.activitiesList.status == 50) {
+          this.status = '关闭'
+        }
+      })
+    },
     // 参加明星
     _getJoinStar() {
       const token = this.$ls.get('Access-Token')

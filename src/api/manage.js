@@ -8,7 +8,7 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree'
 }
-const baseUrl = 'server'
+//const baseUrl = 'server'
 export default api
 
 export function getUserList (parameter) {

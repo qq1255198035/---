@@ -7,13 +7,16 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <head-info :title="$t('issuer.index.zzdsp')" :content="number.zzdsp" :center="false" :bordered="false"/>
+          <div>{{$t('issuer.index.zzdsp')}}</div>
+          <div class="numCenter">{{count2}}</div>
         </a-col>
         <a-col :span="8">
-          <head-info :title="$t('issuer.index.mxdsp')" :content="number.mxdsp" :center="false" :bordered="false"/>
+          <div>{{$t('issuer.index.mxdsp')}}</div>
+          <div class="numCenter">{{count1}}</div>
         </a-col>
         <a-col :span="8">
-          <head-info :title="$t('issuer.index.hddsp')" :content="number.hddsp" :center="false" />
+          <div>{{$t('issuer.index.hddsp')}}</div>
+          <div class="numCenter">{{count3}}</div>
         </a-col>
       </a-row>
     </div>
@@ -23,6 +26,7 @@
           <a-card :loading="loading" :title="$t('issuer.index.zzxq')" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
+                
                   <a-row>
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" style="margin-left:-100px;">
                         <v-chart :height="300" :data="pieData" :scale="pieScale">
@@ -74,7 +78,7 @@
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
             <a slot="extra" @click="$router.push({name: 'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in newsList">
+              <a-card-grid class="project-card-grid" :key="index" v-for="(item, index) in newsList">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
@@ -99,7 +103,7 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { getSponsorshipdetails, getUserInformation, getSponsoredTweets, getMyFiveNews, getMyAllNews } from '@api/hand'
+import { getSponsorshipdetails, getHandActivities, getUserInformation, getSponsoredTweets, getMyFiveNews, getMyAllNews, getStarNum, getSponsorNum, getActiveNum } from '@api/hand'
 import { mapActions,mapGetters } from 'vuex'
 import api from "@/api/index";
 import { PageView } from '@/layouts'
@@ -138,6 +142,10 @@ export default {
   },
   data () {
     return {
+      activeList: [],
+      count1: '',
+      count2: '',
+      count3: '',
       sponSor: '', //赞助商
       timeFix: timeFix(),
       personInfo: '', // 搞手用户信息
@@ -198,19 +206,19 @@ export default {
         },
         {
           title: '开始时间',
-          dataIndex: 'time',
-          key: 'time'
+          dataIndex: 'publishTime',
+          key: 'publishTime'
         },
         {
           title: '活动分类',
-          dataIndex: 'classify',
-          key: 'classify'
+          dataIndex: 'campCatalogVal',
+          key: 'campCatalogVal'
         },
         {
           title: '状态',
           dataIndex: 'status',
           key: 'status',
-          scopedSlots: { customRender: 'status' }
+          /*scopedSlots: { customRender: 'status' }*/
         },
       ],
     }
@@ -226,6 +234,10 @@ export default {
     this._getUserInformation()
     this._getSponsoredTweets()
     this._getMyFiveNews()
+    this._getStarNum()
+    this._getSponsorNum()
+    this._getActiveNum()
+    this._getHandActivities()
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
   },
@@ -233,6 +245,50 @@ export default {
   
   },
   methods: {
+    // 明星待审数量
+    _getStarNum() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getStarNum(params).then(res => {
+        console.log(res)
+        this.count1 = res.data.count
+      })
+    },
+    // 赞助待审数量
+    _getSponsorNum() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getSponsorNum(params).then(res => {
+        console.log(res)
+        this.count2 = res.data.count
+      })
+    },
+    // 活动待审数量
+    _getActiveNum() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getActiveNum(params).then(res => {
+        console.log(res)
+        this.count3 = res.data.count
+      })
+    },
+    // 活动动态
+    _getHandActivities() {
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token
+      }
+      getHandActivities(params).then(res => {
+        console.log(res)
+        this.operation = res.page.rows
+      })
+    },
     _getMyFiveNews() {
       const token = this.$ls.get('Access-Token')
       const params = {
@@ -241,6 +297,8 @@ export default {
       getMyFiveNews(params).then(res => {
         console.log(res)
         this.newsList = res.data
+        this.loading = !this.loading
+        console.log(this.newsList)
       })
     },
     //赞助消息接口
@@ -253,6 +311,7 @@ export default {
         console.log(res)
       })
     },
+    // 赞助详情
     _getSponsorshipdetails() {
       const token = this.$ls.get('Access-Token')
       const params = {
@@ -262,6 +321,7 @@ export default {
         console.log(res)
         this.sponSor = res
         if(res.code == 1000){
+          console.log(res.cash)
               this.pieData[0].count= res.cash
               this.pieData[1].count= res.product
               this.pieData1[0].count= res.noPaid
@@ -505,11 +565,14 @@ export default {
       border: 0;
       padding-top: 16px;
       margin: 16px 0 16px;
+      text-align: center;
     }
 
     .headerContent .title .welcome-text {
       display: none;
     }
   }
-
+.more-info{
+  text-align: center;
+}
 </style>

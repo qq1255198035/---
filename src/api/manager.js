@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { axios } from '@/utils/request'
 import qs from 'qs'
-
+//const baseUrl = 'server'
 // 明星管理列表
 export function starsList(name, offset) {
       return axios({

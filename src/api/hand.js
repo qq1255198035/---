@@ -2,10 +2,58 @@ import api from './index'
 import { axios } from '@/utils/request'
 import qs from 'qs'
 //const baseUrl = 'server'
+// 明星待审批数量
+export function getStarNum(parameter) {
+    return axios({
+        url:'/vue/organize/searchCampStarCount',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
+// 赞助待审批数量
+export function getSponsorNum(parameter) {
+    return axios({
+        url:'/vue/organize/searchCampSponsorCount',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
+// 活动待审批数量
+export function getActiveNum(parameter) {
+    return axios({
+        url:'/vue/organize/searchCampCount',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
 //赞助详情
 export function getSponsor(parameter) {
     return axios({
         url:'/vue/organize/searchCampSponsor',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
+// 删除
+export function getDetele(parameter) {
+    return axios({
+        url:'/vue/organize/deleteCamp',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
+// 活动信息进度
+export function getPress(parameter) {
+    return axios({
+        url:'/vue/organize/campSchedule',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
+// 明星信息
+export function getStarsDeails(parameter) {
+    return axios({
+        url:'/vue/organize/searchCampStar',
         method: 'post',
         data: qs.stringify(parameter)
     })
@@ -55,7 +103,7 @@ export function getCheckInformation(parameter) {
 // 搞手赞助审批列表接口
 export function getApprovalList(parameter) {
     return axios({
-        url:baseUrl+ '/vue/organize/searchCampSponsorForOrganize',
+        url: '/vue/organize/searchCampSponsorForOrganize',
         method: 'post',
         data: qs.stringify(parameter)
     })
