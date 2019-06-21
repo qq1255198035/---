@@ -29,3 +29,37 @@ export function infoList(condition, offset) {
     data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), condition: condition, limit: 5, offset: offset})
   })
 }
+
+// 查看已审批角色信息
+export function userInfo(userId) {
+return axios({
+    url: '/vue/organize/userInfo',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      userId: userId
+    })
+  })
+}
+// 查看活动进度
+export function campSchedule(campId) {
+return axios({
+  url: '/vue/admin/campSchedule',
+  method: 'post',
+  data: qs.stringify({
+    token: Vue.ls.get(ACCESS_TOKEN),
+    campId: campId
+  })
+})
+}
+// 饼图数据接口
+export function piesData() {
+         return axios({
+           url: '/vue/pieData',
+           method: 'post',
+           data: qs.stringify({
+             token: Vue.ls.get(ACCESS_TOKEN),
+             
+           })
+         })
+       }

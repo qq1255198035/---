@@ -31,7 +31,7 @@
                         </div>
                         <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table">
                               <template slot="operation" slot-scope="text,record">
-                                    <a href="javascript:;" @click="showModal(record.ssId)">赞 助</a>
+                                    <a-button @click="showModal(record.ssId)" type="primary">赞 助</a-button>
                               </template>
                         </a-table>
                         
@@ -69,11 +69,13 @@
                   <div class="calc-price">
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               
-                              <a-input type='text' v-model="price" @change="handlePriceChange" placeholder="单价" style="width: 100%;"/>
+                              <a-input type='number' v-model="price" placeholder="单价" style="width: 100%;"/>
+                              
                         </a-form-item>
                         *
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
-                              <a-input type='text' v-model="number" @change="handleNumberChange" placeholder="数量" style="width: 100%;"/>
+                              <a-input type='number' v-model="number" placeholder="数量" style="width: 100%;"/>
+                              
                         </a-form-item>
                         =
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
@@ -197,7 +199,7 @@ const hasProp = (instance, prop) => {
 export default {
       
       data(){
-            const value = this.value || {};
+            
             return{
                   lists:[],
                   columns: [
@@ -238,8 +240,8 @@ export default {
                   date:'',
                   cashMoney:'',
                   proname: '',
-                  price: value.price,
-                  number: value.number,
+                  price: '',
+                  number: '',
                   demand: '',
                   id: '',
                   form: this.$form.createForm(this),
@@ -297,8 +299,8 @@ export default {
                         }
                   })
             },
-            postSaveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz){
-                  saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz).then(res=>{
+            postSaveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz, cash){
+                  saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz, cash).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！');
                               this.confirmLoading = false;
@@ -312,7 +314,7 @@ export default {
             },
             handleSubmit() {
                   this.confirmLoading = true;
-                  this.postSaveMySponsor(this.id,this.cashMoney,this.proname,this.number,this.total,this.totalPrice,this.demand)
+                  this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
             },
             handleCancel(e) {
                   console.log('Clicked cancel button');
@@ -322,26 +324,7 @@ export default {
                   console.log('changed', value);
             },
            
-            handlePriceChange(e) {
-                  const price = parseInt(e.target.value || 0, 10);
-                  if (isNaN(price)) {
-                        return;
-                  }
-                  if (!hasProp(this, 'value')) {
-                  this.price = price;
-                  }
-                  this.triggerChange({ price });
-            },
-            handleNumberChange(e) {
-                  const number = parseInt(e.target.value || 0, 10);
-                  if (isNaN(number)) {
-                        return;
-                  }
-                  if (!hasProp(this, 'value')) {
-                  this.number = number;
-                  }
-                  this.triggerChange({ number });
-            },
+            
             triggerChange  (changedValue) {
                   // Should provide an event to pass value to Form.
                   this.$emit('change', Object.assign({}, this.$data, changedValue));
@@ -357,10 +340,7 @@ export default {
             }
       },
       watch: {
-            value (val = {}) {
-                  this.price = val.price || 0;
-                  this.number = val.number || 0;
-            },
+           
             
       },
 }

@@ -136,3 +136,15 @@ export function applicationList(startime, endtime, condition, offset) {
     })
   })
 }
+// 申请记录列表
+export function joinCampAll(year, month) {
+  return axios({
+    url: '/vue/agent/searchMyJoinCampAll',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      year: year,
+      month: month
+    })
+  })
+}

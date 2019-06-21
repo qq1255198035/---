@@ -3,16 +3,16 @@
             <div class="my-calendar">
                   <a-calendar @panelChange="onPanelChange">
                         <ul class="events" slot="dateCellRender" slot-scope="value">
-                              <li v-for="item in getListData(value)" :key="item.content" @click="showModal(value)">
-                                    <a-badge :status="item.type" :text="item.content" />
+                              <li v-for="item in getJoinCampAll(value.year(),value.month() + 1,value.date())" :key="item.camp_id" @click="showModal(value)">
+                                    <a-badge :text="item.campname" />
                               </li>
                         </ul>
-                        <template slot="monthCellRender" slot-scope="value">
+                        <!-- <template slot="monthCellRender" slot-scope="value">
                               <div v-if="getMonthData(value)" class="notes-month">
                               <section>{{getMonthData(value)}}</section>
                               <span>Backlog number</span>
                               </div>
-                        </template>
+                        </template> -->
                   </a-calendar>
             </div>
             <a-modal
@@ -106,6 +106,7 @@
 }
 </style>
 <script>
+import { joinCampAll } from "@/api/manager";
 export default {
       data() {
             return {
@@ -140,38 +141,34 @@ export default {
                                     yfk: '$ 4000万',    
                               },
                   ],
+                 
             }
       },
+      mounted(){
+           
+      },
+      created(){
+             
+      },
       methods: {
-            getListData(value) {
-                  let listData;
-                  //value.month()
-                  //var date = value.year() 
-                  //console.log(value.year(),value.date(),value.month()  )
-                  if(value.month() === 4){
-                         switch (value.date()) {
-                  case 8:
-                  listData = [
-                        { type: 'warning', content: '主教练培训.' },
-                        { type: 'success', content: '体育电子游戏' },
-                  ]; break;
-                  case 10:
-                  listData = [
-                        { type: 'warning', content: '魔兽争霸' },
-                        { type: 'success', content: '魁地奇争霸' },
-                        { type: 'error', content: '五军之战' },
-                  ]; break;
-                  case 15:
-                  listData = [
-                        { type: 'warning', content: '长春马拉松' },
-                        { type: 'success', content: '日本马拉松' },
-                        
-                  ]; break;
-                  default:
-                  }
-                  return listData || [];
-                  }
-                 
+           
+            
+            getJoinCampAll(year,month,date){
+                  var listData;
+                  joinCampAll(year, month).then(res=>{
+                        if (res.code == 1000) {
+                               listData = res.data[year+ '-' + month + '-' + date]
+                               console.log(1)
+                        }
+                  })
+                  console.log(2)
+                  setTimeout(() => {
+                        console.log(listData)
+                        return listData
+                  }, 1000);
+                  
+                  
+                  
             },
             getMonthData(value) {
                   if (value.month() === 8) {
@@ -182,7 +179,7 @@ export default {
                   this.visible = true
                   this.nowData = value.date();
                   this.nowMonth = value.month();
-                  console.log(value.year())
+                  
             },
             hideModal() {
                   this.visible = false

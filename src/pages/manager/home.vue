@@ -23,7 +23,7 @@
                       </v-chart>
                       <div class="calc-price">
                           总计：￥
-                          <span>10000</span>
+                          <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
                   </a-row>
@@ -39,8 +39,11 @@
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
-            <a slot="extra">全部消息</a>
-            <div>
+           
+            <a slot="extra" @click="$router.push({name:'tzxx'})">全部消息</a>
+            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="projects.length == 0">暂无信息</p>
+            <div v-else>
+           
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
@@ -71,20 +74,15 @@ import { mapActions } from 'vuex'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
-import { headMsg } from '@/api/common'
+import { headMsg,piesData } from '@/api/common'
 const sourceData1 = [
-  { item: '未付', count: 60 },
-  { item: '已付', count: 10 },
+  { item: '未付', count: null },
+  { item: '已付', count: null },
   
 ]
 const DataSet = require('@antv/data-set')
 const dv1 = new DataSet.View().source(sourceData1)
-dv1.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
+
 const pieScale = [{
   dataKey: 'percent',
   min: 0,
@@ -112,6 +110,7 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
+      agentTotal:'',
       pieScale,
       pieStyle: {
         stroke: '#fff',
@@ -222,11 +221,12 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.$host + this.$store.getters.avatar
-
+    console.log(this.avatar)
     
   },
   mounted () {
-    this.getHeadMsg()
+    this.getHeadMsg();
+    this.getPieData()
     // this.conlog();
   },
   methods: {
@@ -239,6 +239,22 @@ export default {
         }
       })
     },
+    getPieData(){
+      piesData().then(res=>{
+        if (res.code == 1000) {
+          console.log(res)
+            this.pieData1[0].count= res.data.unpaid;
+            this.pieData1[1].count= res.data.paid;
+            this.agentTotal = res.data.agentTotal
+            dv1.transform({
+              type: 'percent',
+              field: 'count',
+              dimension: 'item',
+              as: 'percent'
+            })
+        }
+      })
+    }
   },
   filters: {
     

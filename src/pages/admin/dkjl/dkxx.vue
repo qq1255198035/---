@@ -119,6 +119,7 @@ export default {
 <style lang="less" scoped>
 #dkxx{
       margin: -24px -24px 0px;
+      background-color: #fff;
       .form-box{
             width: 100%;
             display: flex;

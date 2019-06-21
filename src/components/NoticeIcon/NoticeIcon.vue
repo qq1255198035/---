@@ -35,7 +35,7 @@
 <script>
 import { mapActions,mapGetters } from 'vuex'
 import { unread,headMsg } from '@/api/common'
-import api from "@/api/index";
+
 export default {
   name: 'HeaderNotice',
   data () {

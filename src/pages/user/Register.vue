@@ -27,7 +27,7 @@
                                     </ul>
                                     <div class="bottom">
                                           <a-button type="primary" @click="goRegister" class="my-btn">
-                                                注册
+                                                下一步
                                           </a-button>
                                           <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
                                     </div>
@@ -59,7 +59,8 @@
                                     <a-input
                                           size="large"
                                           type="password"
-                                          @click="handlePasswordInputClick"
+                                          @keydown="insertDown"
+                                          @keyup="insertUp"
                                           autocomplete="false"
                                           placeholder="至少6位密码，区分大小写"
                                           v-decorator="['password', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
@@ -76,15 +77,6 @@
                                     v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
                                     ></a-input>
                                     </a-form-item>
-
-                                    <!-- <a-form-item>
-                                    <a-input size="large" placeholder="11 位手机号" v-decorator="['mobile', {rules: [{ required: true, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
-                                    <a-select slot="addonBefore" size="large" defaultValue="+86">
-                                          <a-select-option value="+86">+86</a-select-option>
-                                          <a-select-option value="+87">+87</a-select-option>
-                                    </a-select>
-                                    </a-input>
-                                    </a-form-item> -->
                                     <a-row :gutter="16">
                                     <a-col class="gutter-row" :span="16">
                                     <a-form-item>
@@ -152,7 +144,8 @@
                         display: flex;
                         justify-content: space-around;
                         .active{
-                              border-color: aqua;
+                              background-color: #21C5C7;
+                              color: #fff;
                         }
                         li{
                               width: 24%;
@@ -323,12 +316,13 @@ export default {
                   }
                   callback()
             },
-            handlePasswordInputClick () {
-                  if (!this.isMobile()) {
-                  this.state.passwordLevelChecked = true
-                  return
-                  }
-                  this.state.passwordLevelChecked = false
+            insertDown() {
+                  this.state.passwordLevelChecked = true;
+            },
+            insertUp(){
+                  setTimeout(() => {
+                        this.state.passwordLevelChecked = false;
+                  }, 1500);
             },
             handleSubmit () {
                         if(this.activeIndex == '1'){
@@ -380,15 +374,18 @@ export default {
                         window.clearInterval(interval)
                         }
                         }, 1000)
-                        const hide = $message.loading('验证码发送中..', 0)
+                        const hide = $message.loading('验证码发送中..',1)
                         getSmsCaptcha({ username: values.email }).then(res => {
+                              console.log(res)
                               if(res.status == 200){
-                                    setTimeout(hide, 2500)
+                                    setTimeout(hide, 1)
                                     $notification['success']({
                                           message: '提示',
                                           description: '验证码获取成功，请查收！',
                                           duration: 8
                                     })
+                              }else if(res.status == 201){
+                                    this.$message.error(res.info)
                               }
                         
                         }).catch(err => {

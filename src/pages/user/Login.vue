@@ -13,7 +13,7 @@
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="账户"
               v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }], validateTrigger: 'change'}
@@ -28,7 +28,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -40,9 +40,7 @@
         
         
       
-      <!-- <a-form-item>
-        <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox>
-      </a-form-item> -->
+    
 
       <a-form-item style="margin-top:24px">
         <a-button
@@ -60,26 +58,19 @@
       </div>
     </a-form>
 
-    <!-- <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha> -->
+   
   </div>
 </template>
 
 <script>
-import md5 from 'md5'
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
+
+
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha } from '@/api/login'
 
 export default {
-  components: {
-    TwoStepCaptcha
-  },
+  
   data () {
     return {
       customActiveKey: 'tab1',
@@ -99,14 +90,7 @@ export default {
     }
   },
   created () {
-    // get2step({ })
-    //   .then(res => {
-    //     this.requiredTwoStepCaptcha = res.result.stepCode
-    //   })
-    //   .catch(() => {
-    //     this.requiredTwoStepCaptcha = false
-    //   })
-    // // this.requiredTwoStepCaptcha = true
+    
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
@@ -148,15 +132,7 @@ export default {
       })
     },
     
-    // stepCaptchaSuccess () {
-    //   this.loginSuccess()
-    // },
-    // stepCaptchaCancel () {
-    //   this.Logout().then(() => {
-    //     this.loginBtn = false
-    //     // this.stepCaptchaVisible = false
-    //   })
-    // },
+  
     loginSuccess (res) {
       console.log(res)
       this.$router.push({ name: 'index' })

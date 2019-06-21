@@ -121,17 +121,21 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload1"
-                                                :fileList="fileList"
-                                                v-decorator="[
-                                                'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
                                                 >
                                                 <img v-if="imageUrl1" :src="imageUrl1" alt="avatar" />
+                                                
                                                 <div v-else>
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
                                                       <div class="ant-upload-text">上传</div>
                                                 </div>
+                                                <a-input  v-decorator="[
+                                                'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
+                                                
+                                                type="hidden"
+                                                />
                                           </a-upload>
-                                          <span>建议尺寸 200 * 300</span>
+                                          <span>建议尺寸 200 * 300</span><br>
+                                          
                                     </a-form-item>
                                     <a-form-item label="上传头像" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
@@ -140,8 +144,6 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload2"
-                                                v-decorator="[
-                                                'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
                                                 >
                                                 
                                                 <img v-if="imageUrl2" :src="imageUrl2" alt="avatar" />
@@ -149,8 +151,14 @@
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
                                                       <div class="ant-upload-text">上传</div>
                                                 </div>
+                                                 <a-input  v-decorator="[
+                                                'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
+                                                
+                                                type="hidden"
+                                                />
                                                 </a-upload>
-                                                <span>建议尺寸 200 * 300</span>
+                                                <span>建议尺寸 200 * 300</span><br>
+                                                
                                     </a-form-item>
                                     <a-form-item label="上传图片" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
@@ -159,8 +167,6 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload3"
-                                                v-decorator="[
-                                                'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
                                                 >
                                                 
                                                 <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" />
@@ -168,8 +174,14 @@
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
                                                       <div class="ant-upload-text">上传</div>
                                                 </div>
+                                                 <a-input  v-decorator="[
+                                                'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
+                                                
+                                                type="hidden"
+                                                />
                                                 </a-upload>
-                                                <span>建议尺寸 200 * 300</span>
+                                                <span>建议尺寸 200 * 300</span><br>
+                                                
                                     </a-form-item>
                               </div>
                         </a-form>
@@ -346,12 +358,7 @@ export default {
                   postImg2:'',
                   postImg3:'',
                   stasId:'',
-                  fileList: [{
-                        uid: '1',
-                        name: '1',
-                        status: 'uploading',
-                        url: this.$host,
-                  }],
+                  
             }
       },
       mounted () {
@@ -390,13 +397,16 @@ export default {
                                     home: res.data.addr,
                                     desc: res.data.introduction,
                                     sex: res.data.sex,
+                                    uploader: res.data.credential,
+                                    avatar: res.data.avatar,
+                                    imgs: res.data.imgs
                                     
                               });
                               this.imageUrl1 = this.host + res.data.credential;
                               this.imageUrl2 = this.host + res.data.avatar;
                               this.imageUrl3 = this.host + res.data.imgs;
-                              this.fileList[0].name = res.data.credential;
-                              console.log(this.fileList)
+                              
+                              
                         }
                   })
             },

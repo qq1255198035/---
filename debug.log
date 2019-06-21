@@ -1,2 +1,4 @@
 [0506/084540.421:ERROR:http_transport_win.cc(276)] WinHttpSendRequest: 操作成功完成。 (0x0)
 [0619/093318.238:ERROR:http_transport_win.cc(276)] WinHttpSendRequest: 操作成功完成。 (0x0)
+[0620/194441.763:ERROR:file_io_win.cc(170)] CreateFile C:\Users\Admin\AppData\Local\Google\Chrome\User Data\Crashpad\reports\6b912076-4fb1-41a2-a738-61097520f718.dmp: 磁盘空间不足。 (0x70)
+[0620/194441.764:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed

@@ -18,7 +18,7 @@ export function searchCampList(startime, endtime, offset) {
       })
 }
 // 提交赞助
-export function saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz) {
+export function saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz, cash) {
       return axios({
            url: '/vue/sponsor/saveMySponsor',
            method: 'post',
@@ -30,7 +30,8 @@ export function saveMySponsor(ssId, price, productName, productNum, productVal, 
                   productNum: productNum,
                   productVal: productVal,
                   tolMoney: tolMoney,
-                  bz: bz
+                  bz: bz,
+                  cash: cash
            })
       })
 }

@@ -1,26 +1,26 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
     <div class="container">
-      <div class="top">
-        <div class="header">
-          <a href="/">
-            <img src="~@/assets/logo.png" class="logo" alt="logo">
-            
-          </a>
+      <div class="bgc">
+        <div class="top">
+          <div class="header">
+            <a href="/">
+              <img src="~@/assets/logo-bla.png" class="logo" alt="logo">
+              
+            </a>
+          </div>
+          <div class="desc">
+          
+          </div>
         </div>
-        <div class="desc">
-         
-        </div>
+        <route-view></route-view>
       </div>
-
-      <route-view></route-view>
-
       <div class="footer">
-        <div class="links">
+        <!-- <div class="links">
           <a href="_self">帮助</a>
           <a href="_self">隐私</a>
           <a href="_self">条款</a>
-        </div>
+        </div> -->
         <div class="copyright">
           Copyright &copy; 2018 赞立方
         </div>
@@ -67,9 +67,14 @@ export default {
       min-height: 100%;
       background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
       background-size: 100%;
-      padding: 110px 0 144px;
+      padding: 250px 0 144px;
       position: relative;
-
+      .bgc{
+        background-color: #fff;
+        width: 50%;
+        margin: 0 auto;
+        padding: 50px 0;
+      }
       a {
         text-decoration: none;
       }

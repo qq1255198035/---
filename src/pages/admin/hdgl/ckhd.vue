@@ -5,7 +5,7 @@
                   <div class="details-header">
                         <a-card title="活动进度">
                               <div class="secetion">
-                                    <a-steps :current="status | filterStatusStep">
+                                    <a-steps :current="schedule">
                                           <a-popover slot="progressDot" slot-scope="{index, status, prefixCls}">
                                                 <template slot="content">
                                                 <span>step {{index}} status: {{status}}</span>
@@ -219,6 +219,7 @@ import glTitle from '@/components/glTitle/glTitle'
 import DetailList from '@/components/tools/DetailList'
 import imgUrl from '@/assets/a1.jpg'
 import { campInformation,searchCampSponsor,searchCampStar,campHeadInfo } from '@/api/admin'
+import { campSchedule } from "@/api/common";
 const DetailListItem = DetailList.Item
 const columns = [
       {
@@ -378,15 +379,18 @@ export default {
                   status: '',
                   logo:'',
                   money:'',
-                  host:''
+                  host:'',
+                  schedule:0
+
             }
       },
       mounted(){
-            //this.$route.params.id
-            this.getCampInformation(84);
-            this.getSearchCampSponsor(84);
-            this.getSearchCampStar(84);
-            this.getCampHeadInfo(84);
+            console.log(this.$route.params.id)
+            this.getCampInformation(this.$route.params.id);
+            this.getSearchCampSponsor(this.$route.params.id);
+            this.getSearchCampStar(this.$route.params.id);
+            this.getCampHeadInfo(this.$route.params.id);
+            this.getCampSchedule(this.$route.params.id)
             this.host = this.$host;
             
       },
@@ -398,6 +402,16 @@ export default {
             
       },
       methods:{
+            getCampSchedule(id){
+                  campSchedule(id).then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.schedule = parseInt(res.data.schedule - 1) 
+                        }
+                  })
+
+                  
+            },
             getCampInformation(id){
                   campInformation(id).then(res=>{
                         if(res.code == 1000){
@@ -489,15 +503,8 @@ export default {
                   }else{
                         return val
                   }
-            },
-            filterStatusStep(val){
-                  if(val === 40 || 20){
-                        return 2
-                  }
-                  if(val === 0 || 30){
-                        return 1
-                  }
             }
+            
       }
 }
 </script>

@@ -73,7 +73,8 @@
         </a-card>
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
             <a slot="extra" @click="$router.push({name: 'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
-            <div>
+            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="newsList.length == 0">暂无信息</p>
+            <div v-else>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in newsList">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
@@ -101,7 +102,7 @@
 import { timeFix } from '@/utils/util'
 import { getSponsorshipdetails, getUserInformation, getSponsoredTweets, getMyFiveNews, getMyAllNews } from '@api/hand'
 import { mapActions,mapGetters } from 'vuex'
-import api from "@/api/index";
+
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 

@@ -5,29 +5,29 @@
                         <a-card :bordered="false">
                               <div class="account-center-avatarHolder">
                                     <div class="avatar">
-                                    <img :src="avatar()">
+                                    <img :src="logo">
                                     </div>
-                                    <div class="username">{{ nickname() }}</div>
+                                    <div class="username">{{ name }}</div>
                               </div>
                               <div class="account-center-detail">
                                           <p>
-                                                <a-icon type="user" class="user"></a-icon>张集
+                                                <a-icon type="user" class="user"></a-icon>{{contact}}
                                           </p>
                                           <p>
-                                                <a-icon type="phone" class="tel"></a-icon>137 5684 2365
+                                                <a-icon type="phone" class="tel"></a-icon>{{phone}}
                                           </p>
                                           <p>
-                                          <i class="group"></i>www.baidu.com
+                                          <i class="group"></i>{{web}}
                                           </p>
                                           <p>
                                           <i class="address"></i>
-                                          <span>浙江省</span>
-                                          <span>杭州市</span>
+                                          <span>{{area}}</span>
+                                          
                                           </p>
                               </div>
                               <a-divider :dashed="true"/>
                               <div class="account-center-team">
-                                    <img :src="imgUrl" alt="">
+                                    <img :src="businessImg" alt="">
                               </div>
                         </a-card>
                   </a-col>
@@ -37,9 +37,7 @@
                                     <h5>公司简介</h5>
                               </div>
                               <div class="content">
-                                    <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
-                                    <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
-                                    <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
+                                    <p>{{intro}}</p>
                               </div>
                         </div>
                   </a-col>
@@ -137,15 +135,46 @@
 </style>
 <script>
 import { mapGetters } from 'vuex'
-import imgUrl from '@/assets/123.png'
+
+import { userInfo } from "@/api/common";
 export default {
       data(){
             return{
-                  imgUrl
+                  name:"",
+                  area: "",
+                  businessImg: "",
+                  contact: "",
+                  country: "",
+                  email: "",
+                  intro: "",
+                  logo: "",
+                  phone: "",
+                  sports: "",
+                  web: "",
             }
+      },
+      mounted(){
+            this.getUserInfo(this.$route.params.id)
       },
       methods: {
             ...mapGetters(['nickname', 'avatar']),
-    }
+            getUserInfo(id){
+                  userInfo(id).then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.email = res.data.email;
+                              this.area = res.data.area;
+                              this.businessImg = this.$host + res.data.businessImg;
+                              this.contact = res.data.contact;
+                              this.phone = res.data.phone;
+                              this.web = res.data.web;
+                              this.intro = res.data.intro;
+                              this.logo = res.data.logo;
+                              this.name = res.data.name;
+                              
+                        }
+                  })
+            }
+      }
 }
 </script>

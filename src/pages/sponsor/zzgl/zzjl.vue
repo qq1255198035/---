@@ -11,8 +11,8 @@
                         </a-col>
                         <a-col :span="8">
                               <div class="input-box">
-                                    <a-form-item label="公司名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="请输入公司名称" v-model="name"/>
+                                    <a-form-item label="活动名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input placeholder="请输入活动名称" v-model="name"/>
                                     </a-form-item>
                                     <a-button type="primary" icon="search" @click="search">搜 索</a-button>
                               </div>
@@ -71,6 +71,10 @@ const statusMap = {
             status: 'error',
             text: '驳回'
       },
+      11:{
+            status: 'warning',
+            text: '未审批'
+      }
 }
 export default {
       data () {

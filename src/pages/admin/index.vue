@@ -8,16 +8,16 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="6">
-          <head-info title="搞手待审批" content="56" :center="false" :bordered="false"/>
+          <head-info title="搞手待审批" :content="tohand" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="6">
-          <head-info title="赞助商待审批" content="24" :center="false" :bordered="false"/>
+          <head-info title="赞助商待审批" :content="sponsor" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="6">
-          <head-info title="经纪人待审批" content="2,223" :center="false" />
+          <head-info title="经纪人待审批" :content="agent" :center="false" />
         </a-col>
         <a-col :span="6">
-          <head-info title="明星待审批" content="2,223" :center="false" />
+          <head-info title="明星待审批" :content="star" :center="false" />
         </a-col>
       </a-row>
     </div>
@@ -33,10 +33,12 @@
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
+          
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
-            <a slot="extra">全部消息</a>
-            <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in infoList">
+            <a slot="extra" @click="$router.push({name:'admintzxx'})">全部消息</a>
+            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="infoList.length == 0">暂无信息</p>
+            <div v-else>
+              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in infoList" >
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
@@ -50,8 +52,10 @@
                     <span class="datetime">{{ item.createtime }}</span>
                   </div>
                 </a-card>
+                
               </a-card-grid>
             </div>
+            
           </a-card>
         </a-col>
       </a-row>
@@ -66,8 +70,7 @@ import { headMsg } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
-import { searchCampList } from '@/api/admin'
+import { searchCampList,rightInfo } from '@/api/admin'
 const statusMap = {
       0: {
             status: 'processing',
@@ -95,7 +98,7 @@ export default {
       avatar: '',
       user: {},
       infoList:[],
-      loading: true,
+      loading: false,
       radarLoading: true,
       tableLoading: true,
       activities: [],
@@ -124,6 +127,10 @@ export default {
           },
       ],
       operation1: [],
+      sponsor:'',
+      agent:'',
+      tohand:'',
+      star:''
     }
   },
   computed: {
@@ -134,14 +141,15 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.$store.getters.avatar
+    console.log(this.avatar)
   },
   mounted () {
-    this.getHeadMsg();
-    this.getSearchCampList('',1)
+    //this.getHeadMsg();
+    this.getSearchCampList('',1);
+    this.getRightInfo();
   },
   methods: {
     ...mapGetters(['nickname', 'welcome']),
-    
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){
@@ -163,6 +171,15 @@ export default {
         }
       })
     },
+    getRightInfo(){
+      rightInfo().then(res=>{
+        console.log(res)
+        this.sponsor = res.statistics.sponsor.toString();
+        this.agent = res.statistics.agent.toString();
+        this.tohand = res.statistics.tohand.toString();
+        this.star = res.statistics.star.toString()
+      })
+    }
   },
   filters: {
     statusFilter (type) {
