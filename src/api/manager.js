@@ -137,7 +137,7 @@ export function applicationList(startime, endtime, condition, offset) {
   })
 }
 // 申请记录列表
-export function joinCampAll(year, month) {
+export async function joinCampAll(year, month) {
   return axios({
     url: '/vue/agent/searchMyJoinCampAll',
     method: 'post',

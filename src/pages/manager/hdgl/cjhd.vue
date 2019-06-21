@@ -4,15 +4,9 @@
                   <a-calendar @panelChange="onPanelChange">
                         <ul class="events" slot="dateCellRender" slot-scope="value">
                               <li v-for="item in getJoinCampAll(value.year(),value.month() + 1,value.date())" :key="item.camp_id" @click="showModal(value)">
-                                    <a-badge :text="item.campname" />
+                                    <a-badge :text="item.campname"/>
                               </li>
                         </ul>
-                        <!-- <template slot="monthCellRender" slot-scope="value">
-                              <div v-if="getMonthData(value)" class="notes-month">
-                              <section>{{getMonthData(value)}}</section>
-                              <span>Backlog number</span>
-                              </div>
-                        </template> -->
                   </a-calendar>
             </div>
             <a-modal
@@ -107,6 +101,9 @@
 </style>
 <script>
 import { joinCampAll } from "@/api/manager";
+import { axios } from '@/utils/request';
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import qs from 'qs'
 export default {
       data() {
             return {
@@ -153,28 +150,37 @@ export default {
       methods: {
            
             
-            getJoinCampAll(year,month,date){
-                  var listData;
-                  joinCampAll(year, month).then(res=>{
-                        if (res.code == 1000) {
-                               listData = res.data[year+ '-' + month + '-' + date]
-                               console.log(1)
-                        }
-                  })
-                  console.log(2)
-                  setTimeout(() => {
-                        console.log(listData)
-                        return listData
-                  }, 1000);
+            async getJoinCampAll(year,month,date){
+                  var listData = await axios.post('/vue/agent/searchMyJoinCampAll',qs.stringify({
+                        token: this.$ls.get(ACCESS_TOKEN),
+                        year: year,
+                        month: month
+                  }))
+                  console.log(listData.data)
                   
+                  return listData.data[year+ '-' + month + '-' + date]
                   
-                  
+                  // joinCampAll(year, month).then(res=>{
+                  //       if (res.code == 1000) {
+                               
+                  //              console.log(1)
+                  //       }
+                  // })
+                  // console.log(2)
+                 
+                  //       console.log(listData)
+                  //       return listData
             },
-            getMonthData(value) {
-                  if (value.month() === 8) {
-                  return 1394;
-                  }
-            },
+//             return axios({
+//     url: '/vue/agent/searchMyJoinCampAll',
+//     method: 'post',
+//     data: qs.stringify({
+//       token: Vue.ls.get(ACCESS_TOKEN),
+//       year: year,
+//       month: month
+//     })
+//   })
+            
             showModal(value) {
                   this.visible = true
                   this.nowData = value.date();

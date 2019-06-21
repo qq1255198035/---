@@ -27,7 +27,7 @@
                     </a-col>
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
-                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl"/>
+                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl1"/>
                         <v-tooltip :showTitle="false" dataKey="item*percent" />
                         <v-axis />
                         <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
@@ -148,7 +148,17 @@ export default {
       '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
       '</tr>';
   },
-      
+      itemTpl1: (value, color, checked, index) => {
+        const obj = dv1.rows[index];
+        checked = checked ? 'checked' : 'unChecked';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
+          '" data-value="' + value + '" data-color=' + color +
+          ' style="cursor: pointer;font-size: 14px;">' +
+          '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
+          '<span class="g2-legend-text">' + value + '</span></td>' +
+          '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
+          '</tr>';
+      },
       // data
       
       
@@ -273,10 +283,10 @@ export default {
     getPiesData(){
       piesData().then(res=>{
         if (res.code == 1000) {
-          
+          console.log(res)
           this.pieData[0].count= res.data.money;
           this.pieData[1].count= res.data.goods;
-          this.pieData1[0].count= res.data.noPaid;
+          this.pieData1[0].count= res.data.unpaid;
           this.pieData1[1].count= res.data.paid;
           this.sponsorTotal = res.data.sponsorTotal;
           this.agentTotal = res.data.agentTotal
