@@ -5,34 +5,39 @@
                         <a-card :bordered="false">
                               <div class="account-center-avatarHolder">
                                     <div class="avatar">
-                                    <img :src="avatar()">
+                                    <img :src="avatar">
                                     </div>
-                                    <div class="username">{{ nickname() }}</div>
-                                    <p>Stephon Xavier Marbury</p>
+                                    <div class="username">{{ lastname + firstname }}</div>
+                                    <p>{{enname}}</p>
                               </div>
                               <div class="account-center-detail">
-                                          <p>
-                                                <a-icon type="man" />男
+                                          <p v-if="sex == 1">
+                                                <a-icon type="man"/>男
+                                               
+                                          </p>
+                                          <p v-if="sex == 2">
+                                               
+                                                <a-icon type="woman"/>女
                                           </p>
                                           <p>
-                                                <a-icon type="bank" class="tel"></a-icon>美国
+                                                <a-icon type="bank" class="tel"></a-icon>{{country}}
                                           </p>
                                           <p>
-                                                <a-icon type="sort-descending" />188cm
+                                                <a-icon type="sort-descending" />{{height}}cm
                                           </p>
                                           <p>
-                                                <a-icon type="contacts" /> 93公斤
+                                                <a-icon type="contacts" /> {{heavy}}公斤
                                           </p>
                                           <p>
-                                                <a-icon type="environment" /><span>美国纽约州纽约市布鲁克林区科尼岛</span>
+                                                <a-icon type="environment" /><span>{{home}}</span>
                                           </p>
                               </div>
                               <a-divider :dashed="true"/>
                               <div class="account-center-team">
-                                    <p>公司名称：北京大学附属中学初中男篮</p>
-                                    <p>联系人：张凉冰</p>
-                                    <p>联系电话：15590030000</p>
-                                    <p>邮箱：jacky@mlsports.com.hk</p>
+                                    <p>公司名称：{{company}}</p>
+                                    <p>联系人：{{contact}}</p>
+                                    <p>联系电话：{{phone}}</p>
+                                    <p>邮箱：{{email}}</p>
                               </div>
                         </a-card>
                   </a-col>
@@ -42,21 +47,15 @@
                                     <h5>公司简介</h5>
                               </div>
                               <div class="content">
-                                    <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
-                                    <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
-                                    <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
+                                    <p>{{desc}}</p>
+                                    
                               </div>
                               <div class="title">
                                     <h5>个人图册</h5>
                               </div>
                               <div class="img-content">
-                                    <img :src="imgUrl" alt="">
-                                    <img :src="imgUrl" alt="">
-                                    <img :src="imgUrl" alt="">
-                                    <img :src="imgUrl" alt="">
-                                    <img :src="imgUrl" alt="">
-                                    <img :src="imgUrl" alt="">
-                                    <img :src="imgUrl" alt="">
+                                    <img :src="imgs" alt="">
+                                    
                               </div>
                         </div>
                   </a-col>
@@ -164,15 +163,59 @@
 </style>
 <script>
 import { mapGetters } from 'vuex'
-import imgUrl from '@/assets/123.png'
+import { searchStarInfo } from "@/api/manager";
 export default {
       data(){
             return{
-                  imgUrl
+                  lastname: "",
+                  firstname: "",
+                  enname: "",
+                  works: "",
+                  country : "",
+                  birthday: "",
+                  height: "",
+                  heavy: "",
+                  home: "",
+                  desc: "",
+                  sex: "",
+                  avatar: "",
+                  imgs: "",
+                  company:"",
+                  contact:"",
+                  phone:"",
+                  email:"",
+                 
             }
       },
+      mounted(){
+            this.getSearchStarInfo(this.$route.params.id)
+      },
       methods: {
-            ...mapGetters(['nickname', 'avatar']),
-    }
+           
+            getSearchStarInfo(athleteId){
+                  searchStarInfo(athleteId).then(res=>{
+                        if (res.code == 1000) {
+                              console.log(res)
+                              this.lastnam = res.data.surname,
+                              this.firstname = res.data.monicker,
+                              this.enname = res.data.enName,
+                              this.works = res.data.catalog,
+                              this.country  = res.data.nationality,
+                              this.birthday = res.data.birth,
+                              this.height = res.data.height,
+                              this.heavy = res.data.weight,
+                              this.home = res.data.addr,
+                              this.desc = res.data.introduction,
+                              this.sex = res.data.sex,
+                              this.email = res.data.email,
+                              this.avatar = this.$host + res.data.avatar,
+                              this.imgs = this.$host + res.data.imgs,
+                              this.company = res.data.company,
+                              this.contact = res.data.contact,
+                              this.phone = res.data.phone
+                        }
+                  })
+            },
+      }
 }
 </script>

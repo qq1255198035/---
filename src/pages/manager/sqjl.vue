@@ -2,41 +2,29 @@
       <div id="sqjl">
             
             <div class="sqjl-header">
-                  <a-row :gutter="2">
+                  <a-row :gutter="2" type="flex" justify="start" align="middle">
                         <a-col :span="6">
                               <div class="input-box">
                                     <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-date-picker class="my-picker"/>
+                                          <a-range-picker @change="changeDate" class="my-picker"/>
                                     </a-form-item>
                               </div>
                         </a-col>
                         <a-col :span="6">
                               <div class="input-box">
                                     <a-form-item label="活动名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="Basic usage"/>
+                                          <a-input placeholder="Basic usage" v-model="condition"/>
                                     </a-form-item>
                               </div>
                         </a-col>
-                        <a-col :span="7">
-                              <div class="input-box">
-                                    <a-form-item label="活动名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 5}">
-                                          <a-select placeholder="请选择" style="width: 90%;">
-                                                <a-select-option value="male">
-                                                      male
-                                                </a-select-option>
-                                                <a-select-option value="female">
-                                                      female
-                                                </a-select-option>
-                                          </a-select>
-                                    </a-form-item>
-                                    <a-button type="primary" icon="search">搜 索</a-button>
-                              </div>
+                        <a-col :span="6">
+                              <a-button type="primary" icon="search" @click="search">搜 索</a-button>
                         </a-col>
                   </a-row>
             </div>
             <div class="sqjl-content">
                   <div class="my-table">
-                        <a-table :columns="columns" :dataSource="data">
+                        <a-table :columns="columns" :dataSource="data" :loading="loading" :pagination="pagination" @change="handleTableChange">
                               <span slot="status" slot-scope="text">
                                     <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                               </span>
@@ -77,27 +65,22 @@
 }
 </style>
 <script>
+import { applicationList } from "@/api/manager";
 const statusMap = {
-      0: {
-            status: 'default',
-            text: '关闭'
-      },
-      1: {
+      
+      2: {
             status: 'processing',
             text: '待审批'
       },
-      2: {
+      1: {
             status: 'success',
             text: '通过'
       },
-      3: {
+      0: {
             status: 'error',
             text: '驳回'
       },
-      4: {
-            status: 'processing',
-            text: '已认证'
-      }
+      
 }
 export default {
      
@@ -107,23 +90,23 @@ export default {
                   columns: [
                         {
                               title: '活动名称',
-                              dataIndex: 'hdmc'
+                              dataIndex: 'campname'
                         },
                         {
                               title: '活动时间',
-                              dataIndex: 'hdss'
+                              dataIndex: 'publishTime'
                         },
                         {
                               title: '参加明星',
-                              dataIndex: 'cjmx',
+                              dataIndex: 'username',
                         },
                         {
                               title: '出厂总额',
-                              dataIndex: 'ccze',
+                              dataIndex: 'cost',
                         },
                         {
                               title: '备注',
-                              dataIndex: 'remark',
+                              dataIndex: 'details',
                               
                         },
                         {
@@ -132,42 +115,49 @@ export default {
                               scopedSlots: { customRender: 'status' }
                         },
                   ],
-                  data: [
-                              {
-                                    key: '0',
-                                    hdmc: '2019年吉林市马拉松比赛',
-                                    hdss: '2019-03-29 10:00',
-                                    cjmx: '灭霸',
-                                    ccze: '$ 890万',
-                                    remark: 'XXXX驳回',
-                                    status: '2'
-                              },
-                              {
-                                    key: '1',
-                                    hdmc: '2019年吉林市马拉松比赛',
-                                    hdss: '2019-03-29 10:00',
-                                    cjmx: '灭霸',
-                                    ccze: '$ 890万',
-                                    remark: 'XXXX驳回',
-                                    status: '3'
-                              },
-                              {
-                                    key: '2',
-                                    hdmc: '2019年吉林市马拉松比赛',
-                                    hdss: '2019-03-29 10:00',
-                                    cjmx: '灭霸',
-                                    ccze: '$ 890万',
-                                    remark: 'XXXX驳回',
-                                    status: '2'
-                              },
-                        ],
+                  data: [],
+                  startime:'',
+                  endtime:'',
+                  condition:'',
+                  offset: 1,
+                  loading: true,
+                  pagination:{
+                        total:0,
+                        pageSize:10,
+                  },
             }
       },
       methods:{
-           
+            getApplicationList(startime, endtime, condition, offset){
+                  applicationList(startime, endtime, condition, offset).then(res=>{
+                        if(res.code == 1000){
+                              console.log(res)
+                              let key = 'key'
+                              this.loading = false;
+                              this.data = res.page.rows
+                              this.pagination.total = parseInt(res.page.total)
+                              this.data.map((item,index)=>{
+                                    item[key] = index
+                              })
+                        }
+                  })
+            },
+            changeDate(val,date){
+                  this.startime = date[0];
+                  this.endtime = date[1]
+            },
+            search(){
+                  this.loading = true;
+                  this.getApplicationList(this.startime,this.endtime,this.condition,1)
+            },
+            handleTableChange (pagination) {
+                  this.loading = true;
+                  this.offset = pagination.current;
+                  this.getApplicationList(this.startime,this.endtime,this.condition,this.offset);
+            },
       },
       mounted () {
-            
+            this.getApplicationList(this.startime,this.endtime,this.condition,this.offset)
       
       },
       filters: {

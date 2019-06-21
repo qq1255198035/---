@@ -121,17 +121,21 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload1"
-                                                :fileList="fileList"
-                                                v-decorator="[
-                                                'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
                                                 >
                                                 <img v-if="imageUrl1" :src="imageUrl1" alt="avatar" />
+                                                
                                                 <div v-else>
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
                                                       <div class="ant-upload-text">上传</div>
                                                 </div>
+                                                <a-input  v-decorator="[
+                                                'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
+                                                
+                                                type="hidden"
+                                                />
                                           </a-upload>
-                                          <span>建议尺寸 200 * 300</span>
+                                          <span>建议尺寸 200 * 300</span><br>
+                                          
                                     </a-form-item>
                                     <a-form-item label="上传头像" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
@@ -140,8 +144,6 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload2"
-                                                v-decorator="[
-                                                'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
                                                 >
                                                 
                                                 <img v-if="imageUrl2" :src="imageUrl2" alt="avatar" />
@@ -149,8 +151,14 @@
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
                                                       <div class="ant-upload-text">上传</div>
                                                 </div>
+                                                 <a-input  v-decorator="[
+                                                'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
+                                                
+                                                type="hidden"
+                                                />
                                                 </a-upload>
-                                                <span>建议尺寸 200 * 300</span>
+                                                <span>建议尺寸 200 * 300</span><br>
+                                                
                                     </a-form-item>
                                     <a-form-item label="上传图片" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
@@ -159,8 +167,6 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload3"
-                                                v-decorator="[
-                                                'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
                                                 >
                                                 
                                                 <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" />
@@ -168,8 +174,14 @@
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
                                                       <div class="ant-upload-text">上传</div>
                                                 </div>
+                                                 <a-input  v-decorator="[
+                                                'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
+                                                
+                                                type="hidden"
+                                                />
                                                 </a-upload>
-                                                <span>建议尺寸 200 * 300</span>
+                                                <span>建议尺寸 200 * 300</span><br>
+                                                
                                     </a-form-item>
                               </div>
                         </a-form>
@@ -346,12 +358,7 @@ export default {
                   postImg2:'',
                   postImg3:'',
                   stasId:'',
-                  fileList: [{
-                        uid: '1',
-                        name: '1',
-                        status: 'uploading',
-                        url: this.$host,
-                  }],
+                  
             }
       },
       mounted () {
@@ -362,14 +369,14 @@ export default {
             
       },
       methods:{
-            postStarUpdatea(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId){
-                  console.log(222)
+            postStarUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId){
                   starUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！')
                               this.visible = false;
                               this.confirmLoading = false;
-                              
+                              this.getStarsList('',this.offset);
+                              console.log(222)
                         }
                   })
             },
@@ -390,13 +397,16 @@ export default {
                                     home: res.data.addr,
                                     desc: res.data.introduction,
                                     sex: res.data.sex,
+                                    uploader: res.data.credential,
+                                    avatar: res.data.avatar,
+                                    imgs: res.data.imgs
                                     
                               });
                               this.imageUrl1 = this.host + res.data.credential;
                               this.imageUrl2 = this.host + res.data.avatar;
                               this.imageUrl3 = this.host + res.data.imgs;
-                              this.fileList[0].name = res.data.credential;
-                              console.log(this.fileList)
+                              
+                              
                         }
                   })
             },
@@ -456,13 +466,13 @@ export default {
                   
             },
             handleOk(e) {
-                  this.confirmLoading = true;
+                  
                   this.form.validateFields((err,values) => {
                         if (!err) {
-                              console.log(11)
+                        
                               console.log(values)
-                              this.a()
-                              this.postStarUpdatea(values.lastname)
+                              
+                              this.postStarUpdate(values.lastname,values.firstname,values.works,values.country,values.birthday._i,values.height,values.heavy,values.home,values.desc,values.sex,this.postImg1,this.postImg2,this.postImg3,this.stasId)
                               
                         }
                   },);
@@ -516,6 +526,9 @@ export default {
                   getBase64(file, (imageUrl) => {
                         this.imageUrl1 = imageUrl
                         this.loading = false
+                        this.form.setFieldsValue({  
+                              uploader: imageUrl,
+                        });
                   })
                   const formData = new FormData();
                   formData.append('file',file)
@@ -539,7 +552,10 @@ export default {
                   }
                   getBase64(file, (imageUrl) => {
                         this.imageUrl2 = imageUrl
-                        this.loading = false
+                        this.loading = false;
+                        this.form.setFieldsValue({
+                              avatar: imageUrl,
+                        });
                   })
                   const formData = new FormData();
                   formData.append('file',file)
@@ -565,7 +581,10 @@ export default {
                   }
                   getBase64(file, (imageUrl) => {
                         this.imageUrl3 = imageUrl
-                        this.loading = false
+                        this.loading = false;
+                        this.form.setFieldsValue({
+                              imgs: imageUrl,
+                        });
                   })
                   const formData = new FormData();
                   formData.append('file',file)

@@ -109,7 +109,7 @@ export default {
         line-height: 28px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.85);
-        margin-bottom: 16px;
+        margin-bottom: 5px;
         flex: auto;
       }
       .logo {
@@ -123,7 +123,7 @@ export default {
         flex: auto;
         color: rgba(0, 0, 0, 0.45);
         line-height: 22px;
-
+        padding-bottom: 10px;
         .link {
           margin-top: 16px;
           line-height: 24px;

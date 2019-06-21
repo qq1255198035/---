@@ -83,9 +83,80 @@ export function starUpdate(
        }
 // 经纪人删除明星
 export function starDel(athleteId) {
-         return axios({
-           url: '/vue/agent/starDel',
-           method: 'post',
-           data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), athleteId: athleteId })
-         })
-       }
+  return axios({
+    url: '/vue/agent/starDel',
+    method: 'post',
+    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), athleteId: athleteId })
+  })
+}
+// 获取我要参加列表
+export function searchCampList(startime, endtime, offset){
+    return axios({
+      url: '/vue/agent/searchCampListForAgent',
+      method: 'post',
+      data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), startime: startime, endtime: endtime, limit: 4, offset: offset })
+    })
+}
+// 选择明星接口
+export function chooseStar() {
+  return axios({
+    url: '/vue/agent/chooseStar',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN)
+    })
+  })
+}
+// 我要参加提交接口
+export function wantJoin(campId, athleteId, cost, details) {
+  return axios({
+    url: '/vue/agent/wantJoin',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      campId: campId,
+      athleteId: athleteId,
+      cost: cost,
+      details: details
+    })
+  })
+}
+// 申请记录列表
+export function applicationList(startime, endtime, condition, offset) {
+  return axios({
+    url: '/vue/agent/searchApplicationRecord',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      startime: startime,
+      endtime: endtime,
+      condition: condition,
+      limit: 10,
+      offset: offset
+    })
+  })
+}
+// 申请记录
+export async function joinCampAll(year, month) {
+  return axios({
+    url: '/vue/agent/searchMyJoinCampAll',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      year: year,
+      month: month
+    })
+  })
+}
+// 查看明星参加活动详细
+export async function searchDetail(campId) {
+return axios({
+  url: '/vue/agent/searchMyJoinCampDetail',
+  method: 'post',
+  data: qs.stringify({
+    token: Vue.ls.get(ACCESS_TOKEN),
+    campId: campId,
+    
+  })
+})
+}

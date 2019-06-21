@@ -309,3 +309,13 @@ export function addTransferMoney(payCompany, receiveCompany, payment, balance, p
             })
       })
 }
+// 获取头部未审批数据
+export function rightInfo() {
+      return axios({
+            url: '/vue/rightInfo',
+            method: 'post',
+            data: qs.stringify({
+                  token: Vue.ls.get(ACCESS_TOKEN), 
+            })
+      })
+}

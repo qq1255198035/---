@@ -105,7 +105,7 @@
 import { timeFix } from '@/utils/util'
 import { getSponsorshipdetails, getHandActivities, getUserInformation, getSponsoredTweets, getMyFiveNews, getMyAllNews, getStarNum, getSponsorNum, getActiveNum } from '@api/hand'
 import { mapActions,mapGetters } from 'vuex'
-import api from "@/api/index";
+
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 

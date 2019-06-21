@@ -22,12 +22,12 @@
                         </v-chart>
                         <div class="calc-price">
                           总计：￥
-                          <span>10000</span>
+                          <span>{{sponsorTotal}}</span>
                         </div>
                     </a-col>
                     <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
-                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl"/>
+                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl1"/>
                         <v-tooltip :showTitle="false" dataKey="item*percent" />
                         <v-axis />
                         <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
@@ -35,7 +35,7 @@
                       </v-chart>
                       <div class="calc-price">
                           总计：￥
-                          <span>10000</span>
+                          <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
                   </a-row>
@@ -51,8 +51,9 @@
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           
           <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
-            <a slot="extra">全部消息</a>
-            <div>
+            <a slot="extra" @click="$router.push({name:'tzxx'})">全部消息</a>
+            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="projects.length == 0">暂无信息</p>
+            <div v-else>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
@@ -79,37 +80,26 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapGetters } from 'vuex'
-import { headMsg } from '@/api/common'
+import { headMsg,piesData } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 
-import { getRoleList, getServiceList } from '@/api/manage'
+
 const sourceData = [
-  { item: '现金', count: 32.2 },
-  { item: '实物', count: 21 },
+  { item: '现金', count: null },
+  { item: '实物', count: null },
   
 ]
 const sourceData1 = [
-  { item: '未付', count: 60 },
-  { item: '已付', count: 10 },
+  { item: '未付', count: null },
+  { item: '已付', count: null },
   
 ]
 const DataSet = require('@antv/data-set')
 const dv = new DataSet.View().source(sourceData)
 const dv1 = new DataSet.View().source(sourceData1)
-dv.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
-dv1.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
+
 const pieScale = [{
   dataKey: 'percent',
   min: 0,
@@ -133,6 +123,8 @@ export default {
       pieData1,
       sourceData,
       sourceData1,
+      sponsorTotal:'',
+      agentTotal:'',
       c:["item", ["#4275FC","#41BDFD",]],
       c1:["item", ["#F56367","#FFB535",]],
       projects: [],
@@ -156,7 +148,17 @@ export default {
       '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
       '</tr>';
   },
-      
+      itemTpl1: (value, color, checked, index) => {
+        const obj = dv1.rows[index];
+        checked = checked ? 'checked' : 'unChecked';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
+          '" data-value="' + value + '" data-color=' + color +
+          ' style="cursor: pointer;font-size: 14px;">' +
+          '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
+          '<span class="g2-legend-text">' + value + '</span></td>' +
+          '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
+          '</tr>';
+      },
       // data
       
       
@@ -260,15 +262,16 @@ export default {
   },
   created () {
     this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
-
+    this.avatar = this.$store.getters.avatar
+    console.log(this.avatar)
     
   },
   mounted () {
-    this.getHeadMsg()
+    this.getHeadMsg();
+    this.getPiesData()
   },
   methods: {
-    ...mapGetters(['nickname', 'welcome']),
+    ...mapGetters(['nickname']),
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){
@@ -277,6 +280,31 @@ export default {
         }
       })
     },
+    getPiesData(){
+      piesData().then(res=>{
+        if (res.code == 1000) {
+          console.log(res)
+          this.pieData[0].count= res.data.money;
+          this.pieData[1].count= res.data.goods;
+          this.pieData1[0].count= res.data.unpaid;
+          this.pieData1[1].count= res.data.paid;
+          this.sponsorTotal = res.data.sponsorTotal;
+          this.agentTotal = res.data.agentTotal
+          dv.transform({
+            type: 'percent',
+            field: 'count',
+            dimension: 'item',
+            as: 'percent'
+          })
+          dv1.transform({
+            type: 'percent',
+            field: 'count',
+            dimension: 'item',
+            as: 'percent'
+          })
+        }
+      })
+    }
   },
   filters: {
     

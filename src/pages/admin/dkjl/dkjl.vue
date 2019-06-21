@@ -50,7 +50,7 @@
 import { mixinsTitle } from "@/utils/mixin.js";
 import HeadInfo from '@/components/tools/HeadInfo'
 import { STable } from '@/components'
-import { getServiceList } from '@/api/manage'
+
 import { transferMoneyList } from "@/api/admin";
 export default {
       components: {

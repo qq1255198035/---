@@ -69,7 +69,7 @@
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
                                                             
-                                                            <a-button type="primary" class="primary" @click="$router.push({name:'jjrxq'})">查 看</a-button>
+                                                            <a-button type="primary" class="primary" @click="$router.push({name:'jjrxq',params:{id: item.key}})">查 看</a-button>
                                                       </div>
                                                 </transition>
                                                 
@@ -210,7 +210,7 @@ export default {
                   loading:false,
                   btnDsiable1: false,
                   btnDsiable2: false,
-                  loadingMore: true,
+                  loadingMore: false,
                   cardItemData1:[],  
                   cardItemData2:[],  
                   condition: '',

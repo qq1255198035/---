@@ -1,7 +1,7 @@
 <template>
       <div id="wdzz">
             <div class="input-box">
-                  <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                  <a-form-item label="活动日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                         <a-range-picker @change="changeDate" class="my-picker"/>
                   </a-form-item>
                   <a-button type="primary" icon="search" @click="search">搜 索</a-button>
@@ -27,7 +27,15 @@
                                     </span>
                               </a-col>
                         </div>
-                        <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table"></a-table>
+                        <div class="my-collapse">
+                              <a-collapse>
+                                    <a-collapse-panel header="赞助纪录">
+                                          <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table"></a-table>
+                                    </a-collapse-panel>
+                              </a-collapse>
+                        </div>
+                        
+                        
                   </div>  
             </div>
             <div style="text-align: center; margin-top: 30px;">
@@ -98,7 +106,9 @@
                   }
                   
             }
-            
+            .my-collapse{
+                  margin-top: 20px;
+            }
       }
       
 }
@@ -145,7 +155,7 @@ export default {
                         },
                         {
                               title: '实物赞助',
-                              dataIndex: 'product',
+                              dataIndex: 'productVal',
                               
                         },
                         {
