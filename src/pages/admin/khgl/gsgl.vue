@@ -269,7 +269,7 @@ export default {
                                     return item.status == 1
                               })
                               this.cardItemData1 = this.cardItemData1.concat(cardItemData3);
-                              this.loadingMore = false;
+                              
                         }
                   })
 
@@ -290,7 +290,7 @@ export default {
                                     return item.status == 0
                               })
                               this.cardItemData2 = this.cardItemData2.concat(cardItemData4)
-                              this.loadingMore = false;
+                              
                               
                         }
                   })

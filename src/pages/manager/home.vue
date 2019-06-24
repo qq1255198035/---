@@ -75,6 +75,7 @@ import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 import { headMsg,piesData } from '@/api/common'
+import { applicationList } from "@/api/manager";
 const sourceData1 = [
   { item: '未付', count: null },
   { item: '已付', count: null },
@@ -130,86 +131,33 @@ export default {
       // data
       operationColumns: [
         {
-          title: '编号',
-          dataIndex: 'number',
-          key: 'number'
+            title: '编号',
+            dataIndex: 'key',
         },
         {
-          title: '活动名称',
-          dataIndex: 'name',
-          key: 'name'
-        },
-        
-        {
-          title: '参与明星',
-          dataIndex: 'cymx',
-          key: 'cymx',
-          
+            title: '活动名称',
+            dataIndex: 'campname'
         },
         {
-          title: '活动时间',
-          dataIndex: 'hdss',
-          key: 'hdss'
+            title: '已付款',
+            dataIndex: 'paid',
         },
         {
-          title: '出厂总额',
-          dataIndex: 'ccze',
-          key: 'ccze'
+              title: '活动时间',
+              dataIndex: 'publishTime'
         },
         {
-          title: '已付款',
-          dataIndex: 'yfk',
-          key: 'yfk'
+              title: '参加明星',
+              dataIndex: 'username',
         },
+        {
+              title: '出场总额',
+              dataIndex: 'cost',
+        },
+                       
        
       ],
-      operation1: [
-            {
-                  key: '1',
-                  number: '01',
-                  name: '篮球',
-                  cymx: '姚明',
-                  hdss: '2016-09-21  08:50:08',
-                  ccze: '2.00',
-                  yfk: '1000',
-            },
-            {
-                  key: '2',
-                  number: '01',
-                  name: '篮球',
-                  cymx: '姚明',
-                  hdss: '2016-09-21  08:50:08',
-                  ccze: '2.00',
-                  yfk: '1000',
-            },
-            {
-                  key: '3',
-                  number: '01',
-                  name: '篮球',
-                  cymx: '姚明',
-                  hdss: '2016-09-21  08:50:08',
-                  ccze: '2.00',
-                  yfk: '1000',
-            },
-            {
-                  key: '4',
-                  number: '01',
-                  name: '篮球',
-                  cymx: '姚明',
-                  hdss: '2016-09-21  08:50:08',
-                  ccze: '2.00',
-                  yfk: '1000',
-            },
-            {
-                  key: '5',
-                  number: '01',
-                  name: '篮球',
-                  cymx: '姚明',
-                  hdss: '2016-09-21  08:50:08',
-                  ccze: '2.00',
-                  yfk: '1000',
-            },
-      ],
+      operation1: [],
       
     }
   },
@@ -221,12 +169,12 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.$host + this.$store.getters.avatar
-    console.log(this.avatar)
     
   },
   mounted () {
     this.getHeadMsg();
     this.getPieData()
+    this.getApplicationList('','','',1)
     // this.conlog();
   },
   methods: {
@@ -254,7 +202,21 @@ export default {
             })
         }
       })
-    }
+    },
+    getApplicationList(startime, endtime, condition, offset){
+        applicationList(startime, endtime, condition, offset).then(res=>{
+              if(res.code == 1000){
+                    console.log(res)
+                    let key = 'key'
+                    
+                    this.operation1 = res.page.rows
+                    
+                    this.operation1.map((item,index)=>{
+                          item[key] = index
+                    })
+              }
+        })
+  },
   },
   filters: {
     
@@ -277,11 +239,12 @@ export default {
     position: relative;
     height: 227px;
     overflow: hidden;
-		margin-bottom: 24px;
-      .item-row{
+    margin-bottom: 24px;
+    .item-boxes{
+          .item-row{
         position: absolute;
         left: 0;
-        top: 0px;
+        top: -318px;
           .item-box{
           display: flex;
           align-items: flex-start;
@@ -324,6 +287,8 @@ export default {
           }
         }
       }
+    }
+      
       }
       
 }

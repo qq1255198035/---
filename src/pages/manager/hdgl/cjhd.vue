@@ -117,7 +117,7 @@ export default {
                   columns: [
                         {
                               title: '参加明星',
-                              dataIndex: 'name'
+                              dataIndex: 'details'
                         },
                         {
                               title: '出场总额',
@@ -138,7 +138,6 @@ export default {
              var date = new Date();
              var year = date.getFullYear();
              var month = date.getMonth();
-             console.log(month)
              this.getJoinCampAll(year,month+1)
       },
       methods: {
@@ -146,7 +145,7 @@ export default {
                   joinCampAll(year,month).then(res=>{
                         if (res.code == 1000) {
                               this.dateList = res.data
-                              console.log(this.dateList)
+                              console.log(res)
                         }
                   })
             },

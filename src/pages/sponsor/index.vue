@@ -84,7 +84,7 @@ import { headMsg,piesData } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
-
+import { searchSponsor } from "@/api/sponsor";
 
 const sourceData = [
   { item: '现金', count: null },
@@ -165,7 +165,7 @@ export default {
       operationColumns: [
         {
           title: '编号',
-          dataIndex: 'number',
+          dataIndex: 'key',
           key: 'number'
         },
         {
@@ -176,83 +176,37 @@ export default {
         
         {
           title: '推广形式',
-          dataIndex: 'tgxs',
+          dataIndex: 'ssKind',
           key: 'tgxs'
         },
         {
           title: '赞助形式',
-          dataIndex: 'zzxs',
+          dataIndex: 'sponsorship',
           key: 'zzxs'
         },
         {
           title: '现金资助',
-          dataIndex: 'xjzz',
+          dataIndex: 'cash',
           key: 'xjzz'
         },
         {
           title: '实物赞助',
-          dataIndex: 'swzz',
+          dataIndex: 'product',
           key: 'swzz'
         },
         {
           title: '赞助金额',
-          dataIndex: 'zzje',
+          dataIndex: 'tolMoney',
           key: 'zzje'
         },
         {
           title: '已付款',
-          dataIndex: 'yfk',
+          dataIndex: 'paid',
           key: 'yfk'
         },
         
       ],
-      operation1: [
-            {
-                  key: '1',
-                  number: '01',
-                  name: '篮球比赛',
-                  tgxs: '冠名',
-                  zzxs: '现金+实物',
-                  xjzz: '1000',
-                  swzz: '30 * 衣服',
-                  zzje: '1000',
-                  yfk: '1000',
-            },
-            {
-                  key: '2',
-                  number: '02',
-                  name: '篮球比赛',
-                  tgxs: '冠名',
-                  zzxs: '现金+实物',
-                  xjzz: '1000',
-                  swzz: '30 * 衣服',
-                  zzje: '1000',
-                  yfk: '1000',
-            },
-            {
-                  key: '3',
-                  number: '03',
-                  name: '篮球比赛',
-                  tgxs: '冠名',
-                  zzxs: '现金+实物',
-                  xjzz: '1000',
-                  swzz: '30 * 衣服',
-                  zzje: '1000',
-                  yfk: '1000',
-            },
-            {
-                  key: '4',
-                  number: '04',
-                  name: '篮球比赛',
-                  tgxs: '冠名',
-                  zzxs: '现金+实物',
-                  xjzz: '1000',
-                  swzz: '30 * 衣服',
-                  zzje: '1000',
-                  yfk: '1000',
-            },
-      ],
-      
+      operation1: [],
     }
   },
   computed: {
@@ -268,7 +222,8 @@ export default {
   },
   mounted () {
     this.getHeadMsg();
-    this.getPiesData()
+    this.getPiesData();
+    this.getSponsorList('','','',1)
   },
   methods: {
     ...mapGetters(['nickname']),
@@ -304,7 +259,20 @@ export default {
           })
         }
       })
-    }
+    },
+    getSponsorList(name,startime, endtime, offset){
+          searchSponsor(name,startime, endtime, offset).then(res=>{
+                if(res.code == 1000){
+                      console.log(res)
+                      let key = 'key';
+                      this.operation1 = res.page.rows;
+                      
+                      this.operation1.map((item,index)=>{
+                            item[key] = index
+                      })
+                }
+          })
+    },
   },
   filters: {
     

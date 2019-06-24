@@ -110,7 +110,7 @@ import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   data() {
     return {
-      personInfo: '',
+      personInfo: {},
       places: '',
       imgUrl,
       imgUrl1,
@@ -143,9 +143,9 @@ export default {
       }
       getUserInformation(params).then(res => {
         console.log(res)
-        this.personInfo = res.data
-        this.phoneFirst = res.data.phone.split(',')[0]
-        this.phoneLast = res.data.phone.split(',')[1]
+        this.personInfo = res.data;
+        this.phoneFirst = res.data.phone.split(',')[0] || '';
+        this.phoneLast = res.data.phone.split(',')[1] || '';
       })
     },
     _getPlace() {
