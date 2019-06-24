@@ -4,28 +4,32 @@
     <a-row :gutter="200" type="flex" justify="center" style="padding: 20px 0">
       <a-col :lg="9">
         <div>
-          <a-form layout="vertical">
+          <a-form layout="vertical" :form="form">
             <a-form-item label="邮箱">
               <a-input placeholder="input placeholder" :disabled="true" v-model="personInfo.email"/>
             </a-form-item>
             <a-form-item label="公司名称">
-              <a-input placeholder="input placeholder" v-model="personInfo.name"/>
+              <a-input placeholder="input placeholder"
+                v-decorator="['companyName',{rules: [{ required: true, message: '公司名称' }]}]"
+              />
             </a-form-item>
             <a-form-item label="公司网址">
-              <a-input placeholder="input placeholder" v-model="personInfo.web"/>
+              <a-input placeholder="input placeholder"
+                v-decorator="['webName',{rules: [{ required: true, message: '公司网址' }]}]"
+              />
             </a-form-item>
             <a-form-item label="公司简介">
               <a-textarea
                 placeholder="input placeholder"
                 :autosize="{ minRows: 6 }"
-                v-model="personInfo.intro"
+                v-decorator="['textName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-form-item label="国家地区">
               <a-select
                 :defaultValue="personInfo.country"
                 @change="countryBtn"
-                v-model="personInfo.country"
+                v-decorator="['countryName',{rules: [{ required: true, message: '公司简介' }]}]"
               >
                 <a-select-option value="中国">中国</a-select-option>
                 <a-select-option value="香港">香港</a-select-option>
@@ -33,34 +37,39 @@
             </a-form-item>
             <a-form-item label="所在省市">
               <div class="select-box">
-                <a-cascader
-                  :fieldNames="{ label: 'value', value: 'label', children: 'children' }"
-                  :options="activeityPlace"
-                  @change="onChange"
-                  :placeholder="places"
-                  :showSearch="true"
-                />
+                
+                <a-select
+                style="width:100%"
+                  placeholder="请选择"
+                  v-decorator="['addressName',{rules: [{ required: true, message: '公司简介' }]}]"
+                >
+                  <a-select-option
+                    v-for="(item, index) in activeityPlace"
+                    :key="index"
+                    :value="item.code"
+                  >{{item.areaName}}</a-select-option>
+                </a-select>
               </div>
             </a-form-item>
             <a-form-item label="街道地址">
               <a-textarea
                 placeholder="input placeholder"
                 :autosize="{ minRows: 6 }"
-                v-model="personInfo.compAddr"
+                v-decorator="['placeName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-form-item label="联系人">
               <a-input
                 placeholder="input placeholder"
                 :autosize="{ minRows: 6 }"
-                v-model="personInfo.contact"
+                v-decorator="['contactName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-input-group compact>
               <a-form-item label="联系电话">
                 <div class="input-group">
-                  <a-input style="width: 30%" defaultValue="0571" v-model="phoneFirst"/>
-                  <a-input style="width: 68%" defaultValue="26888888" v-model="phoneLast"/>
+                  <a-input style="width: 100%" defaultValue="26888888"
+                    v-decorator="['phoneName',{rules: [{ required: true, message: '公司简介' }]}]"/>
                 </div>
               </a-form-item>
             </a-input-group>
@@ -72,7 +81,7 @@
         <div class="upload">
           <div class="top">
             <p>公司LOGO</p>
-            <a-avatar :src="personInfo.logo" :size="130"/>
+            <a-avatar :src="fileUrl" :size="130"/>
             <template>
               <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
@@ -83,7 +92,7 @@
           </div>
           <div class="top">
             <p>营业执照</p>
-            <a-avatar :src="personInfo.businessImg" :size="130"/>
+            <a-avatar :src="fileUrl1" :size="130"/>
             <template>
               <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload1">
                 <a-button>
@@ -144,8 +153,18 @@ export default {
       getUserInformation(params).then(res => {
         console.log(res)
         this.personInfo = res.data
-        this.phoneFirst = res.data.phone.split(',')[0]
-        this.phoneLast = res.data.phone.split(',')[1]
+        this.form.setFieldsValue({
+              companyName: res.data.name,
+              webName: res.data.web,
+              textName: res.data.email,
+              countryName: res.data.country,
+              addressName: res.data.area,
+              placeName: res.data.compAddr,
+              contactName: res.data.contact,
+              phoneName: res.data.phone,
+            })
+            this.fileUrl = res.data.logo
+            this.fileUrl1 = res.data.businessImg
       })
     },
     _getPlace() {
@@ -153,7 +172,7 @@ export default {
         console.log(res)
         this.activeityPlace = res.data
         console.log(this.placeName)
-        this.places = this.placeName[0].value
+        
         console.log(this.places)
       })
     },
@@ -163,16 +182,16 @@ export default {
       const params = {
         token: token,
         email: this.personInfo.email,
-        name: this.personInfo.name,
-        web: this.personInfo.web,
-        intro: this.personInfo.intro,
-        country: this.personInfo.country,
-        area: this.personInfo.area,
-        compAddr: this.personInfo.compAddr,
-        contact: this.personInfo.contact,
-        phone: this.phoneFirst + ',' + this.phoneLast,
+        name: this.form.getFieldValue('companyName'),
+        web: this.form.getFieldValue('webName'),
+        intro: this.form.getFieldValue('textName'),
+        country: this.form.getFieldValue('countryName'),
+        area: this.form.getFieldValue('addressName'),
+        compAddr: this.form.getFieldValue('placeName'),
+        contact: this.form.getFieldValue('contactName'),
+        phone: this.form.getFieldValue('phoneName'),
         logo: this.fileUrl,
-        businessImg: this.fileUrl1
+        businessImg: this.fileUrl1,
       }
       console.log(params)
       getChangeInformation(params).then(res => {
@@ -184,9 +203,9 @@ export default {
       this.personInfo.country = value
     },
     beforeUpload(file) {
-      getBase64(file, imageUrl => {
+      /*getBase64(file, imageUrl => {
         this.imgUrl = imgUrl
-      })
+      })*/
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
@@ -196,9 +215,9 @@ export default {
       })
     },
     beforeUpload1(file) {
-      getBase64(file, imageUrl, imgUrl => {
+      /*getBase64(file, imageUrl, imgUrl => {
         this.imgUrl1 = imgUrl
-      })
+      })*/
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
@@ -209,19 +228,15 @@ export default {
     },
     onChange(value) {
       console.log(value)
-      this.personInfo.area = value['0']
+      
     }
   },
   computed: {
-    placeName() {
-      setTimeout(() => {
-        return this.activeityPlace.filter(item => {
-        console.log(this.personInfo)
-        return item.label == this.personInfo.area
-      })
-      },1000)
-      
-    }
+    
+  },
+  beforeCreate() {
+    this.form = this.$form.createForm(this)
+    this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
   }
 }
 </script>

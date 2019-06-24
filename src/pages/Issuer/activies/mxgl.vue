@@ -84,7 +84,7 @@
                     <a-button
                       type="primary"
                       class="primary"
-                      @click="$router.push({name: 'starsdetail', query: {userId: item.recordId}})"
+                      @click="$router.push({name: 'issuerMxxq', query: {userId: item.recordId}})"
                     >查 看</a-button>
                   </div>
                 </transition>
@@ -276,7 +276,7 @@ export default {
     // 参加明星
     _getJoinStar() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId
+      const campId = this.$route.params.campId
       const params = {
         token: token,
         campId: campId

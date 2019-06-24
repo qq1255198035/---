@@ -91,6 +91,20 @@
                   @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
               </div>
+              <div class="button-box" v-if="item.status == 30">
+                <a-button
+                  ghost
+                  class="btn-success"
+                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
+                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
+                <div>
+                  <a-button
+                    ghost
+                    class="btn-warning"
+                    @click="$router.push({name: 'issuerCjhd', params: {campId: item.campId}})"
+                  >&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
+                </div>
+              </div>
               <div class="button-box" v-if="item.status == 10">
                 <a-button
                   ghost
@@ -113,7 +127,11 @@
             </div>
           </div>
         </a-col>
+        
       </div>
+      <div slot="footer" v-if="cardList.length > 0" style="text-align: center; margin-top: 16px;">
+          <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+        </div>
       <div class="hide-item" v-else>
         <a-col :span="8">
           <a-card title :bordered="false" :body-style="{padding: 20}">
@@ -151,7 +169,12 @@ export default {
       avtiveityDate: '',
       searchPlace: '',
       searchClassify: '',
-      searchText: ''
+      searchText: '',
+      loading: true,
+      loadingMore: false,
+      offset:1,
+      btnDsiable:false,
+      pages:0,
     }
   },
   created() {
@@ -182,6 +205,37 @@ export default {
       getClassify().then(res => {
         console.log(res)
         this.activeityClass = res.data
+      })
+    },
+    loadMore() {
+      this.offset++
+      this.loadingMore = true
+      this.loading = true
+      const token = this.$ls.get('Access-Token')
+      const params = {
+        token: token,
+        offset: this.offset
+      }
+      console.log(params)
+      getHandActivities(params).then(res => {
+        console.log(res)
+        if (res.code == 1000) {
+          this.cardList = this.cardList.concat(res.page.rows)
+          console.log(this.cardList)
+          let page = parseInt(this.pages)
+          if (res.page.offset > page) {
+            this.btnDsiable = true
+            this.$message.warning('已加载全部信息！')
+            this.loadingMore = false
+            this.loading = false
+            return
+          }
+          
+          this.loading = false
+          this.loadingMore = false
+          this.pages = res.page.pages
+          this.loading = false
+        }
       })
     },
     onSearch(value) {

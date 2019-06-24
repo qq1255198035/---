@@ -10,7 +10,7 @@
                                         {{title}}
                                     </h2>
                                     <p>时间：{{start}}</p>
-                                    <span><a-icon type="environment" class="my-icon"/>{{adress}}</span>
+                                    <span v-for="(item, index) in adress" :key="index"><a-icon type="environment"  class="my-icon"/>{{item.area_name}}</span>
                         </div>
                   </a-col>
                   <a-col :span="10">
@@ -135,13 +135,13 @@ export default {
                   type: String,
             },
             adress: {
-                  type: String,
+                  type: Array,
             },
             type: {
                   type: String,
             },
             num: {
-                  type: String,
+                  type: Number,
             },
             stars: {
                   type: Array,
