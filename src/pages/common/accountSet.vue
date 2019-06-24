@@ -119,7 +119,7 @@ import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   data() {
     return {
-      personInfo: '',
+      personInfo: {},
       places: '',
       imgUrl,
       imgUrl1,

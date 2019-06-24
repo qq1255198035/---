@@ -101,7 +101,7 @@ export default {
                               dataIndex: 'username',
                         },
                         {
-                              title: '出厂总额',
+                              title: '出场总额',
                               dataIndex: 'cost',
                         },
                         {
