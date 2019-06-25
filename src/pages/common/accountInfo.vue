@@ -50,7 +50,7 @@
   .account-center-avatarHolder {
     text-align: center;
     margin-bottom: 24px;
-
+ 
     & > .avatar {
       margin: 0 auto;
       width: 104px;
@@ -63,7 +63,7 @@
         width: 100%;
       }
     }
-
+ 
     .username {
       color: rgba(0, 0, 0, 0.85);
       font-size: 20px;
@@ -78,7 +78,7 @@
       padding-left: 26px;
       position: relative;
     }
-
+ 
     i {
       position: absolute;
       height: 14px;
@@ -87,7 +87,7 @@
       top: 4px;
       background: url(https://gw.alipayobjects.com/zos/rmsportal/pBjWzVAHnOOtAUvZmZfy.svg);
     }
-
+ 
     .tel {
       background-position: -44px -44px;
     }

@@ -214,6 +214,11 @@ export default {
                               this.$message.success('操作成功！');
                               this.visible = false;
                               this.confirmLoading = false;
+                              this.form.setFieldsValue({
+                                    stars: '',
+                                    ccfy: '',
+                                    desc: '',
+                              });
                         }
                   })
             },
@@ -259,12 +264,18 @@ export default {
                   this.form.validateFields((err,values) => {
                         if (!err) {
                               this.postWantJoin(this.key,values.stars,values.ccfy,values.desc)
+                              
                         }
                   },);
             },
             handleCancel(e) {
-                  console.log('Clicked cancel button');
+                  
                   this.visible = false
+                  this.form.setFieldsValue({
+                        stars: '',
+                        ccfy: '',
+                        desc: '',
+                  });
             },
            
            
