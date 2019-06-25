@@ -247,6 +247,8 @@ export default {
       const token = this.$ls.get('Access-Token')
       const params = {
         token: token,
+        limit: 10,
+        offset:1,
         startime: this.avtiveityDate ? this.avtiveityDate : '',
         area: this.searchPlace ? this.searchPlace : '',
         campCatalog: this.searchClassify ? this.searchClassify : '',

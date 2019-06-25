@@ -60,7 +60,7 @@
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="chinese"
+                  placeholder="中文名称"
                   class="my-input"
                   v-decorator="['chineseName',{rules: [{ required: true, message: '请输入中文名称' }]}]"
                 />
@@ -72,27 +72,27 @@
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="english"
+                  placeholder="英文名称"
                   class="my-input"
                   autocomplete="false"
                   v-decorator="['englishName',{rules: [{ required: true, message: '请输入英文' }]}]"
                 />
               </a-form-item>
-              <a-form-item label="选择日期" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+              <a-form-item label="活动日期" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                 <a-range-picker
                   style="width: 100%;"
                   @change="onChangeDate"
                   v-decorator="['rangePicker', {rules: [{ type: 'array', required: true, message: '请选择日期' }]}]"
                 />
               </a-form-item>
-              <a-form-item label="选择时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
+              <a-form-item label="活动时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
                 <a-time-picker
                   @change="onChangeTime"
                   v-decorator="['timePicker', {rules: [{ type: 'object', required: true, message: '请选择时间' }]}]"
                 />
               </a-form-item>
               <a-form-item
-                label="选择地点"
+                label="活动地点"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 1}"
                 :required="true"
@@ -547,7 +547,7 @@
                       v-if="col!='zzWay'"
                       style="margin: -5px 0"
                       :value="text"
-                      placeholder="columns[i].title"
+                      :placeholder="columns[i].title"
                       v-decorator="['requireName',{rules: [{ required: true, message: '请输入' }]}]"
                       @change="e => handleChange2(e.target.value, record.key, col)"
                     />
@@ -606,7 +606,7 @@
               :labelCol="{span: 3}"
             >
               <a-textarea
-                placeholder="requirdContent"
+                placeholder="合作要求"
                 class="my-input"
                 :autosize="{ minRows: 4, maxRows: 6 }"
                 v-decorator="['textYao',{rules: [{ required: true, message: '请输入公司名称' }]}]"
@@ -720,7 +720,7 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
-      zanZah: [{ label: '0', value: '活动赞助' }, { label: '1', value: '活动赞助' }, { label: '2', value: '活动赞助' }],
+      zanZah: [{ label: '0', value: '冠名赞助' }, { label: '1', value: '非冠名赞助' }, { label: '2', value: '其它赞助' }],
       xingShi: [{ label: '0', value: '形式' }, { label: '1', value: '形式' }, { label: '2', value: '形式' }],
       visible: false,
       confirmLoading: false,
@@ -935,10 +935,11 @@ export default {
       })
     },
     handleSubmit(e) {
-      this.dataTitle()
       console.log(223)
       e.preventDefault()
-      if (this.code == 1000 || this.code == 1001) {
+      console.log(this.code)
+      if (this.code == '1000' || this.code == '1001') {
+        const campId = this.$route.query.campId ? this.$route.query.campId : ''
         const params = {
           token: this.$ls.get('Access-Token'),
           campId: campId
@@ -1105,6 +1106,7 @@ export default {
             })
             console.log(res.data.list[0].createTime)
             this.imageUrl = this.$host + res.data.list[0].cover_img
+            this.fileUrl = res.data.list[0].cover_img
             console.log(this.imageUrl)
             this.areaList = res.data.listLoc
             this.addressJson.data = this.areaList
@@ -1748,24 +1750,25 @@ export default {
     },
     handleChange2(value, key, column) {
       console.log(value, key, column)
-      if (column == 'tgWay') {
+      /*if (column == 'tgWay') {
         if (/^[0-9]*$/.test(value)) {
           console.log('请输入文字')
           value = ''
         }
-      } else if (column == 'zzWay') {
+      }
+      if (column == 'zzWay') {
         if (/^[0-9]*$/.test(value)) {
           console.log('请输入文字')
           value = ''
         }
-      } else if (column == 'zzPrice') {
+      }*/
+      if (column == 'zzPrice') {
         console.log(/^\d+(\.\d{0,2})?$/.test(value))
         if (!/^\d+(\.\d{0,2})?$/.test(value)) {
           value = ''
         }
       } else if (column == 'zzNum') {
         if (!/^[0-9]+(.[0-9]{2})?$/.test(value)) {
-          console.log('请输入文字')
           value = ''
         }
       }

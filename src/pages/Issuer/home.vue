@@ -108,7 +108,20 @@ import { mapActions,mapGetters } from 'vuex'
 
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-
+const statusMap = {
+      0: {
+            status: 'processing',
+            text: '待审批'
+      },
+      20: {
+            status: 'success',
+            text: '已通过'
+      },
+      10: {
+            status: 'warning',
+            text: '创建中'
+      }
+}
 let sourceData = [{
               "item": "现金",
               "count": null
@@ -195,11 +208,6 @@ export default {
       // data
       operationColumns: [
         {
-          title: this.$t('header.HeadMenu.logout'),
-          dataIndex: 'num',
-          key: 'num'
-        },
-        {
           title: '活动名称',
           dataIndex: 'name',
           key: 'name'
@@ -218,7 +226,7 @@ export default {
           title: '状态',
           dataIndex: 'status',
           key: 'status',
-          /*scopedSlots: { customRender: 'status' }*/
+          scopedSlots: { customRender: 'status' }
         },
       ],
     }
@@ -282,7 +290,9 @@ export default {
     _getHandActivities() {
       const token = this.$ls.get('Access-Token')
       const params = {
-        token: token
+        token: token,
+        offset: 1,
+        limit: 10
       }
       getHandActivities(params).then(res => {
         console.log(res)
@@ -293,7 +303,9 @@ export default {
       const token = this.$ls.get('Access-Token')
       const params = {
         token: token
+        
       }
+      console.log(params)
       getMyFiveNews(params).then(res => {
         console.log(res)
         this.newsList = res.data
@@ -355,23 +367,11 @@ export default {
     },
   },
   filters: {
-    statusFilter (status) {
-      const statusMap = {
-        'agree': '已审批',
-        'reject': '驳回',
-        'authen': '已认证',
-        'agreeing': '未审批'
-      }
-      return statusMap[status]
+    statusFilter (type) {
+          return statusMap[type].text
     },
     statusTypeFilter (type) {
-      const statusTypeMap = {
-        'agree': 'success',
-        'reject': 'error',
-        'authen': 'processing',
-        'agreeing': 'warning'
-      }
-      return statusTypeMap[type]
+          return statusMap[type].status
     }
   }
 }

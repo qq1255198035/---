@@ -200,6 +200,16 @@ export default {
       console.log(params)
       getChangeInformation(params).then(res => {
         console.log(res)
+        if(res.code == 1000) {
+          this.$notification.success({
+              message: '成功',
+              description: '更新成功',
+              duration: 4
+            })
+          this.$router.push({
+            path: '/zhxx'
+          })
+        }
       })
     },
     countryBtn(value) {
