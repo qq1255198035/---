@@ -403,8 +403,8 @@ export default {
                                     lastname: res.data.surname,
                                     firstname: res.data.monicker,
                                     enname: res.data.enName,
-                                    works: res.data.catalog,
-                                    country : res.data.nationality,
+                                    works: parseInt(res.data.catalog),
+                                    country : parseInt(res.data.nationality),
                                     birthday: moment(res.data.birth || moment(), 'YYYY-MM-DD'),
                                     height: res.data.height,
                                     heavy: res.data.weight,
@@ -445,6 +445,7 @@ export default {
                         if (res.code == 1000) {
                               this.cardItemData = res.page.rows;
                               this.loadingMore = false
+                              console.log(res)
                         }
                   })
             },
