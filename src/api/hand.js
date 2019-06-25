@@ -148,6 +148,14 @@ export function getStarInfo(parameter) {
         data: qs.stringify(parameter)
     })
 }
+// 参与明星详情
+export function getStarDetails(parameter) {
+    return axios({
+        url: '/vue/organize/searchStarInfo',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
 // 我的赞助列表
 export function getMineSupport(parameter) {
     return axios({
@@ -273,6 +281,14 @@ export function getSubmitAudit(parameter) {
 export function getPlace(parameter) {
     return axios({
         url:'/vue/organize/area',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
+// 个人信息地点
+export function getAreaInfo(parameter) {
+    return axios({
+        url:'/vue/organize/areaList',
         method: 'post',
         data: qs.stringify(parameter)
     })

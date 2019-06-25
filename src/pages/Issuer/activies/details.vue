@@ -11,8 +11,15 @@
       :sponsors="data2"
       :status="status"
       :price="price"
-      :adress="adress"
-    ></glTitle>
+    >
+      <div slot="a">
+        <a-icon type="environment" class="my-icon"/>
+        <span>
+          
+          <span v-for="(item, index) in adress" :key="index">{{item.area_name}}</span>
+        </span>
+      </div>
+    </glTitle>
     <div class="details-content">
       <div class="details-header">
         <a-card title="活动进度">
@@ -454,6 +461,7 @@ export default {
   data() {
     return {
       activitiesList: '',
+      logo: '',
       current: '',
       status: '',
       starList: [],
@@ -471,11 +479,11 @@ export default {
       enName: '',
       contact: '',
       phone: '',
-      data,
+      data: [],
       columns,
-      data1,
+      data1: [],
       columns1,
-      data2,
+      data2: [],
       columns2,
       columns3,
       columns4,
@@ -489,14 +497,11 @@ export default {
       companyList1: '',
       closingDate: '',
       requirdContent: '',
-      dataTable: '',
-
+      dataTable: ''
     }
   },
-  created() {
-    
-  },
-  mounted() {
+  created() {},
+  activated() {
     this._getCheckActivitiesDetail()
     this._getPress()
     this._getActivityInformation()
@@ -508,7 +513,7 @@ export default {
   methods: {
     _getApprovalList() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -533,11 +538,12 @@ export default {
     },
     _getActivityInformation() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
       }
+      console.log(params)
       getActivityInformation(params).then(res => {
         console.log(res)
         this.data = res.data.listLoc
@@ -546,13 +552,15 @@ export default {
         this.start = activityDetail.createTime
         this.adress = res.data.listLoc
         this.capName = activityDetail.capName
-        this.campNum = parseInt(activityDetail.campNum)
-        this.price = activityDetail.price
+        this.campNum = activityDetail.campNum
+        this.price = res.data.amount
         this.email = activityDetail.email
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
         this.imgUrl = activityDetail.cover_img
+        this.logo = activityDetail.cover_img
+        console.log(this.campNum)
         if (activityDetail.status == 10) {
           this.status = '创建中'
         }
@@ -572,7 +580,7 @@ export default {
     },
     _getStarsDeails() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -584,7 +592,7 @@ export default {
     },
     _getSponsor() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -593,13 +601,13 @@ export default {
         console.log(res)
         this.data2 = res.data
         this.closingDate = res.endTime
-          this.requirdContent = res.demand
-          const dataArrty = res.data
+        this.requirdContent = res.demand
+        const dataArrty = res.data
       })
     },
     _getPress() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -611,7 +619,7 @@ export default {
     },
     _getCheckActivitiesDetail() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -626,12 +634,12 @@ export default {
     },
     _getExtension() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
       }
-      getExtension(params).then(res => {
+      getExtension().then(res => {
         console.log(res)
         this.data1 = res.data
         this.palyPlatfrom = res.platform

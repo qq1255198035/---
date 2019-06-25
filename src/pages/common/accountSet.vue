@@ -6,7 +6,7 @@
         <div>
           <a-form layout="vertical" :form="form">
             <a-form-item label="邮箱">
-              <a-input placeholder="input placeholder" :disabled="true" v-model="personInfo.email"/>
+              <a-input placeholder="input placeholder" :disabled="true" v-decorator="['email',{rules: [{ required: true, message: '公司名称' }]}]"/>
             </a-form-item>
             <a-form-item label="公司名称">
               <a-input placeholder="input placeholder"
@@ -27,7 +27,6 @@
             </a-form-item>
             <a-form-item label="国家地区">
               <a-select
-                :defaultValue="personInfo.country"
                 @change="countryBtn"
                 v-decorator="['countryName',{rules: [{ required: true, message: '公司简介' }]}]"
               >
@@ -46,8 +45,8 @@
                   <a-select-option
                     v-for="(item, index) in activeityPlace"
                     :key="index"
-                    :value="item.code"
-                  >{{item.areaName}}</a-select-option>
+                    :value="item.label"
+                  >{{item.value}}</a-select-option>
                 </a-select>
               </div>
             </a-form-item>
@@ -68,7 +67,7 @@
             <a-input-group compact>
               <a-form-item label="联系电话">
                 <div class="input-group">
-                  <a-input style="width: 100%" defaultValue="26888888"
+                  <a-input style="width: 100%" placeholder="26888888"
                     v-decorator="['phoneName',{rules: [{ required: true, message: '公司简介' }]}]"/>
                 </div>
               </a-form-item>
@@ -81,9 +80,9 @@
         <div class="upload">
           <div class="top">
             <p>公司LOGO</p>
-            <a-avatar :src="fileUrl" :size="130"/>
+            <img v-if="imgurl" :src="imgurl"  width="130" height="130" style="border-radius:50%;background:#808080"/>
             <template>
-              <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload">
+              <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
                   <a-icon type="upload"/>更换LOGO
                 </a-button>
@@ -92,9 +91,9 @@
           </div>
           <div class="top">
             <p>营业执照</p>
-            <a-avatar :src="fileUrl1" :size="130"/>
+            <img v-if="imgurl1" :src="imgurl1"  width="130" height="130" style="border-radius:50%;background:#808080"/>
             <template>
-              <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload1">
+              <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload1">
                 <a-button>
                   <a-icon type="upload"/>更换营业执照
                 </a-button>
@@ -112,8 +111,7 @@ function getBase64(img, callback) {
   reader.addEventListener('load', () => callback(reader.result))
   reader.readAsDataURL(img)
 }
-import imgUrl from '@/assets/a1.jpg'
-import imgUrl1 from '@/assets/a1.jpg'
+
 import { getChangeInformation, getPlace, getUpload, getUserInformation } from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
 export default {
@@ -121,8 +119,6 @@ export default {
     return {
       personInfo: {},
       places: '',
-      imgUrl,
-      imgUrl1,
       companyName: '',
       companyWeb: '',
       companyDesc: '',
@@ -134,7 +130,9 @@ export default {
       areaId: '',
       country: '',
       fileUrl: '',
-      fileUrl1: ''
+      fileUrl1: '',
+      imgurl:'',
+      imgurl1:''
     }
   },
   mixins: [mixinsTitle],
@@ -156,15 +154,21 @@ export default {
         this.form.setFieldsValue({
               companyName: res.data.name,
               webName: res.data.web,
-              textName: res.data.email,
+              email: res.data.email,
+              textName: res.data.intro,
               countryName: res.data.country,
               addressName: res.data.area,
               placeName: res.data.compAddr,
               contactName: res.data.contact,
               phoneName: res.data.phone,
             })
+            this.imgurl = this.$host + res.data.logo
             this.fileUrl = res.data.logo
+            console.log(this.imgurl)
+            this.imgurl1 = this.$host + res.data.businessImg
             this.fileUrl1 = res.data.businessImg
+            console.log(this.imgurl1)
+           
       })
     },
     _getPlace() {
@@ -176,12 +180,12 @@ export default {
         console.log(this.places)
       })
     },
-
+ 
     submitPerson() {
       const token = this.$ls.get('Access-Token')
       const params = {
         token: token,
-        email: this.personInfo.email,
+        email: this.form.getFieldValue('email'),
         name: this.form.getFieldValue('companyName'),
         web: this.form.getFieldValue('webName'),
         intro: this.form.getFieldValue('textName'),
@@ -191,7 +195,7 @@ export default {
         contact: this.form.getFieldValue('contactName'),
         phone: this.form.getFieldValue('phoneName'),
         logo: this.fileUrl,
-        businessImg: this.fileUrl1,
+        businessImg: this.fileUrl1
       }
       console.log(params)
       getChangeInformation(params).then(res => {
@@ -203,9 +207,10 @@ export default {
       this.personInfo.country = value
     },
     beforeUpload(file) {
-      /*getBase64(file, imageUrl => {
-        this.imgUrl = imgUrl
-      })*/
+      getBase64(file, (imageUrl) => {
+          this.imgurl = imageUrl
+            
+      })
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
@@ -215,9 +220,9 @@ export default {
       })
     },
     beforeUpload1(file) {
-      /*getBase64(file, imageUrl, imgUrl => {
-        this.imgUrl1 = imgUrl
-      })*/
+      getBase64(file, imageUrl => {
+        this.imgurl1 = imageUrl
+      })
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
@@ -243,7 +248,7 @@ export default {
 <style lang="less" scoped>
 #accountSet {
   background-color: #fff;
-
+ 
   .ant-form-item {
     width: 100%;
   }

@@ -36,7 +36,7 @@
         </a-list-item>
       </a-list>
       <div class="btn-bottom">
-        <a-button>取消</a-button>
+        <a-button @click="goHome">取消</a-button>
         <a-button type="primary" @click="handleSubmit">提交审批</a-button>
       </div>
       <a-alert v-if="alertVisible" banner :description="alertText" showIcon/>
@@ -82,13 +82,13 @@
                 <a-range-picker
                   style="width: 100%;"
                   @change="onChangeDate"
-                  v-decorator="['rangePicker', {rules: [{ required: true, message: '请选择日期' }]}]"
+                  v-decorator="['rangePicker', {rules: [{ type: 'array', required: true, message: '请选择日期' }]}]"
                 />
               </a-form-item>
               <a-form-item label="选择时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
                 <a-time-picker
                   @change="onChangeTime"
-                  v-decorator="['timePicker', {rules: [{ required: true, message: '请选择时间' }]}]"
+                  v-decorator="['timePicker', {rules: [{ type: 'object', required: true, message: '请选择时间' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -99,7 +99,7 @@
               >
                 <a-input-group compact style="width: 93%; margin-right: 8px">
                   <a-select
-                    defaultValue="{key: `${address}`}"
+                    defaultValue="请选择"
                     labelInValue
                     v-decorator="['placeName',{rules: [{ required: true, message: '请输入地址' }]}]"
                   >
@@ -253,7 +253,7 @@
                   :showUploadList="false"
                   :beforeUpload="beforeUpload"
                 >
-                  <img v-if="fileUrl || imageUrl" :src="imageUrl" alt="avatar">
+                  <img v-if="imageUrl" :src="imageUrl" alt="avatar">
                   <div v-else>
                     <a-icon :type="loading ? 'loading' : 'plus'"/>
                     <div class="ant-upload-text">上传</div>
@@ -520,9 +520,8 @@
               :labelCol="{span: 3}"
             >
               <a-date-picker
-                placeholder="closingDate"
                 @change="onClosingDate"
-                v-decorator="['closingDate',{rules: [{ required: true, message: '请输入时间' }]}]"
+                v-decorator="['closingDate',{rules: [{ type: 'object', required: true, message: '请输入时间' }]}]"
               />
             </a-form-item>
             <a-form-item
@@ -543,23 +542,28 @@
                   slot-scope="text, record"
                 >
                   <template v-if="record.editable">
-                    
                     <a-input
                       :key="col"
                       v-if="col!='zzWay'"
                       style="margin: -5px 0"
                       :value="text"
                       placeholder="columns[i].title"
-                      v-decorator="['requireName',{rules: [{ required: true, message: '请输入时间' }]}]"
+                      v-decorator="['requireName',{rules: [{ required: true, message: '请输入' }]}]"
                       @change="e => handleChange2(e.target.value, record.key, col)"
                     />
-                    <a-select :key="col" v-else
-                    :defaultValue="{ key: '请选择' }"
-                    @change="vlues"
+                    <a-select
+                      :key="col"
+                      v-else
+                      :defaultValue="{ key: '请选择' }"
+                      @change="vlues"
                       labelInValue
                       v-decorator="['xingShi2',{rules: [{ required: true, message: '请填写活动' }]}]"
                     >
-                      <a-select-option v-for="(item, index) in zanZah" :key="index" :value="item.label">{{item.value}}</a-select-option>
+                      <a-select-option
+                        v-for="(item, index) in zanZah"
+                        :key="index"
+                        :value="item.label"
+                      >{{item.value}}</a-select-option>
                     </a-select>
                   </template>
                   <template v-else>{{ text }}</template>
@@ -716,8 +720,8 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
-      zanZah: [{label:'0', value:'活动赞助'},{label:'1', value:'活动赞助'},{label:'2', value:'活动赞助'}],
-      xingShi: [{label:'0', value:'形式'},{label:'1', value:'形式'},{label:'2', value:'形式'}],
+      zanZah: [{ label: '0', value: '活动赞助' }, { label: '1', value: '活动赞助' }, { label: '2', value: '活动赞助' }],
+      xingShi: [{ label: '0', value: '形式' }, { label: '1', value: '形式' }, { label: '2', value: '形式' }],
       visible: false,
       confirmLoading: false,
       times: [],
@@ -754,7 +758,7 @@ export default {
       phoneLast: '',
       coverImg: '', //图片
       activityContent: '', // 活动内容
-      
+
       videoUrl: '', // 视频
       videoUrls: '', // 视频路径
       companyList: [], // 公司
@@ -880,7 +884,7 @@ export default {
     }
   },
   mounted() {},
-  created() {
+  activated() {
     this._getActivityTest()
     this.dataTitle()
     //this._getPress()
@@ -899,14 +903,14 @@ export default {
       })
     },
     dataTitle() {
-      if (this.$route.params.campId) {
+      if (this.$route.query.campId) {
         this.findIndex = 1
       } else {
         this.findIndex = 0
       }
       for (let i = 0; i < this.data.length; i++) {
-        console.log(this.$route.params.campId)
-        if (this.$route.params.campId) {
+        console.log(this.$route.query.campId)
+        if (this.$route.query.campId) {
           this.data[i].actions.title = '修改'
         } else {
           this.data[i].actions.title = '新增'
@@ -925,11 +929,38 @@ export default {
         console.log(res)
       })
     },
-
+    goHome() {
+      this.$router.push({
+        path: '/issuerHome'
+      })
+    },
     handleSubmit(e) {
       this.dataTitle()
       console.log(223)
       e.preventDefault()
+      if (this.code == 1000 || this.code == 1001) {
+        const params = {
+          token: this.$ls.get('Access-Token'),
+          campId: campId
+        }
+        console.log(params)
+        getSubmitAudit(params).then(res => {
+          console.log(res)
+          if (res.data.code == '1') {
+            this.$notification.success({
+              message: '成功',
+              description: '提交成功',
+              duration: 4
+            })
+          }
+        })
+      } else {
+        this.$notification['error']({
+          message: '失败',
+          description: '提交失败，请先填写活动基本信息',
+          duration: 4
+        })
+      }
       const {
         form: { validateFields }
       } = this
@@ -939,24 +970,9 @@ export default {
         console.log(error)
         console.log(values)
         const params = { ...values }
-        let campId = this.$route.params.campId ? this.$route.params.campId : ''
+        let campId = this.$route.query.campId ? this.$route.query.campId : ''
         console.log(this.findIndex)
         if (!error) {
-          const params = {
-            token: this.$ls.get('Access-Token'),
-            campId: campId
-          }
-          console.log(params)
-          getSubmitAudit(params).then(res => {
-            console.log(res)
-            if (res.data.code == '1') {
-              this.alertVisible = true
-              this.alertText = '提交成功'
-              setTimeout(() => {
-                this.alertVisible = false
-              }, 1000)
-            }
-          })
         }
         console.log(params)
       })
@@ -1049,7 +1065,7 @@ export default {
     },
     showModal(index, item) {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId ? this.$route.params.campId : ''
+      const campId = this.$route.query.campId ? this.$route.query.campId : ''
       const params = {
         token: token,
         campId: campId
@@ -1071,9 +1087,9 @@ export default {
             const dateList = res.data.list[0].publishTime
             const endTime = res.data.list[0].endTime
             const list = []
-          if(dateList && endTime) {
-            list.push(moment(dateList, 'YYYY-MM-DD'),moment(endTime, 'YYYY-MM-DD'))
-          }
+            if (dateList && endTime) {
+              list.push(moment(dateList, 'YYYY-MM-DD'), moment(endTime, 'YYYY-MM-DD'))
+            }
             this.form.setFieldsValue({
               chineseName: res.data.list[0].name,
               englishName: res.data.list[0].enName,
@@ -1082,14 +1098,16 @@ export default {
               testNum: res.data.list[0].campNum,
               testName: res.data.list[0].contact,
               phoneName: res.data.list[0].phone,
+              placeName: { key: '110000', label: '北京市' },
               addressName: '北京市',
               rangePicker: list,
               timePicker: moment(res.data.list[0].createTime, 'HH:mm:ss')
             })
             console.log(res.data.list[0].createTime)
-             this.address  = 110000
-            this.imageUrl = res.data.list[0].cover_img
+            this.imageUrl = this.$host + res.data.list[0].cover_img
+            console.log(this.imageUrl)
             this.areaList = res.data.listLoc
+            this.addressJson.data = this.areaList
           } else {
             console.log(122)
             this.form.setFieldsValue({
@@ -1100,10 +1118,9 @@ export default {
               testNum: '',
               testName: '',
               phoneName: '',
-              /*placeName: '',
-            addressName: '',*/
-              rangePicker: '',
-              timePicker: ''
+              placeName: { key: '110000', label: '北京市' },
+              rangePicker: moment(),
+              timePicker: moment()
             })
             this.areaList = []
             this.imageUrl = ''
@@ -1119,15 +1136,14 @@ export default {
               textName: res.data[0].content
             })
             this.videoUrl = res.data[0].video
-          this.detailsImgs = res.data[0].imgs
+            this.detailsImgs = res.data[0].imgs
           } else {
             this.form1.setFieldsValue({
               textName: ''
             })
             this.videoUrl = ''
-          this.detailsImgs = []
+            this.detailsImgs = []
           }
-          
         })
       }
       if (index == 2) {
@@ -1145,29 +1161,13 @@ export default {
           this.tags6 = res.data.consumeAttr
           this.tags7 = res.data.jobAttr
           this.organizerTypeList = res.data.organizerTypeList
-          /*this.companyList = res.data
-        console.log(this.companyList)
-        this.selectedTags = res.tabInfo.campFeaturel
-        this.characteristic = this.selectedTags.join(',')
-        this.activeityExtension = res.tabInfo.campFeaturel
-        for (let i = 0; i < res.data.length; i++) {
-          if (res.data.length > 0) {
-            this.companyList.push({
-              name: res.data[i].anme,
-              workType: res.data[i].workType
-            })
-          }
-
-          this.companyJson.data = this.companyList
-          console.log(this.companyJson)
-        }*/
         })
         getExtension(params).then(res => {
           console.log(res)
           if (campId) {
             this.form2.setFieldsValue({
               pingName: res.platform,
-              companyTitle: '请选择',
+              companyTitle: { key: 133, label: '主办方' },
               companyName: '公司地址'
             })
             const selectArry = res.campFeature.split(',')
@@ -1186,7 +1186,8 @@ export default {
             }
           } else {
             this.form2.setFieldsValue({
-              pingName:''
+              pingName: '',
+              companyTitle: { key: 133, label: '主办方' },
             })
             this.companyList = []
             this.selectedTags = []
@@ -1201,47 +1202,47 @@ export default {
         getSponsor(params).then(res => {
           console.log(res)
           if (campId) {
-            this.form3.setFieldsValue( {
-              closingDate:moment(res.endTime, 'YYYY-MM-DD'),
-              textYao:res.demand
+            this.form3.setFieldsValue({
+              closingDate: res.endTime ? moment(res.endTime, 'YYYY-MM-DD') : '',
+              textYao: res.demand
             })
             const dataArrty = res.data
             const tableList = []
             const tableList1 = []
-            
+
             console.log(length)
-          for (let i = 0; i < dataArrty.length; i++) {
-            tableList.push({
-              ssKind: dataArrty[i].ss_kind,
-              sponsorship: dataArrty[i].sponsorship,
-              money: dataArrty[i].money,
-              num: dataArrty[i].num,
-              //bargain: isPrice,
-              bz: dataArrty[i].bz
-            })
-            const length = dataArrty.length
-            tableList1.push({
-              key: length === 0 ? '1' : (parseInt(i) + 1).toString(),
-              tgWay: dataArrty[i].ss_kind,
-              zzWay: dataArrty[i].sponsorship_name,
-              zzPrice: dataArrty[i].money,
-              zzNum: dataArrty[i].num,
-              remarks: dataArrty[i].bz,
-              editable: false,
-              isNew: false
-            })
-          }
-          this.supportAyyty = tableList
-          this.dataTable = tableList1
+            for (let i = 0; i < dataArrty.length; i++) {
+              tableList.push({
+                ssKind: dataArrty[i].ss_kind,
+                sponsorship: dataArrty[i].sponsorship,
+                money: dataArrty[i].money,
+                num: dataArrty[i].num,
+                //bargain: isPrice,
+                bz: dataArrty[i].bz
+              })
+              const length = dataArrty.length
+              tableList1.push({
+                key: length === 0 ? '1' : (parseInt(i) + 1).toString(),
+                tgWay: dataArrty[i].ss_kind,
+                zzWay: dataArrty[i].sponsorship_name,
+                zzPrice: dataArrty[i].money,
+                zzNum: dataArrty[i].num,
+                remarks: dataArrty[i].bz,
+                editable: false,
+                isNew: false
+              })
+            }
+            this.supportAyyty = tableList
+            this.dataTable = tableList1
           } else {
             this.form3.setFieldsValue({
               closingDate: moment(),
-              textYao:''
+              textYao: ''
             })
-            this.supportAyyty=[]
+            this.supportAyyty = []
             this.dataTable = []
           }
-          
+
           console.log(this.dataTable)
           console.log(this.supportAyyty)
           this.supportJson.data = this.supportAyyty
@@ -1252,11 +1253,19 @@ export default {
 
       console.log(index)
       this.title = item.title
-      console.log(this.$route.params.campId, this.$ls.get('code') == '1000')
-      if (this.$route.params.campId) {
+      console.log(this.$route.query.campId, this.$ls.get('code') == '1000')
+      if (this.$route.query.campId || this.code) {
         this.findIndex = 1
       } else {
         this.findIndex = 0
+      }
+
+      if (this.findIndex == 1) {
+        this.formShow = index
+        this.visible = true
+        this.alertVisible = false
+      } else if (this.findIndex == 0) {
+        this.formShow = 0
       }
       if (index == 0) {
         this.visible = true
@@ -1266,13 +1275,6 @@ export default {
         setTimeout(() => {
           this.alertVisible = false
         }, 1000)
-      }
-      if (this.findIndex == 1) {
-        this.formShow = index
-        this.visible = true
-        this.alertVisible = false
-      } else if (this.findIndex == 0) {
-        this.formShow = 0
       }
 
       console.log(this.findIndex)
@@ -1304,6 +1306,7 @@ export default {
       console.log(dateString)
     },
     addCompany() {
+      console.log(this.form2.getFieldValue('companyTitle'))
       this.companyKey = this.form2.getFieldValue('companyTitle').key
       this.companyPlace = this.form2.getFieldValue('companyName')
       this.companyName = this.form2.getFieldValue('companyTitle').label
@@ -1369,7 +1372,7 @@ export default {
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
       const token = this.$ls.get('Access-Token')
-      let campId = this.$route.params.campId ? this.$route.params.campId : ''
+      let campId = this.$route.query.campId ? this.$route.query.campId : ''
       console.log(this.form.validateFields)
       //活动基本信息
       if (this.formShow == 0) {
@@ -1397,10 +1400,7 @@ export default {
             this.endTime = dateValue.rangePicker[1]
             this.concreteTime = dateValue.timePicker
             this.publishTime = dateValue.rangePicker[0]
-          }
-        })
-        console.log(this.chinese)
-        const params = {
+            const params = {
           campId: campId,
           token: token,
           name: this.chinese,
@@ -1423,16 +1423,24 @@ export default {
           this.code = res.data.code
           if (res.data.code == '1000' || res.data.code == '1001') {
             this.findIndex = 1
+            this.$notification.success({
+              message: '成功',
+              description: ('创建成功'),
+              duration: 4
+            })
             setTimeout(() => {
-              this.visible = true
+              this.visible = false
               this.confirmLoading = false
             }, 2000)
           } else {
             this.findIndex = 0
           }
         })
+          }
+        })
+        
       }
-      
+
       // 活动详情
       if (this.formShow == 1) {
         this.form1.validateFields((err, values) => {
@@ -1443,9 +1451,7 @@ export default {
             this.activityContent = values.textName
             /*this.videoUrls = values.englishName
             this.detailImgs = dateValue.range - picker[1]*/
-          }
-        })
-        const params = {
+            const params = {
           token: token,
           campId: campId,
           content: this.activityContent,
@@ -1456,12 +1462,20 @@ export default {
         getDetailsActivity(params).then(res => {
           console.log(res)
           if (res.data.code == '1000' || res.data.code == '1001') {
+            this.$notification.success({
+              message: '成功',
+              description: ('创建成功'),
+              duration: 4
+            })
             setTimeout(() => {
               this.visible = false
               this.confirmLoading = false
             }, 2000)
           }
         })
+          }
+        })
+        
       }
       // 活动推广
       if (this.formShow == 2) {
@@ -1473,9 +1487,7 @@ export default {
             this.companyPlace = values.companyName
             this.companyName = values.companyTitle
             this.palyPlatfrom = values.pingName
-          }
-        })
-        const params = {
+            const params = {
           token: token,
           campId: campId,
           jsonData: JSON.stringify(this.companyJson),
@@ -1487,12 +1499,20 @@ export default {
         getActivityPromotion(params).then(res => {
           console.log(res)
           if (res.data.code == '1000' || res.data.code == '1001') {
+            this.$notification.success({
+              message: '成功',
+              description: ('创建成功'),
+              duration: 4
+            })
             setTimeout(() => {
               this.visible = false
               this.confirmLoading = false
             }, 2000)
           }
         })
+          }
+        })
+        
       }
       // 活动赞助
       if (this.formShow == 3) {
@@ -1506,9 +1526,7 @@ export default {
             console.log(values)
             this.closingDate = dateValue.closingDate
             this.requirdContent = values.textYao
-          }
-        })
-        const params = {
+            const params = {
           token: token,
           campId: campId,
           jsonData: JSON.stringify(this.supportJson),
@@ -1517,18 +1535,27 @@ export default {
         }
         console.log(params)
         getEventSponsorship(params).then(res => {
+          
           console.log(res)
           if (res.data.code == 1000 || rea.data.code == 1001) {
+            this.$notification.success({
+              message: '成功',
+              description: ('创建成功'),
+              duration: 4
+            })
             setTimeout(() => {
               this.visible = false
               this.confirmLoading = false
             }, 2000)
           }
         })
+          }
+        })
+        
       }
     },
     handleCancel(e) {
-      console.log('Clicked cancel button')
+      this.confirmLoading = false
       this.visible = false
     },
     handleCancelImg(e) {
@@ -1555,7 +1582,7 @@ export default {
       }
     },
     beforeUpload(file) {
-      console.log(file.File)
+      console.log(file)
       getBase64(file, imageUrl => {
         this.imageUrl = imageUrl
         this.loading = false
@@ -1593,10 +1620,9 @@ export default {
         this.videoUrls = res.location
       })
     },
-    beforeChangeMore({ fileList, event}) {
+    beforeChangeMore({ fileList, event }) {
       console.log(fileList)
       console.log(event)
-      
     },
     handleCancel1() {
       this.previewVisible = false
@@ -1609,16 +1635,15 @@ export default {
       getUpload(formData).then(res => {
         console.log(res)
         console.log(this.detailsImgs)
-        if(res.location) {
+        if (res.location) {
           this.fileList.push({
             location: res.location,
             file_name: res.fileName,
             file_type: res.fileType
-            })
+          })
         }
         this.imgsJson.data = this.fileList
         console.log(this.fileList)
-        
       })
     },
     closeImg(file) {
@@ -1670,7 +1695,7 @@ export default {
       const zzWay1 = this.xingValue
       console.log(this.xingValue1)
       const { key, tgWay, zzWay, zzPrice, zzNum, remarks } = record
-      
+
       if (!tgWay || !zzWay || !zzPrice || !zzNum) {
         this.memberLoading = false
         this.$message.error('请填写完整成员信息。')
@@ -1678,17 +1703,17 @@ export default {
       } else {
         console.log(this.dataTable)
         const tableList = []
-        for(let i = 0;i <this.dataTable.length; i++) {
+        for (let i = 0; i < this.dataTable.length; i++) {
           tableList.push({
-          ssKind: this.dataTable[i].tgWay,
-          sponsorship: zzWay1,
-          money: this.dataTable[i].zzPrice,
-          num: this.dataTable[i].zzNum,
-          //bargain: isPrice,
-          bz: this.dataTable[i].remarks
-        })
+            ssKind: this.dataTable[i].tgWay,
+            sponsorship: zzWay1,
+            money: this.dataTable[i].zzPrice,
+            num: this.dataTable[i].zzNum,
+            //bargain: isPrice,
+            bz: this.dataTable[i].remarks
+          })
         }
-        
+
         this.supportAyyty = tableList
         console.log(this.supportAyyty)
         this.supportJson.data = this.supportAyyty
@@ -1710,7 +1735,7 @@ export default {
     },
     remove1(key) {
       console.log(key)
-      this.supportAyyty.splice(key-1, 1)
+      this.supportAyyty.splice(key - 1, 1)
       console.log(this.supportAyyty)
       this.dataTable.splice(key, 1)
       this.supportJson.data = this.supportAyyty

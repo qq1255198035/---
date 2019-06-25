@@ -5,35 +5,35 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar()">
+              <img :src="starDetils.avatar">
             </div>
-            <div class="username">{{ nickname() }}</div>
-            <p>Stephon Xavier Marbury</p>
+            <div class="username">{{starDetils.monicker}}{{starDetils.surname}}</div>
+            <p>{{starDetils.enName}}</p>
           </div>
           <div class="account-center-detail">
             <p>
-              <a-icon type="man"/>男
+              <a-icon type="man"/>{{sex}}
             </p>
             <p>
-              <a-icon type="bank" class="tel"></a-icon>美国
+              <a-icon type="bank" class="tel"></a-icon>{{starDetils.nationality}}
             </p>
             <p>
-              <a-icon type="sort-descending"/>188cm
+              <a-icon type="sort-descending"/>{{starDetils.height}}cm
             </p>
             <p>
-              <a-icon type="contacts"/>93公斤
+              <a-icon type="contacts"/>{{starDetils.weight}}公斤
             </p>
             <p>
               <a-icon type="environment"/>
-              <span>美国纽约州纽约市布鲁克林区科尼岛</span>
+              <span>{{starDetils.addr}}</span>
             </p>
           </div>
           <a-divider :dashed="true"/>
           <div class="account-center-team">
-            <p>公司名称：北京大学附属中学初中男篮</p>
-            <p>联系人：张凉冰</p>
-            <p>联系电话：15590030000</p>
-            <p>邮箱：jacky@mlsports.com.hk</p>
+            <p>公司名称：{{starDetils.company}}</p>
+            <p>联系人：{{starDetils.contact}}</p>
+            <p>联系电话：{{starDetils.phone}}</p>
+            <p>邮箱：{{starDetils.email}}</p>
           </div>
         </a-card>
       </a-col>
@@ -43,21 +43,13 @@
             <h5>公司简介</h5>
           </div>
           <div class="content">
-            <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
-            <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
-            <p>段落示意：蚂蚁金服设计平台 design.alipay.com，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。</p>
+           <p>{{starDetils.introduction}}</p>
           </div>
           <div class="title">
             <h5>个人图册</h5>
           </div>
           <div class="img-content">
-            <img :src="imgUrl" alt>
-            <img :src="imgUrl" alt>
-            <img :src="imgUrl" alt>
-            <img :src="imgUrl" alt>
-            <img :src="imgUrl" alt>
-            <img :src="imgUrl" alt>
-            <img :src="imgUrl" alt>
+            <img v-for="(item, index) in starDetils.imgs" :key="index" :src="item" alt>
           </div>
         </div>
       </a-col>
@@ -163,28 +155,32 @@
 </style>
 <script>
 import { mapGetters } from 'vuex'
-import { getStarInfo } from '@api/hand'
+import { getStarDetails } from '@api/hand'
 import imgUrl from '@/assets/123.png'
 export default {
   data() {
     return {
-      imgUrl
+      imgUrl,
+      starDetils: '',
+      sex: ''
     }
   },
   created() {
-    this._getStarInfo()
+    this._getStarDetails()
   },
   methods: {
-    _getStarInfo() {
+    _getStarDetails() {
       const token = this.$ls.get('Access-Token')
       const userId = this.$route.query.userId
       const params = {
         token: token,
-        userId: userId
+        athleteId: userId
       }
       console.log(params)
-      getStarInfo(params).then(res => {
+      getStarDetails(params).then(res => {
         console.log(res)
+        this.starDetils = res.data
+        this.sex = res.data.sex === '1' ? '男' : '女'
       })
     },
     ...mapGetters(['nickname', 'avatar'])

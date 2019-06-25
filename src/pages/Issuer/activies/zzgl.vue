@@ -673,7 +673,7 @@ export default {
   methods: {
     _getActivityInformation() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -714,7 +714,7 @@ export default {
     // 赞助审批列表
     _getApprovalList() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -765,7 +765,7 @@ export default {
     // 我的赞助
     _getMineSupport() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
@@ -803,7 +803,7 @@ export default {
     },
     handleOk(e) {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         orderId: this.orderId,
@@ -843,7 +843,7 @@ export default {
     success(item) {
       console.log(item)
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         orderId: item.orderId,

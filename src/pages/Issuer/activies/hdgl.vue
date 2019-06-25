@@ -69,18 +69,18 @@
                 <a-button
                   ghost
                   class="btn-success"
-                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
+                  @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-primary"
-                    @click="$router.push({name: 'zzsp', params: {campId: item.campId}})"
+                    @click="$router.push({path: '/zzsp', query: {campId: item.campId}})"
                   >赞助审批</a-button>
                   <a-button
                     ghost
                     class="btn-info"
-                    @click="$router.push({name: 'issuerMxsp', params: {campId: item.campId}})"
+                    @click="$router.push({path: '/issuerMxsp', query: {campId: item.campId}})"
                   >明星审批</a-button>
                 </div>
               </div>
@@ -88,20 +88,20 @@
                 <a-button
                   ghost
                   class="btn-success"
-                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
+                  @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
               </div>
               <div class="button-box" v-if="item.status == 30">
                 <a-button
                   ghost
                   class="btn-success"
-                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
+                  @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-warning"
-                    @click="$router.push({name: 'issuerCjhd', params: {campId: item.campId}})"
+                    @click="$router.push({path: '/issuerCjhd', query: {campId: item.campId}})"
                   >&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
                 </div>
               </div>
@@ -109,13 +109,13 @@
                 <a-button
                   ghost
                   class="btn-success"
-                  @click="$router.push({name:'issuerCkhd', params: {campId: item.campId}})"
+                  @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
                 >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-warning"
-                    @click="$router.push({name: 'issuerCjhd', params: {campId: item.campId}})"
+                    @click="$router.push({path: '/issuerCjhd', query: {campId: item.campId}})"
                   >&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
                   <a-button
                     ghost
@@ -187,11 +187,14 @@ export default {
     _getHandActivities() {
       const token = this.$ls.get('Access-Token')
       const params = {
-        token: token
+        token: token,
+        offset: this.offset,
+        limit: 10
       }
       getHandActivities(params).then(res => {
         console.log(res)
         this.cardList = res.page.rows
+        this.pages = res.page.pages;
       })
     },
     // 地点
@@ -214,7 +217,8 @@ export default {
       const token = this.$ls.get('Access-Token')
       const params = {
         token: token,
-        offset: this.offset
+        offset: this.offset,
+        limit:10
       }
       console.log(params)
       getHandActivities(params).then(res => {
@@ -223,7 +227,7 @@ export default {
           this.cardList = this.cardList.concat(res.page.rows)
           console.log(this.cardList)
           let page = parseInt(this.pages)
-          if (res.page.offset > page) {
+          if (this.offset > page) {
             this.btnDsiable = true
             this.$message.warning('已加载全部信息！')
             this.loadingMore = false
@@ -304,6 +308,14 @@ export default {
     this.form = this.$form.createForm(this)
     console.log(this.form)
     this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
+  },
+  watch: {
+
+  '$route' (to, from) {   //监听路由是否变化
+
+      //在这里可以处理对应的跳转逻辑
+
+  }
   }
 }
 </script>

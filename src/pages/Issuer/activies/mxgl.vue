@@ -84,7 +84,7 @@
                     <a-button
                       type="primary"
                       class="primary"
-                      @click="$router.push({name: 'issuerMxxq', query: {userId: item.recordId}})"
+                      @click="$router.push({path: '/issuerMxxq', query: {userId: item.athlete_id}})"
                     >查 看</a-button>
                   </div>
                 </transition>
@@ -222,11 +222,11 @@ export default {
       start: '',
       capName: '',
       campNum: '',
-      starList: '',
-      sponsorList: '',
+      starList: [],
+      sponsorList: [],
       status: '',
       price: '',
-      adress: '',
+      adress: [],
       status: ''
     }
   },
@@ -243,32 +243,35 @@ export default {
         token: token,
         campId: campId
       }
+      console.log(params)
       getActivityInformation(params).then(res => {
         console.log(res)
-        this.activitiesList = res.data[0]
-        this.name = this.activitiesList.name
-        this.start = this.activitiesList.createTime
-        this.address = this.activitiesList.address
-        this.capName = this.activitiesList.capName
-        this.campNum = this.activitiesList.campNum
-        this.price = this.activitiesList.price
-        this.email = this.activitiesList.email
-        this.phone = this.activitiesList.phone
-        this.enName = this.activitiesList.enName
-        this.contact = this.activitiesList.contact
-        if (this.activitiesList.status == 10) {
+        this.data = res.data.listLoc
+        let activityDetail = res.data.list[0]
+        this.name = activityDetail.name
+        this.start = activityDetail.createTime
+        this.adress = res.data.listLoc
+        this.capName = activityDetail.capName
+        this.campNum = parseInt(activityDetail.campNum)
+        this.price = res.data.amount
+        this.email = activityDetail.email
+        this.phone = activityDetail.phone
+        this.enName = activityDetail.enName
+        this.contact = activityDetail.contact
+        this.imgUrl = activityDetail.cover_img
+        if (activityDetail.status == 10) {
           this.status = '创建中'
         }
-        if (this.activitiesList.status == 0) {
+        if (activityDetail.status == 0) {
           this.status = '申请中'
         }
-        if (this.activitiesList.status == 20) {
+        if (activityDetail.status == 20) {
           this.status = '成功'
         }
-        if (this.activitiesList.status == 30) {
+        if (activityDetail.status == 30) {
           this.status = '驳回'
         }
-        if (this.activitiesList.status == 50) {
+        if (activityDetail.status == 50) {
           this.status = '关闭'
         }
       })
@@ -276,7 +279,7 @@ export default {
     // 参加明星
     _getJoinStar() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.params.campId
+      const campId = this.$route.query.campId
       const params = {
         token: token,
         campId: campId
