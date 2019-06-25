@@ -12,8 +12,7 @@
             <div class="item-boxes">
               <div class="item-row">
                   <a-row>
-                    
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
+                    <a-col v-if="chartshow" :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
                         <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl"/>
                         <v-tooltip :showTitle="false" dataKey="item*percent" />
@@ -26,6 +25,7 @@
                           <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
+                    <p v-else>暂无数据</p>
                   </a-row>
               </div>
             </div>
@@ -100,6 +100,7 @@ export default {
   },
   data () {
     return {
+      chartshow:true,
       timeFix: timeFix(),
       avatar: '',
       user: {},
@@ -194,6 +195,9 @@ export default {
             this.pieData1[0].count= res.data.unpaid;
             this.pieData1[1].count= res.data.paid;
             this.agentTotal = res.data.agentTotal
+            if (res.data.unpaid == 0 && res.data.paid == 0) {
+              this.chartshow = false;
+            }
             dv1.transform({
               type: 'percent',
               field: 'count',
@@ -244,7 +248,7 @@ export default {
           .item-row{
         position: absolute;
         left: 0;
-        top: -318px;
+        bottom: -60px;
           .item-box{
           display: flex;
           align-items: flex-start;

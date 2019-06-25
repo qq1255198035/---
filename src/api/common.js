@@ -63,3 +63,13 @@ export function piesData() {
            })
          })
        }
+       // 是否通过审批
+export function judge() {
+  return axios({
+    url: '/vue/judge',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+    })
+  })
+}

@@ -299,7 +299,7 @@ export default {
       .item-row{
         position: absolute;
         left: 0;
-        top: 0px;
+        bottom: -60px;
           .item-box{
           display: flex;
           align-items: flex-start;
