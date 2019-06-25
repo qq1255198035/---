@@ -67,7 +67,11 @@
             <a-input-group compact>
               <a-form-item label="联系电话">
                 <div class="input-group">
+<<<<<<< HEAD
                   <a-input style="width: 100%" placeholder="26888888"
+=======
+                  <a-input style="width: 100%" defaultValue="26888888"
+>>>>>>> fc5ae2cdba4f429a3c65578d293f6634c9c5a0f3
                     v-decorator="['phoneName',{rules: [{ required: true, message: '公司简介' }]}]"/>
                 </div>
               </a-form-item>
@@ -80,7 +84,11 @@
         <div class="upload">
           <div class="top">
             <p>公司LOGO</p>
+<<<<<<< HEAD
             <a-avatar :src="imgurl" :size="130"/>
+=======
+            <a-avatar :src="fileUrl" :size="130"/>
+>>>>>>> fc5ae2cdba4f429a3c65578d293f6634c9c5a0f3
             <template>
               <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
@@ -91,7 +99,11 @@
           </div>
           <div class="top">
             <p>营业执照</p>
+<<<<<<< HEAD
             <a-avatar :src="imgurl1" :size="130"/>
+=======
+            <a-avatar :src="fileUrl1" :size="130"/>
+>>>>>>> fc5ae2cdba4f429a3c65578d293f6634c9c5a0f3
             <template>
               <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload1">
                 <a-button>
@@ -161,9 +173,14 @@ export default {
               contactName: res.data.contact,
               phoneName: res.data.phone,
             })
+<<<<<<< HEAD
             this.imgurl = this.$host + res.data.logo
             this.imgurl1 = this.$host + res.data.businessImg
            
+=======
+            this.fileUrl = res.data.logo
+            this.fileUrl1 = res.data.businessImg
+>>>>>>> fc5ae2cdba4f429a3c65578d293f6634c9c5a0f3
       })
     },
     _getPlace() {
@@ -202,10 +219,16 @@ export default {
       this.personInfo.country = value
     },
     beforeUpload(file) {
+<<<<<<< HEAD
       getBase64(file, (imageUrl) => {
             this.imgurl = imageUrl
             
       })
+=======
+      /*getBase64(file, imageUrl => {
+        this.imgUrl = imgUrl
+      })*/
+>>>>>>> fc5ae2cdba4f429a3c65578d293f6634c9c5a0f3
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
@@ -215,9 +238,15 @@ export default {
       })
     },
     beforeUpload1(file) {
+<<<<<<< HEAD
       getBase64(file, imageUrl => {
         this.imgurl1 = imageUrl
       })
+=======
+      /*getBase64(file, imageUrl, imgUrl => {
+        this.imgUrl1 = imgUrl
+      })*/
+>>>>>>> fc5ae2cdba4f429a3c65578d293f6634c9c5a0f3
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)

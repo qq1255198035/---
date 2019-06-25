@@ -8,7 +8,7 @@
       :type="capName"
       :num="campNum"
       :stars="starList"
-      :sponsors="sponsorList"
+      :sponsors="data2"
       :status="status"
       :price="price"
       :adress="adress"
@@ -46,26 +46,24 @@
                     <div class="content">
                       <p>赞助金额：</p>
                       <div class="my-charts">
-                        <v-chart :height="320" :data="pieData" :scale="pieScale">
+                        <v-chart :height="300" :data="pieData" :scale="pieScale">
                           <v-legend
                             data-key="item"
                             :useHtml="true"
                             :itemTpl="itemTpl"
                             position="right"
                             :offsetX="-50"
-                            :offsetY="-40"
+                            :offsetY="-35"
                           />
                           <v-tooltip :showTitle="false" data-key="item*percent"/>
                           <v-axis/>
-                          <v-guide
-                            :type="guideOpts.type"
-                            :position="guideOpts.position"
-                            :content="guideOpts.content"
-                            :v-style="guideOpts.style"
-                          />
                           <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
+                          <v-coord type="theta" :radius="0.75" :innerRadius="0.3"/>
                         </v-chart>
+                        <div class="calc-price">
+                          总计：￥
+                          <span>{{item.tolMoney}}</span>
+                        </div>
                       </div>
                     </div>
                     <div class="footer">
@@ -127,12 +125,12 @@
                           />
                           <v-tooltip :showTitle="false" data-key="item*percent"/>
                           <v-axis/>
-                          <v-guide
+                          <!--<v-guide
                             :type="guideOpts.type"
                             :position="guideOpts.position"
                             :content="guideOpts.content"
                             :v-style="guideOpts.style"
-                          />
+                          />-->
                           <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
                           <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
                         </v-chart>
@@ -197,12 +195,12 @@
                           />
                           <v-tooltip :showTitle="false" data-key="item*percent"/>
                           <v-axis/>
-                          <v-guide
+                          <!--<v-guide
                             :type="guideOpts.type"
                             :position="guideOpts.position"
                             :content="guideOpts.content"
                             :v-style="guideOpts.style"
-                          />
+                          />-->
                           <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
                           <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
                         </v-chart>
@@ -240,7 +238,7 @@
                   <span>（ 2 ）</span>
                 </h5>
                 <div class="my-tables">
-                  <a-table :columns="columns" :dataSource="dataList" size="middle"></a-table>
+                  <a-table :columns="columns" :dataSource="dataList" @change="pageNext" size="middle"></a-table>
                 </div>
               </a-collapse-panel>
               <a-collapse-panel key="2" :disabled="false" :bordered="false">
@@ -425,10 +423,38 @@
 import glTitle from '@/components/glTitle/glTitle'
 import { getApprovalList, getMineSupport, getApproval, getActivityInformation } from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
-const sourceData = [{ item: '现金', count: 50 }, { item: '实物', count: 50 }]
-const sourceData1 = [{ item: '现金', count: 50 }, { item: '实物', count: 50 }]
-const sourceData2 = [{ item: '现金', count: 50 }, { item: '实物', count: 50 }]
-const guideOpts = {
+import { PageView } from '@/layouts'
+let sourceData = [
+  {
+    item: '现金',
+    count: null
+  },
+  {
+    item: '实物',
+    count: null
+  }
+]
+let sourceData1 = [
+  {
+    item: '未付',
+    count: null
+  },
+  {
+    item: '已付',
+    count: null
+  }
+]
+let sourceData2 = [
+  {
+    item: '现金',
+    count: null
+  },
+  {
+    item: '实物',
+    count: null
+  }
+]
+/*const guideOpts = {
   type: 'text',
   position: ['50%', '50%'],
   content: '24001110 万',
@@ -438,12 +464,14 @@ const guideOpts = {
     fill: '#FF0000',
     textAlign: 'center'
   }
-}
+}*/
 const DataSet = require('@antv/data-set')
-const dv = new DataSet.View().source(sourceData)
+let dv = new DataSet.View().source(sourceData)
 let dv1 = new DataSet.View().source(sourceData1)
 let dv2 = new DataSet.View().source(sourceData2)
-
+let pieData = dv.rows
+let pieData1 = dv1.rows
+let pieData2 = dv2.rows
 const pieScale = [
   {
     dataKey: 'percent',
@@ -451,13 +479,11 @@ const pieScale = [
     formatter: '.0%'
   }
 ]
-let pieData = dv.rows
-let pieData1 = dv1.rows
-let pieData2 = dv2.rows
+
 const columns = [
   {
     title: '编号',
-    dataIndex: 'num',
+    dataIndex: 'key',
     align: 'center'
   },
   {
@@ -468,11 +494,6 @@ const columns = [
   {
     title: '赞助形式',
     dataIndex: 'ssKind',
-    align: 'center'
-  },
-  {
-    title: '是否议价',
-    dataIndex: 'bargain',
     align: 'center'
   },
   {
@@ -513,11 +534,11 @@ export default {
       start: '',
       capName: '',
       campNum: '',
-      starList: '',
-      sponsorList: '',
+      starList: [],
+      sponsorList: [],
       status: '',
       price: '',
-      adress: '',
+      adress: [],
       status: '',
       visible: false,
       confirmLoading: false,
@@ -528,6 +549,7 @@ export default {
       dataList: [],
       dataList1: [],
       dataList2: [],
+      data2: [],
       baseText: '',
       orderId: '',
       length: '',
@@ -637,9 +659,11 @@ export default {
           '</td>' +
           '</tr>'
         )
-      },
-      guideOpts
+      }
     }
+  },
+  comments: {
+    PageView
   },
   created() {
     this._getApprovalList()
@@ -649,37 +673,40 @@ export default {
   methods: {
     _getActivityInformation() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId
+      const campId = this.$route.params.campId
       const params = {
         token: token,
         campId: campId
       }
+      console.log(params)
       getActivityInformation(params).then(res => {
         console.log(res)
-        this.activitiesList = res.data[0]
-        this.name = this.activitiesList.name
-        this.start = this.activitiesList.createTime
-        this.address = this.activitiesList.address
-        this.capName = this.activitiesList.capName
-        this.campNum = this.activitiesList.campNum
-        this.price = this.activitiesList.price
-        this.email = this.activitiesList.email
-        this.phone = this.activitiesList.phone
-        this.enName = this.activitiesList.enName
-        this.contact = this.activitiesList.contact
-        if (this.activitiesList.status == 10) {
+        let activityDetail = res.data.list[0]
+        this.name = activityDetail.name
+        console.log(this.name)
+        this.start = activityDetail.createTime
+        this.adress = res.data.listLoc
+        this.capName = activityDetail.capName
+        this.campNum = parseInt(activityDetail.campNum)
+        this.price = activityDetail.price
+        this.email = activityDetail.email
+        this.phone = activityDetail.phone
+        this.enName = activityDetail.enName
+        this.contact = activityDetail.contact
+        this.imgUrl = activityDetail.cover_img
+        if (activityDetail.status == 10) {
           this.status = '创建中'
         }
-        if (this.activitiesList.status == 0) {
+        if (activityDetail.status == 0) {
           this.status = '申请中'
         }
-        if (this.activitiesList.status == 20) {
+        if (activityDetail.status == 20) {
           this.status = '成功'
         }
-        if (this.activitiesList.status == 30) {
+        if (activityDetail.status == 30) {
           this.status = '驳回'
         }
-        if (this.activitiesList.status == 50) {
+        if (activityDetail.status == 50) {
           this.status = '关闭'
         }
       })
@@ -687,7 +714,7 @@ export default {
     // 赞助审批列表
     _getApprovalList() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId
+      const campId = this.$route.params.campId
       const params = {
         token: token,
         campId: campId
@@ -700,38 +727,74 @@ export default {
         this.cardItemData2 = res.data.otherCampSponsor
         console.log(this.cardItemData2)
         this.length = this.cardItemData.length
+        console.log(this.cardItemData.length)
         this.length1 = this.cardItemData1.length
         this.length2 = this.cardItemData2.length
-        this.pieData[0].count = this.cardItemData.cash
-        this.pieData[1].count = this.cardItemDat.productVal
-        this.pieData1[0].count = this.cardItemDat1.cash
-        this.pieData1[1].count = this.cardItemDat1.productVal
-        this.pieData2[0].count = this.cardItemDat2.cash
-        this.pieData2[1].count = this.cardItemDat2.productVal
+        for (let i = 0; i < this.cardItemData.length; i++) {
+          this.pieData[0].count = this.cardItemData[i].cash
+          this.pieData[1].count = this.cardItemData[i].productVal
+          dv.transform({
+            type: 'percent',
+            field: 'count',
+            dimension: 'item',
+            as: 'percent'
+          })
+        }
+        for (let i = 0; i < this.cardItemData1.length; i++) {
+          this.pieData1[0].count = this.cardItemData1[i].cash
+          this.pieData1[1].count = this.cardItemData1[i].productVal
+          dv1.transform({
+            type: 'percent',
+            field: 'count',
+            dimension: 'item',
+            as: 'percent'
+          })
+        }
+        for (let i = 0; i < this.cardItemData2.length; i++) {
+          this.pieData2[0].count = this.cardItemData2[i].cash
+          this.pieData2[1].count = this.cardItemData2[i].productVal
+          dv2.transform({
+            type: 'percent',
+            field: 'count',
+            dimension: 'item',
+            as: 'percent'
+          })
+        }
       })
     },
     // 我的赞助
     _getMineSupport() {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId
+      const campId = this.$route.params.campId
       const params = {
         token: token,
         campId: campId
       }
       getMineSupport(params).then(res => {
         console.log(res)
-        this.dataList =this._mapList(res.data.namingCampSponsor)
+        let key = 'key'
+        this.loading = false;
+        this.dataList = res.data.namingCampSponsor
+        this.dataList.map((item,index)=>{
+              item[key] = index
+        })
         console.log(this.dataList)
         this.dataList1 = res.data.noNamingCampSponsor
+        this.dataList1.map((item,index)=>{
+              item[key] = index
+        })
         this.dataList2 = res.data.otherCampSponsor
+        this.dataList2.map((item,index)=>{
+              item[key] = index
+        })
       })
     },
-    _mapList(list) {
-       list.map(item => {
-             item[key] = {
-                   num: index
-             }
-       })
+    pageNext(pagination, filters, sorte) {
+      console.log(pagination, filters, sorte)
+    },
+    onSelectChange (selectedRowKeys) {
+      console.log('selectedRowKeys changed: ', selectedRowKeys);
+      this.selectedRowKeys = selectedRowKeys
     },
     showModal(item, index) {
       console.log(item, index)
@@ -740,7 +803,7 @@ export default {
     },
     handleOk(e) {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId
+      const campId = this.$route.params.campId
       const params = {
         token: token,
         orderId: this.orderId,
@@ -750,6 +813,18 @@ export default {
       console.log(params)
       getApproval(params).then(res => {
         console.log(res)
+        if(res.data.code == 1) {
+          this.$notification.success({
+          message: '成功',
+          description: '审批通过'
+        })
+        }else {
+          this.$notification['error']({
+          message: '失败',
+          description: '审批失败'
+        })
+        }
+        this._getApprovalList()
       })
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
@@ -768,7 +843,7 @@ export default {
     success(item) {
       console.log(item)
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId
+      const campId = this.$route.params.campId
       const params = {
         token: token,
         orderId: item.orderId,
@@ -777,6 +852,17 @@ export default {
       console.log(params)
       getApproval(params).then(res => {
         console.log(res)
+        if(res.data.code == 1) {
+          this.$notification.success({
+          message: '成功',
+          description: '通过'
+        })
+        }else {
+          this.$notification['error']({
+          message: '失败',
+          description: '未通过'
+        })
+        }
       })
       this.loading = true
       setTimeout(() => {

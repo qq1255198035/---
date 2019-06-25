@@ -111,7 +111,7 @@ export function getApprovalList(parameter) {
 // 搞手赞助审批
 export function getApproval(parameter) {
     return axios({
-        url:'/vue/admin/sponsorApproval',
+        url:'/vue/organize/sponsorApproval',
         method: 'post',
         data: qs.stringify(parameter)
     })

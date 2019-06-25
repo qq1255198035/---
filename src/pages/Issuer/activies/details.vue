@@ -8,7 +8,7 @@
       :type="capName"
       :num="campNum"
       :stars="starList"
-      :sponsors="sponsorList"
+      :sponsors="data2"
       :status="status"
       :price="price"
       :adress="adress"
@@ -91,7 +91,7 @@
                   <span>主办承办方：</span>
                   <a-table
                     :columns="columns1"
-                    :dataSource="companyList1"
+                    :dataSource="data1"
                     size="small"
                     :pagination="false"
                     class="my-table"
@@ -134,7 +134,7 @@
                   <span>赞助要求：</span>
                   <a-table
                     :columns="columns2"
-                    :dataSource="dataTable"
+                    :dataSource="data2"
                     size="small"
                     :pagination="false"
                     class="my-table"
@@ -279,47 +279,43 @@ const DetailListItem = DetailList.Item
 const columns = [
   {
     title: '地区',
-    dataIndex: 'address'
+    dataIndex: 'area_name'
   },
   {
     title: '详细',
-    dataIndex: 'desc'
+    dataIndex: 'addr'
   }
 ]
 const columns1 = [
   {
     title: '主办承办方',
-    dataIndex: 'name'
+    dataIndex: 'work_name'
   },
   {
     title: '名称',
-    dataIndex: 'desc'
+    dataIndex: 'name'
   }
 ]
 const columns2 = [
   {
     title: '推广形式',
-    dataIndex: 'tgWay'
+    dataIndex: 'ss_kind'
   },
   {
     title: '赞助形式',
-    dataIndex: 'zzWay'
+    dataIndex: 'sponsorship_name'
   },
   {
     title: '赞助金额',
-    dataIndex: 'zzPrice'
+    dataIndex: 'money'
   },
   {
     title: '赞助名额',
-    dataIndex: 'zzNum'
-  },
-  {
-    title: '是否议价',
-    dataIndex: 'desc'
+    dataIndex: 'num'
   },
   {
     title: '备注',
-    dataIndex: 'remarks'
+    dataIndex: 'bz'
   }
 ]
 const data = [
@@ -363,7 +359,6 @@ const data2 = [
     zzWay: '现金+实物',
     zzprice: '1000万',
     zzNum: '10名',
-    desc: '否',
     remarks: '宽城区万达广场3楼某某某'
   },
   {
@@ -372,7 +367,6 @@ const data2 = [
     zzWay: '现金+实物',
     zzprice: '1000万',
     zzNum: '10名',
-    desc: '否',
     remarks: '宽城区万达广场3楼某某某'
   }
 ]
@@ -469,7 +463,7 @@ export default {
       dataOther: [],
       name: '',
       start: '',
-      address: '',
+      adress: [],
       capName: '',
       campNum: '',
       price: '',
@@ -546,30 +540,32 @@ export default {
       }
       getActivityInformation(params).then(res => {
         console.log(res)
-        this.activitiesList = res.data[0]
-        this.name = this.activitiesList.name
-        this.start = this.activitiesList.createTime
-        this.address = this.activitiesList.address
-        this.capName = this.activitiesList.capName
-        this.campNum = this.activitiesList.campNum
-        this.price = this.activitiesList.price
-        this.email = this.activitiesList.email
-        this.phone = this.activitiesList.phone
-        this.enName = this.activitiesList.enName
-        this.contact = this.activitiesList.contact
-        if (this.activitiesList.status == 10) {
+        this.data = res.data.listLoc
+        let activityDetail = res.data.list[0]
+        this.name = activityDetail.name
+        this.start = activityDetail.createTime
+        this.adress = res.data.listLoc
+        this.capName = activityDetail.capName
+        this.campNum = parseInt(activityDetail.campNum)
+        this.price = activityDetail.price
+        this.email = activityDetail.email
+        this.phone = activityDetail.phone
+        this.enName = activityDetail.enName
+        this.contact = activityDetail.contact
+        this.imgUrl = activityDetail.cover_img
+        if (activityDetail.status == 10) {
           this.status = '创建中'
         }
-        if (this.activitiesList.status == 0) {
+        if (activityDetail.status == 0) {
           this.status = '申请中'
         }
-        if (this.activitiesList.status == 20) {
+        if (activityDetail.status == 20) {
           this.status = '成功'
         }
-        if (this.activitiesList.status == 30) {
+        if (activityDetail.status == 30) {
           this.status = '驳回'
         }
-        if (this.activitiesList.status == 50) {
+        if (activityDetail.status == 50) {
           this.status = '关闭'
         }
       })
@@ -594,22 +590,11 @@ export default {
         campId: campId
       }
       getSponsor(params).then(res => {
-        this.sponsorList = res.data
+        console.log(res)
+        this.data2 = res.data
         this.closingDate = res.endTime
           this.requirdContent = res.demand
           const dataArrty = res.data
-          for (let i = 0; i < dataArrty.length; i++) {
-            this.dataTable.push({
-              key: length === 0 ? '1' : (parseInt(this.dataTable[length - 1].key) + 1).toString(),
-              tgWay: dataArrty[i].sponsorship,
-              zzWay: dataArrty[i].ss_kind,
-              zzPrice: dataArrty[i].money,
-              zzNum: dataArrty[i].num,
-              remarks: dataArrty[i].bz,
-              editable: false,
-              isNew: false
-            })
-          }
       })
     },
     _getPress() {
@@ -632,11 +617,11 @@ export default {
         campId: campId
       }
       getCheckActivitiesDetail(params).then(res => {
-        this.activeityInfo = res.data[0]
-        this.activityContent = res.data[0].content
+        console.log(res)
+        this.activityContent = res.data.list[0].content
         console.log(this.activityContent)
-        this.videoUrls = res.data[0].video
-        this.detailImgs = res.data[0].imgs
+        this.videoUrls = res.data.list[0].video
+        this.detailImgs = res.data.listCampAtt
       })
     },
     _getExtension() {
@@ -648,17 +633,11 @@ export default {
       }
       getExtension(params).then(res => {
         console.log(res)
+        this.data1 = res.data
         this.palyPlatfrom = res.platform
         const selectArry = res.campFeature.split(',')
-        const companyArry = res.data
         for (let i = 0; i < selectArry.length; i++) {
           this.selectedTags.push(parseInt(selectArry[i]))
-        }
-        for (let i = 0; i < companyArry.length; i++) {
-          this.companyList1.push({
-            name: companyArry[i].name,
-            workType: companyArry[i].work_name
-          })
         }
       })
     }

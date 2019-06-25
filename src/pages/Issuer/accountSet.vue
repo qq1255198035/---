@@ -4,28 +4,32 @@
     <a-row :gutter="200" type="flex" justify="center" style="padding: 20px 0">
       <a-col :lg="9">
         <div>
-          <a-form layout="vertical">
+          <a-form layout="vertical" :form="from">
             <a-form-item label="邮箱">
               <a-input placeholder="input placeholder" :disabled="true" v-model="personInfo.email"/>
             </a-form-item>
             <a-form-item label="公司名称">
-              <a-input placeholder="input placeholder" v-model="personInfo.name"/>
+              <a-input placeholder="input placeholder"
+                v-decorator="['companyName',{rules: [{ required: true, message: '公司名称' }]}]"
+              />
             </a-form-item>
             <a-form-item label="公司网址">
-              <a-input placeholder="input placeholder" v-model="personInfo.web"/>
+              <a-input placeholder="input placeholder"
+                v-decorator="['webName',{rules: [{ required: true, message: '公司网址' }]}]"
+              />
             </a-form-item>
             <a-form-item label="公司简介">
               <a-textarea
                 placeholder="input placeholder"
                 :autosize="{ minRows: 6 }"
-                v-model="personInfo.intro"
+                v-decorator="['textName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-form-item label="国家地区">
               <a-select
                 :defaultValue="personInfo.country"
                 @change="countryBtn"
-                v-model="personInfo.country"
+                v-decorator="['countryName',{rules: [{ required: true, message: '公司简介' }]}]"
               >
                 <a-select-option value="中国">中国</a-select-option>
                 <a-select-option value="香港">香港</a-select-option>
@@ -39,6 +43,7 @@
                   @change="onChange"
                   :placeholder="places"
                   :showSearch="true"
+                  v-decorator="['addressName',{rules: [{ required: true, message: '公司简介' }]}]"
                 />
               </div>
             </a-form-item>
@@ -46,21 +51,21 @@
               <a-textarea
                 placeholder="input placeholder"
                 :autosize="{ minRows: 6 }"
-                v-model="personInfo.compAddr"
+                v-decorator="['placeName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-form-item label="联系人">
               <a-input
                 placeholder="input placeholder"
                 :autosize="{ minRows: 6 }"
-                v-model="personInfo.contact"
+                v-decorator="['contactName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-input-group compact>
               <a-form-item label="联系电话">
                 <div class="input-group">
-                  <a-input style="width: 30%" defaultValue="0571" v-model="phoneFirst"/>
-                  <a-input style="width: 68%" defaultValue="26888888" v-model="phoneLast"/>
+                  <a-input style="width: 100%" defaultValue="26888888"
+                    v-decorator="['phoneName',{rules: [{ required: true, message: '公司简介' }]}]"/>
                 </div>
               </a-form-item>
             </a-input-group>
@@ -163,16 +168,16 @@ export default {
       const params = {
         token: token,
         email: this.personInfo.email,
-        name: this.personInfo.name,
-        web: this.personInfo.web,
-        intro: this.personInfo.intro,
-        country: this.personInfo.country,
-        area: this.personInfo.area,
-        compAddr: this.personInfo.compAddr,
-        contact: this.personInfo.contact,
-        phone: this.phoneFirst + ',' + this.phoneLast,
-        logo: this.fileUrl,
-        businessImg: this.fileUrl1
+        name: this.form.getFieldValue('companyName'),
+        web: this.form.getFieldValue('webName'),
+        intro: this.form.getFieldValue('textName'),
+        country: this.form.getFieldValue('countryName'),
+        area: this.form.getFieldValue('addressName'),
+        compAddr: this.form.getFieldValue('placeName'),
+        contact: this.form.getFieldValue('contactName'),
+        phone: this.form.getFieldValue('phoneName'),
+        logo: this.personInfo.logo,
+        businessImg: this.personInfo.businessImg,
       }
       console.log(params)
       getChangeInformation(params).then(res => {
@@ -222,6 +227,10 @@ export default {
       },1000)
       
     }
+  },
+  beforeCreate() {
+    this.form = this.$form.createForm(this)
+    this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
   }
 }
 </script>
