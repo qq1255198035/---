@@ -16,7 +16,7 @@
 
 <script>
 import types from './type'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'Exception',
   props: {
@@ -31,8 +31,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['Logout']),
     handleToHome () {
-      this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'login' });
+      this.Logout();
     }
   }
 }

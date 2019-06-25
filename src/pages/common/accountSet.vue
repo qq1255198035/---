@@ -81,6 +81,7 @@
           <div class="top">
             <p>公司LOGO</p>
             <a-avatar :src="imgurl" :size="130"/>
+            
             <template>
               <a-upload name="avatar" action :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
@@ -204,7 +205,7 @@ export default {
     beforeUpload(file) {
       getBase64(file, (imageUrl) => {
             this.imgurl = imageUrl
-            
+            console.log(this.imgurl)
       })
       const formData = new FormData()
       formData.append('file', file)
@@ -217,6 +218,7 @@ export default {
     beforeUpload1(file) {
       getBase64(file, imageUrl => {
         this.imgurl1 = imageUrl
+        console.log(this.imgurl1)
       })
       const formData = new FormData()
       formData.append('file', file)

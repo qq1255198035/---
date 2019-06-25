@@ -43,44 +43,14 @@ export function getUpload(parameter) {
   })
 }
 // 经纪人修改明星提交接口
-export function starUpdate(
-         surname,
-         monicker,
-         catalog,
-         nationality,
-         birth,
-         height,
-         weight,
-         addr,
-         introduction,
-         sex,
-         avatar,
-         imgs,
-         credential,
-         athleteId
-       ) {
-         return axios({
-           url: '/vue/agent/starUpdate',
-           method: 'post',
-           data: qs.stringify({
-             token: Vue.ls.get(ACCESS_TOKEN),
-             surname: surname,
-             monicker: monicker,
-             catalog: catalog,
-             nationality: nationality,
-             birth: birth,
-             height: height,
-             weight: weight,
-             addr: addr,
-             introduction: introduction,
-             sex: sex,
-             avatar: avatar,
-             imgs: imgs,
-             credential: credential,
-             athleteId: athleteId
-           })
-         })
-       }
+export function starUpdate(params) {
+          var a = Object.assign({},{token: Vue.ls.get(ACCESS_TOKEN)},params);
+          return axios({
+            url: '/vue/agent/starUpdate',
+            method: 'post',
+            data: qs.stringify(a)
+    })
+}
 // 经纪人删除明星
 export function starDel(athleteId) {
   return axios({

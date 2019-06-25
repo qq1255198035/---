@@ -1,6 +1,10 @@
 <template>
       <div id="details">
-            <glTitle :logo="logo" :title="titleName" :start="startTime" :type="type" :num="num" :stars="starList | filterLength" :sponsors="sponsorList | filterLength" :status="status | filterStatus" :price="money" :adress="area"></glTitle>
+            <glTitle :logo="logo" :title="titleName" :start="startTime" :type="type" :num="num" :stars="starList | filterLength" :sponsors="sponsorList | filterLength" :status="status | filterStatus" :price="money">
+                  <span slot="b">
+                        <a-icon type="environment" class="my-icon"/>{{adre}}
+                  </span>
+            </glTitle>
             <div class="details-content">
                   <div class="details-header">
                         <a-card title="活动进度">
@@ -371,7 +375,7 @@ export default {
                   colors:['pink','red','orange','green','cyan','blue','purple'],
                   titleName:'',
                   startTime: '',
-                  area: '',
+                  adre: '',
                   type: '',
                   num:'',
                   starList: [],
@@ -481,9 +485,9 @@ export default {
                               this.money = res.data.amount;
                               this.startTime = res.data.campain.publishTime;
                               this.type = res.data.campain.campCatalog;
-                              this.num = res.data.campain.campNum.toString();
+                              this.num = res.data.campain.campNum;
                               this.starList = res.data.starList;
-                              this.area = res.data.campain.area;
+                              this.adre = res.data.campain.area;
                               this.sponsorList = res.data.sponsorList;
                         }
                   })

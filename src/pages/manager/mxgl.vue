@@ -167,7 +167,6 @@
                                                 class="avatar-uploader"
                                                 :showUploadList="false"
                                                 :beforeUpload="beforeUpload3"
-                                                
                                                 >
                                                 
                                                 <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" />
@@ -370,8 +369,8 @@ export default {
             
       },
       methods:{
-            postStarUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId){
-                  starUpdate(surname,monicker,catalog,nationality,birth,height,weight,addr,introduction,sex,avatar,imgs,credential,athleteId).then(res=>{
+            postStarUpdate(params){
+                  starUpdate(params).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！')
                               this.visible = false;
@@ -406,7 +405,7 @@ export default {
                                     enname: res.data.enName,
                                     works: res.data.catalog,
                                     country : res.data.nationality,
-                                    birthday: moment(res.data.birth, 'YYYY-MM-DD') || '',
+                                    birthday: moment(res.data.birth || moment(), 'YYYY-MM-DD'),
                                     height: res.data.height,
                                     heavy: res.data.weight,
                                     home: res.data.addr,
@@ -415,13 +414,13 @@ export default {
                                     uploader: res.data.credential,
                                     avatar: res.data.avatar,
                                     imgs: res.data.imgs
-                                    
                               });
                               this.imageUrl1 = this.host + res.data.credential;
                               this.imageUrl2 = this.host + res.data.avatar;
                               this.imageUrl3 = this.host + res.data.imgs;
-                              
-                              
+                              this.postImg1 = res.data.credential;
+                              this.postImg2 = res.data.avatar;
+                              this.postImg3 = res.data.imgs;
                         }
                   })
             },
@@ -473,6 +472,7 @@ export default {
             showModal(e,id) {
                   this.visible = true
                   this.stasId = id
+                  
                   if(e.target.innerText === '修 改'){
                         this.getSearchStarInfo(id)
                   }
@@ -480,9 +480,26 @@ export default {
             handleOk(e) {
                   this.form.validateFields((err,values) => {
                         if (!err) {
-                              console.log(values)
-                              this.postStarUpdate(values.lastname,values.firstname,values.works,values.country,values.birthday._i,values.height,values.heavy,values.home,values.desc,values.sex,this.postImg1,this.postImg2,this.postImg3,this.stasId);
-                              
+                              console.log(values.birthday.format('YYYY-MM-DD'));
+                               var params = {
+                                    athleteId: this.stasId,
+                                    surname: values.lastname,
+                                    monicker: values.firstname,
+                                    enName: values.enname,
+                                    catalog: values.works,
+                                    nationality: values.country,
+                                    birth: values.birthday.format('YYYY-MM-DD'),
+                                    height: values.height,
+                                    weight: values.heavy,
+                                    addr: values.home,
+                                    introduction: values.desc,
+                                    sex: values.sex,
+                                    avatar: this.postImg1,
+                                    imgs: this.postImg2,
+                                    credential: this.postImg3
+                              };
+                              this.postStarUpdate(params);
+                              console.log(this.stasId)
                         }
                   },);
             },
@@ -542,6 +559,7 @@ export default {
                   formData.append('file',file)
                   getUpload(formData).then(res=>{
                         this.postImg1 = res.location
+                        console.log(res)
                   })
                   // const isJPG = file.type === 'image/jpeg'
                   // const isPNG = file.type === 'image/png'

@@ -10,7 +10,12 @@
                                         {{title}}
                                     </h2>
                                     <p>时间：{{start}}</p>
-                                    <span v-for="(item, index) in adress" :key="index"><a-icon type="environment"  class="my-icon"/>{{item.area_name}}</span>
+                                    <slot name="a">
+                                          <span v-for="(item, index) in adress" :key="index">
+                                                <a-icon type="environment"  class="my-icon"/>{{item.area_name}}
+                                          </span>
+                                    </slot>
+                                    <slot name="b">{{adre}}</slot>
                         </div>
                   </a-col>
                   <a-col :span="10">
@@ -31,7 +36,7 @@
                                     </ul>
                               </li>
                               <li>
-                                    参与明星：
+                                    参与赞助：
                                     <ul style="display: flex; padding: 0">
                                           <li v-for="(item,index) in sponsors" :key="index">
                                                 <a-avatar :size="40" class="img-circle" :src="host + item.logo"/>
@@ -125,36 +130,37 @@
 <script>
 export default {
       props: {
-            title: {
-                  type: String,
-            },
+            title: '',
             logo: {
-                  type: String,
+                  
             },
             start: {
-                  type: String,
+                  
             },
             adress: {
-                  type: Array,
+                 
             },
             type: {
-                  type: String,
+                  
             },
             num: {
-                  type: Number,
+                  
             },
             stars: {
-                  type: Array,
+                  
             },
             sponsors: {
-                  type: Array,
+                  
             },
             status: {
-                  type: String,
+                  
             },
             price: {
-                  type: String,
+                  
             },
+            adre:{
+
+            }
       },
       data(){
             return{
