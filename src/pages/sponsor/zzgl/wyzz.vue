@@ -191,6 +191,7 @@
 </style>
 <script>
 import { searchCampList,saveMySponsor } from "@/api/sponsor";
+import { judge } from "@/api/common";
 const hasProp = (instance, prop) => {
   const $options = instance.$options || {};
   const propsData = $options.propsData || {};
@@ -199,7 +200,6 @@ const hasProp = (instance, prop) => {
 export default {
       
       data(){
-            
             return{
                   lists:[],
                   columns: [
@@ -253,6 +253,7 @@ export default {
             this.getSearchCampList(this.starttime,this.endtime,this.offset);
       },
       methods: {
+            
             getSearchCampList(startime, endtime, offset){
                   searchCampList(startime, endtime, offset).then(res=>{
                         if(res.code == 1000){
@@ -309,8 +310,24 @@ export default {
                   })
             },
             showModal(id) {
-                  this.id = id;
-                  this.visible = true
+                  let that = this;
+                  judge().then(res=>{
+                        if (res.code == 1000) {
+                              if (res.data == 0) {
+                                    that.id = id;
+                                    that.visible = true
+                              }else{
+                                    that.$error({
+                                          okText: '去设置',
+                                          title: '错误',
+                                          content: '对不起，您的账户尚未通过审批！',
+                                          onOk() {
+                                                that.$router.push({name: 'zhsz'})
+                                          },
+                                    });
+                              }
+                        }
+                  })   
             },
             handleSubmit() {
                   this.confirmLoading = true;

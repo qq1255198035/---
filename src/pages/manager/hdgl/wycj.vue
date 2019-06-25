@@ -183,6 +183,7 @@
 </style>
 <script>
 import { searchCampList,chooseStar,wantJoin } from "@/api/manager";
+import { judge } from "@/api/common";
 export default {
       data(){
             return{
@@ -233,8 +234,26 @@ export default {
                   })
             },
             showModal(id) {
-                  this.visible = true
-                  this.key = id
+                  let that = this;
+                  
+                  judge().then(res=>{
+                        if (res.code == 1000) {
+                              if (res.data == 0) {
+                                    
+                                    that.visible = true
+                                    that.key = id
+                              }else{
+                                    that.$error({
+                                          okText: '去设置',
+                                          title: '错误',
+                                          content: '对不起，您的账户尚未通过审批！',
+                                          onOk() {
+                                                that.$router.push({name: 'zhsz'})
+                                          },
+                                    });
+                              }
+                        }
+                  })   
             },
             handleOk(e) {
                   this.form.validateFields((err,values) => {

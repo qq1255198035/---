@@ -474,10 +474,11 @@ export default {
             getCampHeadInfo(id){
                   campHeadInfo(id).then(res=>{
                         if(res.code == 1000){
+                              console.log(res)
                               this.logo = this.$host + res.data.campain.coverImg;
                               this.titleName = res.data.campain.name;
                               this.status = res.data.campain.status;
-                              this.money = res.data.campain.money;
+                              this.money = res.data.amount;
                               this.startTime = res.data.campain.publishTime;
                               this.type = res.data.campain.campCatalog;
                               this.num = res.data.campain.campNum.toString();
