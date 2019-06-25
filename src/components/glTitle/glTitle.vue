@@ -9,7 +9,6 @@
           <h2 class="no-margins">{{title}}</h2>
           <p>时间：{{start}}</p>
           <slot name="a">
-            
           </slot>
           <slot name="b">
             <a-icon type="environment" class="my-icon"/>
