@@ -15,7 +15,6 @@
       <div slot="a">
         <a-icon type="environment" class="my-icon"/>
         <span>
-          
           <span v-for="(item, index) in adress" :key="index">{{item.area_name}}</span>
         </span>
       </div>
@@ -87,7 +86,7 @@
                 </li>
                 <li>
                   <span>活动照片：</span>
-                  <img v-for="item in detailImgs" :src="item" :key="item" alt>
+                  <img v-for="item in detailsImgs" :src="item" :key="item" alt>
                 </li>
               </ul>
             </div>
@@ -558,8 +557,8 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl = activityDetail.cover_img
-        this.logo = activityDetail.cover_img
+        this.imgUrl = this.$host + activityDetail.cover_img
+        this.logo = this.$host + activityDetail.cover_img
         console.log(this.campNum)
         if (activityDetail.status == 10) {
           this.status = '创建中'
@@ -628,8 +627,15 @@ export default {
         console.log(res)
         this.activityContent = res.data.list[0].content
         console.log(this.activityContent)
-        this.videoUrls = res.data.list[0].video
-        this.detailImgs = res.data.listCampAtt
+        this.videoUrls = this.$host + res.data.list[0].video
+        const detailsArrty = []
+        const fileArrty = []
+        for (let i = 0; i < res.data.listCampAtt.length; i++) {
+          if (!res.data.listCampAtt.length == 0) {
+            detailsArrty.push(this.$host + res.data.listCampAtt[i].location)
+          }
+        }
+        this.detailsImgs = detailsArrty
       })
     },
     _getExtension() {

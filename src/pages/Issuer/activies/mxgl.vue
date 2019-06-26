@@ -63,12 +63,10 @@
               <div class="title">
                 <h5>{{item.name}}</h5>
                 <span>{{item.company}}</span>
-                <a-avatar
-                  :size="64"
-                  :src="item.avatar"
-                />
+                <a-avatar :size="64" :src="item.avatar"/>
                 <p>
-                  <span>$</span>{{item.cost}}
+                  <span>$</span>
+                  {{item.cost}}
                 </p>
                 <span>出厂费用</span>
               </div>
@@ -124,7 +122,7 @@
     padding: 20px;
     .my-cards {
       display: flex;
-      justify-content: space-between;
+      //justify-content: space-between;
       flex-wrap: wrap;
       padding: 0 0 50px;
 
@@ -201,7 +199,7 @@
 </style>
 <script>
 import glTitle from '@/components/glTitle/glTitle'
-import { getStarList, getStarCheck, getJoinStar, getActivityInformation} from '@api/hand'
+import { getStarList, getStarCheck, getJoinStar, getActivityInformation } from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   mixins: [mixinsTitle],
@@ -230,7 +228,7 @@ export default {
       status: ''
     }
   },
-  created() {
+  activated() {
     this._getStarList()
     this._getJoinStar()
     this._getActivityInformation()
@@ -318,6 +316,7 @@ export default {
       console.log(params)
       getStarCheck(params).then(res => {
         console.log(res)
+        this._getStarList()
       })
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
@@ -345,12 +344,20 @@ export default {
       console.log(params)
       getStarCheck(params).then(res => {
         console.log(res)
+        if (res.data.code == '1') {
+          this._getStarList()
+          this.loading = true
+          setTimeout(() => {
+            this.loading = false
+            this.$message.success('操作成功')
+          }, 2000)
+        }else {
+          setTimeout(() => {
+            this.loading = false
+            this.$message.error('操作失败')
+          }, 2000)
+        }
       })
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-        this.$message.success('操作成功')
-      }, 2000)
     }
   }
 }

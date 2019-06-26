@@ -1,5 +1,5 @@
 <template>
-  <page-view :avatar="personInfo.logo" :title="false">
+  <page-view :avatar="logo" :title="false">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ personInfo.contact }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>搞手</div>
@@ -155,6 +155,7 @@ export default {
   },
   data () {
     return {
+      logo: '',
       activeList: [],
       count1: '',
       count2: '',
@@ -188,7 +189,7 @@ export default {
         checked = checked ? 'checked' : 'unChecked';
         return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
           '" data-value="' + value + '" data-color=' + color +
-          ' style="cursor: pointer;font-size: 14px;">' +
+          ' style="cursor: pointer;font-size: 14px;margin-right:0px">' +
           '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
           '<span class="g2-legend-text">' + value + '</span></td>' +
           '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
@@ -219,8 +220,8 @@ export default {
         },
         {
           title: '活动分类',
-          dataIndex: 'campCatalogVal',
-          key: 'campCatalogVal'
+          dataIndex: 'capName',
+          key: 'capName'
         },
         {
           title: '状态',
@@ -363,6 +364,7 @@ export default {
       getUserInformation(params).then(res => {
         console.log(res)
         this.personInfo = res.data
+        this.logo = this.$host + res.data.logo
       })
     },
   },
