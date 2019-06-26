@@ -1,4 +1,4 @@
-0<template>
+<template>
   <div id="cjhd">
     <page-header :title="pageTitle"></page-header>
     <div class="cjhd-header">
@@ -274,7 +274,7 @@
               :labelCol="{span: 4}"
             >
               <a-textarea
-                placeholder="activityContent"
+                placeholder="活动内容"
                 class="my-input"
                 maxlength="300"
                 v-decorator="['textName',{rules: [{ required: true, message: '请输入公司名称' }]}]"
@@ -294,13 +294,7 @@
                 :showUploadList="false"
                 :beforeUpload="beforeUploadVideo"
               >
-                <video
-                  v-if="videoUrls || videoUrl"
-                  height="180"
-                  width="180"
-                  :src="videoUrl"
-                  controls
-                ></video>
+                <video v-if="videoUrl" height="180" width="180" :src="videoUrl" controls></video>
                 <div v-else>
                   <a-icon :type="loading ? 'loading' : 'plus'"/>
                   <div class="ant-upload-text">上传</div>
@@ -308,15 +302,20 @@
               </a-upload>
             </a-form-item>
             <a-form-item label="上传多张图片" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+              <div class="imgFile">
+                <div class="imgsFileBox" v-for="(item, index) in detailsImgs" :key="index">
+                  <img :src="item" alt width="102" height="102">
+                  <span class="close_img" @click="closeImg(index)">x</span>
+                </div>
+              </div>
               <a-upload
                 listType="picture-card"
-                :fileList="fileList"
                 :beforeUpload="beforeUploadImgs"
-                @preview="handlePreview"
-                @change="beforeChangeMore"
-                :remove="closeImg"
+                name="avatar"
+                class="avatar-uploader"
+                :showUploadList="false"
               >
-                <div v-if="fileList.length < 9">
+                <div v-if="detailsImgs.length < 9">
                   <a-icon type="plus"/>
                   <div class="ant-upload-text">Upload</div>
                 </div>
@@ -619,6 +618,29 @@
   </div>
 </template>
 <style lang="less" scoped>
+.imgFile {
+  padding-bottom: 10px;
+}
+.imgFile .imgsFileBox {
+  display: inline-block;
+  width: 102px;
+  height: 102px;
+  box-sizing: border-box;
+  margin-right: 10px;
+  position: relative;
+}
+.imgFile .imgsFileBox .close_img {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(128, 128, 128, 0.6);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+}
 #cjhd {
   padding: 20px 30px;
   .cjhd-header {
@@ -720,7 +742,7 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
-      zanZah: [{ label: '0', value: '冠名赞助' }, { label: '1', value: '非冠名赞助' }, { label: '2', value: '其它赞助' }],
+      zanZah: [{ label: '0', value: '现金' }, { label: '1', value: '现金+实物' }, { label: '2', value: '实物' }],
       xingShi: [{ label: '0', value: '形式' }, { label: '1', value: '形式' }, { label: '2', value: '形式' }],
       visible: false,
       confirmLoading: false,
@@ -758,7 +780,7 @@ export default {
       phoneLast: '',
       coverImg: '', //图片
       activityContent: '', // 活动内容
-
+      userid: '',
       videoUrl: '', // 视频
       videoUrls: '', // 视频路径
       companyList: [], // 公司
@@ -802,6 +824,7 @@ export default {
       organizerTypeList: [],
       fileList: [],
       imgsJson: {},
+      fileImgs: '',
       detailsImgs: [], // 活动详情多张图片
       data: [
         { title: '活动基本信息', description: '活动详细内容编辑', value: '', actions: { title: '' } },
@@ -903,11 +926,13 @@ export default {
       })
     },
     dataTitle() {
+      console.log(this.$route.query.campId)
       if (this.$route.query.campId) {
         this.findIndex = 1
       } else {
         this.findIndex = 0
       }
+      console.log(this.findIndex)
       for (let i = 0; i < this.data.length; i++) {
         console.log(this.$route.query.campId)
         if (this.$route.query.campId) {
@@ -931,7 +956,7 @@ export default {
     },
     goHome() {
       this.$router.push({
-        path: '/issuerHome'
+        path: '/issuerHdgl'
       })
     },
     handleSubmit(e) {
@@ -947,7 +972,10 @@ export default {
         console.log(params)
         getSubmitAudit(params).then(res => {
           console.log(res)
-          if (res.data.code == '1') {
+          if (res.data.code == '1001') {
+            this.$router.push({
+              path: '/issuerHdgl'
+            })
             this.$notification.success({
               message: '成功',
               description: '提交成功',
@@ -1067,10 +1095,7 @@ export default {
     showModal(index, item) {
       const token = this.$ls.get('Access-Token')
       const campId = this.$route.query.campId ? this.$route.query.campId : ''
-      const params = {
-        token: token,
-        campId: campId
-      }
+      
       if (index == 0) {
         getPlace().then(res => {
           console.log(res)
@@ -1081,6 +1106,10 @@ export default {
           console.log(res)
         })
         // 活动基本信息
+        const params = {
+        token: token,
+        campId: campId
+      }
         getActivityInformation(params).then(res => {
           console.log(res)
           if (campId) {
@@ -1131,14 +1160,38 @@ export default {
       }
       if (index == 1) {
         // 活动详情
+        const campId = this.$route.query.campId ? this.$route.query.campId :this.userid
+        const params = {
+        token: token,
+        campId: campId
+      }
         getCheckActivitiesDetail(params).then(res => {
           console.log(res)
           if (campId) {
             this.form1.setFieldsValue({
-              textName: res.data[0].content
+              textName: res.data.list[0].content
             })
-            this.videoUrl = res.data[0].video
-            this.detailsImgs = res.data[0].imgs
+            this.videoUrl = res.data.list[0].video ? this.$host + res.data.list[0].video : ''
+            this.videoUrls = res.data.list[0].video
+            console.log(this.videoUrl)
+            console.log(res.data.listCampAtt.length)
+            const detailsArrty = []
+            const fileArrty = []
+            for (let i = 0; i < res.data.listCampAtt.length; i++) {
+              if(!res.data.listCampAtt.length == 0) {
+                detailsArrty.push(this.$host + res.data.listCampAtt[i].location)
+              fileArrty.push({
+                location: res.data.listCampAtt[i].location,
+                file_name: res.data.listCampAtt[i].file_name,
+                file_type: res.data.listCampAtt[i].file_type
+              })
+              }
+            }
+            this.detailsImgs = detailsArrty
+            this.fileList = fileArrty
+            console.log(this.fileList)
+            this.imgsJson.data = this.fileList
+            console.log(this.detailsImgs)
           } else {
             this.form1.setFieldsValue({
               textName: ''
@@ -1150,6 +1203,13 @@ export default {
       }
       if (index == 2) {
         // 查询推广
+        console.log(this.userid)
+        const campId = this.$route.query.campId ? this.$route.query.campId : this.userid
+        console.log(campId)
+        const params = {
+        token: token,
+        campId: campId
+      }
         getCheckInformation(params).then(res => {
           console.log(res)
           //this.palyPlatfrom = res.platform
@@ -1164,12 +1224,13 @@ export default {
           this.tags7 = res.data.jobAttr
           this.organizerTypeList = res.data.organizerTypeList
         })
+        console.log(params)
         getExtension(params).then(res => {
           console.log(res)
           if (campId) {
             this.form2.setFieldsValue({
               pingName: res.platform,
-              companyTitle: { key: 133, label: '主办方' },
+              companyTitle: { key: '133', label: '主办方' },
               companyName: '公司地址'
             })
             const selectArry = res.campFeature.split(',')
@@ -1189,8 +1250,9 @@ export default {
           } else {
             this.form2.setFieldsValue({
               pingName: '',
-              companyTitle: { key: 133, label: '主办方' },
+              companyTitle: { key: '133', label: '主办方' }
             })
+            console.log(this.companyList)
             this.companyList = []
             this.selectedTags = []
           }
@@ -1201,6 +1263,11 @@ export default {
       }
       if (index == 3) {
         // 活动赞助
+        const campId = this.$route.query.campId ? this.$route.query.campId :this.userid
+        const params = {
+        token: token,
+        campId: campId
+      }
         getSponsor(params).then(res => {
           console.log(res)
           if (campId) {
@@ -1255,7 +1322,6 @@ export default {
 
       console.log(index)
       this.title = item.title
-      console.log(this.$route.query.campId, this.$ls.get('code') == '1000')
       if (this.$route.query.campId || this.code) {
         this.findIndex = 1
       } else {
@@ -1268,6 +1334,7 @@ export default {
         this.alertVisible = false
       } else if (this.findIndex == 0) {
         this.formShow = 0
+         this.visible = false
       }
       if (index == 0) {
         this.visible = true
@@ -1403,44 +1470,44 @@ export default {
             this.concreteTime = dateValue.timePicker
             this.publishTime = dateValue.rangePicker[0]
             const params = {
-          campId: campId,
-          token: token,
-          name: this.chinese,
-          enName: this.english,
-          publishTime: this.publishTime,
-          endTime: this.endTime,
-          concreteTime: this.concreteTime,
-          email: this.email,
-          campCatalog: this.campCatalog,
-          campNum: this.campNum,
-          contact: this.contact,
-          phone: this.phone,
-          coverImg: this.fileUrl,
-          jsonDataAddress: JSON.stringify(this.addressJson)
-        }
-        console.log(params)
-        getActivityModification(params).then(res => {
-          console.log(res)
-          this.$ls.set('code', res.data.code)
-          this.code = res.data.code
-          if (res.data.code == '1000' || res.data.code == '1001') {
-            this.findIndex = 1
-            this.$notification.success({
-              message: '成功',
-              description: ('创建成功'),
-              duration: 4
+              campId: campId,
+              token: token,
+              name: this.chinese,
+              enName: this.english,
+              publishTime: this.publishTime,
+              endTime: this.endTime,
+              concreteTime: this.concreteTime,
+              email: this.email,
+              campCatalog: this.campCatalog,
+              campNum: this.campNum,
+              contact: this.contact,
+              phone: this.phone,
+              coverImg: this.fileUrl,
+              jsonDataAddress: JSON.stringify(this.addressJson)
+            }
+            console.log(params)
+            getActivityModification(params).then(res => {
+              console.log(res)
+              this.userid = res.data.campId
+              this.$ls.set('code', res.data.code)
+              this.code = res.data.code
+              if (res.data.code == '1000' || res.data.code == '1001') {
+                this.findIndex = 1
+                this.$notification.success({
+                  message: '成功',
+                  description: '创建成功',
+                  duration: 4
+                })
+                setTimeout(() => {
+                  this.visible = false
+                  this.confirmLoading = false
+                }, 2000)
+              } else {
+                this.findIndex = 0
+              }
             })
-            setTimeout(() => {
-              this.visible = false
-              this.confirmLoading = false
-            }, 2000)
-          } else {
-            this.findIndex = 0
           }
         })
-          }
-        })
-        
       }
 
       // 活动详情
@@ -1454,30 +1521,29 @@ export default {
             /*this.videoUrls = values.englishName
             this.detailImgs = dateValue.range - picker[1]*/
             const params = {
-          token: token,
-          campId: campId,
-          content: this.activityContent,
-          video: this.videoUrls,
-          jsonDataPic: this.fileList.length === 0 ? '' : JSON.stringify(this.imgsJson)
-        }
-        console.log(params)
-        getDetailsActivity(params).then(res => {
-          console.log(res)
-          if (res.data.code == '1000' || res.data.code == '1001') {
-            this.$notification.success({
-              message: '成功',
-              description: ('创建成功'),
-              duration: 4
+              token: token,
+              campId: this.$route.query.campId ? this.$route.query.campId :this.userid,
+              content: this.activityContent,
+              video: this.videoUrls,
+              jsonDataPic: this.fileList.length === 0 ? '' : JSON.stringify(this.imgsJson)
+            }
+            console.log(params)
+            getDetailsActivity(params).then(res => {
+              console.log(res)
+              if (res.data.code == '1000' || res.data.code == '1001') {
+                this.$notification.success({
+                  message: '成功',
+                  description: '创建成功',
+                  duration: 4
+                })
+                setTimeout(() => {
+                  this.visible = false
+                  this.confirmLoading = false
+                }, 2000)
+              }
             })
-            setTimeout(() => {
-              this.visible = false
-              this.confirmLoading = false
-            }, 2000)
           }
         })
-          }
-        })
-        
       }
       // 活动推广
       if (this.formShow == 2) {
@@ -1490,31 +1556,30 @@ export default {
             this.companyName = values.companyTitle
             this.palyPlatfrom = values.pingName
             const params = {
-          token: token,
-          campId: campId,
-          jsonData: JSON.stringify(this.companyJson),
-          platform: this.palyPlatfrom,
-          campFeature: this.characteristic,
-          pid: this.pids
-        }
-        console.log(params)
-        getActivityPromotion(params).then(res => {
-          console.log(res)
-          if (res.data.code == '1000' || res.data.code == '1001') {
-            this.$notification.success({
-              message: '成功',
-              description: ('创建成功'),
-              duration: 4
+              token: token,
+              campId: this.$route.query.campId ? this.$route.query.campId :this.userid,
+              jsonData: JSON.stringify(this.companyJson),
+              platform: this.palyPlatfrom,
+              campFeature: this.characteristic,
+              pid: this.pids
+            }
+            console.log(params)
+            getActivityPromotion(params).then(res => {
+              console.log(res)
+              if (res.data.code == '1000' || res.data.code == '1001') {
+                this.$notification.success({
+                  message: '成功',
+                  description: '创建成功',
+                  duration: 4
+                })
+                setTimeout(() => {
+                  this.visible = false
+                  this.confirmLoading = false
+                }, 2000)
+              }
             })
-            setTimeout(() => {
-              this.visible = false
-              this.confirmLoading = false
-            }, 2000)
           }
         })
-          }
-        })
-        
       }
       // 活动赞助
       if (this.formShow == 3) {
@@ -1529,31 +1594,29 @@ export default {
             this.closingDate = dateValue.closingDate
             this.requirdContent = values.textYao
             const params = {
-          token: token,
-          campId: campId,
-          jsonData: JSON.stringify(this.supportJson),
-          endTime: this.closingDate,
-          demand: this.requirdContent
-        }
-        console.log(params)
-        getEventSponsorship(params).then(res => {
-          
-          console.log(res)
-          if (res.data.code == 1000 || rea.data.code == 1001) {
-            this.$notification.success({
-              message: '成功',
-              description: ('创建成功'),
-              duration: 4
+              token: token,
+              campId: this.$route.query.campId ? this.$route.query.campId :this.userid,
+              jsonData: JSON.stringify(this.supportJson),
+              endTime: this.closingDate,
+              demand: this.requirdContent
+            }
+            console.log(params)
+            getEventSponsorship(params).then(res => {
+              console.log(res)
+              if (res.data.code == 1000 || rea.data.code == 1001) {
+                this.$notification.success({
+                  message: '成功',
+                  description: '创建成功',
+                  duration: 4
+                })
+                setTimeout(() => {
+                  this.visible = false
+                  this.confirmLoading = false
+                }, 2000)
+              }
             })
-            setTimeout(() => {
-              this.visible = false
-              this.confirmLoading = false
-            }, 2000)
           }
         })
-          }
-        })
-        
       }
     },
     handleCancel(e) {
@@ -1614,6 +1677,7 @@ export default {
         this.videoUrl = videoUrl
         this.loading = false
       })
+      
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
@@ -1622,21 +1686,23 @@ export default {
         this.videoUrls = res.location
       })
     },
-    beforeChangeMore({ fileList, event }) {
-      console.log(fileList)
-      console.log(event)
-    },
     handleCancel1() {
       this.previewVisible = false
     },
     beforeUploadImgs(file) {
       console.log(file)
+      getBase64(file, imageUrl => {
+        this.fileImgs = imageUrl
+        this.detailsImgs.push(this.fileImgs)
+        this.loading = false
+      })
+      
+      console.log(this.detailsImgs)
       const formData = new FormData()
       formData.append('file', file)
       console.log(formData)
       getUpload(formData).then(res => {
         console.log(res)
-        console.log(this.detailsImgs)
         if (res.location) {
           this.fileList.push({
             location: res.location,
@@ -1646,18 +1712,23 @@ export default {
         }
         this.imgsJson.data = this.fileList
         console.log(this.fileList)
+        const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 2MB!')
+      }
+      return isLt2M
       })
     },
-    closeImg(file) {
-      console.log(file)
+    closeImg(index) {
+      console.log(index)
+      this.detailsImgs.splice(index, 1)
+      this.fileList.splice(index, 1)
+      this.imgsJson.data = this.fileList
     },
     handlePreview(file) {
       console.log(file)
       this.previewImage = file.url || file.thumbUrl
       this.previewVisible = true
-    },
-    handleChange1({ fileList }) {
-      this.fileList = fileList
     },
     //
     handleChangeT(tag, pid, checked) {

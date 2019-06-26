@@ -285,6 +285,14 @@ export function getPlace(parameter) {
         data: qs.stringify(parameter)
     })
 }
+// 中国，香港判断地点
+export function getBooleanPlace(parameter) {
+    return axios({
+        url:'/vue/organize/areaForPersonInfo',
+        method: 'post',
+        data: qs.stringify(parameter)
+    })
+}
 // 个人信息地点
 export function getAreaInfo(parameter) {
     return axios({

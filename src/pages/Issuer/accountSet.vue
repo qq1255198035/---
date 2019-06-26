@@ -6,21 +6,21 @@
         <div>
           <a-form layout="vertical" :form="from">
             <a-form-item label="邮箱">
-              <a-input placeholder="input placeholder" :disabled="true" v-model="personInfo.email"/>
+              <a-input placeholder="邮箱" :disabled="true" v-model="personInfo.email"/>
             </a-form-item>
             <a-form-item label="公司名称">
-              <a-input placeholder="input placeholder"
+              <a-input placeholder="公司名称"
                 v-decorator="['companyName',{rules: [{ required: true, message: '公司名称' }]}]"
               />
             </a-form-item>
             <a-form-item label="公司网址">
-              <a-input placeholder="input placeholder"
+              <a-input placeholder="公司网址"
                 v-decorator="['webName',{rules: [{ required: true, message: '公司网址' }]}]"
               />
             </a-form-item>
             <a-form-item label="公司简介">
               <a-textarea
-                placeholder="input placeholder"
+                placeholder="公司简介"
                 :autosize="{ minRows: 6 }"
                 v-decorator="['textName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
@@ -49,14 +49,14 @@
             </a-form-item>
             <a-form-item label="街道地址">
               <a-textarea
-                placeholder="input placeholder"
+                placeholder="i街道地址"
                 :autosize="{ minRows: 6 }"
                 v-decorator="['placeName',{rules: [{ required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-form-item label="联系人">
               <a-input
-                placeholder="input placeholder"
+                placeholder="联系人"
                 :autosize="{ minRows: 6 }"
                 v-decorator="['contactName',{rules: [{ required: true, message: '公司简介' }]}]"
               />

@@ -165,7 +165,7 @@ export default {
       sex: ''
     }
   },
-  created() {
+  activated() {
     this._getStarDetails()
   },
   methods: {

@@ -4,15 +4,18 @@
     <div class="header">
       <a-button type="primary" class="item-input" @click="$router.push({name: 'issuerCjhd'})">创建活动</a-button>
       <a-locale-provider :locale="locale">
-        <a-date-picker class="item-input" @change="searchDate"/>
+        <a-date-picker class="item-input" placeholder="开始时间" @change="searchDate"/>
       </a-locale-provider>
-      <a-cascader
+      <a-locale-provider :locale="locale">
+        <a-date-picker class="item-input" placeholder="结束时间" @change="searchDate1"/>
+      </a-locale-provider>
+      <!--<a-cascader
         :fieldNames="{ label: 'value', value: 'label', children: 'children' }"
         :options="activeityPlace"
         @change="onChange"
         placeholder="请选择"
         :showSearch="true"
-      />
+      />-->
       <a-select
         style="width: 174px;"
         class="item-input"
@@ -44,7 +47,7 @@
               <div class="first-row">
                 <h2 class="ant-col-12 title">{{item.name}}</h2>
                 <h2 class="ant-col-6 my-text">
-                  ${{item.money}}
+                  ${{item.money || 0}}
                   <span>万</span>
                 </h2>
                 <h2 class="ant-col-6 my-text">
@@ -57,10 +60,19 @@
                 <span class="ant-col-6">已赞助</span>
                 <span class="ant-col-6">参与明星</span>
               </div>
+              <div class="second-row">
+                <span class="ant-col-12"></span>
+                <span class="ant-col-6"></span>
+                <span class="ant-col-6">
+
+                <a-badge :status="item.status | statusTypeFilter" :text="item.status | statusFilter"/>
+
+                </span>
+              </div>
               <div class="third-row">
                 <span class="col-lg-12">
                   <a-icon type="environment"/>
-                  {{item.address}}
+                  {{item.area_name}}
                 </span>
               </div>
             </div>
@@ -158,6 +170,28 @@ const lang = {
   'zh-CN': zhCN,
   'en-US': enUS
 }
+const statusMap = {
+      0: {
+            status: 'processing',
+            text: '申请中'
+      },
+      20: {
+            status: 'success',
+            text: '成功'
+      },
+      10: {
+            status: 'warning',
+            text: '创建中'
+      },
+      30: {
+            status: 'error',
+            text: '驳回'
+      },
+      50: {
+          status: 'error',
+          text: '关闭'
+      }
+}
 export default {
   mixins: [mixinsTitle],
   data() {
@@ -175,12 +209,17 @@ export default {
       offset:1,
       btnDsiable:false,
       pages:0,
+      moneys: '',
+      avtiveityDateEnd: '' // 结束时间
     }
   },
-  created() {
+  activated() {
     this._getHandActivities()
     this._getPlace()
     this._getClassify()
+  },
+  computed: {
+    
   },
   methods: {
     // 活动管理
@@ -194,6 +233,7 @@ export default {
       getHandActivities(params).then(res => {
         console.log(res)
         this.cardList = res.page.rows
+        
         this.pages = res.page.pages;
       })
     },
@@ -250,6 +290,7 @@ export default {
         limit: 10,
         offset:1,
         startime: this.avtiveityDate ? this.avtiveityDate : '',
+        endtime: this.avtiveityDateEnd ? this.avtiveityDateEnd : '',
         area: this.searchPlace ? this.searchPlace : '',
         campCatalog: this.searchClassify ? this.searchClassify : '',
         content: this.searchText ? this.searchText : ''
@@ -264,6 +305,10 @@ export default {
     searchDate(date, dateString) {
       console.log(dateString)
       this.avtiveityDate = dateString
+    },
+    searchDate1(date, dateString) {
+      console.log(dateString)
+      this.avtiveityDateEnd = dateString
     },
     showDeleteConfirm(item, index) {
       const that = this
@@ -318,6 +363,14 @@ export default {
       //在这里可以处理对应的跳转逻辑
 
   }
+  },
+  filters: {
+    statusFilter (type) {
+          return statusMap[type].text
+    },
+    statusTypeFilter (type) {
+          return statusMap[type].status
+    }
   }
 }
 </script>

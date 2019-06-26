@@ -6,36 +6,38 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="host + personInfo.logo">
+              <img :src="logo">
             </div>
             <div class="username">{{personInfo.name}}</div>
           </div>
           <div class="account-center-detail">
             <p>
-              <a-icon type="user" class="user"></a-icon>{{personInfo.contact}}
+              <span>联系人：</span><a-icon type="user" class="user"></a-icon>{{personInfo.contact}}
             </p>
             <p>
-              <a-icon type="phone" class="tel"></a-icon>{{personInfo.phone}}
+              <span>联系电话：</span><a-icon type="phone" class="tel"></a-icon>{{personInfo.phone}}
             </p>
             <p>
-              <i class="group"></i>{{personInfo.web}}
+              <span>网址：</span><i class="group"></i>{{personInfo.web}}
             </p>
             <p>
-              <i class="address"></i>
-              {{personInfo.area}}
+              <span>地点：</span><i class="address"></i>
+              {{personInfo.country}}
             </p>
           </div>
           <a-divider :dashed="true"/>
           <div class="account-center-team">
-            <img :src="host + personInfo.businessImg" alt>
+            <img :src="busiess" alt>
           </div>
         </a-card>
       </a-col>
       <a-col :md="24" :lg="17">
         <div class="info-box">
+          
           <div class="title">
             <a-button type="primary" @click="$router.push({name: 'zhsz'})">账户设置</a-button>
           </div>
+          <p class="company_title">公司简介</p>
           <a-divider :dashed="true"/>
           <div class="content">
             <p>{{personInfo.intro}}</p>
@@ -46,6 +48,9 @@
   </div>
 </template>
 <style lang="less" scoped>
+.company_title{
+  padding-left: 20px
+}
 #accountInfo {
   .account-center-avatarHolder {
     text-align: center;
@@ -137,13 +142,14 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
+      imgUrl: '',
       personInfo: '',
-      host:''
+      busiess: '',
+      logo: '',
     }
   },
-  created() {
-        this._getUserInformation();
-        this.host = this.$host
+  activated() {
+        this._getUserInformation()
   },
   methods: {
     // 搞手用户信息
@@ -155,6 +161,9 @@ export default {
       getUserInformation(params).then(res => {
         console.log(res)
         this.personInfo = res.data
+        this.busiess = this.$host + res.data.business_img
+
+        this.logo = this.$host + res.data.logo
       })
     },
     ...mapGetters(['nickname', 'avatar'])
