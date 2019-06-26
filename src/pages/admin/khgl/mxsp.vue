@@ -45,6 +45,7 @@
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
                                                             <a-button type="danger" class="danger" @click="showModal(item.key)">驳回</a-button>
                                                             <a-button type="primary" class="primary" @click="success(item.key)" :loading="loading">通过</a-button>
+                                                            <a-button @click="$router.push({path:'/mxxq',query:{id: item.key}})">查 看</a-button>
                                                       </div>
                                                 </transition>
                                                 
@@ -81,7 +82,7 @@
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
                                                             
-                                                            <a-button type="primary" class="primary" @click="$router.push({name:'mxxq',params:{id: item.key}})">查 看</a-button>
+                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/mxxq',query:{id: item.key}})">查 看</a-button>
                                                       </div>
                                                 </transition>
                                                 
@@ -188,18 +189,18 @@
                               .button-box{
                                     padding: 10px 0;
                                     display: flex;
-                                    justify-content: center;
+                                    justify-content: space-around;
                                     
                                     .danger{
                                           background-color: #ff0000;
                                           color: #fff;
-                                          margin: 0 15px;
+                                          
                                           border-color: red;
                                     }
                                     .primary{
                                           background-color: #23C6C8;
                                           color: #fff;
-                                          margin: 0 15px;
+                                         
                                           border-color: #23C6C8;
                                     }   
                               }   

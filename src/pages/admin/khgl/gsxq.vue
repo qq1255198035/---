@@ -154,7 +154,7 @@ export default {
             }
       },
       mounted(){
-            this.getUserInfo(this.$route.params.id)
+            this.getUserInfo(this.$route.query.id)
       },
       methods: {
             ...mapGetters(['nickname', 'avatar']),
@@ -169,7 +169,7 @@ export default {
                               this.phone = res.data.phone;
                               this.web = res.data.web;
                               this.intro = res.data.intro;
-                              this.logo = res.data.logo;
+                              this.logo = this.$host + res.data.logo;
                               this.name = res.data.name;
                               
                         }

@@ -42,7 +42,7 @@
                         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                   </span>
                   <template slot="operation" slot-scope="text,record">
-                        <a href="javascript:;" @click="$router.push({name: 'ckhd',params: { id: record.key}})">查 看</a>
+                        <a href="javascript:;" @click="$router.push({path: '/ckhd',query: { id: record.key}})">查 看</a>
                         <div style="display: inline-block;" v-if="record.status == 0">
                               <a-divider type="vertical"/>
                               <a-popconfirm
@@ -112,7 +112,7 @@ export default {
                   },
                   columns: [
                         {
-                              title: '编号',
+                              title: '序号',
                               dataIndex: 'num'
                         },
                         {
@@ -185,7 +185,7 @@ export default {
                               this.loading = false;
                               this.data = res.page.rows
                               this.data.map((item,index)=>{
-                                    item[key] = (res.page.offset - 1).toString() + index
+                                    item[key] = (res.page.offset - 1).toString() + (index + 1)
                               })
                         }
                   })

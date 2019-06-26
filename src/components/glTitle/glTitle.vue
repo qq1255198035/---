@@ -122,27 +122,27 @@
 export default {
   props: {
     title: {
-      type: String
+      
     },
     logo: {
-      type: String
+      
     },
     start: {
-      type: String
+      
     },
-    adress: {
-      type: Array
+    adre: {
+      
     },
     type: {
-      type: String
+      
     },
     num: {},
     stars: {
-      type: Array
+      
     },
     sponsors: {},
     status: {
-      type: String
+      
     },
     price: {}
   },

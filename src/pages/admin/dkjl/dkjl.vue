@@ -12,7 +12,7 @@
                   <div class="my-stable">
                         <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
                               <template slot="action" slot-scope="text,record">
-                                    <a-button type="primary" ghost @click="$router.push({name: 'dkxq',params:{data:record}})">查 看</a-button>
+                                    <a-button type="primary" ghost @click="$router.push({path: '/dkxq',query:{data:record}})">查 看</a-button>
                               </template>
                         </a-table>
                   </div>

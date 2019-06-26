@@ -372,7 +372,7 @@ const data2 = [
 ]
 const columns3 = [
   {
-    title: '编号',
+    title: '序号',
     dataIndex: 'key',
     align: 'center'
   },
@@ -519,13 +519,13 @@ export default {
         this.dataNoName = res.data.noNamingCampSponsor
         this.dataOther = res.data.otherCampSponsor
         this.dataName.map((item, index) => {
-          item[key] = index
+          item[key] = index + 1
         })
         this.dataNoName.map((item, index) => {
-          item[key] = index
+          item[key] = index + 1
         })
         this.dataOther.map((item, index) => {
-          item[key] = index
+          item[key] = index + 1
         })
       })
     },

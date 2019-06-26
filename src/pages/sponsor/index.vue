@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar" :title="false">
+  <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>赞助商</div>
@@ -132,6 +132,7 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
+      host:'',
       pieScale,
       pieStyle: {
         stroke: '#fff',
@@ -164,7 +165,7 @@ export default {
       
       operationColumns: [
         {
-          title: '编号',
+          title: '序号',
           dataIndex: 'key',
           key: 'number'
         },
@@ -224,6 +225,7 @@ export default {
     this.getHeadMsg();
     this.getPiesData();
     this.getSponsorList('','','',1)
+    this.host = this.$host;
   },
   methods: {
     ...mapGetters(['nickname']),
@@ -268,7 +270,7 @@ export default {
                       this.operation1 = res.page.rows;
                       
                       this.operation1.map((item,index)=>{
-                            item[key] = index
+                            item[key] = index + 1
                       })
                 }
           })
@@ -295,11 +297,14 @@ export default {
     position: relative;
     height: 227px;
     overflow: hidden;
-		margin-bottom: 24px;
-      .item-row{
-        position: absolute;
-        left: 0;
-        bottom: -60px;
+    margin-bottom: 24px;
+      .item-boxes{
+        
+        .item-row{
+          
+          position: absolute;
+          left: 0;
+          bottom: -60px;
           .item-box{
           display: flex;
           align-items: flex-start;
@@ -349,6 +354,8 @@ export default {
           }
         }
       }
+      }
+      
       }
       
 }

@@ -11,7 +11,8 @@
                         <div class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
-                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle"/>
+                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                    <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
                                           <h2 class="no-margins">
@@ -80,11 +81,9 @@
                         =
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               <a-input
-                                    @change="onChange"
                                     placehodler="总额"
                                     :read-only="true"
                                     v-model="total"
-                                    
                               />
                         </a-form-item>
                         
@@ -192,11 +191,6 @@
 <script>
 import { searchCampList,saveMySponsor } from "@/api/sponsor";
 import { judge } from "@/api/common";
-const hasProp = (instance, prop) => {
-  const $options = instance.$options || {};
-  const propsData = $options.propsData || {};
-  return prop in propsData;
-};
 export default {
       
       data(){
@@ -216,11 +210,6 @@ export default {
                               dataIndex: 'num',
                         },
                         {
-                              title: '是否议价',
-                              dataIndex: 'bargain',
-                              
-                        },
-                        {
                               title: '详情',
                               dataIndex: 'demand',
                         },
@@ -232,7 +221,7 @@ export default {
                   ],
                   visible: false,
                   confirmLoading: false,
-                  loadingMore: true,
+                  loadingMore: false,
                   btnDsiable:false,
                   offset:1,
                   endtime:'',
@@ -306,6 +295,11 @@ export default {
                               this.$message.success('操作成功！');
                               this.confirmLoading = false;
                               this.visible = false;
+                              this.cashMoney = '';
+                              this.proname = '';
+                              this.price = '';
+                              this.number = '';
+                              this.demand= ''
                         }
                   })
             },
@@ -331,29 +325,30 @@ export default {
             },
             handleSubmit() {
                   this.confirmLoading = true;
-                  this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
+                  if (this.totalPrice) {
+                        this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
+                  }else{
+                        this.confirmLoading = false;
+                        this.$message.error('请至少一种赞助形式!')
+                  }
+                  
             },
             handleCancel(e) {
-                  console.log('Clicked cancel button');
-                  this.visible = false
-            },
-            onChange(value) {
-                  console.log('changed', value);
-            },
-           
-            
-            triggerChange  (changedValue) {
-                  // Should provide an event to pass value to Form.
-                  this.$emit('change', Object.assign({}, this.$data, changedValue));
-            },
-            
+                  this.loadingMore = false;
+                  this.visible = false;
+                  this.cashMoney = '';
+                  this.proname = '';
+                  this.price = '';
+                  this.number = '';
+                  this.demand= ''
+            }
       },
       computed:{
             total(){
                   return this.price*this.number || 0
             },
             totalPrice(){
-                  return this.cashMoney + this.total
+                  return parseInt(this.cashMoney + this.total)
             }
       },
       watch: {
