@@ -13,7 +13,10 @@
           </div>
           <div class="row">
             <div v-if="avatar" class="avatar">
-              <a-avatar :src="avatar" />
+              <a-avatar :src="avatar"/>
+            </div>
+            <div v-else class="avatar">
+              <a-avatar icon="user" style="font-size: 40px;line-height: 60px;"/>
             </div>
             <div v-if="this.$slots.content" class="headerContent">
               <slot name="content"></slot>

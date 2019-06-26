@@ -13,10 +13,8 @@
                               <div class="account-center-detail">
                                           <p v-if="sex == 1">
                                                 <a-icon type="man"/>男
-                                               
                                           </p>
                                           <p v-if="sex == 2">
-                                               
                                                 <a-icon type="woman"/>女
                                           </p>
                                           <p>
@@ -48,14 +46,12 @@
                               </div>
                               <div class="content">
                                     <p>{{desc}}</p>
-                                    
                               </div>
                               <div class="title">
                                     <h5>个人图册</h5>
                               </div>
                               <div class="img-content">
                                     <img :src="imgs" alt="">
-                                    
                               </div>
                         </div>
                   </a-col>

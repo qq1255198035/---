@@ -6,9 +6,9 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar()">
+              <img :src="host + personInfo.logo">
             </div>
-            <div class="username">{{ nickname() }}</div>
+            <div class="username">{{personInfo.name}}</div>
           </div>
           <div class="account-center-detail">
             <p>
@@ -27,7 +27,7 @@
           </div>
           <a-divider :dashed="true"/>
           <div class="account-center-team">
-            <img :src="personInfo.businessImg" alt>
+            <img :src="host + personInfo.businessImg" alt>
           </div>
         </a-card>
       </a-col>
@@ -131,18 +131,19 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getUserInformation } from '@api/hand'
-import imgUrl from '@/assets/123.png'
+
 import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   mixins: [mixinsTitle],
   data() {
     return {
-      imgUrl: '',
-      personInfo: ''
+      personInfo: '',
+      host:''
     }
   },
   created() {
-        this._getUserInformation()
+        this._getUserInformation();
+        this.host = this.$host
   },
   methods: {
     // 搞手用户信息

@@ -80,7 +80,7 @@
         <div class="upload">
           <div class="top">
             <p>公司LOGO</p>
-            <img v-if="imgurl" :src="imgurl"  width="130" height="130" style="border-radius:50%;background:#808080"/>
+            <img v-if="imgurl" :src="imgurl"  width="130" height="130" style="border-radius:50%;background:#808080;margin-bottom: 10px;"/>
             <template>
               <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
@@ -91,7 +91,7 @@
           </div>
           <div class="top">
             <p>营业执照</p>
-            <img v-if="imgurl1" :src="imgurl1"  width="130" height="130" style="border-radius:50%;background:#808080"/>
+            <img v-if="imgurl1" :src="imgurl1"  width="130" height="130" style="border-radius:50%;background:#808080;margin-bottom: 10px;"/>
             <template>
               <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload1">
                 <a-button>
@@ -208,7 +208,8 @@ export default {
             })
           this.$router.push({
             path: '/zhxx'
-          })
+          });
+          window.location.reload();
         }
       })
     },

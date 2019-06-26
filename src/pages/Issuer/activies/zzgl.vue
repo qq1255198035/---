@@ -482,7 +482,7 @@ const pieScale = [
 
 const columns = [
   {
-    title: '编号',
+    title: '序号',
     dataIndex: 'key',
     align: 'center'
   },
@@ -776,16 +776,16 @@ export default {
         this.loading = false;
         this.dataList = res.data.namingCampSponsor
         this.dataList.map((item,index)=>{
-              item[key] = index
+              item[key] = index + 1
         })
         console.log(this.dataList)
         this.dataList1 = res.data.noNamingCampSponsor
         this.dataList1.map((item,index)=>{
-              item[key] = index
+              item[key] = index + 1
         })
         this.dataList2 = res.data.otherCampSponsor
         this.dataList2.map((item,index)=>{
-              item[key] = index
+              item[key] = index + 1
         })
       })
     },

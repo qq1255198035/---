@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar" :title="false">
+  <page-view :avatar="avatar? host+avatar : ''" :title="false">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>经纪人</div>
@@ -25,7 +25,7 @@
                           <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
-                    <p v-else>暂无数据</p>
+                    <p v-else style="margin-left: 100px;">暂无数据</p>
                   </a-row>
               </div>
             </div>
@@ -123,8 +123,8 @@ export default {
       checked = checked ? 'checked' : 'unChecked';
       return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
         '" data-value="' + value + '" data-color=' + color +
-        ' style="cursor: pointer;font-size: 14px;">' +
-        '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
+        ' style="cursor: pointer;font-size: 14px; margin-right: 0">' +
+        '<td style="border: none;padding:0;width:150px"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
         '<span class="g2-legend-text">' + value + '</span></td>' +
         '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
         '</tr>';
@@ -132,7 +132,7 @@ export default {
       // data
       operationColumns: [
         {
-            title: '编号',
+            title: '序号',
             dataIndex: 'key',
         },
         {
@@ -144,19 +144,17 @@ export default {
             dataIndex: 'paid',
         },
         {
-              title: '活动时间',
-              dataIndex: 'publishTime'
+            title: '活动时间',
+            dataIndex: 'publishTime'
         },
         {
-              title: '参加明星',
-              dataIndex: 'username',
+            title: '参加明星',
+            dataIndex: 'username',
         },
         {
-              title: '出场总额',
-              dataIndex: 'cost',
+            title: '出场总额',
+            dataIndex: 'cost',
         },
-                       
-       
       ],
       operation1: [],
       
@@ -169,14 +167,13 @@ export default {
   },
   created () {
     this.user = this.userInfo
-    this.avatar = this.$host + this.$store.getters.avatar
+    this.avatar = this.$store.getters.avatar
     
   },
   mounted () {
     this.getHeadMsg();
-    this.getPieData()
+    this.getPieData();
     this.getApplicationList('','','',1)
-    // this.conlog();
   },
   methods: {
     ...mapGetters(['nickname']),
@@ -196,7 +193,7 @@ export default {
             this.pieData1[1].count= res.data.paid;
             this.agentTotal = res.data.agentTotal
             if (res.data.unpaid == 0 && res.data.paid == 0) {
-              this.chartshow = false;
+                this.chartshow = false;
             }
             dv1.transform({
               type: 'percent',
@@ -211,12 +208,10 @@ export default {
         applicationList(startime, endtime, condition, offset).then(res=>{
               if(res.code == 1000){
                     console.log(res)
-                    let key = 'key'
-                    
-                    this.operation1 = res.page.rows
-                    
+                    let key = 'key';
+                    this.operation1 = res.page.rows;
                     this.operation1.map((item,index)=>{
-                          item[key] = index
+                          item[key] = index + 1
                     })
               }
         })
@@ -245,50 +240,53 @@ export default {
     overflow: hidden;
     margin-bottom: 24px;
     .item-boxes{
+      height: 100%;
           .item-row{
-        position: absolute;
-        left: 0;
-        bottom: -60px;
-          .item-box{
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          .calc-price{
-            position: absolute;
-            bottom: 80px;
-            left: 86px;
-            font-size: 16px;
-            color: #FEBF56;
             width: 100%;
-            span{
-              font-size: 24px;
-              font-weight: bold;
-              color: #F5797D;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+          .item-box{
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            .calc-price{
+              position: absolute;
+              bottom: 80px;
+              margin-left: 90px;
+              font-size: 16px;
+              color: #FEBF56;
+              width: 100%;
+              span{
+                font-size: 24px;
+                font-weight: bold;
+                color: #F5797D;
             }
           }
           .desc{
-          display: flex;
-          
-          flex-direction: column;
-          justify-content: flex-start;
-          padding-top: 85px;
-          h5{
-            color: #333;
-            font-size: 20px;
-            span{
-              color: #666;
-              font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 85px;
+            h5{
+              color: #333;
+              font-size: 20px;
+              span{
+                color: #666;
+                font-size: 14px;
+              }
             }
-          }
-          p{
-            font-size: 15px;
-            &:nth-child(1){
-              color: #42BCFD;
+            p{
+              font-size: 15px;
+              &:nth-child(1){
+                color: #42BCFD;
+              }
+              &:nth-child(2){
+                color: #4075FC;
+              }
             }
-            &:nth-child(2){
-              color: #4075FC;
-            }
-          }
         }
       }
     }

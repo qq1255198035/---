@@ -341,7 +341,7 @@ export default {
                   btnShow: -1,
                   visible: false,
                   confirmLoading: false,
-                  loadingMore:true,
+                  loadingMore:false,
                   loading:false,
                   btnDsiable: false,
                   imageUrl1: '',
@@ -427,7 +427,6 @@ export default {
             getProfessionList(){
                   getProfession().then(res=>{
                         if (res.code == 1000) {
-                              console.log(res)
                               this.works = res.data
                         }
                   })
@@ -435,7 +434,6 @@ export default {
             getCountryList(){
                   getCountry().then(res=>{
                         if (res.code == 1000) {
-                              console.log(res)
                               this.country = res.data
                         }
                   })

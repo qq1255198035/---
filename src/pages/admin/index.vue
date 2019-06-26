@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar" :title="false">
+  <page-view :avatar="avatar? host+avatar : ''" :title="false">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>管理员用户</div>
@@ -105,7 +105,7 @@ export default {
       teams: [],
       operationColumns: [
          {
-                title: '编号',
+                title: '序号',
                 dataIndex: 'key'
           },
           {
@@ -130,7 +130,8 @@ export default {
       sponsor:'',
       agent:'',
       tohand:'',
-      star:''
+      star:'',
+      host:''
     }
   },
   computed: {
@@ -147,6 +148,7 @@ export default {
     //this.getHeadMsg();
     this.getSearchCampList('',1);
     this.getRightInfo();
+    this.host = this.$host
   },
   methods: {
     ...mapGetters(['nickname']),
@@ -166,7 +168,7 @@ export default {
           console.log(res.page.rows)
           this.operation1 = res.page.rows
           this.operation1.map((item,index)=>{
-            item[key] = index
+            item[key] = index +1;
           })
         }
       })

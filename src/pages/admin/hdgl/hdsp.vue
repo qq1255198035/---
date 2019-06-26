@@ -112,7 +112,7 @@ export default {
                   },
                   columns: [
                         {
-                              title: '编号',
+                              title: '序号',
                               dataIndex: 'num'
                         },
                         {
@@ -185,7 +185,7 @@ export default {
                               this.loading = false;
                               this.data = res.page.rows
                               this.data.map((item,index)=>{
-                                    item[key] = (res.page.offset - 1).toString() + index
+                                    item[key] = (res.page.offset - 1).toString() + (index + 1)
                               })
                         }
                   })

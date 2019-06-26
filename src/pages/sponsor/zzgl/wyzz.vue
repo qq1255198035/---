@@ -80,11 +80,9 @@
                         =
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               <a-input
-                                    @change="onChange"
                                     placehodler="总额"
                                     :read-only="true"
                                     v-model="total"
-                                    
                               />
                         </a-form-item>
                         
@@ -192,11 +190,6 @@
 <script>
 import { searchCampList,saveMySponsor } from "@/api/sponsor";
 import { judge } from "@/api/common";
-const hasProp = (instance, prop) => {
-  const $options = instance.$options || {};
-  const propsData = $options.propsData || {};
-  return prop in propsData;
-};
 export default {
       
       data(){
@@ -216,11 +209,6 @@ export default {
                               dataIndex: 'num',
                         },
                         {
-                              title: '是否议价',
-                              dataIndex: 'bargain',
-                              
-                        },
-                        {
                               title: '详情',
                               dataIndex: 'demand',
                         },
@@ -232,7 +220,7 @@ export default {
                   ],
                   visible: false,
                   confirmLoading: false,
-                  loadingMore: true,
+                  loadingMore: false,
                   btnDsiable:false,
                   offset:1,
                   endtime:'',
@@ -336,17 +324,7 @@ export default {
             handleCancel(e) {
                   console.log('Clicked cancel button');
                   this.visible = false
-            },
-            onChange(value) {
-                  console.log('changed', value);
-            },
-           
-            
-            triggerChange  (changedValue) {
-                  // Should provide an event to pass value to Form.
-                  this.$emit('change', Object.assign({}, this.$data, changedValue));
-            },
-            
+            }
       },
       computed:{
             total(){
