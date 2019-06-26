@@ -5,23 +5,27 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="starDetils.avatar">
+              <img :src="avatar">
             </div>
-            <div class="username">{{starDetils.monicker}}{{starDetils.surname}}</div>
+            <div class="username">{{starDetils.surname}}{{starDetils.monicker}}</div>
             <p>{{starDetils.enName}}</p>
           </div>
           <div class="account-center-detail">
             <p>
-              <a-icon type="man"/>{{sex}}
+              <a-icon type="man"/>
+              {{sex}}
             </p>
             <p>
-              <a-icon type="bank" class="tel"></a-icon>{{starDetils.nationality}}
+              <a-icon type="bank" class="tel"></a-icon>
+              {{starDetils.nationality}}
             </p>
             <p>
-              <a-icon type="sort-descending"/>{{starDetils.height}}cm
+              <a-icon type="sort-descending"/>
+              {{starDetils.height}}cm
             </p>
             <p>
-              <a-icon type="contacts"/>{{starDetils.weight}}公斤
+              <a-icon type="contacts"/>
+              {{starDetils.weight}}公斤
             </p>
             <p>
               <a-icon type="environment"/>
@@ -43,13 +47,13 @@
             <h5>公司简介</h5>
           </div>
           <div class="content">
-           <p>{{starDetils.introduction}}</p>
+            <p>{{starDetils.introduction}}</p>
           </div>
           <div class="title">
             <h5>个人图册</h5>
           </div>
           <div class="img-content">
-            <img v-for="(item, index) in starDetils.imgs" :key="index" :src="item" alt>
+            <img v-for="(item, index) in detailsImgs" :key="index" :src="item" alt>
           </div>
         </div>
       </a-col>
@@ -162,7 +166,9 @@ export default {
     return {
       imgUrl,
       starDetils: '',
-      sex: ''
+      sex: '',
+      avatar: '',
+      detailsImgs: []
     }
   },
   activated() {
@@ -180,7 +186,18 @@ export default {
       getStarDetails(params).then(res => {
         console.log(res)
         this.starDetils = res.data
+        this.avatar = this.$host + res.data.avatar
+        console.log(this.avatar)
         this.sex = res.data.sex === '1' ? '男' : '女'
+        const detailsArrty = []
+        console.log(res.data.imgs.length)
+        for (let i = 0; i < res.data.imgs.length; i++) {
+          if (!res.data.imgs.length == 0) {
+            detailsArrty.push(this.$host + res.data.imgs[i].location)
+          }
+        }
+        this.detailsImgs = detailsArrty
+        console.log(this.detailsImgs)
       })
     },
     ...mapGetters(['nickname', 'avatar'])

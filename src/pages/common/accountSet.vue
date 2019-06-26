@@ -157,7 +157,7 @@ export default {
     }
   },
   mixins: [mixinsTitle],
-  created() {
+  activated() {
    // this._getPlace()
     this._getUserInformation()
     this._getBooleanPlace()

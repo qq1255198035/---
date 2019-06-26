@@ -176,8 +176,7 @@
                 <a-input
                   placeholder="email"
                   class="my-input"
-                  type="email"
-                  v-decorator="['emailName',{rules: [{ required: true, message: '请输入电子邮箱' }]}]"
+                  v-decorator="['emailName',{rules: [{type: 'email', required: true, message: '请输入电子邮箱' }]}]"
                 />
               </a-form-item>
             </div>
@@ -964,7 +963,7 @@ export default {
       e.preventDefault()
       console.log(this.code)
       if (this.code == '1000' || this.code == '1001') {
-        const campId = this.$route.query.campId ? this.$route.query.campId : ''
+        const campId = this.$route.query.campId ? this.$route.query.campId :this.userid
         const params = {
           token: this.$ls.get('Access-Token'),
           campId: campId
@@ -1231,7 +1230,7 @@ export default {
             this.form2.setFieldsValue({
               pingName: res.platform,
               companyTitle: { key: '133', label: '主办方' },
-              companyName: '公司地址'
+              companyName: ''
             })
             const selectArry = res.campFeature.split(',')
             const companyArry = res.data
@@ -1445,6 +1444,7 @@ export default {
       console.log(this.form.validateFields)
       //活动基本信息
       if (this.formShow == 0) {
+        this.confirmLoading = false
         this.form.validateFields((err, values) => {
           console.log(values)
           if (!err) {
@@ -1512,6 +1512,7 @@ export default {
 
       // 活动详情
       if (this.formShow == 1) {
+        this.confirmLoading = false
         this.form1.validateFields((err, values) => {
           console.log(values)
           if (!err) {
@@ -1547,6 +1548,7 @@ export default {
       }
       // 活动推广
       if (this.formShow == 2) {
+        this.confirmLoading = false
         this.form2.validateFields((err, values) => {
           console.log(values)
           if (!err) {
@@ -1583,6 +1585,7 @@ export default {
       }
       // 活动赞助
       if (this.formShow == 3) {
+        this.confirmLoading = false
         this.form3.validateFields((err, values) => {
           console.log(values)
           if (!err) {
@@ -1602,6 +1605,7 @@ export default {
             }
             console.log(params)
             getEventSponsorship(params).then(res => {
+              
               console.log(res)
               if (res.data.code == 1000 || rea.data.code == 1001) {
                 this.$notification.success({
@@ -1673,6 +1677,14 @@ export default {
     },
     beforeUploadVideo(file) {
       console.log(file)
+      const isMP4 = file.type === 'video/mp4'
+      console.log(file.type === 'video/mp4')
+      const isRMVB = file.type === 'video/rmvb'
+      const isAVI = file.type === 'video/avi'
+      if (!isMP4 && !isRMVB && !isAVI) {
+        this.$message.error('不是视频格式!')
+        return false
+      }
       getBase64(file, videoUrl => {
         this.videoUrl = videoUrl
         this.loading = false

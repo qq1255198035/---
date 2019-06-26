@@ -198,7 +198,7 @@
 }
 </style>
 <script>
-import glTitle from '@/components/glTitle/glTitle'
+import glTitle from '@/components/glTitle1/glTitle1'
 import { getStarList, getStarCheck, getJoinStar, getActivityInformation } from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
 export default {
@@ -317,6 +317,7 @@ export default {
       getStarCheck(params).then(res => {
         console.log(res)
         this._getStarList()
+        this._getJoinStar()
       })
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
@@ -346,6 +347,7 @@ export default {
         console.log(res)
         if (res.data.code == '1') {
           this._getStarList()
+          this._getJoinStar()
           this.loading = true
           setTimeout(() => {
             this.loading = false

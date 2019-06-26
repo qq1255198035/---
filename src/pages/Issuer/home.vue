@@ -238,7 +238,7 @@ export default {
     },
     ...mapGetters(['notice']),
   },
-  created () {
+  activated () {
     this._getSponsorshipdetails()
     this._getUserInformation()
     this._getSponsoredTweets()

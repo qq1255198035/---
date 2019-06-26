@@ -8,12 +8,10 @@
         <div class="profile-info">
           <h2 class="no-margins">{{title}}</h2>
           <p>时间：{{start}}</p>
-          <slot name="a">
-          </slot>
-          <slot name="b">
-            <a-icon type="environment" class="my-icon"/>
-            {{adre}}
-          </slot>
+          <a-icon type="environment" class="my-icon"/>
+        <span>
+          <span v-for="(item, index) in adress" :key="index">{{item.area_name}}</span>
+        </span>
         </div>
       </a-col>
       <a-col :span="10">
