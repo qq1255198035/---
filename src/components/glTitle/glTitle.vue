@@ -30,7 +30,7 @@
             </ul>
           </li>
           <li>
-            参与明星：
+            参与赞助：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in sponsors" :key="index">
                 <a-avatar :size="40" class="img-circle" :src="host + item.logo"/>

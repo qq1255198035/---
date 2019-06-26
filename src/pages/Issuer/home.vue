@@ -1,5 +1,5 @@
 <template>
-  <page-view :avatar="logo" :title="false">
+  <page-view :avatar="logo ? this.$host + logo : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ personInfo.contact }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>搞手</div>
@@ -364,7 +364,7 @@ export default {
       getUserInformation(params).then(res => {
         console.log(res)
         this.personInfo = res.data
-        this.logo = this.$host + res.data.logo
+        this.logo = res.data.logo
       })
     },
   },

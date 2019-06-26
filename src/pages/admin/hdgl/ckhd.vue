@@ -56,12 +56,12 @@
                                                 </li>
                                                 <li>
                                                       <span>活动视频：</span>
-                                                      <video :src="video" controls poster="./../../../assets/a1.jpg" width="200px" height="150px"></video>
+                                                      <video :src="video" controls width="200px" height="150px"></video>
                                                 </li>
                                                 <li>
                                                       <span>活动照片：</span>
                                                       <div class="img-box" v-for="(item,index) in imgs" :key="index">
-                                                            <img :src="host + item" alt="">        
+                                                            <img :src="host + item" alt="活动照片">        
                                                       </div>
                                                       
                                                 </li>
@@ -112,11 +112,11 @@
                                           <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>   
                                     </div>
                                     <div class="my-tables">
-                                          <h3>非冠名赞助<span>（ 2 ）</span></h3>
+                                          <h3>非冠名赞助<span>( {{dataNoName.length}} )</span></h3>
                                           <a-table :columns="columns3" :dataSource="dataNoName" size="middle"></a-table>   
                                     </div>
                                     <div class="my-tables">
-                                          <h3>其他赞助<span>（ 2 ）</span></h3>
+                                          <h3>其他赞助<span>( {{dataOther.length}} )</span></h3>
                                           <a-table :columns="columns3" :dataSource="dataOther" size="middle"></a-table>   
                                     </div>
                               </a-tab-pane>
@@ -389,12 +389,12 @@ export default {
             }
       },
       mounted(){
-            console.log(this.$route.params.id)
-            this.getCampInformation(this.$route.params.id);
-            this.getSearchCampSponsor(this.$route.params.id);
-            this.getSearchCampStar(this.$route.params.id);
-            this.getCampHeadInfo(this.$route.params.id);
-            this.getCampSchedule(this.$route.params.id)
+            
+            this.getCampInformation(this.$route.query.id);
+            this.getSearchCampSponsor(this.$route.query.id);
+            this.getSearchCampStar(this.$route.query.id);
+            this.getCampHeadInfo(this.$route.query.id);
+            this.getCampSchedule(this.$route.query.id)
             this.host = this.$host;
             
       },

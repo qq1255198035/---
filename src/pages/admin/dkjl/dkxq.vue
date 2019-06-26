@@ -61,8 +61,7 @@ export default {
             
       },
       mounted () {
-            
-            this.list = this.$route.params.data
+            this.list = this.$route.query.data
       },
 }
 </script>

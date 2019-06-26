@@ -184,7 +184,7 @@ export default {
             }
       },
       mounted(){
-            this.getSearchStarInfo(this.$route.params.id)
+            this.getSearchStarInfo(this.$route.query.id)
       },
       methods: {
            

@@ -45,7 +45,7 @@
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
                                                             <a-button type="danger" class="danger" @click="showModal(item.key)">驳回</a-button>
                                                             <a-button type="primary" class="primary" @click="success(item.key)" :loading="loading">通过</a-button>
-                                                            <a-button @click="$router.push({name:'mxxq',params:{id: item.key}})">查 看</a-button>
+                                                            <a-button @click="$router.push({path:'/mxxq',query:{id: item.key}})">查 看</a-button>
                                                       </div>
                                                 </transition>
                                                 
@@ -82,7 +82,7 @@
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
                                                             
-                                                            <a-button type="primary" class="primary" @click="$router.push({name:'mxxq',params:{id: item.key}})">查 看</a-button>
+                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/mxxq',query:{id: item.key}})">查 看</a-button>
                                                       </div>
                                                 </transition>
                                                 

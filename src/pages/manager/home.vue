@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar? host+avatar : ''" :title="false">
+  <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>经纪人</div>

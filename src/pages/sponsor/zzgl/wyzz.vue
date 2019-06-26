@@ -11,7 +11,8 @@
                         <div class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
-                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle"/>
+                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                    <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
                                           <h2 class="no-margins">
@@ -294,6 +295,11 @@ export default {
                               this.$message.success('操作成功！');
                               this.confirmLoading = false;
                               this.visible = false;
+                              this.cashMoney = '';
+                              this.proname = '';
+                              this.price = '';
+                              this.number = '';
+                              this.demand= ''
                         }
                   })
             },
@@ -319,11 +325,22 @@ export default {
             },
             handleSubmit() {
                   this.confirmLoading = true;
-                  this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
+                  if (this.totalPrice) {
+                        this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
+                  }else{
+                        this.confirmLoading = false;
+                        this.$message.error('请至少一种赞助形式!')
+                  }
+                  
             },
             handleCancel(e) {
-                  console.log('Clicked cancel button');
-                  this.visible = false
+                  this.loadingMore = false;
+                  this.visible = false;
+                  this.cashMoney = '';
+                  this.proname = '';
+                  this.price = '';
+                  this.number = '';
+                  this.demand= ''
             }
       },
       computed:{
@@ -331,7 +348,7 @@ export default {
                   return this.price*this.number || 0
             },
             totalPrice(){
-                  return this.cashMoney + this.total
+                  return parseInt(this.cashMoney + this.total)
             }
       },
       watch: {
