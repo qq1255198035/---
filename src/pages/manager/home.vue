@@ -1,8 +1,8 @@
 
 <template>
-  <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
+  <page-view :avatar="avatar? host + avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div class="title">{{ timeFix }}，{{ user }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>经纪人</div>
     </div>
     <div id="myhome">
@@ -69,13 +69,12 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 import { headMsg,piesData } from '@/api/common'
-import { applicationList } from "@/api/manager";
+import { applicationList } from "@/api/manager"
+import { userInfo } from "@/api/common"
 const sourceData1 = [
   { item: '未付', count: null },
   { item: '已付', count: null },
@@ -103,8 +102,9 @@ export default {
       chartshow:true,
       timeFix: timeFix(),
       avatar: '',
-      user: {},
+      user: '',
       pieData1,
+      host:'',
       sourceData1,
       c1:["item", ["#F56367","#FFB535",]],
       projects: [],
@@ -119,17 +119,10 @@ export default {
         lineWidth: 1
       },
       itemTpl: (value, color, checked, index) => {
-      const obj = dv1.rows[index];
-      checked = checked ? 'checked' : 'unChecked';
-      return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
-        '" data-value="' + value + '" data-color=' + color +
-        ' style="cursor: pointer;font-size: 14px; margin-right: 0">' +
-        '<td style="border: none;padding:0;width:150px"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
-        '<span class="g2-legend-text">' + value + '</span></td>' +
-        '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
-        '</tr>';
-  },
-      // data
+        const obj = dv1.rows[index];
+        checked = checked ? 'checked' : 'unChecked';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px; margin-right: 0">' +'<td style="border: none;padding:0;width:150px"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+      },
       operationColumns: [
         {
             title: '序号',
@@ -161,22 +154,19 @@ export default {
     }
   },
   computed: {
-    userInfo () {
-      return this.$store.getters.userInfo
-    }
+    
   },
   created () {
-    this.user = this.userInfo
-    this.avatar = this.$store.getters.avatar
     
   },
   mounted () {
     this.getHeadMsg();
     this.getPieData();
-    this.getApplicationList('','','',1)
+    this.getApplicationList('','','',1);
+    this.getUserInfo();
+    this.host = this.$host
   },
   methods: {
-    ...mapGetters(['nickname']),
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){
@@ -215,7 +205,18 @@ export default {
                     })
               }
         })
-  },
+    },
+    getUserInfo(id){
+      userInfo(id).then(res=>{
+        if (res.code == 1000) {
+            console.log(res);
+            this.user = res.data.name;
+            this.avatar = res.data.logo;
+            console.log(this.avatar);
+          }
+        })
+    }
+    
   },
   filters: {
     

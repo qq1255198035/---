@@ -2,7 +2,7 @@
 <template>
   <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div class="title">{{ timeFix }}，{{user}}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>管理员用户</div>
     </div>
     <div slot="extra">
@@ -65,12 +65,12 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { mapGetters } from 'vuex'
 import { headMsg } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 import { searchCampList,rightInfo } from '@/api/admin'
+import { userInfo } from "@/api/common";
 const statusMap = {
       0: {
             status: 'processing',
@@ -96,7 +96,7 @@ export default {
     return {
       timeFix: timeFix(),
       avatar: '',
-      user: {},
+      user: '',
       infoList:[],
       loading: false,
       radarLoading: true,
@@ -135,23 +135,20 @@ export default {
     }
   },
   computed: {
-    userInfo () {
-      return this.$store.getters.userInfo
-    }
+    
   },
   created () {
-    this.user = this.userInfo
-    this.avatar = this.$store.getters.avatar
-    console.log(this.avatar)
+  
   },
   mounted () {
     //this.getHeadMsg();
     this.getSearchCampList('',1);
     this.getRightInfo();
+    this.getUserInfo()
     this.host = this.$host
   },
   methods: {
-    ...mapGetters(['nickname']),
+    
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){
@@ -181,8 +178,17 @@ export default {
         this.tohand = res.statistics.tohand.toString();
         this.star = res.statistics.star.toString()
       })
-    }
-  },
+    },
+    getUserInfo(id){
+      userInfo(id).then(res=>{
+        if (res.code == 1000) {
+            console.log(res);
+            this.user = res.data.name;
+            this.avatar = res.data.avatar;
+          }
+        })
+      }
+    },
   filters: {
     statusFilter (type) {
           return statusMap[type].text

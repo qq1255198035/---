@@ -25,7 +25,7 @@
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in stars" :key="index">
                 <a-avatar :size="40" class="img-circle" :src="host + item.avatar"/>
-                <i v-if="item.length > 4"></i>
+                <i v-if="item.length > 4">...</i>
               </li>
             </ul>
           </li>
@@ -34,7 +34,7 @@
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in sponsors" :key="index">
                 <a-avatar :size="40" class="img-circle" :src="host + item.logo"/>
-                <i v-if="item.length > 4"></i>
+                <i v-if="item.length > 4">...</i>
               </li>
             </ul>
           </li>

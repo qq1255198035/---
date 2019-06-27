@@ -134,8 +134,6 @@
 
 </style>
 <script>
-import { mapGetters } from 'vuex'
-
 import { userInfo } from "@/api/common";
 export default {
       data(){
@@ -155,9 +153,10 @@ export default {
       },
       mounted(){
             this.getUserInfo(this.$route.query.id)
+            console.log(this.$route.query.id)
       },
       methods: {
-            ...mapGetters(['nickname', 'avatar']),
+            
             getUserInfo(id){
                   userInfo(id).then(res=>{
                         if (res.code == 1000) {
@@ -171,7 +170,6 @@ export default {
                               this.intro = res.data.intro;
                               this.logo = this.$host + res.data.logo;
                               this.name = res.data.name;
-                              
                         }
                   })
             }
