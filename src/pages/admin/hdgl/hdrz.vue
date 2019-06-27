@@ -60,7 +60,7 @@ const statusMap = {
             text: '已认证'
       },
       0: {
-            status: 'error',
+            status: 'default',
             text: '待认证'
       }
 }

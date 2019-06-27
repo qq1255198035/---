@@ -74,15 +74,17 @@
                                                 </li>
                                                 <li>
                                                       <span>受众群众：</span>
-                                                      <div>
-                                                            <a-tag v-for="(item,index) in audiences" :key="index" :color="tagColors" style="margin-bottom:10px">{{item}}</a-tag>
+                                                      <div v-if="tagshow1">
+                                                            <a-tag v-for="(item,index) in audiences" :key="index" color="red" style="margin-bottom:10px">{{item}}</a-tag>
                                                       </div>
+                                                      <p v-else>暂无数据</p>
                                                 </li>
                                                 <li>
                                                       <span>活动特点：</span>
-                                                      <div>
-                                                            <a-tag v-for="(item,index) in campFeature" :key="index" :color="tagColors" style="margin-bottom:10px">{{item}}</a-tag>
+                                                      <div v-if="tagshow2">
+                                                            <a-tag v-for="(item,index) in campFeature" :key="index" color="cyan" style="margin-bottom:10px">{{item}}</a-tag>
                                                       </div>
+                                                      <p v-else>暂无数据</p>
                                                 </li>
                                           </ul>
                                     </div> 
@@ -228,7 +230,7 @@ const columns = [
             title: '地区',
             dataIndex: 'area',
       }, {
-            itle: '详细',
+            title: '详细',
             dataIndex: 'address',
       }, 
 ];
@@ -244,10 +246,10 @@ const columns1 = [
 const columns2 = [
       {
             title: '推广形式',
-            dataIndex: 'sponsorship',
+            dataIndex: 'ssKind',
       },    {
             title: '赞助形式',
-            dataIndex: 'ssKind',
+            dataIndex: 'sponsorship',
       }, {
             title: '赞助金额',
             dataIndex: 'money',
@@ -361,7 +363,7 @@ export default {
                   audiences: [],
                   campFeature:[],
                   demand:"",
-                  colors:['pink','red','orange','green','cyan','blue','purple'],
+                  
                   titleName:'',
                   startTime: '',
                   adre: '',
@@ -373,25 +375,21 @@ export default {
                   logo:'',
                   money:'',
                   host:'',
-                  schedule:0
-
+                  schedule:0,
+                  tagshow1:true,
+                  tagshow2:true,
             }
       },
       mounted(){
-            
             this.getCampInformation(this.$route.query.id);
             this.getSearchCampSponsor(this.$route.query.id);
             this.getSearchCampStar(this.$route.query.id);
             this.getCampHeadInfo(this.$route.query.id);
             this.getCampSchedule(this.$route.query.id)
             this.host = this.$host;
-            
       },
       computed:{
-            tagColors(){
-                  let x = Math.floor(Math.random()*this.colors.length)
-                  return this.colors[x]
-            },
+            
             
       },
       methods:{
@@ -402,8 +400,6 @@ export default {
                               this.schedule = parseInt(res.data.schedule - 1) 
                         }
                   })
-
-                  
             },
             getCampInformation(id){
                   campInformation(id).then(res=>{
@@ -423,11 +419,17 @@ export default {
                               this.imgs = (res.data.basic.imgs || '').split(',');
                               this.data1 = res.data.campOrgList;
                               this.audiences = (res.data.basic.audiences || '').split(',');
+                              if (res.data.basic.audiences.length == 0) {
+                                    this.tagshow1 = false
+                              }
                               this.campFeature = (res.data.basic.campFeature || '').split(',');
-                              this.jzTime = res.data.campSponsor[0].endTime;
+                              if (res.data.basic.campFeature.length == 0) {
+                                    this.tagshow2 = false
+                              }
                               this.data2 = res.data.campSponsor;
-                              this.demand = res.data.campSponsor[0].demand;
-                              
+                              console.log(res.data.campSponsor.length)
+                              this.demand = res.data.campSponsor.length ? res.data.campSponsor[0].demand : '';
+                              this.jzTime = res.data.campSponsor.length ? res.data.campSponsor[0].endTime : '';
                         }
                   })
             },

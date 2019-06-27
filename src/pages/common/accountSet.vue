@@ -92,8 +92,9 @@
               :src="imgurl"
               width="130"
               height="130"
-              style="border-radius:50%;background:#808080"
+              style="border-radius:50%;background:#808080;margin-bottom: 10px;"
             >
+            <a-avatar v-else style="backgroundColor:#23C6C8" :size="130">Sponsor Cube</a-avatar>
             <template>
               <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
@@ -109,8 +110,9 @@
               :src="imgurl1"
               width="130"
               height="130"
-              style="border-radius:50%;background:#808080"
+              style="border-radius:50%;background:#808080;margin-bottom: 10px;"
             >
+            <a-avatar v-else style="backgroundColor:#23C6C8" :size="130">Sponsor Cube</a-avatar>
             <template>
               <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload1">
                 <a-button>
@@ -157,7 +159,7 @@ export default {
     }
   },
   mixins: [mixinsTitle],
-  activated() {
+  created() {
    // this._getPlace()
     this._getUserInformation()
     this._getBooleanPlace()
@@ -188,8 +190,8 @@ export default {
         this.imgurl = res.data.logo ? this.$host + res.data.logo : ''
         this.fileUrl = res.data.logo
         console.log(this.imgurl)
-        this.imgurl1 = res.data.business_img ? this.$host + res.data.business_img : ''
-        this.fileUrl1 = res.data.business_img
+        this.imgurl1 = res.data.businessImg ? this.$host + res.data.businessImg : ''
+        this.fileUrl1 = res.data.businessImg
         console.log(this.imgurl1)
       })
     },

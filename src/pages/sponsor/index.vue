@@ -2,7 +2,7 @@
 <template>
   <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div class="title">{{ timeFix }}，{{ user }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>赞助商</div>
     </div>
     <div id="home">
@@ -79,13 +79,11 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { mapGetters } from 'vuex'
-import { headMsg,piesData } from '@/api/common'
+import { headMsg,piesData,userInfo } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
-import { searchSponsor } from "@/api/sponsor";
 
+import { searchSponsor } from "@/api/sponsor";
 const sourceData = [
   { item: '现金', count: null },
   { item: '实物', count: null },
@@ -112,13 +110,13 @@ export default {
   components: {
     PageView,
     HeadInfo,
-    Radar
+    
   },
   data () {
     return {
       timeFix: timeFix(),
       avatar: '',
-      user: {},
+      user: '',
       pieData,
       pieData1,
       sourceData,
@@ -139,30 +137,16 @@ export default {
         lineWidth: 1
       },
       itemTpl: (value, color, checked, index) => {
-    const obj = dv.rows[index];
-    checked = checked ? 'checked' : 'unChecked';
-    return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
-      '" data-value="' + value + '" data-color=' + color +
-      ' style="cursor: pointer;font-size: 14px;">' +
-      '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
-      '<span class="g2-legend-text">' + value + '</span></td>' +
-      '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
-      '</tr>';
-  },
+        const obj = dv.rows[index];
+        checked = checked ? 'checked' : 'unChecked';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;">' +'<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+      },
       itemTpl1: (value, color, checked, index) => {
         const obj = dv1.rows[index];
         checked = checked ? 'checked' : 'unChecked';
-        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +
-          '" data-value="' + value + '" data-color=' + color +
-          ' style="cursor: pointer;font-size: 14px;">' +
-          '<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +
-          '<span class="g2-legend-text">' + value + '</span></td>' +
-          '<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +
-          '</tr>';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;">' +'<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
       },
       // data
-      
-      
       operationColumns: [
         {
           title: '序号',
@@ -211,24 +195,19 @@ export default {
     }
   },
   computed: {
-    userInfo () {
-      return this.$store.getters.userInfo
-    }
+   
   },
   created () {
-    this.user = this.userInfo
-    this.avatar = this.$store.getters.avatar
-    console.log(this.avatar)
-    
+   
   },
   mounted () {
     this.getHeadMsg();
     this.getPiesData();
-    this.getSponsorList('','','',1)
+    this.getSponsorList('','','',1);
+    this.getUserInfo();
     this.host = this.$host;
   },
   methods: {
-    ...mapGetters(['nickname']),
     getHeadMsg(){
       headMsg().then(res => {
         if(res.code == 1000){
@@ -275,13 +254,20 @@ export default {
                 }
           })
     },
+    getUserInfo(id){
+      userInfo(id).then(res=>{
+        if (res.code == 1000) {
+            this.user = res.data.name;
+            this.avatar = res.data.logo;
+          }
+        })
+    }
   },
   filters: {
     
   }
 }
 </script>
-
 <style lang="less">
 .project-card-grid{
   width: 100%;

@@ -79,7 +79,7 @@ import HeadInfo from '@/components/tools/HeadInfo'
 import { approvalNumber,searchCampList,campApproval,campInformation } from '@/api/admin'
 const statusMap = {
       0: {
-            status: 'processing',
+            status: 'warning',
             text: '待审批'
       },
       20: {

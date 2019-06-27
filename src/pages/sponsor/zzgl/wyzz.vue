@@ -70,12 +70,12 @@
                   <div class="calc-price">
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               
-                              <a-input type='number' v-model="price" placeholder="单价" style="width: 100%;"/>
+                              <a-input type='number' min="0" v-model="price" placeholder="单价" style="width: 100%;"/>
                               
                         </a-form-item>
                         *
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
-                              <a-input type='number' v-model="number" placeholder="数量" style="width: 100%;"/>
+                              <a-input type='number' min="0" v-model="number" placeholder="数量" style="width: 100%;"/>
                               
                         </a-form-item>
                         =
@@ -90,7 +90,7 @@
                   </div>
                   <a-divider class="my-divider"/>
                   <p>总计：{{totalPrice}}元</p>
-                  <a-form-item label="详情" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                  <a-form-item label="备注" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                         <a-textarea class="my-input" v-model="demand"/>
                   </a-form-item>
                   </a-form>
@@ -240,6 +240,7 @@ export default {
       mounted(){
             this.host = this.$host;
             this.getSearchCampList(this.starttime,this.endtime,this.offset);
+            console.log(this.isPositive)
       },
       methods: {
             
@@ -326,7 +327,12 @@ export default {
             handleSubmit() {
                   this.confirmLoading = true;
                   if (this.totalPrice) {
-                        this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
+                        this.confirmLoading = false;
+                        if (this.isPositive) {
+                              this.postSaveMySponsor(this.id,this.price,this.proname,this.number,this.total,this.totalPrice,this.demand,this.cashMoney)
+                        }else{
+                              this.$message.error('单价与数量必须为大于0!')
+                        }
                   }else{
                         this.confirmLoading = false;
                         this.$message.error('请至少一种赞助形式!')
@@ -349,6 +355,13 @@ export default {
             },
             totalPrice(){
                   return parseInt(this.cashMoney + this.total)
+            },
+            isPositive(){
+                  if (this.price >= 0 && this.number >= 0) {
+                        return true
+                  }else{
+                        return false
+                  }
             }
       },
       watch: {

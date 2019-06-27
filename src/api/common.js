@@ -33,7 +33,7 @@ export function infoList(condition, offset) {
 // 查看已审批角色信息
 export function userInfo(userId) {
 return axios({
-    url: '/vue/organize/userInfo',
+    url: '/vue/admin/userInfo',
     method: 'post',
     data: qs.stringify({
       token: Vue.ls.get(ACCESS_TOKEN),

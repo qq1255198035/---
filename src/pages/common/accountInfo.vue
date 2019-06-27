@@ -135,9 +135,7 @@
 }
 </style>
 <script>
-import { mapGetters } from 'vuex'
 import { getUserInformation } from '@api/hand'
-
 import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   mixins: [mixinsTitle],
@@ -162,12 +160,11 @@ export default {
       getUserInformation(params).then(res => {
         console.log(res)
         this.personInfo = res.data
-        this.busiess = this.$host + res.data.business_img
+        this.busiess = this.$host + res.data.businessImg
 
         this.logo = this.$host + res.data.logo
       })
     },
-    ...mapGetters(['nickname', 'avatar'])
   }
 }
 </script>
