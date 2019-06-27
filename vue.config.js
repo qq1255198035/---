@@ -90,9 +90,9 @@ module.exports = {
     proxy: {
       '/api': {
         // 测试环境
-        //target: 'http://192.168.0.122:8090', // 接口域名
+        target: 'http://192.168.0.122:8090', // 接口域名
         //target: 'http://192.168.0.9:8080',
-        target: 'http://192.168.0.129:8080',
+        //target: 'http://192.168.0.129:8080',
         changeOrigin: true, // 是否跨域
       }
     }

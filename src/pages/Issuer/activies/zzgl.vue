@@ -7,8 +7,8 @@
       :start="start"
       :type="capName"
       :num="campNum"
-      :stars="starList"
-      :sponsors="data2"
+      :stars="starAvatar"
+      :sponsors="sponsorList"
       :status="status"
       :price="price"
       :adress="adress"
@@ -16,9 +16,9 @@
     <div class="zzgl-content">
       <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
         <a-tab-pane key="1" tab="赞助审批">
-          <div>
+          <div >
             <a-collapse accordion activeKey="1" :bordered="false">
-              <a-collapse-panel key="1">
+              <a-collapse-panel  v-for="(item, index) in cardItemData1" :key="index">
                 <h5 slot="header" class="panel-title">
                   冠名赞助
                   <span>
@@ -38,13 +38,13 @@
                     <div class="title">
                       <a-avatar
                         :size="40"
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                        :src="logo"
                         class="user-img"
                       />
                       <span>{{item.company}}</span>
                     </div>
                     <div class="content">
-                      <p>赞助金额：</p>
+                      <p>赞助金额：{{item.tolMoney}}</p>
                       <div class="my-charts">
                         <v-chart :height="300" :data="pieData" :scale="pieScale">
                           <v-legend
@@ -60,10 +60,6 @@
                           <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
                           <v-coord type="theta" :radius="0.75" :innerRadius="0.3"/>
                         </v-chart>
-                        <div class="calc-price">
-                          总计：￥
-                          <span>{{item.tolMoney}}</span>
-                        </div>
                       </div>
                     </div>
                     <div class="footer">
@@ -71,6 +67,10 @@
                       <p>联系电话：{{item.phone}}</p>
                       <p>邮箱：{{item.email}}</p>
                       <p>备注：{{item.bz}}</p>
+                      <div class="calc-price">
+                          总计：￥
+                          <span>{{item.tolMoney}}</span>
+                        </div>
                       <transition name="fade">
                         <div class="button-box" v-show="btnShow == index" key="1">
                           <a-button type="danger" class="danger" @click="showModal(item, index)">驳回</a-button>
@@ -86,162 +86,24 @@
                   </div>
                 </div>
               </a-collapse-panel>
-              <a-collapse-panel key="2" :disabled="false" :bordered="false">
-                <h5 slot="header" class="panel-title">
-                  非冠名赞助
-                  <span>
-                    （
-                    <i>1</i> / 2 ）
-                  </span>
-                  <a-tag color="#f50">{{length1}}</a-tag>
-                </h5>
-                <div class="my-cards">
-                  <div
-                    class="card-item ant-card-hoverable"
-                    @mouseenter="btnShow = index"
-                    @mouseleave="btnShow = -1"
-                    v-for="(item,index) in cardItemData1"
-                    :key="index"
-                  >
-                    <div class="title">
-                      <a-avatar
-                        :size="40"
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                        class="user-img"
-                      />
-                      <span>李宁体育用品有限公司</span>
-                    </div>
-                    <div class="content">
-                      <p>赞助金额：</p>
-                      <div class="my-charts">
-                        <v-chart :height="320" :data="pieData1" :scale="pieScale">
-                          <v-legend
-                            data-key="item"
-                            :useHtml="true"
-                            :itemTpl="itemTpl1"
-                            position="right"
-                            :offsetX="-50"
-                            :offsetY="-40"
-                          />
-                          <v-tooltip :showTitle="false" data-key="item*percent"/>
-                          <v-axis/>
-                          <!--<v-guide
-                            :type="guideOpts.type"
-                            :position="guideOpts.position"
-                            :content="guideOpts.content"
-                            :v-style="guideOpts.style"
-                          />-->
-                          <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
-                        </v-chart>
-                      </div>
-                    </div>
-                    <div class="footer">
-                      <p>联系人: {{ item.contact}}</p>
-                      <p>联系电话：{{item.phone}}</p>
-                      <p>邮箱：{{item.email}}</p>
-                      <p>备注：{{item.bz}}</p>
-                      <transition name="fade">
-                        <div class="button-box" v-show="btnShow == index">
-                          <a-button type="danger" class="danger" @click="showModal(item, index)">驳回</a-button>
-                          <a-button
-                            type="primary"
-                            class="primary"
-                            @click="success(item)"
-                            :loading="loading"
-                          >通过</a-button>
-                        </div>
-                      </transition>
-                    </div>
-                  </div>
-                </div>
-              </a-collapse-panel>
-              <a-collapse-panel key="3" :disabled="false" :bordered="false">
-                <h5 slot="header" class="panel-title">
-                  其他
-                  <span>
-                    （
-                    <i>1</i> / 2 ）
-                  </span>
-                  <a-tag color="#f50">{{length2}}</a-tag>
-                </h5>
-                <div class="my-cards">
-                  <div
-                    class="card-item ant-card-hoverable"
-                    @mouseenter="btnShow = index"
-                    @mouseleave="btnShow = -1"
-                    v-for="(item,index) in cardItemData2"
-                    :key="index"
-                  >
-                    <div class="title">
-                      <a-avatar
-                        :size="40"
-                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                        class="user-img"
-                      />
-                      <span>李宁体育用品有限公司</span>
-                    </div>
-                    <div class="content">
-                      <p>赞助金额：</p>
-                      <div class="my-charts">
-                        <v-chart :height="320" :data="pieData2" :scale="pieScale">
-                          <v-legend
-                            data-key="item"
-                            :useHtml="true"
-                            :itemTpl="itemTpl2"
-                            position="right"
-                            :offsetX="-50"
-                            :offsetY="-40"
-                          />
-                          <v-tooltip :showTitle="false" data-key="item*percent"/>
-                          <v-axis/>
-                          <!--<v-guide
-                            :type="guideOpts.type"
-                            :position="guideOpts.position"
-                            :content="guideOpts.content"
-                            :v-style="guideOpts.style"
-                          />-->
-                          <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
-                        </v-chart>
-                      </div>
-                    </div>
-                    <div class="footer">
-                      <p>联系人: {{ item.contact}}</p>
-                      <p>联系电话：{{item.phone}}</p>
-                      <p>邮箱：{{item.email}}</p>
-                      <p>备注：{{item.bz}}</p>
-                      <transition name="fade">
-                        <div class="button-box" v-show="btnShow == index">
-                          <a-button type="danger" class="danger" @click="showModal(item, index)">驳回</a-button>
-                          <a-button
-                            type="primary"
-                            class="primary"
-                            @click="success(item)"
-                            :loading="loading"
-                          >通过</a-button>
-                        </div>
-                      </transition>
-                    </div>
-                  </div>
-                </div>
-              </a-collapse-panel>
+              
+              
             </a-collapse>
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" tab="我的赞助">
           <div>
             <a-collapse accordion activeKey="1" :bordered="false">
-              <a-collapse-panel key="1">
+              <a-collapse-panel :key="index" v-for="(item, index) in dataForm">
                 <h5 slot="header" class="panel-title">
-                  冠名赞助
-                  <span>（ 2 ）</span>
+                  {{dataList[0].ssKind}}
+                  <span>（ {{dataList.length}} ）</span>
                 </h5>
                 <div class="my-tables">
                   <a-table :columns="columns" :dataSource="dataList" @change="pageNext" size="middle"></a-table>
                 </div>
               </a-collapse-panel>
-              <a-collapse-panel key="2" :disabled="false" :bordered="false">
+              <!--<a-collapse-panel key="2" :disabled="false" :bordered="false">
                 <h5 slot="header" class="panel-title">
                   非冠名赞助
                   <span>（ 2 ）</span>
@@ -254,7 +116,7 @@
                   <span>（ 2 ）</span>
                 </h5>
                 <a-table :columns="columns" :dataSource="dataList2" size="middle"></a-table>
-              </a-collapse-panel>
+              </a-collapse-panel>-->
             </a-collapse>
           </div>
         </a-tab-pane>
@@ -274,6 +136,9 @@
   </div>
 </template>
 <style lang="less" scoped>
+.calc-price{
+  text-align: center
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -331,16 +196,16 @@
     }
     .my-cards {
       display: flex;
-      justify-content: space-between;
+      //justify-content: space-between;
       flex-wrap: wrap;
-
+      padding: 0 0 50px;
       .card-item {
         width: 24%;
-        margin: 10px 0;
+        margin: 10px;
         border: 1px solid #ccc;
         border-radius: 10px;
         padding: 0 20px;
-        height: 455px;
+        height: 474px;
 
         .title {
           display: flex;
@@ -488,12 +353,12 @@ const columns = [
   },
   {
     title: '赞助公司名称',
-    dataIndex: 'company',
+    dataIndex: 'name',
     align: 'center'
   },
   {
     title: '赞助形式',
-    dataIndex: 'ssKind',
+    dataIndex: 'sponsorship',
     align: 'center'
   },
   {
@@ -526,6 +391,7 @@ export default {
   data() {
     return {
       btnShow: -1,
+      logo: [],
       current: 1,
       data,
       columns,
@@ -535,10 +401,10 @@ export default {
       capName: '',
       campNum: '',
       starList: [],
-      sponsorList: [],
       status: '',
       price: '',
       adress: [],
+      dataForm: [],
       status: '',
       visible: false,
       confirmLoading: false,
@@ -546,6 +412,8 @@ export default {
       cardItemData: [],
       cardItemData1: [],
       cardItemData2: [],
+      starAvatar: [],
+      sponsorList: [],
       dataList: [],
       dataList1: [],
       dataList2: [],
@@ -681,6 +549,21 @@ export default {
       console.log(params)
       getActivityInformation(params).then(res => {
         this.data = res.data.listLoc
+        const avatarArrty = []
+        for (let i = 0; i < res.data.starList.length; i++) {
+          if (!res.data.starList.length == 0) {
+            avatarArrty.push(this.$host + res.data.starList[i].avatar)
+          }
+        }
+        const sponsorList = []
+        for (let i = 0; i < res.data.sponsorList.length; i++) {
+          if (!res.data.sponsorList.length == 0) {
+            sponsorList.push(this.$host + res.data.sponsorList[i].logo)
+          }
+        }
+        this.sponsorList = sponsorList
+        console.log(avatarArrty)
+        this.starAvatar = avatarArrty
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
         this.start = activityDetail.createTime
@@ -694,7 +577,6 @@ export default {
         this.contact = activityDetail.contact
         this.imgUrl = this.$host + activityDetail.cover_img
         this.logo = this.$host + activityDetail.cover_img
-        console.log(this.campNum)
         if (activityDetail.status == 10) {
           this.status = '创建中'
         }
@@ -723,14 +605,17 @@ export default {
       console.log(params)
       getApprovalList(params).then(res => {
         console.log(res)
-        this.cardItemData = res.data.namingCampSponsor
-        this.cardItemData1 = res.data.noNamingCampSponsor
-        this.cardItemData2 = res.data.otherCampSponsor
+        const logoList = []
+        for (let i = 0;i<res.data.campInputSponsorList.length; i++) {
+          if(!res.data.campInputSponsorList.length == 0) {
+            logoList.push(res.data.campInputSponsorList[i].logo)
+          }
+        }
+        this.logo = logoList
+        this.cardItemData = res.data.campInputSponsorList
+        this.cardItemData1 = res.data.campSponsorAllList
         console.log(this.cardItemData2)
         this.length = this.cardItemData.length
-        console.log(this.cardItemData.length)
-        this.length1 = this.cardItemData1.length
-        this.length2 = this.cardItemData2.length
         for (let i = 0; i < this.cardItemData.length; i++) {
           this.pieData[0].count = this.cardItemData[i].cash
           this.pieData[1].count = this.cardItemData[i].productVal
@@ -775,19 +660,13 @@ export default {
         console.log(res)
         let key = 'key'
         this.loading = false;
-        this.dataList = res.data.namingCampSponsor
+        this.dataForm = res.data.campSponsorAllList
+        this.dataList = res.data.campSponsorList
         this.dataList.map((item,index)=>{
               item[key] = index + 1
         })
         console.log(this.dataList)
-        this.dataList1 = res.data.noNamingCampSponsor
-        this.dataList1.map((item,index)=>{
-              item[key] = index + 1
-        })
-        this.dataList2 = res.data.otherCampSponsor
-        this.dataList2.map((item,index)=>{
-              item[key] = index + 1
-        })
+        
       })
     },
     pageNext(pagination, filters, sorte) {
@@ -826,6 +705,7 @@ export default {
         })
         }
         this._getApprovalList()
+        this._getMineSupport()
       })
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
@@ -865,6 +745,8 @@ export default {
         })
         }
       })
+      this._getApprovalList()
+      this._getMineSupport()
       this.loading = true
       setTimeout(() => {
         this.loading = false

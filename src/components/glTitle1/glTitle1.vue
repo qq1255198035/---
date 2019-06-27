@@ -22,7 +22,7 @@
             参与明星：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in stars" :key="index">
-                <a-avatar :size="40" class="img-circle" :src="host + item.avatar"/>
+                <a-avatar :size="40" class="img-circle" :src="item"/>
                 <i v-if="item.length > 4"></i>
               </li>
             </ul>
@@ -120,27 +120,27 @@
 export default {
   props: {
     title: {
-      type: String
+
     },
     logo: {
-      type: String
+
     },
     start: {
-      type: String
+
     },
     adress: {
-      type: Array
+
     },
     type: {
-      type: String
+
     },
     num: {},
     stars: {
-      type: Array
+
     },
     sponsors: {},
     status: {
-      type: String
+
     },
     price: {}
   },

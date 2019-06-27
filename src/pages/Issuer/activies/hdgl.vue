@@ -297,6 +297,7 @@ export default {
       }
       console.log(params)
       getHandActivities(params).then(res => {
+        this.searchText = ''
         console.log(res)
         this.cardList = res.page.rows
       })
