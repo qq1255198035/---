@@ -12,12 +12,6 @@
       :status="status"
       :price="price"
     >
-      <div slot="a">
-        <a-icon type="environment" class="my-icon"/>
-        <span>
-          <span v-for="(item, index) in adress" :key="index">{{item.area_name}}</span>
-        </span>
-      </div>
     </glTitle>
     <div class="details-content">
       <div class="details-header">
@@ -267,7 +261,7 @@
 }
 </style>
 <script>
-import glTitle from '@/components/glTitle/glTitle'
+import glTitle from '@/components/glTitle1/glTitle1'
 import DetailList from '@/components/tools/DetailList'
 import {
   getCheckActivitiesDetail,
@@ -645,7 +639,8 @@ export default {
         token: token,
         campId: campId
       }
-      getExtension().then(res => {
+      console.log(params)
+      getExtension(params).then(res => {
         console.log(res)
         this.data1 = res.data
         this.palyPlatfrom = res.platform

@@ -420,7 +420,7 @@
 }
 </style>
 <script>
-import glTitle from '@/components/glTitle/glTitle'
+import glTitle from '@/components/glTitle1/glTitle1'
 import { getApprovalList, getMineSupport, getApproval, getActivityInformation } from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
 import { PageView } from '@/layouts'
@@ -665,7 +665,7 @@ export default {
   comments: {
     PageView
   },
-  created() {
+  activated() {
     this._getApprovalList()
     this._getMineSupport()
     this._getActivityInformation()
@@ -680,20 +680,21 @@ export default {
       }
       console.log(params)
       getActivityInformation(params).then(res => {
-        console.log(res)
+        this.data = res.data.listLoc
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
-        console.log(this.name)
         this.start = activityDetail.createTime
         this.adress = res.data.listLoc
         this.capName = activityDetail.capName
-        this.campNum = parseInt(activityDetail.campNum)
-        this.price = activityDetail.price
+        this.campNum = activityDetail.campNum
+        this.price = res.data.amount
         this.email = activityDetail.email
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl = activityDetail.cover_img
+        this.imgUrl = this.$host + activityDetail.cover_img
+        this.logo = this.$host + activityDetail.cover_img
+        console.log(this.campNum)
         if (activityDetail.status == 10) {
           this.status = '创建中'
         }
