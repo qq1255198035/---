@@ -31,7 +31,7 @@
             </span>
           </a-list-item-meta>
           <template v-if="item.actions">
-            <a slot="actions" @click="showModal(index,item)">{{ item.actions.title }}</a>
+            <a slot="actions" :class="{'selected': item.actions.checked}" @click="showModal(index,item)">{{ item.actions.title }}</a>
           </template>
         </a-list-item>
       </a-list>
@@ -276,7 +276,7 @@
                 placeholder="活动内容"
                 class="my-input"
                 maxlength="300"
-                v-decorator="['textName',{rules: [{ required: true, message: '请输入公司名称' }]}]"
+                v-decorator="['textName',{rules: [{ required: true, message: '活动内容' }]}]"
                 :autosize="{ minRows: 4, maxRows: 6 }"
               />
             </a-form-item>
@@ -349,7 +349,7 @@
                   </a-select>
                   <a-input
                     style="width: 66%"
-                    v-decorator="['companyName',{rules: [{ required: true, message: '请输入公司名称' }]}]"
+                    v-decorator="['companyName',{rules: [{ required: true, message: '公司地址' }]}]"
                   />
                 </a-input-group>
               </a-form-item>
@@ -378,7 +378,7 @@
                 <a-input
                   placeholder="请输入播放平台"
                   class="my-input"
-                  v-decorator="['pingName',{rules: [{ required: true, message: '请输入播放平台' }]}]"
+                  v-decorator="['pingName',{rules: [{ required: false, message: '请输入播放平台' }]}]"
                 />
               </a-form-item>
               <a-form-item
@@ -595,7 +595,7 @@
                 type="dashed"
                 icon="plus"
                 @click="newMember"
-              >新增成员</a-button>
+              >新增赞助</a-button>
             </a-form-item>
             <a-form-item
               label="合作要求"
@@ -607,7 +607,7 @@
                 placeholder="合作要求"
                 class="my-input"
                 :autosize="{ minRows: 4, maxRows: 6 }"
-                v-decorator="['textYao',{rules: [{ required: true, message: '请输入公司名称' }]}]"
+                v-decorator="['textYao',{rules: [{ required: false, message: '合作要求' }]}]"
               />
             </a-form-item>
           </div>
@@ -617,6 +617,9 @@
   </div>
 </template>
 <style lang="less" scoped>
+.selected{
+  color: #808080
+}
 .imgFile {
   padding-bottom: 10px;
 }
@@ -826,15 +829,15 @@ export default {
       fileImgs: '',
       detailsImgs: [], // 活动详情多张图片
       data: [
-        { title: '活动基本信息', description: '活动详细内容编辑', value: '', actions: { title: '' } },
-        { title: '活动详情', description: '设置活动详细信息以及推广内容设置', value: '', actions: { title: '' } },
+        { title: '活动基本信息', description: '活动详细内容编辑', value: '', actions: { title: '',checked: '' } },
+        { title: '活动详情', description: '设置活动详细信息以及推广内容设置', value: '', actions: { title: '', checked: '' } },
         {
           title: '活动推广',
           description: '把自己的活动推广到社交平台以及微媒平台上',
           value: '',
-          actions: { title: '' }
+          actions: { title: '',checked: '' }
         },
-        { title: '活动赞助', description: '把自己的活动赞助情况设置', value: '', actions: { title: '' } }
+        { title: '活动赞助', description: '把自己的活动赞助情况设置', value: '', actions: { title: '',checked: '' } }
         //{ title: '报名', description: '设置报名信息，用户分组/售票等设置', value: '', actions: { title: '修改' } }
       ],
       formItemLayout: {
@@ -1322,20 +1325,33 @@ export default {
       console.log(index)
       this.title = item.title
       if (this.$route.query.campId || this.code) {
-        this.findIndex = 1
+        this.formShow = index
+        this.visible = true
+        this.alertVisible = false
+        
       } else {
-        this.findIndex = 0
+        this.formShow = 0
+        this.visible = false
+        if(index == 0) {
+          this.visible = true
+        } else{
+          this.alertVisible = true
+        this.alertText = '请先填写活动基本信息'
+        setTimeout(() => {
+          this.alertVisible = false
+        }, 1000)
+        }
       }
 
-      if (this.findIndex == 1) {
+      /*if (this.findIndex == 1) {
         this.formShow = index
         this.visible = true
         this.alertVisible = false
       } else if (this.findIndex == 0) {
         this.formShow = 0
          this.visible = false
-      }
-      if (index == 0) {
+      }*/
+      /*if (index == 0) {
         this.visible = true
       } else {
         this.alertVisible = true
@@ -1343,9 +1359,7 @@ export default {
         setTimeout(() => {
           this.alertVisible = false
         }, 1000)
-      }
-
-      console.log(this.findIndex)
+      }*/
     },
     // 公司
     companyBtn(value) {
@@ -1491,6 +1505,9 @@ export default {
               this.userid = res.data.campId
               this.$ls.set('code', res.data.code)
               this.code = res.data.code
+              /*if(res.data.code == '1000') {
+                this.data[0].actions.checked = true
+              }*/
               if (res.data.code == '1000' || res.data.code == '1001') {
                 this.findIndex = 1
                 this.$notification.success({
@@ -1652,6 +1669,17 @@ export default {
     },
     beforeUpload(file) {
       console.log(file)
+      const isJPG = file.type === 'image/jpeg'
+      const isPNG = file.type === 'image/png'
+      if (!isJPG && !isPNG) {
+        this.$message.error('You can only upload JPG file!')
+        return isJPG
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 2MB!')
+        return isLt2M
+      }
       getBase64(file, imageUrl => {
         this.imageUrl = imageUrl
         this.loading = false
@@ -1664,16 +1692,7 @@ export default {
         this.fileUrl = res.location
       })
       console.log(file)
-      const isJPG = file.type === 'image/jpeg'
-      const isPNG = file.type === 'image/png'
-      if (!isJPG && !isPNG) {
-        this.$message.error('You can only upload JPG file!')
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
-      }
-      return isJPG && isLt2M
+      
     },
     beforeUploadVideo(file) {
       console.log(file)
@@ -1703,6 +1722,17 @@ export default {
     },
     beforeUploadImgs(file) {
       console.log(file)
+      const isJPG = file.type === 'image/jpeg'
+      const isPNG = file.type === 'image/png'
+      if (!isJPG && !isPNG) {
+        this.$message.error('You can only upload JPG file!')
+        return isJPG
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 2MB!')
+        return isLt2M
+      }
       getBase64(file, imageUrl => {
         this.fileImgs = imageUrl
         this.detailsImgs.push(this.fileImgs)

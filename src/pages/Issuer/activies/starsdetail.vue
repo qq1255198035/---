@@ -53,16 +53,23 @@
             <h5>个人图册</h5>
           </div>
           <div class="img-content">
-            <img v-for="(item, index) in detailsImgs" :key="index" :src="item" alt>
+            <img :src="detailsImgs" alt="">
+            <!--<img v-for="(item, index) in detailsImgs" :key="index" :src="item" alt>-->
           </div>
         </div>
       </a-col>
     </a-row>
+    <div class="back_btn"><a-button type="primary" @click="handleBack">返回</a-button></div>
   </div>
 </template>
 <style lang="less" scoped>
+.back_btn{
+  text-align: right;
+  padding: 20px;
+}
 #zzsxq {
   margin: 24px;
+  background: #fff;
   .account-center-avatarHolder {
     text-align: center;
     margin-bottom: 24px;
@@ -175,6 +182,14 @@ export default {
     this._getStarDetails()
   },
   methods: {
+    handleBack() {
+      this.$router.push({
+        path: '/issuerMxsp',
+        query: {
+          campId: this.$route.query.campId
+        }
+      })
+    },
     _getStarDetails() {
       const token = this.$ls.get('Access-Token')
       const userId = this.$route.query.userId
@@ -189,7 +204,9 @@ export default {
         this.avatar = this.$host + res.data.avatar
         console.log(this.avatar)
         this.sex = res.data.sex === '1' ? '男' : '女'
-        const detailsArrty = []
+        this.detailsImgs = this.$host + res.data.imgs
+        console.log(this.detailsImgs)
+        /*const detailsArrty = []
         console.log(res.data.imgs.length)
         for (let i = 0; i < res.data.imgs.length; i++) {
           if (!res.data.imgs.length == 0) {
@@ -197,7 +214,7 @@ export default {
           }
         }
         this.detailsImgs = detailsArrty
-        console.log(this.detailsImgs)
+        console.log(this.detailsImgs)*/
       })
     },
     ...mapGetters(['nickname', 'avatar'])

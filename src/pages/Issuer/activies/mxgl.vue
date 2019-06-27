@@ -7,7 +7,7 @@
       :start="start"
       :type="capName"
       :num="campNum"
-      :stars="starList"
+      :stars="starAvatar"
       :sponsors="sponsorList"
       :status="status"
       :price="price"
@@ -82,7 +82,7 @@
                     <a-button
                       type="primary"
                       class="primary"
-                      @click="$router.push({path: '/issuerMxxq', query: {userId: item.athlete_id}})"
+                      @click="starDetail(item)"
                     >查 看</a-button>
                   </div>
                 </transition>
@@ -222,6 +222,7 @@ export default {
       campNum: '',
       starList: [],
       sponsorList: [],
+      starAvatar: [],
       status: '',
       price: '',
       adress: [],
@@ -234,6 +235,9 @@ export default {
     this._getActivityInformation()
   },
   methods: {
+    starDetail(item) {
+      this.$router.push({path: '/issuerMxxq', query: {userId: item.athlete_id, campId: this.$route.query.campId}})
+    },
     _getActivityInformation() {
       const token = this.$ls.get('Access-Token')
       const campId = this.$route.query.campId
@@ -245,18 +249,34 @@ export default {
       getActivityInformation(params).then(res => {
         console.log(res)
         this.data = res.data.listLoc
+        const avatarArrty = []
+        for (let i = 0; i < res.data.starList.length; i++) {
+          if (!res.data.starList.length == 0) {
+            avatarArrty.push(this.$host + res.data.starList[i].avatar)
+          }
+        }
+        const sponsorList = []
+        for (let i = 0; i < res.data.sponsorList.length; i++) {
+          if (!res.data.sponsorList.length == 0) {
+            sponsorList.push(this.$host + res.data.sponsorList[i].logo)
+          }
+        }
+        this.sponsorList = sponsorList
+        console.log(avatarArrty)
+        this.starAvatar = avatarArrty
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
         this.start = activityDetail.createTime
         this.adress = res.data.listLoc
         this.capName = activityDetail.capName
-        this.campNum = parseInt(activityDetail.campNum)
+        this.campNum = activityDetail.campNum
         this.price = res.data.amount
         this.email = activityDetail.email
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl = activityDetail.cover_img
+        this.imgUrl = this.$host + activityDetail.cover_img
+        this.logo = this.$host + activityDetail.cover_img
         if (activityDetail.status == 10) {
           this.status = '创建中'
         }

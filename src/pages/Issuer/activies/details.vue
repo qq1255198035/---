@@ -7,12 +7,12 @@
       :start="start"
       :type="capName"
       :num="campNum"
-      :stars="starList"
-      :sponsors="data2"
+      :stars="starAvatar"
+      :sponsors="sponsorList"
       :status="status"
       :price="price"
-    >
-    </glTitle>
+      :adress="adress"
+    ></glTitle>
     <div class="details-content">
       <div class="details-header">
         <a-card title="活动进度">
@@ -70,13 +70,7 @@
                 </li>
                 <li>
                   <span>活动视频：</span>
-                  <video
-                    :src="videoUrls"
-                    controls
-                    poster="./../../../assets/a1.jpg"
-                    width="200px"
-                    height="150px"
-                  ></video>
+                  <video :src="videoUrls" controls width="200px" height="150px"></video>
                 </li>
                 <li>
                   <span>活动照片：</span>
@@ -148,14 +142,14 @@
             </div>
           </a-tab-pane>
           <a-tab-pane key="2" tab="赞助信息">
-            <div class="my-tables">
-              <h3>
-                冠名赞助
-                <span>（ {{dataName.length}} ）</span>
+            <div class="my-tables" v-for="(item, index) in dataNameArrty" :key="index">
+              <h3 v-if="dataName[0].ssKind">
+                {{dataName[0].ssKind}}
+                <!--<span>（ {{dataName.length}} ）</span>-->
               </h3>
               <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>
             </div>
-            <div class="my-tables">
+            <!--<div class="my-tables">
               <h3>
                 非冠名赞助
                 <span>（ {{dataNoName.length}} ）</span>
@@ -168,7 +162,7 @@
                 <span>（ {{dataOther.length}} ）</span>
               </h3>
               <a-table :columns="columns3" :dataSource="dataOther" size="middle"></a-table>
-            </div>
+            </div>-->
           </a-tab-pane>
           <a-tab-pane key="3" tab="明星信息">
             <div class="my-tables">
@@ -383,14 +377,10 @@ const columns3 = [
   },
   {
     title: '赞助形式',
-    dataIndex: 'way',
+    dataIndex: 'sponsorship',
     align: 'center'
   },
-  {
-    title: '是否议价',
-    dataIndex: 'isPrice',
-    align: 'center'
-  },
+
   {
     title: '现金赞助',
     dataIndex: 'cash',
@@ -398,17 +388,17 @@ const columns3 = [
   },
   {
     title: '实物赞助',
-    dataIndex: 'pro',
+    dataIndex: 'productVal',
     align: 'center'
   },
   {
     title: '赞助总额',
-    dataIndex: 'calPrice',
+    dataIndex: 'tolMoney',
     align: 'center'
   },
   {
     title: '已付款金额',
-    dataIndex: 'payPrice',
+    dataIndex: 'paid',
     align: 'center'
   }
 ]
@@ -453,13 +443,26 @@ export default {
   },
   data() {
     return {
+      lists: [
+        {
+          title: '形式1',
+          list: [{ cash: 6000 ,tolMoney:630000}]
+        },
+        {
+          title: '形式2',
+          list: [{ cash: 3000, tolMoney:630000}]
+        }
+      ],
       activitiesList: '',
+      starAvatar: [],
+      sponsorList: [],
       logo: '',
       current: '',
       status: '',
       starList: [],
-      sponsorList: [],
+      detailsImgs: [],
       dataName: [],
+      dataNameArrty: [],
       dataNoName: [],
       dataOther: [],
       name: '',
@@ -515,16 +518,9 @@ export default {
       getApprovalList(params).then(res => {
         console.log(res)
         let key = 'key'
-        this.dataName = res.data.namingCampSponsor
-        this.dataNoName = res.data.noNamingCampSponsor
-        this.dataOther = res.data.otherCampSponsor
+        this.dataNameArrty = res.data.campSponsorAllList
+        this.dataName = res.data.campInputSponsorList
         this.dataName.map((item, index) => {
-          item[key] = index + 1
-        })
-        this.dataNoName.map((item, index) => {
-          item[key] = index + 1
-        })
-        this.dataOther.map((item, index) => {
           item[key] = index + 1
         })
       })
@@ -540,6 +536,23 @@ export default {
       getActivityInformation(params).then(res => {
         console.log(res)
         this.data = res.data.listLoc
+        const avatarArrty = []
+        for (let i = 0; i < res.data.starList.length; i++) {
+          if (!res.data.starList.length == 0) {
+            avatarArrty.push(this.$host + res.data.starList[i].avatar)
+          }
+        }
+        const sponsorList = []
+        for (let i = 0; i < res.data.sponsorList.length; i++) {
+          if (!res.data.sponsorList.length == 0) {
+            sponsorList.push(this.$host + res.data.sponsorList[i].logo)
+          }
+        }
+        this.sponsorList = sponsorList
+        console.log(this.sponsorList)
+        
+        this.starAvatar = avatarArrty
+        console.log(this.starAvatar)
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
         this.start = activityDetail.createTime
@@ -553,6 +566,7 @@ export default {
         this.contact = activityDetail.contact
         this.imgUrl = this.$host + activityDetail.cover_img
         this.logo = this.$host + activityDetail.cover_img
+        console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {
           this.status = '创建中'
@@ -623,7 +637,6 @@ export default {
         console.log(this.activityContent)
         this.videoUrls = this.$host + res.data.list[0].video
         const detailsArrty = []
-        const fileArrty = []
         for (let i = 0; i < res.data.listCampAtt.length; i++) {
           if (!res.data.listCampAtt.length == 0) {
             detailsArrty.push(this.$host + res.data.listCampAtt[i].location)
