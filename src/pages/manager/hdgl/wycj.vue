@@ -77,7 +77,7 @@
                                           <a-select-option :value="item.athleteId" v-for="(item,index) in starsList" :key="index">{{item.name}}</a-select-option>    
                               </a-select>
                         </a-form-item>
-                        <a-form-item label="详情" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-form-item label="备注" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                               <a-textarea class="my-input" v-decorator="[
                                           'desc',
                                           {rules: [{ required: false, }]}

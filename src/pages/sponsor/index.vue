@@ -11,8 +11,8 @@
           <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
-                  <a-row>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" style="margin-left:-100px;">
+                  <a-row type="flex" justify="space-between">
+                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
                         <v-chart :height="300" :data="pieData" :scale="pieScale">
                           <v-legend dataKey="item" :useHtml="true" :itemTpl="itemTpl" position="right" :offsetX="-50" :offsetY="-35"/>
                           <v-tooltip :showTitle="false" dataKey="item*percent" />

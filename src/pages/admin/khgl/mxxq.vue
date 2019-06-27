@@ -143,6 +143,7 @@
                   flex-wrap: wrap;
                   img{
                         width: 22%;
+                        height: 150px;
                         margin: 10px;
                   }
             }
