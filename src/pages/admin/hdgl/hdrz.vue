@@ -33,7 +33,7 @@
                         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                   </span>
                   <template slot="operation" slot-scope="text,record">
-                        <a href="javascript:;" @click="$router.push({path: '/ckhd',query: { id: record.key}})">查 看</a>
+                        <a href="javascript:;" @click="$router.push({path: '/hdgl/ckhd',query: { id: record.key}})">查 看</a>
                         <div style="display: inline-block" v-if="record.status == 0">
                               <a-divider type="vertical" />
                               <a-popconfirm

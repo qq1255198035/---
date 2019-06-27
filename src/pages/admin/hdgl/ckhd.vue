@@ -42,9 +42,7 @@
                                                 <detail-list-item term="活动地区" class="my-item">
                                                       <a-table :columns="columns" :dataSource="data" size="small" :pagination="false" class="my-table"/>
                                                 </detail-list-item>
-                                                <detail-list-item term="活动封面" class="my-item-1">
-                                                      <img :src="coverImg" alt="">
-                                                </detail-list-item>
+                                                
                                           </detail-list>
                                     </a-card>               
                                     <div class="my-item-list">
@@ -76,14 +74,14 @@
                                                 </li>
                                                 <li>
                                                       <span>受众群众：</span>
-                                                      <div v-for="(item,index) in audiences" :key="index">
-                                                            <a-tag :color="tagColors">{{item}}</a-tag>
+                                                      <div>
+                                                            <a-tag v-for="(item,index) in audiences" :key="index" :color="tagColors" style="margin-bottom:10px">{{item}}</a-tag>
                                                       </div>
                                                 </li>
                                                 <li>
                                                       <span>活动特点：</span>
-                                                      <div v-for="(item,index) in campFeature" :key="index">
-                                                            <a-tag :color="tagColors">{{item}}</a-tag>
+                                                      <div>
+                                                            <a-tag v-for="(item,index) in campFeature" :key="index" :color="tagColors" style="margin-bottom:10px">{{item}}</a-tag>
                                                       </div>
                                                 </li>
                                           </ul>
@@ -257,9 +255,6 @@ const columns2 = [
             title: '赞助名额',
             dataIndex: 'num',
       },{
-            title: '是否议价',
-            dataIndex: 'bargain',
-      },{
             title: '备注',
             dataIndex: 'bz',
       },
@@ -281,11 +276,6 @@ const columns3 = [
             dataIndex: 'ssKind',
             align: "center"
       }, 
-      {
-            title: '是否议价',
-            dataIndex: 'bargain',
-            align: "center"
-      },
       {
             title: '现金赞助',
             dataIndex: 'cash',
@@ -364,7 +354,6 @@ export default {
                   contact: '',
                   email: '',
                   phone: '',
-                  coverImg:'',
                   content:'',
                   video: '',
                   jzTime: '',
@@ -428,7 +417,6 @@ export default {
                               this.contact = res.data.basic.contact;
                               this.email = res.data.basic.email;
                               this.phone = res.data.basic.phone;
-                              this.coverImg = res.data.basic.coverImg;
                               this.data = res.data.basic.newArea;
                               this.content = res.data.basic.content;
                               this.video = res.data.basic.video;

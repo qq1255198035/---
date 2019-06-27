@@ -8,7 +8,7 @@
             <div class="avatar" v-if="logo">
               <img :src="logo">
             </div>
-            <a-avatar v-else style="backgroundColor:#23C6C8" size="104">Sponsor Cube</a-avatar>
+            <a-avatar v-else style="backgroundColor:#23C6C8" :size="104">Sponsor Cube</a-avatar>
             <div class="username">{{personInfo.name}}</div>
           </div>
           <div class="account-center-detail">
