@@ -20,7 +20,7 @@
                   </a-row>
             </div>
             <div class="gsgl-content">
-                  <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
+                  <a-tabs defaultActiveKey="1" tabPosition="top" size="large" @change="tabChange">
                         <a-tab-pane key="1" tab="待审批">
                               <div class="my-cards" v-if="cardItemData1.length > 0">
                                     <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
@@ -53,7 +53,7 @@
                                     <a-button @click="loadMore1" :loading="loadingMore" :disabled="btnDsiable1">加载更多</a-button>
                               </div>
                         </a-tab-pane>
-                        <a-tab-pane key="2" tab="已审批">
+                        <a-tab-pane key="0" tab="已审批">
                               <div class="my-cards" v-if="cardItemData2.length > 0">
                                     <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
                                           <div class="title">
@@ -223,28 +223,37 @@ export default {
                   endtime: '',
                   host: '',
                   key:'',
-                  reason:''
+                  reason:'',
+                  status:1
             }
       },
        mounted(){
-            this.getZzsspList(this.condition,this.offset,this.starttime,this.endtime);
+            this.getZzsspList1(this.condition,1,this.offset,this.starttime,this.endtime);
+            this.getZzsspList0(this.condition,0,this.offset,this.starttime,this.endtime);
             this.host = this.$host
       },
       methods:{
-            getZzsspList(condition,offset,starttime,endtime){
-                  zzsspList(condition,offset,starttime,endtime).then(res=>{
+            tabChange(key){
+                  this.status = key
+            },
+            getZzsspList1(condition,status,offset,starttime,endtime){
+                  zzsspList(condition,status,offset,starttime,endtime).then(res=>{
                         if (res.code == 1000) {
                               this.loadingMore = false;
                               console.log(res)
-                              this.cardItemData1 = res.page.rows.filter(item=>{
-                                    return item.status == 1
-                              })
-                              this.cardItemData2 = res.page.rows.filter(item=>{
-                                    return item.status == 0
-                              })
+                              this.cardItemData1 = res.page.rows
                               if (this.cardItemData1.length == 0) {
                                     this.btnDsiable1 = true;
                               }
+                        }
+                  })
+            },
+            getZzsspList0(condition,status,offset,starttime,endtime){
+                  zzsspList(condition,status,offset,starttime,endtime).then(res=>{
+                        if (res.code == 1000) {
+                              this.loadingMore = false;
+                              console.log(res)
+                              this.cardItemData2 = res.page.rows
                               if (this.cardItemData2.length == 0) {
                                     this.btnDsiable2 = true;
                               }
@@ -254,7 +263,7 @@ export default {
             loadMore1(){
                   this.loadingMore = true;
                   this.offset1++;
-                  zzsspList('',this.offset1,'','').then(res=>{
+                  zzsspList('',1,this.offset1,'','').then(res=>{
                         if (res.code == 1000) {
                               if (this.offset1 > res.page.pages) {
                                     this.$message.warning('已加载全部数据');
@@ -263,9 +272,7 @@ export default {
                                     return;
                               }
                               this.loadingMore = false;
-                              let cardItemData3 = res.page.rows.filter(item=>{
-                                    return item.status == 1
-                              })
+                              let cardItemData3 = res.page.rows
                               this.cardItemData1 = this.cardItemData1.concat(cardItemData3);
                               this.loadingMore = false;
                         }
@@ -275,7 +282,7 @@ export default {
             loadMore2(){
                   this.loadingMore = true;
                   this.offset2++;
-                  zzsspList('',this.offset2,'','').then(res=>{
+                  zzsspList('',0,this.offset2,'','').then(res=>{
                         if (res.code == 1000) {
                               if (this.offset2 > res.page.pages) {
                                     this.$message.warning('已加载全部数据');
@@ -284,9 +291,7 @@ export default {
                                     return;
                               }
                               this.loadingMore = false;
-                              let cardItemData4 = res.page.rows.filter(item=>{
-                                    return item.status == 0
-                              })
+                              let cardItemData4 = res.page.rows
                               this.cardItemData2 = this.cardItemData2.concat(cardItemData4)
                               this.loadingMore = false;
                         }
@@ -294,7 +299,15 @@ export default {
 
             },
             search(){
-                  this.getZzsspList(this.condition,this.offset,this.starttime,this.endtime);
+                  this.offset1 = 1;
+                  this.offset2 = 1;
+                  this.btnDsiable2 = false;
+                  if (this.status == 1) {
+                        this.getZzsspList1(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                  }else{
+                        this.getZzsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                  }
+                  
             },
             showModal(orgId) {
                   this.visible = true
@@ -317,7 +330,7 @@ export default {
             },
             handleOk(e) {
                   this.confirmLoading = true;
-                  this.postSponsorApproval(this.key, this.reason, 1)
+                  this.postSponsorApproval(this.key, this.reason, 2)
             },
             handleCancel(e) {
                   this.visible = false

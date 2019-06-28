@@ -386,6 +386,8 @@ export default {
                                     })
                               }else if(res.status == 201){
                                     this.$message.error(res.info)
+                                    state.time = 60
+                                    state.smsSendBtn = false
                               }
                         
                         }).catch(err => {

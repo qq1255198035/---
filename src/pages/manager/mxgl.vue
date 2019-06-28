@@ -182,7 +182,7 @@
                                                 />
                                                 </a-upload>
                                                 <span>建议尺寸 200 * 300</span><br>
-                                                
+
                                     </a-form-item>
                               </div>
                         </a-form>
@@ -544,6 +544,12 @@ export default {
                   });
             },
             beforeUpload1(file) {
+                  const isJPG = file.type == 'image/jpeg'
+                  const isPNG = file.type == 'image/png'
+                  if (!(!isJPG || !isPNG)) {
+                        this.$message.error('You can upload JPG and PNG file!')
+                        return
+                  }
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
                         this.$message.error('Image must smaller than 2MB!')
@@ -562,15 +568,17 @@ export default {
                         this.postImg1 = res.location
                         console.log(res)
                   })
-                  // const isJPG = file.type === 'image/jpeg'
-                  // const isPNG = file.type === 'image/png'
-                  // if (!isJPG || !isPNG) {
-                  //       this.$message.error('You can only upload JPG file!')
-                  // }
+                  
                   
                   
             },
             beforeUpload2(file) {
+                  const isJPG = file.type === 'image/jpeg'
+                  const isPNG = file.type === 'image/png'
+                  if (!(!isJPG || !isPNG)) {
+                        this.$message.error('You can only upload JPG file!')
+                        return
+                  }
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
                         this.$message.error('Image must smaller than 2MB!')
@@ -588,18 +596,15 @@ export default {
                   getUpload(formData).then(res=>{
                         this.postImg2 = res.location
                   })
-                  // const isJPG = file.type === 'image/jpeg'
-                  // const isPNG = file.type === 'image/png'
-                  // if (!isJPG || !isPNG) {
-                  // this.$message.error('You can only upload JPG file!')
-                  // }
-                  // const isLt2M = file.size / 1024 / 1024 < 2
-                  // if (!isLt2M) {
-                  // this.$message.error('Image must smaller than 2MB!')
-                  // }
-                  // return isJPG && isLt2M
+                 
             },
             beforeUpload3(file) {
+                  const isJPG = file.type === 'image/jpeg'
+                  const isPNG = file.type === 'image/png'
+                  if (!(!isJPG || !isPNG)) {
+                        this.$message.error('You can only upload JPG file!')
+                        return
+                  }
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
                         this.$message.error('Image must smaller than 2MB!')
@@ -618,16 +623,7 @@ export default {
                         this.postImg3 = res.location
                         console.log(res)
                   })
-                  // const isJPG = file.type === 'image/jpeg'
-                  // const isPNG = file.type === 'image/png'
-                  // if (!isJPG || !isPNG) {
-                  // this.$message.error('You can only upload JPG file!')
-                  // }
-                  // const isLt2M = file.size / 1024 / 1024 < 2
-                  // if (!isLt2M) {
-                  // this.$message.error('Image must smaller than 2MB!')
-                  // }
-                  // return isJPG && isLt2M
+                
             },
       },
       

@@ -261,10 +261,11 @@ export default {
             this.avatar = res.data.logo;
           }
         })
-    }
+    },
+    
   },
   filters: {
-    
+      
   }
 }
 </script>

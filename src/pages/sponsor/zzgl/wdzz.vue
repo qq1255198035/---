@@ -12,7 +12,7 @@
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
                                     <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
-                                    <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
+                                    <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
                                           <h2 class="no-margins">{{item.name}}</h2>
@@ -81,7 +81,7 @@
                         display: flex;
                         .item{
                         display: flex;
-                        justify-content: space-around;
+                        justify-content: flex-start;
                         .profile-info{
                               margin-left: 20px;
                               

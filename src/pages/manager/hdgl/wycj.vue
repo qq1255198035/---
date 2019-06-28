@@ -12,7 +12,8 @@
                               <div class="title">
                                     <a-col :span="14" class="item">
                                           <div class="profile-image">
-                                          <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
+                                          <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                          <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
                                           </div>
                                           <div class="profile-info">
                                                 <h2 class="no-margins">
@@ -122,9 +123,11 @@
                         display: flex;
                         .item{
                               display: flex;
-                              justify-content: space-around;
-                              p{
+                              justify-content: flex-start;
+                              padding-left: 10px;
+                              > p{
                                     color: #999;
+                                    margin: 0 10px;
                               }
                               .profile-info{
                                     margin-left: 20px;
@@ -200,12 +203,13 @@ export default {
                   key:'',
                   starsList:[],
                   form: this.$form.createForm(this),
-                  
+                  host:''
             }
       },
       mounted(){
             this.getSearchCampList(this.startime,this.endtime,this.offset);
             this.getChooseStar();
+            this.host = this.$host;
       },
       methods: {
             postWantJoin(campId, athleteId, cost, details){
