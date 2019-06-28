@@ -230,6 +230,7 @@ export default {
         offset: this.offset,
         limit: 10
       }
+      console.log(this.offset)
       getHandActivities(params).then(res => {
         console.log(res)
         this.cardList = res.page.rows

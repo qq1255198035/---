@@ -125,7 +125,6 @@
                       <a
                         slot="title"
                         class="addressPaading"
-                        v-decorator="['addressName',{rules: [{ required: true, message: '请输入地址' }]}]"
                       >{{item.addr}}</a>
                     </a-list-item-meta>
                   </a-list-item>
@@ -933,6 +932,8 @@ export default {
         this.findIndex = 1
       } else {
         this.findIndex = 0
+        this.code = ''
+        this.userid = ''
       }
       console.log(this.findIndex)
       for (let i = 0; i < this.data.length; i++) {
@@ -965,7 +966,7 @@ export default {
       console.log(223)
       e.preventDefault()
       console.log(this.code)
-      if (this.code == '1000' || this.code == '1001') {
+      if (this.code == '1000' || this.code == '1001' || this.$route.query.campId) {
         const campId = this.$route.query.campId ? this.$route.query.campId :this.userid
         const params = {
           token: this.$ls.get('Access-Token'),
@@ -983,6 +984,13 @@ export default {
               description: '提交成功',
               duration: 4
             })
+          }else if(res.data.code == '1002') {
+            this.$message.error('活动详情没有数据')
+          }
+          else if(res.data.code == '1003') {
+            this.$message.error('活动推广信没有填写')
+          }else{
+            this.$message.error('活动赞助信息没有填写')
           }
         })
       } else {
@@ -1112,9 +1120,16 @@ export default {
         token: token,
         campId: campId
       }
+      console.log(params)
         getActivityInformation(params).then(res => {
           console.log(res)
-          if (campId) {
+          const that = this
+          console.log(that.code == '1000')
+          console.log(that.code)
+          console.log(that.userid)
+          console.log(that.code == '1000' && that.userid && campId)
+          
+          if (that.code == '1000' || that.userid || campId) {
             console.log(323)
             const dateList = res.data.list[0].publishTime
             const endTime = res.data.list[0].endTime
@@ -1152,7 +1167,7 @@ export default {
               testName: '',
               phoneName: '',
               placeName: { key: '110000', label: '北京市' },
-              rangePicker: moment(),
+              rangePicker: [moment(), moment()],
               timePicker: moment()
             })
             this.areaList = []
@@ -1167,9 +1182,10 @@ export default {
         token: token,
         campId: campId
       }
+      console.log(params)
         getCheckActivitiesDetail(params).then(res => {
           console.log(res)
-          if (campId) {
+          if (this.code == '1000' || campId) {
             this.form1.setFieldsValue({
               textName: res.data.list[0].content
             })
@@ -1229,7 +1245,7 @@ export default {
         console.log(params)
         getExtension(params).then(res => {
           console.log(res)
-          if (campId) {
+          if (this.code == '1000' || campId) {
             this.form2.setFieldsValue({
               pingName: res.platform,
               companyTitle: { key: '133', label: '主办方' },
@@ -1272,9 +1288,9 @@ export default {
       }
         getSponsor(params).then(res => {
           console.log(res)
-          if (campId) {
+          if (this.code == '1000' || campId) {
             this.form3.setFieldsValue({
-              closingDate: res.endTime ? moment(res.endTime, 'YYYY-MM-DD') : '',
+              closingDate: res.endTime ? moment(res.endTime, 'YYYY-MM-DD') : {},
               textYao: res.demand
             })
             const dataArrty = res.data
@@ -1454,11 +1470,14 @@ export default {
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
       const token = this.$ls.get('Access-Token')
-      let campId = this.$route.query.campId ? this.$route.query.campId : ''
+      let campId = this.userid ? this.userid : this.$route.query.campId
       console.log(this.form.validateFields)
       //活动基本信息
       if (this.formShow == 0) {
         this.confirmLoading = false
+        if(this.areaList.length == 0) {
+          this.$message.error('请添加活动地点')
+        }
         this.form.validateFields((err, values) => {
           console.log(values)
           if (!err) {
@@ -1474,6 +1493,7 @@ export default {
             //this.fileUrl = values.fileUrl
             this.address = values.placeName
             this.areaValue = values.addressName
+            
             const dateList = values['rangePicker']
             const dateValue = {
               rangePicker: [dateList[0].format('YYYY-MM-DD'), dateList[1].format('YYYY-MM-DD')],
@@ -1483,6 +1503,7 @@ export default {
             this.endTime = dateValue.rangePicker[1]
             this.concreteTime = dateValue.timePicker
             this.publishTime = dateValue.rangePicker[0]
+            
             const params = {
               campId: campId,
               token: token,
@@ -1503,24 +1524,19 @@ export default {
             getActivityModification(params).then(res => {
               console.log(res)
               this.userid = res.data.campId
-              this.$ls.set('code', res.data.code)
               this.code = res.data.code
               /*if(res.data.code == '1000') {
                 this.data[0].actions.checked = true
               }*/
               if (res.data.code == '1000' || res.data.code == '1001') {
-                this.findIndex = 1
-                this.$notification.success({
-                  message: '成功',
-                  description: '创建成功',
-                  duration: 4
-                })
-                setTimeout(() => {
-                  this.visible = false
+                this.data[this.formShow].actions.title = '修改'
+                this.visible = false
                   this.confirmLoading = false
-                }, 2000)
+                this.findIndex = 1
+                this.$message.success('成功');
               } else {
                 this.findIndex = 0
+                this.$message.error('失败');
               }
             })
           }
@@ -1549,15 +1565,12 @@ export default {
             getDetailsActivity(params).then(res => {
               console.log(res)
               if (res.data.code == '1000' || res.data.code == '1001') {
-                this.$notification.success({
-                  message: '成功',
-                  description: '创建成功',
-                  duration: 4
-                })
-                setTimeout(() => {
-                  this.visible = false
+                this.data[this.formShow].actions.title = '修改'
+                this.visible = false
                   this.confirmLoading = false
-                }, 2000)
+                  this.$message.success('成功');
+              }else {
+                this.$message.error('失败');
               }
             })
           }
@@ -1566,6 +1579,9 @@ export default {
       // 活动推广
       if (this.formShow == 2) {
         this.confirmLoading = false
+        if(this.companyList.length == 0) {
+          this.$message.error('请添加主承办方')
+        }
         this.form2.validateFields((err, values) => {
           console.log(values)
           if (!err) {
@@ -1586,15 +1602,12 @@ export default {
             getActivityPromotion(params).then(res => {
               console.log(res)
               if (res.data.code == '1000' || res.data.code == '1001') {
-                this.$notification.success({
-                  message: '成功',
-                  description: '创建成功',
-                  duration: 4
-                })
-                setTimeout(() => {
-                  this.visible = false
-                  this.confirmLoading = false
-                }, 2000)
+                this.data[this.formShow].actions.title = '修改'
+                this.visible = false
+                this.confirmLoading = false
+                this.$message.success('成功');
+              }else {
+                this.$message.error('失败');
               }
             })
           }
@@ -1625,15 +1638,12 @@ export default {
               
               console.log(res)
               if (res.data.code == 1000 || rea.data.code == 1001) {
-                this.$notification.success({
-                  message: '成功',
-                  description: '创建成功',
-                  duration: 4
-                })
-                setTimeout(() => {
-                  this.visible = false
+                this.data[this.formShow].actions.title = '修改'
+                this.visible = false
                   this.confirmLoading = false
-                }, 2000)
+                this.$message.success('成功');
+              }else {
+                this.$message.error('失败');
               }
             })
           }
@@ -1912,6 +1922,7 @@ export default {
     this.form1.getFieldDecorator('keys', { initialValue: [], preserve: true })
     this.form2.getFieldDecorator('keys', { initialValue: [], preserve: true })
     this.form3.getFieldDecorator('keys', { initialValue: [], preserve: true })
+
   }
 }
 </script>

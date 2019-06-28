@@ -23,7 +23,7 @@
     <div id="home">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" :title="$t('issuer.index.zzxq')" :bordered="false" class="my-cards">
+          <a-card :title="$t('issuer.index.zzxq')" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                 
@@ -75,7 +75,7 @@
               <a-button type="primary" @click="$router.push({name: 'issuerCjhd'})">{{$t('issuer.index.fbhd')}}</a-button>
             </div>
         </a-card>
-          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
+          <a-card class="project-list" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
             <a slot="extra" @click="$router.push({name: 'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
             <div>
               <a-card-grid class="project-card-grid" :key="index" v-for="(item, index) in newsList">
@@ -174,7 +174,6 @@ export default {
       c:["item", ["#4275FC","#41BDFD",]],
       c1:["item", ["#F56367","#FFB535",]],
       projects: [],
-      loading: true,
       radarLoading: true,
       activities: [],
       teams: [],
@@ -310,7 +309,6 @@ export default {
       getMyFiveNews(params).then(res => {
         console.log(res)
         this.newsList = res.data
-        this.loading = !this.loading
         console.log(this.newsList)
       })
     },

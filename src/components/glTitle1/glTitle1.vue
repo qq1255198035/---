@@ -31,7 +31,7 @@
             参与赞助：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in sponsors" :key="index">
-                <a-avatar :size="40" class="img-circle" :src="host + item.logo"/>
+                <a-avatar :size="40" class="img-circle" :src="item"/>
                 <i v-if="item.length > 4"></i>
               </li>
             </ul>
