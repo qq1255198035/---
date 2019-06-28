@@ -22,8 +22,8 @@
             <div class="gsgl-content">
                   <a-tabs defaultActiveKey="1" tabPosition="top" size="large" @change="tabChange">
                         <a-tab-pane key="1" tab="待审批">
-                              <div class="my-cards" v-if="cardItemData1.length > 0">
-                                    <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
+                              <a-row type="flex" justify="start" align="top" v-if="cardItemData1.length > 0" class="my-cards">
+                                    <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{ item.enName}}</span>
@@ -50,8 +50,8 @@
                                                 </transition>
                                                 
                                           </div>
-                                    </div>      
-                              </div>
+                                    </a-col>
+                              </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
                                     暂无数据
                               </p>
@@ -60,8 +60,8 @@
                               </div>
                         </a-tab-pane>
                         <a-tab-pane key="0" tab="已审批">
-                              <div class="my-cards" v-if="cardItemData2.length > 0">
-                                    <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
+                              <a-row type="flex" justify="start" align="top" v-if="cardItemData2.length > 0" class="my-cards">
+                                    <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{ item.enName}}</span>
@@ -87,8 +87,8 @@
                                                 </transition>
                                                 
                                           </div>
-                                    </div>      
-                              </div>
+                                    </a-col>
+                              </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
                                     暂无数据
                               </p>
@@ -142,18 +142,13 @@
 		padding: 20px;
             background-color: #fff;
             .my-cards{
-                  display: flex;
-                  justify-content: flex-start;
                   flex-wrap: wrap;
-                  padding: 0 120px 50px;
-                  
                   .card-item{
-                        width: 22%;
-                        height: 460px;
-                        margin: 10px 1%;
+                        height: 400px;
+                        margin-bottom: 20px;
                         border:1px solid #ccc;
                         border-radius: 5px;
-                        padding: 20px;
+                        padding: 40px 20px 0;
                         .title{
                               display: flex;
                               align-items: center;
