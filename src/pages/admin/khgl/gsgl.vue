@@ -24,6 +24,7 @@
                         <a-tab-pane key="1" tab="待审批">
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData1.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
+                                          
                                           <div class="title">
                                                 <a-avatar :size="64" :src="host + item.logo"/>
                                                 <span>{{item.name}}</span>
@@ -322,7 +323,8 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getGsspList(this.condition,this.offset,this.starttime,this.endtime);
+                              this.getGsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                              this.getGsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
                         }
                   })
             },

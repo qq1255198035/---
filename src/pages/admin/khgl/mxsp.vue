@@ -144,7 +144,7 @@
             .my-cards{
                   flex-wrap: wrap;
                   .card-item{
-                        height: 400px;
+                        height: 460px;
                         margin-bottom: 20px;
                         border:1px solid #ccc;
                         border-radius: 5px;
@@ -332,7 +332,8 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getMxspList(this.condition,this.offset,this.starttime,this.endtime);
+                              this.getMxspList1(this.condition,1,this.offset,this.starttime,this.endtime);
+                              this.getMxspList0(this.condition,0,this.offset,this.starttime,this.endtime);  
                         }
                   })
             },

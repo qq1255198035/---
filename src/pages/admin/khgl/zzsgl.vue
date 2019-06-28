@@ -320,7 +320,8 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getZzsspList(this.condition,this.offset,this.starttime,this.endtime);
+                              this.getZzsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                              this.getZzsspList1(this.condition,this.status,this.offset,this.starttime,this.endtime);
                         }
                   })
             },

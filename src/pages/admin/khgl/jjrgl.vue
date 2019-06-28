@@ -316,7 +316,8 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getJjrspList(this.condition,this.offset,this.starttime,this.endtime);
+                              this.getJjrspList1(this.condition,1,this.offset,this.starttime,this.endtime);
+                              this.getJjrspList0(this.condition,0,this.offset,this.starttime,this.endtime);
                         }
                   })
             },

@@ -134,30 +134,30 @@
                   .title{
                         display: flex;
                         .item{
-                        display: flex;
-                        justify-content: space-around;
-                        .profile-info{
-                              margin-left: 20px;
-                              
-                              p{
-                                    color: #999;
-                                    margin-bottom: 0;
-                              }
-                              span{
-                                    color: #999;
-                              }
-                              .no-margins {
-                                    font-size: 16px;
-                                    color: #333;
-                                    margin-bottom: 0;
+                              display: flex;
+                              justify-content: flex-start;
+                              .profile-info{
+                                    margin-left: 30px;
                                     
+                                    p{
+                                          color: #999;
+                                          margin-bottom: 0;
+                                    }
+                                    span{
+                                          color: #999;
+                                    }
+                                    .no-margins {
+                                          font-size: 18px;
+                                          color: #139aa1;
+                                          margin-bottom: 0;
+                                          font-weight: bold;
+                                    }
+                                    .my-icon{
+                                          margin-right: 5px;
+                                    }
+                              
                               }
-                              .my-icon{
-                                    margin-right: 5px;
-                              }
-                        
                         }
-                  }
                   }
                   
             }
