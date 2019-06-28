@@ -262,8 +262,10 @@ export default {
           }
         }
         this.sponsorList = sponsorList
-        console.log(avatarArrty)
+        console.log(this.sponsorList)
+        
         this.starAvatar = avatarArrty
+        console.log(this.starAvatar)
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
         this.start = activityDetail.createTime
@@ -277,20 +279,22 @@ export default {
         this.contact = activityDetail.contact
         this.imgUrl = this.$host + activityDetail.cover_img
         this.logo = this.$host + activityDetail.cover_img
+        console.log(this.logo)
+        console.log(this.campNum)
         if (activityDetail.status == 10) {
-          this.status = '创建中'
+          this.status = '创建活动'
         }
         if (activityDetail.status == 0) {
-          this.status = '申请中'
+          this.status = '平台审核'
         }
         if (activityDetail.status == 20) {
-          this.status = '成功'
+          this.status = '活动进行中'
         }
         if (activityDetail.status == 30) {
-          this.status = '驳回'
+          this.status = '创建活动'
         }
         if (activityDetail.status == 50) {
-          this.status = '关闭'
+          this.status = '活动完成'
         }
       })
     },

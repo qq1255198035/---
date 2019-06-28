@@ -162,7 +162,7 @@ export default {
   created() {
    // this._getPlace()
     this._getUserInformation()
-    this._getBooleanPlace()
+    //this._getBooleanPlace()
   },
 
   mounted() {},
@@ -187,24 +187,21 @@ export default {
           phoneName: res.data.phone
         })
         this.flag = res.data.flag
+        console.log(this.flag)
         this.imgurl = res.data.logo ? this.$host + res.data.logo : ''
         this.fileUrl = res.data.logo
         console.log(this.imgurl)
         this.imgurl1 = res.data.businessImg ? this.$host + res.data.businessImg : ''
         this.fileUrl1 = res.data.businessImg
         console.log(this.imgurl1)
-      })
-    },
-    // 地点
-    _getBooleanPlace() {
-      console.log(this.flag)
-      const params = {
+        const params1 = {
         flag: this.flag
       }
       console.log(params)
-      getBooleanPlace(params).then(res => {
+      getBooleanPlace(params1).then(res => {
         console.log(res)
         this.activeityPlace = res.data
+      })
       })
     },
     // 更新
@@ -257,6 +254,17 @@ export default {
       //this.personInfo.country = value
     },
     beforeUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isPNG = file.type === 'image/png'
+      if (!isJPG && !isPNG) {
+        this.$message.error('You can only upload JPG file!')
+        return isJPG
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 2MB!')
+        return isLt2M
+      }
       getBase64(file, imageUrl => {
         this.imgurl = imageUrl
       })
@@ -269,6 +277,17 @@ export default {
       })
     },
     beforeUpload1(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isPNG = file.type === 'image/png'
+      if (!isJPG && !isPNG) {
+        this.$message.error('You can only upload JPG file!')
+        return isJPG
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 2MB!')
+        return isLt2M
+      }
       getBase64(file, imageUrl => {
         this.imgurl1 = imageUrl
       })

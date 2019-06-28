@@ -56,9 +56,9 @@
                     class="my-table"
                   />
                 </detail-list-item>
-                <detail-list-item term="活动封面" class="my-item-1">
+                <!--<detail-list-item term="活动封面" class="my-item-1">
                   <img :src="imgUrl" alt>
-                </detail-list-item>
+                </detail-list-item>-->
               </detail-list>
             </a-card>
             <div class="my-item-list">
@@ -70,7 +70,7 @@
                 </li>
                 <li>
                   <span>活动视频：</span>
-                  <video :src="videoUrls" controls width="200px" height="150px"></video>
+                  <video v-if="videoUrls" :src="videoUrls" controls width="200px" height="150px"></video>
                 </li>
                 <li>
                   <span>活动照片：</span>
@@ -94,25 +94,13 @@
                 <li>
                   <span>受众群众：</span>
                   <div>
-                    <a-tag color="pink">pink</a-tag>
-                    <a-tag color="red">red</a-tag>
-                    <a-tag color="orange">orange</a-tag>
-                    <a-tag color="green">green</a-tag>
-                    <a-tag color="cyan">cyan</a-tag>
-                    <a-tag color="blue">blue</a-tag>
-                    <a-tag color="purple">purple</a-tag>
+                    <a-tag color="pink" v-for="(item, index) in selectedTags1" :key="index">{{item}}</a-tag>
                   </div>
                 </li>
                 <li>
                   <span>活动特点：</span>
                   <div>
-                    <a-tag color="pink">pink</a-tag>
-                    <a-tag color="red">red</a-tag>
-                    <a-tag color="orange">orange</a-tag>
-                    <a-tag color="green">green</a-tag>
-                    <a-tag color="cyan">cyan</a-tag>
-                    <a-tag color="blue">blue</a-tag>
-                    <a-tag color="purple">purple</a-tag>
+                    <a-tag color="orange" v-for="(item, index) in selectedTags" :key="index">{{item}}</a-tag>
                   </div>
                 </li>
               </ul>
@@ -143,8 +131,8 @@
           </a-tab-pane>
           <a-tab-pane key="2" tab="赞助信息">
             <div class="my-tables" v-for="(item, index) in dataNameArrty" :key="index">
-              <h3 v-if="dataName[0].ssKind">
-                {{dataName[0].ssKind}}
+              <h3>
+                {{dataName[0].ssKind || ''}}
                 <!--<span>（ {{dataName.length}} ）</span>-->
               </h3>
               <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>
@@ -297,7 +285,7 @@ const columns2 = [
   },
   {
     title: '赞助形式',
-    dataIndex: 'sponsorship_name'
+    dataIndex: 'sponsorship'
   },
   {
     title: '赞助金额',
@@ -457,7 +445,7 @@ export default {
       starAvatar: [],
       sponsorList: [],
       logo: '',
-      current: '',
+      current: 0,
       status: '',
       starList: [],
       detailsImgs: [],
@@ -489,7 +477,8 @@ export default {
       detailImgs: '',
       videoUrls: '',
       palyPlatfrom: '',
-      selectedTags: '',
+      selectedTags: [],
+      selectedTags1: [],
       companyList1: '',
       closingDate: '',
       requirdContent: '',
@@ -569,19 +558,19 @@ export default {
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {
-          this.status = '创建中'
+          this.status = '创建活动'
         }
         if (activityDetail.status == 0) {
-          this.status = '申请中'
+          this.status = '平台审核'
         }
         if (activityDetail.status == 20) {
-          this.status = '成功'
+          this.status = '活动进行中'
         }
         if (activityDetail.status == 30) {
-          this.status = '驳回'
+          this.status = '创建活动'
         }
         if (activityDetail.status == 50) {
-          this.status = '关闭'
+          this.status = '活动完成'
         }
       })
     },
@@ -594,7 +583,7 @@ export default {
       }
       getStarsDeails(params).then(res => {
         console.log(res)
-        this.starList = res.data
+        this.starList = res.data.length ? res.data : '' 
       })
     },
     _getSponsor() {
@@ -606,7 +595,8 @@ export default {
       }
       getSponsor(params).then(res => {
         console.log(res)
-        this.data2 = res.data
+        this.data2 = res.data.length ? res.data : []
+        console.log(this.data2)
         this.closingDate = res.endTime
         this.requirdContent = res.demand
         const dataArrty = res.data
@@ -635,7 +625,7 @@ export default {
         console.log(res)
         this.activityContent = res.data.list[0].content
         console.log(this.activityContent)
-        this.videoUrls = this.$host + res.data.list[0].video
+        this.videoUrls = res.data.list[0].video ? this.$host + res.data.list[0].video : ''
         const detailsArrty = []
         for (let i = 0; i < res.data.listCampAtt.length; i++) {
           if (!res.data.listCampAtt.length == 0) {
@@ -655,12 +645,28 @@ export default {
       console.log(params)
       getExtension(params).then(res => {
         console.log(res)
-        this.data1 = res.data
+        this.data1 = res.data ? res.data : []
+        console.log(this.data1)
         this.palyPlatfrom = res.platform
-        const selectArry = res.campFeature.split(',')
+        const selectArry = res.campFeature ? res.campFeature.split(',') : []
+        const selectArry1 = res.audiences ? res.audiences.split(',') : []
+        console.log(selectArry)
+        const tagList = []
+        const tagList1 = []
         for (let i = 0; i < selectArry.length; i++) {
-          this.selectedTags.push(parseInt(selectArry[i]))
+          if(selectArry.length !==0) {
+            tagList.push(selectArry[i])
+          }
+         
         }
+        for (let i = 0; i < selectArry1.length; i++) {
+          if(selectArry1.length !== 0) {
+            tagList1.push(selectArry1[i])
+          }
+         
+        }
+         this.selectedTags = tagList
+         this.selectedTags1 = tagList1
       })
     }
   }

@@ -17,8 +17,8 @@
       <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
         <a-tab-pane key="1" tab="赞助审批">
           <div >
-            <a-collapse accordion activeKey="1" :bordered="false">
-              <a-collapse-panel  v-for="(item, index) in cardItemData1" :key="index">
+            <a-collapse accordion activeKey="1" v-if="cardItemData1.length" :bordered="false">
+              <a-collapse-panel   v-for="(item, index) in cardItemData1" :key="index">
                 <h5 slot="header" class="panel-title">
                   冠名赞助
                   <span>
@@ -93,10 +93,10 @@
         </a-tab-pane>
         <a-tab-pane key="2" tab="我的赞助">
           <div>
-            <a-collapse accordion activeKey="1" :bordered="false">
+            <a-collapse accordion activeKey="1" :bordered="false" v-if="dataForm.length">
               <a-collapse-panel :key="index" v-for="(item, index) in dataForm">
                 <h5 slot="header" class="panel-title">
-                  {{dataList[0].ssKind}}
+                  {{dataList[0].ssKind || ''}}
                   <span>（ {{dataList.length}} ）</span>
                 </h5>
                 <div class="my-tables">
@@ -200,7 +200,7 @@
       flex-wrap: wrap;
       padding: 0 0 50px;
       .card-item {
-        width: 24%;
+        width: 22%;
         margin: 10px;
         border: 1px solid #ccc;
         border-radius: 10px;
@@ -578,19 +578,19 @@ export default {
         this.imgUrl = this.$host + activityDetail.cover_img
         this.logo = this.$host + activityDetail.cover_img
         if (activityDetail.status == 10) {
-          this.status = '创建中'
+          this.status = '创建活动'
         }
         if (activityDetail.status == 0) {
-          this.status = '申请中'
+          this.status = '平台审核'
         }
         if (activityDetail.status == 20) {
-          this.status = '成功'
+          this.status = '活动进行中'
         }
         if (activityDetail.status == 30) {
-          this.status = '驳回'
+          this.status = '创建活动'
         }
         if (activityDetail.status == 50) {
-          this.status = '关闭'
+          this.status = '活动完成'
         }
       })
     },
@@ -694,6 +694,8 @@ export default {
       getApproval(params).then(res => {
         console.log(res)
         if(res.data.code == 1) {
+          this._getApprovalList()
+        this._getMineSupport()
           this.$notification.success({
           message: '成功',
           description: '审批通过'
@@ -704,8 +706,6 @@ export default {
           description: '审批失败'
         })
         }
-        this._getApprovalList()
-        this._getMineSupport()
       })
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
@@ -734,6 +734,8 @@ export default {
       getApproval(params).then(res => {
         console.log(res)
         if(res.data.code == 1) {
+          this._getApprovalList()
+        this._getMineSupport()
           this.$notification.success({
           message: '成功',
           description: '通过'
@@ -745,8 +747,7 @@ export default {
         })
         }
       })
-      this._getApprovalList()
-      this._getMineSupport()
+      
       this.loading = true
       setTimeout(() => {
         this.loading = false

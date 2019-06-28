@@ -5,7 +5,7 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar">
+              <img :src="avatars">
             </div>
             <div class="username">{{starDetils.surname}}{{starDetils.monicker}}</div>
             <p>{{starDetils.enName}}</p>
@@ -150,7 +150,8 @@
       padding: 20px 40px;
       flex-wrap: wrap;
       img {
-        width: 22%;
+        width: 40%;
+        height: 100%;
         margin: 10px;
       }
     }
@@ -174,7 +175,7 @@ export default {
       imgUrl,
       starDetils: '',
       sex: '',
-      avatar: '',
+      avatars: '',
       detailsImgs: []
     }
   },
@@ -201,7 +202,7 @@ export default {
       getStarDetails(params).then(res => {
         console.log(res)
         this.starDetils = res.data
-        this.avatar = this.$host + res.data.avatar
+        this.avatars = this.$host + res.data.avatar
         console.log(this.avatar)
         this.sex = res.data.sex === '1' ? '男' : '女'
         this.detailsImgs = this.$host + res.data.imgs
