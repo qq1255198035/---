@@ -679,7 +679,7 @@ export default {
         this._getMineSupport()
           this.$notification.success({
           message: '成功',
-          description: '审批通过'
+          description: '审批成功'
         })
         }else {
           this.$notification['error']({

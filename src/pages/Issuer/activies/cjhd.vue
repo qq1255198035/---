@@ -1104,8 +1104,7 @@ export default {
     },
     showModal(index, item) {
       const token = this.$ls.get('Access-Token')
-      const campId = this.$route.query.campId ? this.$route.query.campId : ''
-      
+      const campId = this.$route.query.campId ? this.$route.query.campId : this.userid
       if (index == 0) {
         getPlace().then(res => {
           console.log(res)
@@ -1123,15 +1122,13 @@ export default {
       console.log(params)
         getActivityInformation(params).then(res => {
           console.log(res)
-          const that = this
-          console.log(that.code == '1000')
-          console.log(that.code)
-          console.log(that.userid)
-          console.log(that.code == '1000' && that.userid && campId)
+          console.log(this.code)
+          console.log(this.userid)
+          console.log(campId)
           
-          if (that.code == '1000' || that.userid || campId) {
+          if (this.code == '1000' || this.userid || campId) {
             console.log(323)
-            const dateList = res.data.list[0].publishTime
+            const dateList = res.data.list[0].publishTime? res.data.list[0].publishTime : ''
             const endTime = res.data.list[0].endTime
             const list = []
             if (dateList && endTime) {
@@ -1182,6 +1179,8 @@ export default {
         token: token,
         campId: campId
       }
+      console.log(this.userid)
+      console.log(campId)
       console.log(params)
         getCheckActivitiesDetail(params).then(res => {
           console.log(res)
@@ -1241,7 +1240,7 @@ export default {
           this.tags5 = res.data.socialAttr
           this.tags6 = res.data.consumeAttr
           this.tags7 = res.data.jobAttr
-          this.organizerTypeList = res.data.organizerTypeList
+          this.organizerTypeList = res.data.organizerType
         })
         console.log(params)
         getExtension(params).then(res => {
@@ -1250,7 +1249,7 @@ export default {
             this.form2.setFieldsValue({
               pingName: res.platform,
               companyTitle: { key: '133', label: '主办方' },
-              companyName: '公司地址'
+              companyName: ''
             })
             const selectArry = res.campFeature.split(',')
             const companyArry = res.data
@@ -1292,6 +1291,7 @@ export default {
         token: token,
         campId: campId
       }
+      console.log(params)
         getSponsor(params).then(res => {
           console.log(res)
           if (this.code == '1000' || campId) {
@@ -1317,7 +1317,7 @@ export default {
               tableList1.push({
                 key: length === 0 ? '1' : (parseInt(i) + 1).toString(),
                 tgWay: dataArrty[i].ss_kind,
-                zzWay: dataArrty[i].sponsorship_name,
+                zzWay: dataArrty[i].sponsorship,
                 zzPrice: dataArrty[i].money,
                 zzNum: dataArrty[i].num,
                 remarks: dataArrty[i].bz,
@@ -1476,7 +1476,7 @@ export default {
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
       const token = this.$ls.get('Access-Token')
-      let campId = this.userid ? this.userid : this.$route.query.campId
+      let campId = this.$route.query.campId ? this.$route.query.campId : this.userid
       console.log(this.form.validateFields)
       //活动基本信息
       if (this.formShow == 0) {
@@ -1570,6 +1570,7 @@ export default {
             console.log(params)
             getDetailsActivity(params).then(res => {
               console.log(res)
+              this.userid = res.data.campId
               if (res.data.code == '1000' || res.data.code == '1001') {
                 this.data[this.formShow].actions.title = '修改'
                 this.visible = false
@@ -1587,13 +1588,14 @@ export default {
         this.confirmLoading = false
         if(this.companyList.length == 0) {
           this.$message.error('请添加主承办方')
+          return false
         }
         this.form2.validateFields((err, values) => {
           console.log(values)
           if (!err) {
             console.log(11)
             console.log(values)
-            this.companyPlace = values.companyName
+            //this.companyPlace = values.companyName
             this.companyName = values.companyTitle
             this.palyPlatfrom = values.pingName
             const params = {
@@ -1607,6 +1609,7 @@ export default {
             console.log(params)
             getActivityPromotion(params).then(res => {
               console.log(res)
+              this.userid = res.data.campId
               if (res.data.code == '1000' || res.data.code == '1001') {
                 this.data[this.formShow].actions.title = '修改'
                 this.visible = false
@@ -1637,12 +1640,12 @@ export default {
               campId: this.$route.query.campId ? this.$route.query.campId :this.userid,
               jsonData: JSON.stringify(this.supportJson),
               endTime: this.closingDate,
-              demand: this.requirdContent
+              demand: this.requirdContent ? this.requirdContent : ''
             }
             console.log(params)
             getEventSponsorship(params).then(res => {
-              
               console.log(res)
+              this.userid = res.data.campId
               if (res.data.code == 1000 || rea.data.code == 1001) {
                 this.data[this.formShow].actions.title = '修改'
                 this.visible = false

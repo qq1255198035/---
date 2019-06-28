@@ -298,9 +298,9 @@ export default {
       }
       console.log(params)
       getHandActivities(params).then(res => {
-        this.searchText = ''
         console.log(res)
         this.cardList = res.page.rows
+        
       })
     },
     // 日期搜索
@@ -322,16 +322,17 @@ export default {
       }
       console.log(params)
       this.$confirm({
-        title: 'Are you sure delete this task?',
-        content: 'Some descriptions',
-        okText: 'Yes',
+        title: '是否删除本条数据?',
+        //content: 'Some descriptions',
+        okText: '是',
         okType: 'danger',
-        cancelText: 'No',
+        cancelText: '否',
         onOk() {
           console.log('OK')
           getDetele(params).then(res => {
             console.log(res)
             that.cardList.splice('index', 1)
+            that._getHandActivities()
           })
         },
         onCancel() {
