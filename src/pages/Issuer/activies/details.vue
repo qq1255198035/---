@@ -131,8 +131,8 @@
           </a-tab-pane>
           <a-tab-pane key="2" tab="赞助信息">
             <div class="my-tables" v-for="(item, index) in dataNameArrty" :key="index">
-              <h3>
-                {{dataName[0].ssKind || ''}}
+              <h3 v-if="dataName.length !== 0">
+                {{dataName[0].ssKind}}
                 <!--<span>（ {{dataName.length}} ）</span>-->
               </h3>
               <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>
@@ -509,6 +509,7 @@ export default {
         let key = 'key'
         this.dataNameArrty = res.data.campSponsorAllList
         this.dataName = res.data.campInputSponsorList
+        console.log(this.dataName.length)
         this.dataName.map((item, index) => {
           item[key] = index + 1
         })
@@ -553,8 +554,8 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl = this.$host + activityDetail.cover_img
-        this.logo = this.$host + activityDetail.cover_img
+        this.imgUrl =activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
+        this.logo = activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {
@@ -583,7 +584,7 @@ export default {
       }
       getStarsDeails(params).then(res => {
         console.log(res)
-        this.starList = res.data.length ? res.data : '' 
+        this.starList = res.data.length ? res.data : []
       })
     },
     _getSponsor() {
@@ -648,8 +649,8 @@ export default {
         this.data1 = res.data ? res.data : []
         console.log(this.data1)
         this.palyPlatfrom = res.platform
-        const selectArry = res.campFeature ? res.campFeature.split(',') : []
-        const selectArry1 = res.audiences ? res.audiences.split(',') : []
+        const selectArry = res.audiencesName ? res.audiencesName.split(',') : []
+        const selectArry1 = res.campFeatureName ? res.campFeatureName.split(',') : []
         console.log(selectArry)
         const tagList = []
         const tagList1 = []

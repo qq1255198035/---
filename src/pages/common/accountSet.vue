@@ -159,7 +159,7 @@ export default {
     }
   },
   mixins: [mixinsTitle],
-  created() {
+  activated() {
    // this._getPlace()
     this._getUserInformation()
     //this._getBooleanPlace()
@@ -191,13 +191,13 @@ export default {
         this.imgurl = res.data.logo ? this.$host + res.data.logo : ''
         this.fileUrl = res.data.logo
         console.log(this.imgurl)
-        this.imgurl1 = res.data.businessImg ? this.$host + res.data.businessImg : ''
+        this.imgurl1 = res.data.businessImg ? this.$host + res.data.business_img : ''
         this.fileUrl1 = res.data.businessImg
         console.log(this.imgurl1)
         const params1 = {
-        flag: this.flag
+        flag: res.data.flag
       }
-      console.log(params)
+      console.log(params1)
       getBooleanPlace(params1).then(res => {
         console.log(res)
         this.activeityPlace = res.data
@@ -243,6 +243,9 @@ export default {
     },
     countryBtn(value) {
       console.log(value)
+      this.form.setFieldsValue({
+        addressName: ''
+      })
       this.flag = value
       const params = {
         flag: value
