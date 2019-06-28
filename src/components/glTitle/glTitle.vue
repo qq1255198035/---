@@ -140,7 +140,7 @@ export default {
     stars: {
       
     },
-    sponsors: {},
+    sponsors: [],
     status: {
       
     },
