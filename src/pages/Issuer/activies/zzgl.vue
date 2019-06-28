@@ -37,7 +37,7 @@
                                   @mouseenter="btnShow = index"
                                   @mouseleave="btnShow = -1"
                                   v-for="(k,index) in cardItemData"
-                                  :key="k.ss_id"
+                                  :key="index"
                                 >
                                 <div class="title">
                                   <a-avatar

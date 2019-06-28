@@ -15,8 +15,8 @@
                                     <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
-                                          <h2 class="no-margins">
-                                          {{item.name}}
+                                          <h2 class="no-margins" @click="$router.push({path:'/ckhd',query:{id:item.campId}})">
+                                                {{item.name}}
                                           </h2>
                                           <p>时间：{{item.publishTime}}</p>
                                           <p>分类：{{item.campCatalogVal}}</p>
@@ -151,6 +151,7 @@
                                           color: #139aa1;
                                           margin-bottom: 0;
                                           font-weight: bold;
+                                          cursor: pointer;
                                     }
                                     .my-icon{
                                           margin-right: 5px;
