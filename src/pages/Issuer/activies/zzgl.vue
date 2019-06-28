@@ -20,105 +20,101 @@
             <a-collapse accordion activeKey="1" v-if="cardItemData1.length" :bordered="false">
               <a-collapse-panel   v-for="(item, index) in cardItemData1" :key="index">
                 <h5 slot="header" class="panel-title" v-if="cardItemData1.length !== 0">
-                  {{cardItemData1[0].ssKind}}
+                  {{item.ss_kind}}
                   <span>
                     （
-                    <i>1</i> / 2 ）
+                    <i>{{item.cnt}}</i> /{{item.num}} ）
                   </span>
-                  <a-tag color="#f50">{{length}}</a-tag>
+                  <a-tag color="#f50">{{item.noCnt}}</a-tag>
                 </h5>
+                
+                
                 <div class="my-cards">
-                  <div
-                    class="card-item ant-card-hoverable"
-                    @mouseenter="btnShow = index"
-                    @mouseleave="btnShow = -1"
-                    v-for="(item,index) in cardItemData"
-                    :key="index"
-                  >
-                    <div class="title">
-                      <a-avatar
-                        :size="40"
-                        :src="logo"
-                        class="user-img"
-                      />
-                      <span>{{item.company}}</span>
-                    </div>
-                    <div class="content">
-                      <p>赞助金额：{{item.tolMoney}}</p>
-                      <div class="my-charts">
-                        <v-chart :height="300" :data="pieData" :scale="pieScale">
-                          <v-legend
-                            data-key="item"
-                            :useHtml="true"
-                            :itemTpl="itemTpl"
-                            position="right"
-                            :offsetX="-50"
-                            :offsetY="-35"
-                          />
-                          <v-tooltip :showTitle="false" data-key="item*percent"/>
-                          <v-axis/>
-                          <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.3"/>
-                        </v-chart>
-                      </div>
-                    </div>
-                    <div class="footer">
-                      <p>联系人: {{ item.contact}}</p>
-                      <p>联系电话：{{item.phone}}</p>
-                      <p>邮箱：{{item.email}}</p>
-                      <p>备注：{{item.bz}}</p>
-                      <div class="calc-price">
-                          总计：￥
-                          <span>{{item.tolMoney}}</span>
-                        </div>
-                      <transition name="fade">
-                        <div class="button-box" v-show="btnShow == index" key="1">
-                          <a-button type="danger" class="danger" @click="showModal(item, index)">驳回</a-button>
-                          <a-button
-                            type="primary"
-                            class="primary"
-                            @click="success(item)"
-                            :loading="loading"
-                          >通过</a-button>
-                        </div>
-                      </transition>
-                    </div>
-                  </div>
+                  <template v-for="y in cardItemData">
+                        <template v-if="item.ss_id == y.ss_id">
+                              <div
+                                  class="card-item ant-card-hoverable"
+                                  @mouseenter="btnShow = index"
+                                  @mouseleave="btnShow = -1"
+                                  v-for="(k,index) in cardItemData"
+                                  :key="k.ss_id"
+                                >
+                                <div class="title">
+                                  <a-avatar
+                                    :size="60"
+                                    :src="logo"
+                                    class="user-img"
+                                  />
+                                  <span>{{k.company}}</span>
+                                </div>
+                                <div class="content">
+                                  <p>赞助金额：{{k.tolMoney}}</p>
+                                  <div class="my-charts">
+                                    <v-chart :height="300" :data="pieData" :scale="pieScale">
+                                      <v-legend
+                                        data-key="item"
+                                        :useHtml="true"
+                                        :itemTpl="itemTpl"
+                                        position="right"
+                                        :offsetX="-50"
+                                        :offsetY="-35"
+                                      />
+                                      <v-tooltip :showTitle="false" data-key="item*percent"/>
+                                      <v-axis/>
+                                      <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
+                                      <v-coord type="theta" :radius="0.75" :innerRadius="0.3"/>
+                                    </v-chart>
+                                  </div>
+                                </div>
+                                <div class="footer">
+                                  <p>联系人: {{ k.contact}}</p>
+                                  <p>联系电话：{{k.phone}}</p>
+                                  <p>邮箱：{{k.email}}</p>
+                                  <p>备注：{{k.bz}}</p>
+                                  <div class="calc-price">
+                                      总计：￥
+                                      <span>{{k.tolMoney}}</span>
+                                    </div>
+                                  <transition name="fade">
+                                    <div class="button-box" v-show="btnShow == index" key="1">
+                                      <a-button type="danger" class="danger" @click="showModal(k, index)">驳回</a-button>
+                                      <a-button
+                                        type="primary"
+                                        class="primary"
+                                        @click="success(k)"
+                                        :loading="loading"
+                                      >通过</a-button>
+                                    </div>
+                                  </transition>
+                                </div>
+                              </div>
+                        </template>
+                  </template>
+                  
                 </div>
               </a-collapse-panel>
-              
-              
             </a-collapse>
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" tab="我的赞助">
-          <div>
-            <a-collapse accordion activeKey="1" :bordered="false" v-if="dataForm.length">
-              <a-collapse-panel :key="index" v-for="(item, index) in dataForm">
-                <h5 slot="header" class="panel-title" v-if="dataList.length !== 0">
-                  {{dataList[0].ssKind || ''}}
-                  <span>（ {{dataList.length}} ）</span>
-                </h5>
-                <div class="my-tables">
-                  <a-table :columns="columns" :dataSource="dataList" @change="pageNext" size="middle"></a-table>
-                </div>
-              </a-collapse-panel>
-              <!--<a-collapse-panel key="2" :disabled="false" :bordered="false">
-                <h5 slot="header" class="panel-title">
-                  非冠名赞助
-                  <span>（ 2 ）</span>
-                </h5>
-                <a-table :columns="columns" :dataSource="dataList1" size="middle"></a-table>
-              </a-collapse-panel>
-              <a-collapse-panel key="3" :disabled="false" :bordered="false">
-                <h5 slot="header" class="panel-title">
-                  其他
-                  <span>（ 2 ）</span>
-                </h5>
-                <a-table :columns="columns" :dataSource="dataList2" size="middle"></a-table>
-              </a-collapse-panel>-->
-            </a-collapse>
-          </div>
+         
+                <div>
+                <a-collapse accordion activeKey="1" :bordered="false">
+                          <a-collapse-panel :key="index" v-for="(item, index) in dataForm">
+                            <h5 slot="header" class="panel-title" >
+                              {{item.ss_kind}}
+                              <span>（ {{item.cnt}} ）</span>
+                            </h5>
+                            <div>
+                                    
+                              <div class="my-tables">
+                                  <a-table :columns="columns" :dataSource="filterItems(dataList,item.ss_id)" @change="pageNext" size="middle"></a-table>
+                              </div>
+                            </div>
+                            
+                          </a-collapse-panel>
+                </a-collapse>
+              </div>
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -205,7 +201,7 @@
         border: 1px solid #ccc;
         border-radius: 10px;
         padding: 0 20px;
-        height: 474px;
+        height: 500px;
 
         .title {
           display: flex;
@@ -299,44 +295,9 @@ let sourceData = [
     count: null
   }
 ]
-let sourceData1 = [
-  {
-    item: '未付',
-    count: null
-  },
-  {
-    item: '已付',
-    count: null
-  }
-]
-let sourceData2 = [
-  {
-    item: '现金',
-    count: null
-  },
-  {
-    item: '实物',
-    count: null
-  }
-]
-/*const guideOpts = {
-  type: 'text',
-  position: ['50%', '50%'],
-  content: '24001110 万',
-  style: {
-    lineHeight: '240px',
-    fontSize: '20',
-    fill: '#FF0000',
-    textAlign: 'center'
-  }
-}*/
 const DataSet = require('@antv/data-set')
 let dv = new DataSet.View().source(sourceData)
-let dv1 = new DataSet.View().source(sourceData1)
-let dv2 = new DataSet.View().source(sourceData2)
 let pieData = dv.rows
-let pieData1 = dv1.rows
-let pieData2 = dv2.rows
 const pieScale = [
   {
     dataKey: 'percent',
@@ -346,11 +307,7 @@ const pieScale = [
 ]
 
 const columns = [
-  {
-    title: '序号',
-    dataIndex: 'key',
-    align: 'center'
-  },
+  
   {
     title: '赞助公司名称',
     dataIndex: 'name',
@@ -423,29 +380,8 @@ export default {
       length: '',
       length1: '',
       length2: '',
-      dataSource: [
-        {
-          title: '李宁体育用品有限公司',
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-          content:
-            '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。'
-        },
-        {
-          title: '李宁体育用品有限公司',
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-          content:
-            '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。'
-        },
-        {
-          title: '李宁体育用品有限公司',
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-          content:
-            '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。'
-        }
-      ],
+      
       pieData,
-      pieData1,
-      pieData2,
       sourceData,
       pieScale,
       c: ['item', ['#FBD437', '#F2637B']],
@@ -465,8 +401,8 @@ export default {
           value +
           '" data-color=' +
           color +
-          ' style="cursor: pointer;font-size: 14px;">' +
-          '<td width=150 style="border: none;padding:0; color:{color};"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' +
+          ' style="cursor: pointer;font-size: 14px;min-width: 180px">' +
+          '<td style="border: none;padding:0; color:{color};min-width: 50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' +
           color +
           ';"></i>' +
           '<span class="g2-legend-text">' +
@@ -539,6 +475,11 @@ export default {
     this._getActivityInformation()
   },
   methods: {
+    filterItems(a,b){
+      return a.filter(item=>{
+        return item.ss_id == b
+      }) 
+    },
     _getActivityInformation() {
       const token = this.$ls.get('Access-Token')
       const campId = this.$route.query.campId
@@ -617,8 +558,8 @@ export default {
         console.log(this.cardItemData2)
         this.length = this.cardItemData.length
         for (let i = 0; i < this.cardItemData.length; i++) {
-          this.pieData[0].count = this.cardItemData[i].cash
-          this.pieData[1].count = this.cardItemData[i].productVal
+          this.pieData[0].count = parseInt(this.cardItemData[i].cash)
+          this.pieData[1].count = parseInt(this.cardItemData[i].productVal)
           dv.transform({
             type: 'percent',
             field: 'count',

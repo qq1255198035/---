@@ -22,11 +22,11 @@
             <div class="gsgl-content">
                   <a-tabs defaultActiveKey="1" tabPosition="top" size="large" @change="tabChange">
                         <a-tab-pane key="1" tab="待审批">
-                              <div class="my-cards" v-if="cardItemData1.length > 0">
-                                    <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
+                              <a-row type="flex" justify="start" align="top" v-if="cardItemData1.length > 0" class="my-cards">
+                                    <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
+                                          
                                           <div class="title">
                                                 <a-avatar :size="64" :src="host + item.logo"/>
-                                                
                                                 <span>{{item.name}}</span>
                                           </div>
                                           <div class="content">
@@ -45,8 +45,8 @@
                                                 </transition>
                                                 
                                           </div>
-                                    </div>      
-                              </div>
+                                    </a-col>
+                              </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
                                     暂无数据
                               </p>
@@ -55,8 +55,9 @@
                               </div>
                         </a-tab-pane>
                         <a-tab-pane key="0" tab="已审批">
-                              <div class="my-cards" v-if="cardItemData2.length > 0">
-                                    <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
+                              <a-row type="flex" justify="start" align="top" v-if="cardItemData2.length > 0" class="my-cards">
+                                    <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
+                                          
                                           <div class="title">
                                                 <a-avatar :size="64" :src="host + item.logo"/>
                                                 <span>{{item.name}}</span>
@@ -76,8 +77,8 @@
                                                 </transition>
                                                 
                                           </div>
-                                    </div>      
-                              </div>
+                                    </a-col>
+                              </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
                                     暂无数据
                               </p>
@@ -133,15 +134,10 @@
 		padding: 20px;
             background-color: #fff;
             .my-cards{
-                  display: flex;
-                  justify-content: flex-start;
                   flex-wrap: wrap;
-                  padding: 0 120px 50px;
-                  
                   .card-item{
-                        width: 22%;
                         height: 400px;
-                        margin: 10px 1%;
+                        margin-bottom: 20px;
                         border:1px solid #ccc;
                         border-radius: 5px;
                         padding: 40px 20px 0;
@@ -245,7 +241,7 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData1 = res.page.rows;
-                              if (res.page.offset == res.page.pages) {
+                              if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable1 = true;
                               }
                               
@@ -258,7 +254,7 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData2 = res.page.rows;
-                              if (res.page.offset == res.page.pages) {
+                              if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable2 = true;
                               }
                         }
@@ -327,7 +323,8 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getGsspList(this.condition,this.offset,this.starttime,this.endtime);
+                              this.getGsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                              this.getGsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
                         }
                   })
             },

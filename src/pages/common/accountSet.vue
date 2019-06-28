@@ -80,6 +80,7 @@
               </a-form-item>
             </a-input-group>
             <a-button type="primary" @click="submitPerson">更新信息</a-button>
+            <a-button type="primary" @click="$router.go(-1)">返 回</a-button>
           </a-form>
         </div>
       </a-col>

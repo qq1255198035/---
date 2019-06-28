@@ -44,6 +44,9 @@
             <p>{{personInfo.intro}}</p>
           </div>
         </div>
+        <div style="display: flex;justify-content: center;margin-top:30px;">
+              <a-button type="primary" @click="$router.go(-1)">返 回</a-button>
+        </div>
       </a-col>
     </a-row>
   </div>

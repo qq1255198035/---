@@ -121,6 +121,9 @@
                                     </div> 
                               </a-tab-pane>
                         </a-tabs>
+                        <div style="display: flex;justify-content: center;margin-top: 20px;">
+                              <a-button type="primary" @click="$router.go(-1)">返 回</a-button>
+                        </div>
                   </div>
             </div>
       </div>
