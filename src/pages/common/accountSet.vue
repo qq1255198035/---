@@ -80,7 +80,7 @@
               </a-form-item>
             </a-input-group>
             <a-button type="primary" @click="submitPerson">更新信息</a-button>
-            <a-button type="primary" @click="$router.go(-1)">返 回</a-button>
+            <a-button type="primary" @click="$router.go(-1)" style="margin-left: 20px;">返 回</a-button>
           </a-form>
         </div>
       </a-col>
@@ -160,13 +160,11 @@ export default {
     }
   },
   mixins: [mixinsTitle],
-  activated() {
-   // this._getPlace()
-    this._getUserInformation()
-    //this._getBooleanPlace()
-  },
+  
 
-  mounted() {},
+  mounted() {
+      this._getUserInformation()
+  },
   methods: {
     _getUserInformation() {
       const token = this.$ls.get('Access-Token')

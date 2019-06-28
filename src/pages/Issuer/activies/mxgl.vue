@@ -230,10 +230,11 @@ export default {
       status: ''
     }
   },
-  activated() {
-    this._getStarList()
-    this._getJoinStar()
-    this._getActivityInformation()
+  
+  mounted(){
+        this._getStarList()
+        this._getJoinStar()
+        this._getActivityInformation()
   },
   methods: {
     starDetail(item) {

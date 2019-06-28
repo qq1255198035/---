@@ -328,19 +328,19 @@ export default {
     },
     ...mapGetters(['notice'])
   },
-  activated() {
-    this._getSponsorshipdetails()
-    this._getUserInformation()
-    this._getSponsoredTweets()
-    this._getMyFiveNews()
-    this._getStarNum()
-    this._getSponsorNum()
-    this._getActiveNum()
-    this._getHandActivities()
-    this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+  
+  mounted() {
+          this._getSponsorshipdetails()
+          this._getUserInformation()
+          this._getSponsoredTweets()
+          this._getMyFiveNews()
+          this._getStarNum()
+          this._getSponsorNum()
+          this._getActiveNum()
+          this._getHandActivities()
+          this.user = this.userInfo
+          this.avatar = this.userInfo.avatar
   },
-  mounted() {},
   methods: {
     // 明星待审数量
     _getStarNum() {

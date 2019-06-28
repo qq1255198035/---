@@ -213,13 +213,14 @@ export default {
       avtiveityDateEnd: '' // 结束时间
     }
   },
-  activated() {
-    this._getHandActivities()
-    this._getPlace()
-    this._getClassify()
-  },
+  
   computed: {
     
+  },
+  mounted(){
+        this._getHandActivities();
+        this._getPlace();
+        this._getClassify();
   },
   methods: {
     // 活动管理
@@ -350,10 +351,7 @@ export default {
     }
   },
   computed: {},
-  mounted() {
-    //this.getCardData();
-    console.log(this.$store.getters.lang)
-  },
+  
   beforeCreate() {
     this.form = this.$form.createForm(this)
     console.log(this.form)

@@ -469,8 +469,9 @@ export default {
   comments: {
     PageView
   },
-  activated() {
-    this._getApprovalList()
+ 
+  mounted(){
+        this._getApprovalList()
     this._getMineSupport()
     this._getActivityInformation()
   },

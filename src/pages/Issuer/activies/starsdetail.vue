@@ -179,8 +179,9 @@ export default {
       detailsImgs: []
     }
   },
-  activated() {
-    this._getStarDetails()
+  
+  mounted(){
+      this._getStarDetails()
   },
   methods: {
     handleBack() {

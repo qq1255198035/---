@@ -486,14 +486,15 @@ export default {
     }
   },
   created() {},
-  activated() {
-    this._getCheckActivitiesDetail()
-    this._getPress()
-    this._getActivityInformation()
-    this._getSponsor()
-    this._getStarsDeails()
-    this._getApprovalList()
-    this._getExtension()
+  
+  mounted(){
+      this._getCheckActivitiesDetail()
+      this._getPress()
+      this._getActivityInformation()
+      this._getSponsor()
+      this._getStarsDeails()
+      this._getApprovalList()
+      this._getExtension()
   },
   methods: {
     _getApprovalList() {

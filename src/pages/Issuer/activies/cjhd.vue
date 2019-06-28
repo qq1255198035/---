@@ -907,12 +907,11 @@ export default {
       dataTable: []
     }
   },
-  mounted() {},
-  activated() {
+  mounted(){
     this._getActivityTest()
     this.dataTitle()
-    //this._getPress()
   },
+  
   methods: {
     ...mapGetters(['token']),
     //进度
@@ -984,6 +983,7 @@ export default {
               description: '提交成功',
               duration: 4
             })
+            //window.location.reload();
           }else if(res.data.code == '1002') {
             this.$message.error('活动详情没有数据')
           }

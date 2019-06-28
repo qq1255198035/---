@@ -150,8 +150,9 @@ export default {
       logo: '',
     }
   },
-  activated() {
-        this._getUserInformation()
+  
+  mounted(){
+      this._getUserInformation()
   },
   methods: {
     // 搞手用户信息
