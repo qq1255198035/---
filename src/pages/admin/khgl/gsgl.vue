@@ -245,7 +245,7 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData1 = res.page.rows;
-                              if (this.cardItemData1.length == 0) {
+                              if (res.page.offset == res.page.pages) {
                                     this.btnDsiable1 = true;
                               }
                               
@@ -258,7 +258,7 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData2 = res.page.rows;
-                              if (this.cardItemData2.length == 0) {
+                              if (res.page.offset == res.page.pages) {
                                     this.btnDsiable2 = true;
                               }
                         }
