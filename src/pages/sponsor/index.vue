@@ -12,7 +12,7 @@
             <div class="item-boxes">
               <div class="item-row">
                   <a-row type="flex" justify="space-between">
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
+                    <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" v-if="nonum1">
                         <v-chart :height="300" :data="pieData" :scale="pieScale">
                           <v-legend dataKey="item" :useHtml="true" :itemTpl="itemTpl" position="right" :offsetX="-50" :offsetY="-35"/>
                           <v-tooltip :showTitle="false" dataKey="item*percent" />
@@ -25,7 +25,10 @@
                           <span>{{sponsorTotal}}</span>
                         </div>
                     </a-col>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" class="item-box">
+                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
+                        <p>暂无数据</p>
+                    </a-col>
+                    <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" v-if="nonum2">
                       <v-chart :height="300" :data="pieData1" :scale="pieScale">
                         <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl1"/>
                         <v-tooltip :showTitle="false" dataKey="item*percent" />
@@ -38,8 +41,12 @@
                           <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
+                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
+                        <p>暂无数据</p>
+                    </a-col>
                   </a-row>
               </div>
+              
             </div>
           </a-card>
           <a-card title="活动动态" class="my-activity">
@@ -101,12 +108,13 @@ const dv1 = new DataSet.View().source(sourceData1)
 const pieScale = [{
   dataKey: 'percent',
   min: 0,
-  formatter: '.0%'
+  formatter: '.0%',
+  height: window.innerHeight,
 }]
 const pieData = dv.rows
 const pieData1 = dv1.rows
 export default {
-  name: 'Workplace',
+  
   components: {
     PageView,
     HeadInfo,
@@ -139,12 +147,12 @@ export default {
       itemTpl: (value, color, checked, index) => {
         const obj = dv.rows[index];
         checked = checked ? 'checked' : 'unChecked';
-        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;">' +'<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;min-width:180px;">' +'<td style="border: none;padding:0;min-width:50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
       },
       itemTpl1: (value, color, checked, index) => {
         const obj = dv1.rows[index];
         checked = checked ? 'checked' : 'unChecked';
-        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;">' +'<td width=150 style="border: none;padding:0;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;min-width:180px;">' +'<td style="border: none;padding:0;min-width:50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
       },
       // data
       operationColumns: [
@@ -192,6 +200,8 @@ export default {
         
       ],
       operation1: [],
+      nonum1:true,
+      nonum2:true,
     }
   },
   computed: {
@@ -226,6 +236,12 @@ export default {
           this.pieData1[1].count= res.data.paid;
           this.sponsorTotal = res.data.sponsorTotal;
           this.agentTotal = res.data.agentTotal
+          if (res.data.money == 0 && res.data.goods == 0) {
+              this.nonum1 = false;
+          }
+          if (res.data.unpaid == 0 && res.data.paid == 0) {
+              this.nonum2 = false;
+          }
           dv.transform({
             type: 'percent',
             field: 'count',
@@ -281,47 +297,59 @@ export default {
 	padding: 24px;
     .my-cards{
         .ant-card-body{
-    position: relative;
-    height: 227px;
-    overflow: hidden;
-    margin-bottom: 24px;
-      .item-boxes{
-        
-        .item-row{
-          
-          position: absolute;
-          left: 0;
-          bottom: -60px;
-          .item-box{
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          &:nth-child(2){
-              .calc-price{
-              color: #FEBF56;
-              span{
-                color: #F5797D;
+            position: relative;
+            height: 227px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            .item-boxes{
+              width: 100%;
+              height:100%;
+              .item-row{
+                width: 100%;
+                position: absolute;
+                left: -85px;
+                bottom: -60px;
+                .nonum1{
+                  display: flex;
+                  align-items: center;
+                  position: relative;
+                  P{
+                    position: absolute;
+                    bottom: 155px;
+                    left: 200px;
+                    color: #ccc;
+                  }
               }
-            }
-          }
-          .calc-price{
-            position: absolute;
-            bottom: 80px;
-            left: 186px;
-            font-size: 16px;
-            color: #5DC6FC;
-            span{
-              font-size: 24px;
-              font-weight: bold;
-              color: #1890ff;
-            }
+                
+                .item-box{
+                  display: flex;
+                  align-items: flex-end;
+                  justify-content: center;
+                  &:nth-child(2){
+                    .calc-price{
+                    color: #FEBF56;
+                    span{
+                      color: #F5797D;
+                    }
+                  }
+                }
+              .calc-price{
+                position: absolute;
+                bottom: 80px;
+                text-align: center;
+                font-size: 16px;
+                color: #5DC6FC;
+                span{
+                  font-size: 24px;
+                  font-weight: bold;
+                  color: #1890ff;
+                }
           }
           .desc{
-          display: flex;
-          
-          flex-direction: column;
-          justify-content: flex-start;
-          padding-top: 85px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 85px;
           h5{
             color: #333;
             font-size: 20px;

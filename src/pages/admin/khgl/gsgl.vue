@@ -341,7 +341,8 @@ export default {
             success (orgId) {
                   this.loading = true;
                   this.postOrganizeApproval(orgId, '', 0)
-                  
+                  this.getGsspList1(this.condition,1,this.offset,this.starttime,this.endtime);
+                  this.getGsspList0(this.condition,0,this.offset,this.starttime,this.endtime);
             },
       }
 }

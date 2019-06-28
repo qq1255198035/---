@@ -452,14 +452,9 @@ export default {
     }
 		.my-activity{border: 0;}
 }
-
-
-
   .project-list {
-
     .card-title {
       font-size: 0;
-
       a {
         color: rgba(0, 0, 0, 0.85);
         margin-left: 12px;
@@ -509,7 +504,6 @@ export default {
       overflow: hidden;
     }
   }
-
   .item-group {
     
     text-align: center;
@@ -518,7 +512,6 @@ export default {
       color: #666;
       text-align: center;
     }
-    
     a {
       color: rgba(0, 0, 0, 0.65);
       display: inline-block;
@@ -527,7 +520,6 @@ export default {
       width: 25%;
     }
   }
-
   .members {
     a {
       display: block;

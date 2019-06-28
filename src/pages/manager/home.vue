@@ -25,9 +25,11 @@
                           <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
-                    <p v-else style="margin-left: 100px;">暂无数据</p>
+                    
                   </a-row>
+                  
               </div>
+              <p v-if="!chartshow">暂无数据</p>
             </div>
           </a-card>
           <a-card title="活动动态" class="my-activity">
@@ -121,7 +123,7 @@ export default {
       itemTpl: (value, color, checked, index) => {
         const obj = dv1.rows[index];
         checked = checked ? 'checked' : 'unChecked';
-        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px; margin-right: 0">' +'<td style="border: none;padding:0;width:150px"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px; margin-right: 0;min-width: 180px;">' +'<td style="border: none;padding:0;min-width:50px"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
       },
       operationColumns: [
         {
@@ -185,6 +187,8 @@ export default {
             if (res.data.unpaid == 0 && res.data.paid == 0) {
                 this.chartshow = false;
             }
+                
+            
             dv1.transform({
               type: 'percent',
               field: 'count',
@@ -242,13 +246,15 @@ export default {
     margin-bottom: 24px;
     .item-boxes{
       height: 100%;
+      > p{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
           .item-row{
-            width: 100%;
-            height: 100%;
             position: absolute;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            bottom: -60px;
           .item-box{
             display: flex;
             align-items: flex-start;

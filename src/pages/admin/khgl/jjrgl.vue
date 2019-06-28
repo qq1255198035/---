@@ -335,7 +335,8 @@ export default {
             success (agentId) {
                   this.loading = true;
                   this.postAgentApproval(agentId, '', 0)
-                  
+                  this.getJjrspList1(this.condition,1,this.offset,this.starttime,this.endtime);
+                  this.getJjrspList0(this.condition,0,this.offset,this.starttime,this.endtime);
             },
       }
 }

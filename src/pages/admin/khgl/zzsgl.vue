@@ -338,7 +338,8 @@ export default {
             success (brandId) {
                   this.loading = true;
                   this.postSponsorApproval(brandId, '', 0)
-                  
+                  this.getZzsspList1(this.condition,1,this.offset,this.starttime,this.endtime);
+                  this.getZzsspList0(this.condition,0,this.offset,this.starttime,this.endtime);
             },
       }
 }
