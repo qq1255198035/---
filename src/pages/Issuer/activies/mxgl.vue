@@ -43,6 +43,7 @@
               <div class="footer">
                 <transition name="fade">
                   <div class="button-box" v-show="btnShow == index" key="1">
+                    <a-button type="primary" class="primary" @click="details(item)">查看</a-button>
                     <a-button type="danger" class="danger" @click="showModal(item)">驳回</a-button>
                     <a-button type="primary" class="primary" @click="success(item)">通过</a-button>
                   </div>
@@ -327,6 +328,9 @@ export default {
       this.visible = true
       console.log(item)
       this.orderId = item.recordId
+    },
+    details(item) {
+      this.$router.push({path: '/issuerMxxq', query: {userId: item.athlete_id, campId: this.$route.query.campId}})
     },
     handleOk(e) {
       const token = this.$ls.get('Access-Token')
