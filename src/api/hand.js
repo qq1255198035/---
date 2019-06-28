@@ -215,7 +215,7 @@ export function getSponsoredTweets(parameter) {
 //搞手用户信息
 export function getUserInformation(parameter) {
     return axios({
-        url:'/vue/organize/userInfo',
+        url:'/vue/admin/userInfo',
         method: 'post',
         data: qs.stringify(parameter)
     })

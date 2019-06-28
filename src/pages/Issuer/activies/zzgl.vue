@@ -19,8 +19,8 @@
           <div >
             <a-collapse accordion activeKey="1" v-if="cardItemData1.length" :bordered="false">
               <a-collapse-panel   v-for="(item, index) in cardItemData1" :key="index">
-                <h5 slot="header" class="panel-title">
-                  冠名赞助
+                <h5 slot="header" class="panel-title" v-if="cardItemData1.length !== 0">
+                  {{cardItemData1[0].ssKind}}
                   <span>
                     （
                     <i>1</i> / 2 ）
@@ -95,7 +95,7 @@
           <div>
             <a-collapse accordion activeKey="1" :bordered="false" v-if="dataForm.length">
               <a-collapse-panel :key="index" v-for="(item, index) in dataForm">
-                <h5 slot="header" class="panel-title">
+                <h5 slot="header" class="panel-title" v-if="dataList.length !== 0">
                   {{dataList[0].ssKind || ''}}
                   <span>（ {{dataList.length}} ）</span>
                 </h5>
@@ -575,8 +575,8 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl = this.$host + activityDetail.cover_img
-        this.logo = this.$host + activityDetail.cover_img
+        this.imgUrl =activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
+        this.logo = activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
         if (activityDetail.status == 10) {
           this.status = '创建活动'
         }
@@ -626,26 +626,7 @@ export default {
             as: 'percent'
           })
         }
-        for (let i = 0; i < this.cardItemData1.length; i++) {
-          this.pieData1[0].count = this.cardItemData1[i].cash
-          this.pieData1[1].count = this.cardItemData1[i].productVal
-          dv1.transform({
-            type: 'percent',
-            field: 'count',
-            dimension: 'item',
-            as: 'percent'
-          })
-        }
-        for (let i = 0; i < this.cardItemData2.length; i++) {
-          this.pieData2[0].count = this.cardItemData2[i].cash
-          this.pieData2[1].count = this.cardItemData2[i].productVal
-          dv2.transform({
-            type: 'percent',
-            field: 'count',
-            dimension: 'item',
-            as: 'percent'
-          })
-        }
+       
       })
     },
     // 我的赞助

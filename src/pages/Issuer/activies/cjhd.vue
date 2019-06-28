@@ -1233,9 +1233,10 @@ export default {
           //this.palyPlatfrom = res.platform
           console.log(res.data.campLevel)
           this.tags = res.data.campLevel
+          console.log(this.tags)
           this.tags1 = res.data.industryCategory
           this.tags2 = res.data.coverScope
-          this.tags3 = res.data.campFeaturel
+          this.tags3 = res.data.campFeature
           this.tags4 = res.data.ageGroup
           this.tags5 = res.data.socialAttr
           this.tags6 = res.data.consumeAttr
@@ -1249,7 +1250,7 @@ export default {
             this.form2.setFieldsValue({
               pingName: res.platform,
               companyTitle: { key: '133', label: '主办方' },
-              companyName: ''
+              companyName: '公司地址'
             })
             const selectArry = res.campFeature.split(',')
             const companyArry = res.data
@@ -1262,9 +1263,14 @@ export default {
               })
             }
             this.companyList = companyList1
+            const tagsList = []
+            console.log(selectArry)
             for (let i = 0; i < selectArry.length; i++) {
-              this.selectedTags.push(parseInt(selectArry[i]))
+              
+              tagsList.push(selectArry[i])
             }
+            console.log(tagsList)
+            this. selectedTags= tagsList
           } else {
             this.form2.setFieldsValue({
               pingName: '',
@@ -1784,6 +1790,7 @@ export default {
     },
     //
     handleChangeT(tag, pid, checked) {
+      console.log(tag)
       this.pidsArrty.push(pid)
       this.pids = uniq(this.pidsArrty).join(',')
       console.log(this.pids)

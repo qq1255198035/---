@@ -277,8 +277,8 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl = this.$host + activityDetail.cover_img
-        this.logo = this.$host + activityDetail.cover_img
+        this.imgUrl =activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
+        this.logo = activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {

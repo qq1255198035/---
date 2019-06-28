@@ -3,7 +3,7 @@
     <div class="main">
       <a-col :span="10" class="item">
         <div class="profile-image">
-          <a-avatar :size="96" :src="logo" class="img-circle"/>
+          <img width="90" height="90" v-if="logo" style="border-radius:50%" :src="logo" class="img-circle"/>
         </div>
         <div class="profile-info">
           <h2 class="no-margins">{{title}}</h2>
@@ -118,39 +118,15 @@
 </style>
 <script>
 export default {
-  props: {
-    title: {
-
-    },
-    logo: {
-
-    },
-    start: {
-
-    },
-    adress: {
-
-    },
-    type: {
-
-    },
-    num: {},
-    stars: {
-
-    },
-    sponsors: {},
-    status: {
-
-    },
-    price: {}
-  },
+  props: ['title', 'logo', 'start', 'adress', 'type', 'num', 'stars', 'sponsors', 'status', 'price'],
+    
   data() {
     return {
       host: ''
     }
   },
   mounted() {
-    this.host = this.$host
+    console.log(this.logo)
   },
   filters: {}
 }
