@@ -112,67 +112,67 @@ export function campHeadInfo(campId) {
       })
 }
 // 搞手审批列表
-export function gsspList(condition, offset, starttime, endtime) {
+export function gsspList(condition, status, offset, starttime, endtime) {
       return axios({
-            url:'/vue/admin/organizeExamineList',
-            method: 'post',
-            data: qs.stringify({
-                  token: Vue.ls.get(ACCESS_TOKEN),
-                  condition: condition,
-                  stutus: 9,
-                  limit: 8,
-                  offset: offset,
-                  starttime: starttime,
-                  endtime: endtime
-            })
+        url: '/vue/admin/organizeExamineList',
+        method: 'post',
+        data: qs.stringify({
+          token: Vue.ls.get(ACCESS_TOKEN),
+            limit: 8,
+          condition: condition,
+          status: status,
+          offset: offset,
+          starttime: starttime,
+          endtime: endtime
+        })
       })
 }
 // 经纪人审批列表
-export function jjrspList(condition, offset, starttime, endtime) {
+export function jjrspList(condition, status, offset, starttime, endtime) {
       return axios({
-            url:'/vue/admin/agentExamineList',
-            method: 'post',
-            data: qs.stringify({
-                  token: Vue.ls.get(ACCESS_TOKEN),
-                  condition: condition,
-                  stutus: 9,
-                  limit: 8,
-                  offset: offset,
-                  starttime: starttime,
-                  endtime: endtime
-            })
+        url: '/vue/admin/agentExamineList',
+        method: 'post',
+        data: qs.stringify({
+          token: Vue.ls.get(ACCESS_TOKEN),
+          condition: condition,
+          status: status,
+          limit: 8,
+          offset: offset,
+          starttime: starttime,
+          endtime: endtime
+        })
       })
 }
 // 赞助商审批列表
-export function zzsspList(condition, offset, starttime, endtime) {
+export function zzsspList(condition, status, offset, starttime, endtime) {
       return axios({
-            url:'/vue/admin/sponsorExamineList',
-            method: 'post',
-            data: qs.stringify({
-                  token: Vue.ls.get(ACCESS_TOKEN),
-                  condition: condition,
-                  stutus: 9,
-                  limit: 8,
-                  offset: offset,
-                  starttime: starttime,
-                  endtime: endtime
-            })
+        url: '/vue/admin/sponsorExamineList',
+        method: 'post',
+        data: qs.stringify({
+          token: Vue.ls.get(ACCESS_TOKEN),
+          condition: condition,
+          status: status,
+          limit: 8,
+          offset: offset,
+          starttime: starttime,
+          endtime: endtime
+        })
       })
 }
 // 明星审批列表
-export function mxspList(condition, offset, starttime, endtime) {
+export function mxspList(condition, status, offset, starttime, endtime) {
       return axios({
-            url:'/vue/admin/starExamineList',
-            method: 'post',
-            data: qs.stringify({
-                  token: Vue.ls.get(ACCESS_TOKEN),
-                  condition: condition,
-                  stutus: 9,
-                  limit: 8,
-                  offset: offset,
-                  starttime: starttime,
-                  endtime: endtime
-            })
+        url: '/vue/admin/starExamineList',
+        method: 'post',
+        data: qs.stringify({
+          token: Vue.ls.get(ACCESS_TOKEN),
+          condition: condition,
+          status: status,
+          limit: 8,
+          offset: offset,
+          starttime: starttime,
+          endtime: endtime
+        })
       })
 }
 // 搞手审批接口
@@ -258,7 +258,7 @@ export function transferMoneyList(condition, offset, starttime, endtime) {
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
                   condition: condition,
-                  stutus: 9,
+                  status: 9,
                   limit: 10,
                   offset: offset,
                   starttime: starttime,

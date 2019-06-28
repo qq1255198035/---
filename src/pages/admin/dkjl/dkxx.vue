@@ -40,7 +40,7 @@
                               <a-input placeholder="请输入" type="number" v-decorator="['wk',{rules: [{ required: true, message: '请填写尾款金额' }]}]"/>
                         </a-form-item>
                         <a-form-item label="备注" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-textarea placeholder="请输入" v-decorator="['bz',{rules: [{ required: true, message: '请填写备注' }]}]"/>
+                              <a-textarea placeholder="请输入" v-decorator="['bz',{rules: [{ required: false, message: '请填写备注' }]}]"/>
                         </a-form-item>
                         <a-form-item style="margin-top:24px; display: flex; justify-content: center;">
                               <a-button type="primary" htmlType="submit" class="btn">提交</a-button>
@@ -97,6 +97,7 @@ export default {
                         if (res.code == 1000) {
                               this.$message.success('操作成功');
                               this.$router.push({name:'dkjl'})
+                              window.location.reload()
                         }    
                        
                   })

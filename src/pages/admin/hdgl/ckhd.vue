@@ -107,18 +107,13 @@
                                     </div>  
                               </a-tab-pane>
                               <a-tab-pane key="2" tab="赞助信息">
-                                    <div class="my-tables">
-                                          <h3>冠名赞助<span> ( {{dataName.length}} ) </span></h3>
-                                          <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>   
+                                    <div v-if="dataName.length > 0">
+                                          <div class="my-tables" v-for="(item,index) in dataName" :key="index">
+                                                <h3>{{item.name}}<span> ( {{item.list.length}} ) </span></h3>
+                                                <a-table :columns="columns3" :dataSource="item.list" size="middle"></a-table>
+                                          </div>
                                     </div>
-                                    <div class="my-tables">
-                                          <h3>非冠名赞助<span>( {{dataNoName.length}} )</span></h3>
-                                          <a-table :columns="columns3" :dataSource="dataNoName" size="middle"></a-table>   
-                                    </div>
-                                    <div class="my-tables">
-                                          <h3>其他赞助<span>( {{dataOther.length}} )</span></h3>
-                                          <a-table :columns="columns3" :dataSource="dataOther" size="middle"></a-table>   
-                                    </div>
+                                    <p v-else style="color: #ccc; text-align: center">暂无数据</p>
                               </a-tab-pane>
                               <a-tab-pane key="3" tab="明星信息">
                                     <div class="my-tables">
@@ -341,8 +336,7 @@ export default {
                   data2:[],
                   columns2,
                   dataName:[],
-                  dataNoName:[],
-                  dataOther:[],
+                 
                   columns3,
                   data4:[],
                   columns4,
@@ -438,18 +432,8 @@ export default {
                         if(res.code == 1000){
                               let key = "key";
                               console.log(res)
-                              this.dataName = res.data.namingCampSponsor;
-                              this.dataNoName = res.data.noNamingCampSponsor;
-                              this.dataOther = res.data.otherCampSponsor;
-                              this.dataName.map((item,index)=>{
-                                    item[key] = index + 1
-                              })
-                              this.dataNoName.map((item,index)=>{
-                                    item[key] = index + 1
-                              })
-                              this.dataOther.map((item,index)=>{
-                                    item[key] = index + 1
-                              })
+                              this.dataName = res.data;
+                              console.log(this.dataName.length > 0)
                         }
                   })
             },
