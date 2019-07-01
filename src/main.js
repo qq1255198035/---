@@ -16,7 +16,7 @@ import './utils/filter' // global filter
 
 Vue.config.productionTip = false;
 // 设置服务器地址
-Vue.prototype.$host = 'http://192.168.0.9'
+Vue.prototype.$host = 'http://192.168.0.122'
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
 /* eslint-disable */

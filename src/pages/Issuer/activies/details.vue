@@ -130,13 +130,23 @@
             </div>
           </a-tab-pane>
           <a-tab-pane key="2" tab="赞助信息">
-            <div class="my-tables" v-for="(item, index) in dataNameArrty" :key="index">
-              <h3 v-if="dataName.length !== 0">
-                {{dataName[0].ssKind}}
-                <!--<span>（ {{dataName.length}} ）</span>-->
-              </h3>
-              <a-table :columns="columns3" :dataSource="dataName" size="middle"></a-table>
-            </div>
+            <div>
+                <a-collapse accordion activeKey="1" :bordered="false">
+                          <a-collapse-panel :key="index" v-for="(item, index) in dataNameArrty">
+                            <h5 slot="header" class="panel-title" >
+                              {{item.ss_kind}}
+                              <span>（ {{item.cnt}} ）</span>
+                            </h5>
+                            <div>
+                                    
+                              <div class="my-tables">
+                                  <a-table :columns="columns3" :dataSource="filterItems(dataName,item.ss_id)" @change="pageNext" size="middle"></a-table>
+                              </div>
+                            </div>
+                            
+                          </a-collapse-panel>
+                </a-collapse>
+              </div>
             <!--<div class="my-tables">
               <h3>
                 非冠名赞助
@@ -485,7 +495,6 @@ export default {
       dataTable: ''
     }
   },
-  created() {},
   
   mounted(){
       this._getCheckActivitiesDetail()
@@ -498,6 +507,14 @@ export default {
       console.log(11)
   },
   methods: {
+    filterItems(a,b){
+      return a.filter(item=>{
+        return item.ss_id == b
+      }) 
+    },
+    pageNext(pagination, filters, sorte) {
+      console.log(pagination, filters, sorte)
+    },
     _getApprovalList() {
       const token = this.$ls.get('Access-Token')
       const campId = this.$route.query.campId

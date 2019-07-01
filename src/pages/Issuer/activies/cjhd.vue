@@ -315,7 +315,7 @@
               >
                 <div v-if="detailsImgs.length < 9">
                   <a-icon type="plus"/>
-                  <div class="ant-upload-text">Upload</div>
+                  <div class="ant-upload-text">上传</div>
                 </div>
               </a-upload>
               <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancelImg(item)">
@@ -348,7 +348,7 @@
                   </a-select>
                   <a-input
                     style="width: 66%"
-                    v-decorator="['companyName',{rules: [{ required: true, message: '公司地址' }]}]"
+                    v-decorator="['companyName',{rules: [{ required: false, message: '公司地址' }]}]"
                   />
                 </a-input-group>
               </a-form-item>
