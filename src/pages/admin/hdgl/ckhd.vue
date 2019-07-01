@@ -54,12 +54,14 @@
                                                 </li>
                                                 <li>
                                                       <span>活动视频：</span>
-                                                      <video :src="video" controls width="200px" height="150px"></video>
+                                                      <video :src="host + video" controls width="200" height="150" v-if="video"></video>
+                                                      <p v-else style="color: #ccc;">暂无视频</p>
                                                 </li>
                                                 <li>
                                                       <span>活动照片：</span>
                                                       <div class="img-box" v-for="(item,index) in imgs" :key="index">
-                                                            <img :src="host + item" alt="活动照片">        
+                                                            <img :src="host + item" alt="活动照片" v-if="item">   
+                                                            <p v-else style="color: #ccc;">暂无图片</p>     
                                                       </div>
                                                       
                                                 </li>
@@ -74,17 +76,17 @@
                                                 </li>
                                                 <li>
                                                       <span>受众群众：</span>
-                                                      <div v-if="tagshow1">
+                                                      <div v-if="audiences.length > 0">
                                                             <a-tag v-for="(item,index) in audiences" :key="index" color="red" style="margin-bottom:10px">{{item}}</a-tag>
                                                       </div>
-                                                      <p v-else>暂无数据</p>
+                                                      <p v-else style="color: #ccc;">暂无数据</p>
                                                 </li>
                                                 <li>
                                                       <span>活动特点：</span>
-                                                      <div v-if="tagshow2">
+                                                      <div v-if="campFeature.length > 0">
                                                             <a-tag v-for="(item,index) in campFeature" :key="index" color="cyan" style="margin-bottom:10px">{{item}}</a-tag>
                                                       </div>
-                                                      <p v-else>暂无数据</p>
+                                                      <p v-else style="color: #ccc;">暂无数据</p>
                                                 </li>
                                           </ul>
                                     </div> 
@@ -360,7 +362,6 @@ export default {
                   audiences: [],
                   campFeature:[],
                   demand:"",
-                  
                   titleName:'',
                   startTime: '',
                   adre: '',
@@ -372,9 +373,7 @@ export default {
                   logo:'',
                   money:'',
                   host:'',
-                  schedule:0,
-                  tagshow1:true,
-                  tagshow2:true,
+                  schedule:0
             }
       },
       mounted(){
@@ -416,17 +415,10 @@ export default {
                               this.imgs = (res.data.basic.imgs || '').split(',');
                               this.data1 = res.data.campOrgList;
                               this.audiences = (res.data.basic.audiences || '').split(',');
-                              if (res.data.basic.audiences.length == 0) {
-                                    this.tagshow1 = false
-                              }
-                              this.campFeature = (res.data.basic.campFeature || '').split(',');
-                              if (res.data.basic.campFeature.length == 0) {
-                                    this.tagshow2 = false
-                              }
                               this.data2 = res.data.campSponsor;
-                              console.log(res.data.campSponsor.length)
+                              console.log(boolean(this.imgs))
                               this.demand = res.data.campSponsor.length ? res.data.campSponsor[0].demand : '';
-                              this.jzTime = res.data.campSponsor.length ? res.data.campSponsor[0].endTime : '';
+                              this.jzTime = res.data.campSponsor.length ? res.data.campSponsor[0].endTime : ''
                         }
                   })
             },
@@ -436,6 +428,11 @@ export default {
                               let key = "key";
                               console.log(res)
                               this.dataName = res.data;
+                              res.data.map((item,index)=>{
+                                    item.list.map((aitem,aindex)=>{
+                                          aitem[key] = aindex + 1
+                                    })
+                              })
                               console.log(this.dataName.length > 0)
                         }
                   })

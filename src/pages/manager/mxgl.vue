@@ -14,8 +14,8 @@
                   </div>
             </div>
             <div class="mxgl-content">
-                  <div class="my-cards" v-if="cardItemData.length > 0">
-                        <div class="card-item ant-card-hoverable" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
+                  <a-row type="flex" justify="start" align="top" v-if="cardItemData.length > 0" class="my-cards">
+                        <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
                               <div class="title">
                                     <h5>{{item.name}}</h5>
                                     <span>{{item.en_name}}</span>
@@ -34,9 +34,9 @@
                                                 <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">修改</a-button>
                                           </div>
                                     </transition>
-                              </div>
-                        </div>
-                  </div>
+                              </div> 
+                        </a-col>
+                  </a-row>
                   <p v-else style="text-align: center; color: #ccc;">
                         暂无数据
                   </p>
@@ -215,15 +215,11 @@
       }
       .mxgl-content{
             .my-cards{
-                  display: flex;
-                  justify-content: flex-start;
                   flex-wrap: wrap;
-                  padding: 30px 120px 50px;
                   background-color: #fff;
+                  padding: 30px 0;
                   .card-item{
-                        width: 22%;
-                        height: 315px;
-                        margin: 10px 1%;
+                        height: 290px;
                         border:1px solid #ccc;
                         border-radius: 5px;
                         padding: 20px;
@@ -494,11 +490,12 @@ export default {
                                     addr: values.home,
                                     introduction: values.desc,
                                     sex: values.sex,
-                                    avatar: this.postImg1,
-                                    imgs: this.postImg2,
-                                    credential: this.postImg3
+                                    avatar: this.postImg2,
+                                    imgs: this.postImg3,
+                                    credential: this.postImg1
                               };
                               this.postStarUpdate(params);
+                              this.getStarsList(this.name,this.offset);
                               window.location.reload();
                               console.log(this.stasId)
                         }

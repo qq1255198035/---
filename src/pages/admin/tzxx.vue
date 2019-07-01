@@ -6,7 +6,7 @@
                         <a-form layout="vertical" :form="form">
                               <a-form-item
                                     label="标题："
-                                    :label-col="{ span: 3 }"
+                                    :label-col="{ span: 5 }"
                                     :wrapper-col="{ span: 24 }"
                               >
                                     <a-input placeholder="请输入标题" v-decorator="[
@@ -14,7 +14,7 @@
                               </a-form-item>
                               <a-form-item
                                     label="发送至："
-                                    :label-col="{ span: 3 }"
+                                    :label-col="{ span: 5 }"
                                     :wrapper-col="{ span: 24}"
                               >
                                     <a-select

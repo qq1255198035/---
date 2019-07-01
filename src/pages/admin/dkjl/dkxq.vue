@@ -25,6 +25,7 @@
 #dkxq{
       margin: -24px -24px 0px;
       .dkxq-content{
+            background-color: #fff;
             ul{
                   padding: 20px 50px;
                   list-style: none;
@@ -62,6 +63,9 @@ export default {
       },
       mounted () {
             this.list = this.$route.query.data
+            console.log(this.list)
+            console.log(11)
+            console.log(this.$route.query)
       },
 }
 </script>

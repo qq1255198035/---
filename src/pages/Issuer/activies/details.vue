@@ -495,6 +495,7 @@ export default {
       this._getStarsDeails()
       this._getApprovalList()
       this._getExtension()
+      console.log(11)
   },
   methods: {
     _getApprovalList() {
