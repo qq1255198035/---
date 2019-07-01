@@ -89,6 +89,7 @@ export const generatorDynamicRouter = () => {
     // ajax
     getRouterByUser().then(res => {
       const result = res.data
+      console.log(result)
       console.log(res.data)
       const routers = generator(result)
       routers.push(notFoundRouter)
@@ -108,6 +109,7 @@ export const generatorDynamicRouter = () => {
  * @returns {*}
  */
 export const generator = (routerMap, parent) => {
+  console.log(parent)
   return routerMap.map(item => {
     const currentRouter = {
       // 路由地址 动态拼接生成如 /dashboard/workplace
@@ -119,6 +121,8 @@ export const generator = (routerMap, parent) => {
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: { title: item.title, icon: item.icon || undefined }
     }
+    console.log(item.hidden)
+    console.log(currentRouter.meta)
     // 为了防止出现后端返回结果不规范，处理有可能出现拼接出两个 反斜杠
     currentRouter.path = currentRouter.path.replace('//', '/')
     
@@ -129,6 +133,7 @@ export const generator = (routerMap, parent) => {
       // Recursion
       currentRouter.children = generator(item.children, currentRouter)
     }
+    console.log(currentRouter)
     return currentRouter
   })
 }

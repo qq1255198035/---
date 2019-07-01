@@ -2,12 +2,12 @@
   <div id="hdgl">
     <page-header :title="pageTitle"></page-header>
     <div class="header">
-      <a-button type="primary" class="item-input" @click="$router.push({name: 'issuerCjhd'})">创建活动</a-button>
+      <a-button type="primary" class="item-input" @click="setInfo">创建活动</a-button>
       <a-locale-provider :locale="locale">
-        <a-date-picker class="item-input" placeholder="开始时间" @change="searchDate"/>
+        <a-date-picker class="item-input" placeholder="开始时间" @change="searchDate" />
       </a-locale-provider>
       <a-locale-provider :locale="locale">
-        <a-date-picker class="item-input" placeholder="结束时间" @change="searchDate1"/>
+        <a-date-picker class="item-input" placeholder="结束时间" @change="searchDate1" />
       </a-locale-provider>
       <!--<a-cascader
         :fieldNames="{ label: 'value', value: 'label', children: 'children' }"
@@ -64,14 +64,15 @@
                 <span class="ant-col-12"></span>
                 <span class="ant-col-6"></span>
                 <span class="ant-col-6">
-
-                <a-badge :status="item.status | statusTypeFilter" :text="item.status | statusFilter"/>
-
+                  <a-badge
+                    :status="item.status | statusTypeFilter"
+                    :text="item.status | statusFilter"
+                  />
                 </span>
               </div>
               <div class="third-row">
                 <span class="col-lg-12">
-                  <a-icon type="environment"/>
+                  <a-icon type="environment" />
                   {{item.area_name}}
                 </span>
               </div>
@@ -139,18 +140,17 @@
             </div>
           </div>
         </a-col>
-        
       </div>
       <div slot="footer" v-if="cardList.length > 0" style="text-align: center; margin-top: 16px;">
-          <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
-        </div>
+        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+      </div>
       <div class="hide-item" v-else>
         <a-col :span="8">
           <a-card title :bordered="false" :body-style="{padding: 20}">
             <div class="item-group">
               <h6>Ready to publish your Campaign</h6>
               <p>Upgrade now to make your campaign public and start receiving application.</p>
-              <a-button type="primary" @click="$router.push({name: 'issuerCjhd'})">发布活动</a-button>
+              <a-button type="primary" @click="setInfo">发布活动</a-button>
             </div>
           </a-card>
         </a-col>
@@ -161,6 +161,7 @@
 <script>
 import { mixinsTitle } from '@/utils/mixin.js'
 import { getHandActivities, getPlace, getClassify, getDetele } from '@api/hand'
+import { judge } from '@api/common'
 import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
@@ -171,26 +172,26 @@ const lang = {
   'en-US': enUS
 }
 const statusMap = {
-      0: {
-            status: 'processing',
-            text: '申请中'
-      },
-      20: {
-            status: 'success',
-            text: '成功'
-      },
-      10: {
-            status: 'warning',
-            text: '创建中'
-      },
-      30: {
-            status: 'error',
-            text: '驳回'
-      },
-      50: {
-          status: 'error',
-          text: '关闭'
-      }
+  0: {
+    status: 'processing',
+    text: '申请中'
+  },
+  20: {
+    status: 'success',
+    text: '成功'
+  },
+  10: {
+    status: 'warning',
+    text: '创建中'
+  },
+  30: {
+    status: 'error',
+    text: '驳回'
+  },
+  50: {
+    status: 'error',
+    text: '关闭'
+  }
 }
 export default {
   mixins: [mixinsTitle],
@@ -206,23 +207,41 @@ export default {
       searchText: '',
       loading: true,
       loadingMore: false,
-      offset:1,
-      btnDsiable:false,
-      pages:0,
+      offset: 1,
+      btnDsiable: false,
+      pages: 0,
       moneys: '',
       avtiveityDateEnd: '' // 结束时间
     }
   },
-  
-  computed: {
-    
-  },
-  mounted(){
-        this._getHandActivities();
-        this._getPlace();
-        this._getClassify();
+
+  computed: {},
+  mounted() {
+    this._getHandActivities()
+    this._getPlace()
+    this._getClassify()
   },
   methods: {
+    setInfo() {
+      let that = this
+      const token = this.$ls.get('Access-Token')
+      judge(token).then(res => {
+        if (res.code == 1000) {
+          if (res.data == 0) {
+            that.$router.push({ name: 'issuerCjhd' })
+          } else {
+            that.$error({
+              okText: '去设置',
+              title: '错误',
+              content: '对不起，您的账户尚未通过审批！',
+              onOk() {
+                that.$router.push({ name: 'zhsz' })
+              }
+            })
+          }
+        }
+      })
+    },
     // 活动管理
     _getHandActivities() {
       const token = this.$ls.get('Access-Token')
@@ -235,8 +254,8 @@ export default {
       getHandActivities(params).then(res => {
         console.log(res)
         this.cardList = res.page.rows
-        
-        this.pages = res.page.pages;
+
+        this.pages = res.page.pages
       })
     },
     // 地点
@@ -260,7 +279,7 @@ export default {
       const params = {
         token: token,
         offset: this.offset,
-        limit:10
+        limit: 10
       }
       console.log(params)
       getHandActivities(params).then(res => {
@@ -276,7 +295,7 @@ export default {
             this.loading = false
             return
           }
-          
+
           this.loading = false
           this.loadingMore = false
           this.pages = res.page.pages
@@ -290,7 +309,7 @@ export default {
       const params = {
         token: token,
         limit: 10,
-        offset:1,
+        offset: 1,
         startime: this.avtiveityDate ? this.avtiveityDate : '',
         endtime: this.avtiveityDateEnd ? this.avtiveityDateEnd : '',
         area: this.searchPlace ? this.searchPlace : '',
@@ -301,7 +320,6 @@ export default {
       getHandActivities(params).then(res => {
         console.log(res)
         this.cardList = res.page.rows
-        
       })
     },
     // 日期搜索
@@ -351,26 +369,24 @@ export default {
     }
   },
   computed: {},
-  
+
   beforeCreate() {
     this.form = this.$form.createForm(this)
     console.log(this.form)
     this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
   },
   watch: {
-
-  '$route' (to, from) {   //监听路由是否变化
-
+    $route(to, from) {
+      //监听路由是否变化
       //在这里可以处理对应的跳转逻辑
-
-  }
+    }
   },
   filters: {
-    statusFilter (type) {
-          return statusMap[type].text
+    statusFilter(type) {
+      return statusMap[type].text
     },
-    statusTypeFilter (type) {
-          return statusMap[type].status
+    statusTypeFilter(type) {
+      return statusMap[type].status
     }
   }
 }

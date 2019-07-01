@@ -112,7 +112,7 @@
               <p>{{$t('issuer.index.desc')}}</p>
               <a-button
                 type="primary"
-                @click="$router.push({name: 'issuerCjhd'})"
+                @click="setInfo"
               >{{$t('issuer.index.fbhd')}}</a-button>
             </div>
           </a-card>
@@ -159,6 +159,7 @@ import {
   getSponsorNum,
   getActiveNum
 } from '@api/hand'
+import { judge } from '@api/common'
 import { mapActions, mapGetters } from 'vuex'
 
 import { PageView } from '@/layouts'
@@ -175,6 +176,10 @@ const statusMap = {
   10: {
     status: 'warning',
     text: '创建中'
+  },
+  1: {
+    status: 'success',
+    text: '已删除'
   }
 }
 let sourceData = [
@@ -342,6 +347,26 @@ export default {
           this.avatar = this.userInfo.avatar
   },
   methods: {
+    setInfo() {
+      let that = this
+      const token = this.$ls.get('Access-Token')
+      judge(token).then(res => {
+        if (res.code == 1000) {
+          if (res.data == 0) {
+            that.$router.push({ name: 'issuerCjhd' })
+          } else {
+            that.$error({
+              okText: '去设置',
+              title: '错误',
+              content: '对不起，您的账户尚未通过审批！',
+              onOk() {
+                that.$router.push({ name: 'zhsz' })
+              }
+            })
+          }
+        }
+      })
+    },
     // 明星待审数量
     _getStarNum() {
       const token = this.$ls.get('Access-Token')
