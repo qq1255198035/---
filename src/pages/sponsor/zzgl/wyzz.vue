@@ -11,7 +11,7 @@
                         <a-row class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
-                                          <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                          <a-avatar :size="96" :src="item.coverImg" class="img-circle" v-if="item.coverImg"/>
                                           <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
@@ -233,12 +233,10 @@ export default {
                   number: '',
                   demand: '',
                   id: '',
-                  form: this.$form.createForm(this),
-                  host: ''
+                  form: this.$form.createForm(this)
             }
       },
       mounted(){
-            this.host = this.$host;
             this.getSearchCampList(this.starttime,this.endtime,this.offset);
             console.log(this.isPositive)
       },

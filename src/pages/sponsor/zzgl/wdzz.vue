@@ -12,7 +12,7 @@
                               <div class="title">
                                     <a-col :span="12" class="item">
                                           <div class="profile-image">
-                                          <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                          <a-avatar :size="96" :src="item.coverImg" class="img-circle" v-if="item.coverImg"/>
                                           <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                           </div>
                                           <div class="profile-info">
@@ -170,8 +170,7 @@ export default {
                   offset: 1,
                   confirmLoading: false,
                   loadingMore: true,
-                  btnDsiable:false,
-                  host:''
+                  btnDsiable:false
             }
       },
       methods: {
@@ -223,7 +222,6 @@ export default {
       },
       mounted(){
             this.getSearchMySponsor(this.starttime,this.endtime,this.offset);
-            this.host = this.$host
       }
 }
 </script>

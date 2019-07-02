@@ -27,7 +27,7 @@
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{ item.enName}}</span>
-                                                <a-avatar :size="64" :src="host + item.avatar"/>
+                                                <a-avatar :size="64" :src="item.avatar"/>
                                                 <div class="bottom">
                                                       <span>{{item.catalog}}</span>
                                                       <span>{{item.birth}} | {{item.height}}cm</span>
@@ -65,7 +65,7 @@
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{ item.enName}}</span>
-                                                <a-avatar :size="64" :src="host + item.avatar"/>
+                                                <a-avatar :size="64" :src="item.avatar"/>
                                                 <div class="bottom">
                                                       <span>{{item.catalog}}</span>
                                                       <span>{{item.birth}} | {{item.height}}cm</span>
@@ -229,7 +229,6 @@ export default {
                   offset2:1,
                   starttime:'',
                   endtime: '',
-                  host: '',
                   key:'',
                   reason:'',
                   status:1,
@@ -238,8 +237,6 @@ export default {
       mounted(){
             this.getMxspList1(this.condition,1,this.offset,this.starttime,this.endtime);
             this.getMxspList0(this.condition,0,this.offset,this.starttime,this.endtime);
-            this.host = this.$host
-            
       },
       methods:{
             tabChange(key){

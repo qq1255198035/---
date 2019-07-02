@@ -167,12 +167,12 @@ export default {
                               console.log(res)
                               this.email = res.data.email;
                               this.area = res.data.area;
-                              this.businessImg = this.$host + res.data.businessImg;
+                              this.businessImg = res.data.businessImg;
                               this.contact = res.data.contact;
                               this.phone = res.data.phone;
                               this.web = res.data.web;
                               this.intro = res.data.intro;
-                              this.logo = this.$host + res.data.logo;
+                              this.logo = res.data.logo;
                               this.name = res.data.name;
                         }
                   })

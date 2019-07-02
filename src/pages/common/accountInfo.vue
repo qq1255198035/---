@@ -164,8 +164,8 @@ export default {
       getUserInformation(params).then(res => {
         console.log(res)
         this.personInfo = res.data
-        this.busiess = this.$host + res.data.business_img
-        this.logo = this.$host + res.data.logo
+        this.busiess = res.data.business_img
+        this.logo = res.data.logo
       })
     },
   }

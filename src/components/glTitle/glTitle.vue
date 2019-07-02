@@ -24,7 +24,7 @@
             参与明星：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in stars" :key="index">
-                <a-avatar :size="40" class="img-circle" :src="host + item.avatar"/>
+                <a-avatar :size="40" class="img-circle" :src="item.avatar"/>
                 <i v-if="item.length > 4">...</i>
               </li>
             </ul>
@@ -33,7 +33,7 @@
             参与赞助：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in sponsors" :key="index">
-                <a-avatar :size="40" class="img-circle" :src="host + item.logo"/>
+                <a-avatar :size="40" class="img-circle" :src="item.logo"/>
                 <i v-if="item.length > 4">...</i>
               </li>
             </ul>
@@ -148,11 +148,11 @@ export default {
   },
   data() {
     return {
-      host: ''
+      
     }
   },
   mounted() {
-    this.host = this.$host
+    
   },
   filters: {}
 }

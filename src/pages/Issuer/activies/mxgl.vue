@@ -254,13 +254,13 @@ export default {
         const avatarArrty = []
         for (let i = 0; i < res.data.starList.length; i++) {
           if (!res.data.starList.length == 0) {
-            avatarArrty.push(this.$host + res.data.starList[i].avatar)
+            avatarArrty.push(res.data.starList[i].avatar)
           }
         }
         const sponsorList = []
         for (let i = 0; i < res.data.sponsorList.length; i++) {
           if (!res.data.sponsorList.length == 0) {
-            sponsorList.push(this.$host + res.data.sponsorList[i].logo)
+            sponsorList.push(res.data.sponsorList[i].logo)
           }
         }
         this.sponsorList = sponsorList
@@ -279,8 +279,8 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl =activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
-        this.logo = activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
+        this.imgUrl =activityDetail.cover_img ? activityDetail.cover_img : ''
+        this.logo = activityDetail.cover_img ? activityDetail.cover_img : ''
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {

@@ -21,7 +21,7 @@
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{item.en_name}}</span>
-                                                <a-avatar :size="64" :src="host + item.avatar" v-if="item.avatar"/>
+                                                <a-avatar :size="64" :src="item.avatar" v-if="item.avatar"/>
                                                 <a-avatar v-else style="backgroundColor:#23C6C8" :size="64">Sponsor Cube</a-avatar>
                                                 <div class="bottom">
                                                       <span>{{item.catalogVal}}</span>
@@ -52,7 +52,7 @@
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{item.en_name}}</span>
-                                                <a-avatar :size="64" :src="host + item.avatar" v-if="item.avatar"/>
+                                                <a-avatar :size="64" :src="item.avatar" v-if="item.avatar"/>
                                                 <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
                                                 <div class="bottom">
                                                       <span>{{item.catalogVal}}</span>
@@ -388,7 +388,6 @@ export default {
                   name: '',
                   offset: 1,
                   offset2: 1,
-                  host:'',
                   form: this.$form.createForm(this),
                   works:[],
                   country:[],
@@ -403,8 +402,7 @@ export default {
             this.getStarsList(1,this.name,this.offset); 
             this.getStarsList2(0,this.name,this.offset2);
             this.getProfessionList();
-            this.getCountryList();
-            this.host = this.$host
+            this.getCountryList()
       },
       methods:{
             postStarUpdate(params){
@@ -453,9 +451,9 @@ export default {
                                     avatar: res.data.avatar,
                                     imgs: res.data.imgs
                               });
-                              this.imageUrl1 = this.host + res.data.credential;
-                              this.imageUrl2 = this.host + res.data.avatar;
-                              this.imageUrl3 = this.host + res.data.imgs;
+                              this.imageUrl1 = res.data.credential;
+                              this.imageUrl2 = res.data.avatar;
+                              this.imageUrl3 = res.data.imgs;
                               this.postImg1 = res.data.credential;
                               this.postImg2 = res.data.avatar;
                               this.postImg3 = res.data.imgs;

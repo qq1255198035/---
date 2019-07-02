@@ -203,20 +203,11 @@ export default {
       getStarDetails(params).then(res => {
         console.log(res)
         this.starDetils = res.data
-        this.avatars = this.$host + res.data.avatar
+        this.avatars = res.data.avatar
         console.log(this.avatar)
         this.sex = res.data.sex === '1' ? '男' : '女'
-        this.detailsImgs = this.$host + res.data.imgs
+        this.detailsImgs = res.data.imgs
         console.log(this.detailsImgs)
-        /*const detailsArrty = []
-        console.log(res.data.imgs.length)
-        for (let i = 0; i < res.data.imgs.length; i++) {
-          if (!res.data.imgs.length == 0) {
-            detailsArrty.push(this.$host + res.data.imgs[i].location)
-          }
-        }
-        this.detailsImgs = detailsArrty
-        console.log(this.detailsImgs)*/
       })
     },
     ...mapGetters(['nickname', 'avatar'])

@@ -187,10 +187,10 @@ export default {
         })
         this.flag = res.data.flag
         console.log(this.flag)
-        this.imgurl = res.data.logo ? this.$host + res.data.logo : ''
+        this.imgurl = res.data.logo ? res.data.logo : ''
         this.fileUrl = res.data.logo
         console.log(this.imgurl)
-        this.imgurl1 = res.data.business_img ? this.$host + res.data.business_img : ''
+        this.imgurl1 = res.data.business_img ? res.data.business_img : ''
         this.fileUrl1 = res.data.business_img
         console.log(this.imgurl1)
         const params1 = {

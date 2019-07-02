@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
+  <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ user }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>赞助商</div>
@@ -138,7 +138,6 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
-      host:'',
       pieScale,
       pieStyle: {
         stroke: '#fff',
@@ -214,8 +213,7 @@ export default {
     this.getHeadMsg();
     this.getPiesData();
     this.getSponsorList('','','',1);
-    this.getUserInfo();
-    this.host = this.$host;
+    this.getUserInfo()
   },
   methods: {
     getHeadMsg(){
