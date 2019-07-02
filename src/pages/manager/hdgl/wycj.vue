@@ -7,10 +7,10 @@
                   <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wycj-content">
-                  <div class="items-box">
-                        <div class="items" v-for="(item, index) in listInfo" :key="index" @mouseenter="showItem = index" @mouseleave="showItem = -1">
-                              <div class="title">
-                                    <a-col :span="14" class="item">
+                  <a-row type="flex" justify="space-between" align="top" class="items-box">
+                        <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item, index) in listInfo" :key="index" @mouseenter="showItem = index" @mouseleave="showItem = -1">
+                              <a-row class="title">
+                                    <a-col :span="12" class="item">
                                           <div class="profile-image">
                                           <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
                                           <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
@@ -26,11 +26,11 @@
                                                 </span>
                                           </div>
                                     </a-col>
-                                    <a-col :span="8" class="item">
+                                    <a-col :span="12" class="item">
                                           <p>分类：{{item.campCatalogVal}}</p>
                                           <p>参赛人数：{{item.campNum}}人</p>
                                     </a-col>
-                              </div>
+                              </a-row>
                               <div class="main">
                                     <ul>
                                           <li>公司：{{item.company}}</li>
@@ -42,9 +42,8 @@
                               <div class="footer" v-show="showItem == index">
                                     <a-button type="primary" @click="showModal(item.campId)">我要参加</a-button>
                               </div>
-                        </div>
-                  </div>
-                  
+                        </a-col>
+                  </a-row>
                   <div style="text-align: center; margin-top: 30px;">
                         <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || listInfo.length == 0">加载更多</a-button>
                   </div>
@@ -94,7 +93,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 20px 0;
+            padding: 20px;
             background-color: #fff;
             .my-form-item{
                   margin: 0; 
@@ -107,18 +106,15 @@
       .wycj-content{
             padding: 30px;
             .items-box{
-                  display: flex;
-                  justify-content: space-between;
-                  flex-wrap: wrap;
                   background-color: #fff;
+                  padding: 40px;
                   .items{
                   background-color: #fff;
                   border: 1px solid #ccc;
                   border-radius: 5px;
-                  width: 48%;
                   height: 293px;
                   padding: 20px 10px;
-                  margin: 20px 1%;
+                  margin: 20px 0;
                   .title{
                         display: flex;
                         .item{
@@ -154,8 +150,7 @@
                         }
                   }
                   .main{
-                        padding-left: 114px;
-                        padding-right: 20px;
+                        padding-left: 100px;
                         ul{
                               display: flex;
                               flex-wrap: wrap;
@@ -244,11 +239,10 @@ export default {
             },
             showModal(id) {
                   let that = this;
-                  
                   judge().then(res=>{
                         if (res.code == 1000) {
                               if (res.data == 0) {
-                                    
+                                    console.log(res)
                                     that.visible = true
                                     that.key = id
                               }else{

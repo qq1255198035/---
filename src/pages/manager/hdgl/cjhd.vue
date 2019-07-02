@@ -8,6 +8,13 @@
                                     
                               </li>
                         </ul>
+                        <template slot="monthCellRender" slot-scope="value">
+                              <div v-if="getMonthData(value.year(),value.month()+1)" class="notes-month">
+                                    <span>您本月一共参加了</span>
+                                    <section>{{getMonthData(value.year(),value.month()+1)}}</section>
+                                    <span>场活动</span>
+                              </div>
+                        </template>
                   </a-calendar>
             </div>
             <a-modal
@@ -51,6 +58,14 @@
 	margin: 24px;
       .my-calendar{
             background-color: #fff;
+            .notes-month {
+                  text-align: center;
+                  font-size: 18px;
+            }
+            .notes-month section {
+                  font-size: 20px;
+                  font-weight: bold;
+            }
       }
 }
 .my-popup{
@@ -98,7 +113,7 @@
 }
 </style>
 <script>
-import { joinCampAll,searchDetail } from "@/api/manager";
+import { joinCampAll,searchDetail, joinCampAllYear } from "@/api/manager";
 import { axios } from '@/utils/request';
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import qs from 'qs'
@@ -128,7 +143,8 @@ export default {
                               dataIndex: 'paid',
                         }
                   ],
-                  data: []
+                  data: [],
+                  monthList:[]
             }
       },
       mounted(){
@@ -139,8 +155,17 @@ export default {
              var year = date.getFullYear();
              var month = date.getMonth();
              this.getJoinCampAll(year,month+1)
+             this.getJoinCampAllYear(year)
       },
       methods: {
+            getJoinCampAllYear(year){
+                  joinCampAllYear(year).then(res=>{
+                        if (res.code == 1000) {
+                              this.monthList = res.data
+                              console.log(res)
+                        }
+                  })
+            },
             getJoinCampAll(year,month){
                   joinCampAll(year,month).then(res=>{
                         if (res.code == 1000) {
@@ -165,6 +190,9 @@ export default {
             getCellData(year,month,date){
                   return this.dateList[year+ '-' + month + '-' + date];
             },
+            getMonthData(year,month){
+                  return this.monthList[year+ '-' + month];
+            },
             getSearchDetail(id){
                   searchDetail(id).then(res=>{
                         if (res.code == 1000) {
@@ -179,7 +207,6 @@ export default {
                               this.campCatalog = res.data.campaign.campCatalog;
                               this.campNum = res.data.campaign.campNum;
                               this.address = res.data.campaign.address;
-                              
                         }
                   })
             }

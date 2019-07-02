@@ -106,7 +106,7 @@ export function applicationList(startime, endtime, condition, offset) {
     })
   })
 }
-// 申请记录
+// 参加的活动
 export async function joinCampAll(year, month) {
   return axios({
     url: '/vue/agent/searchMyJoinCampAll',
@@ -115,6 +115,17 @@ export async function joinCampAll(year, month) {
       token: Vue.ls.get(ACCESS_TOKEN),
       year: year,
       month: month
+    })
+  })
+}
+// 参加的活动
+export async function joinCampAllYear(year) {
+  return axios({
+    url: '/vue/agent/searchMyJoinCampAllForYear',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      year: year,
     })
   })
 }

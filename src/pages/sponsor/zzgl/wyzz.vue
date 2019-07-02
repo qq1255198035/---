@@ -7,12 +7,12 @@
                   <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wyzz-content">
-                  <div class="items" v-for="(item,index) in lists" :key="index">
-                        <div class="title">
+                  <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item,index) in lists" :key="index">
+                        <a-row class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
-                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
-                                    <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
+                                          <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                          <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
                                           <h2 class="no-margins" @click="$router.push({path:'/ckhd',query:{id:item.campId}})">
@@ -29,15 +29,13 @@
                                           {{item.address}}
                                     </span>
                               </a-col>
-                        </div>
+                        </a-row>
                         <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table">
                               <template slot="operation" slot-scope="text,record">
                                     <a-button @click="showModal(record.ssId)" type="primary">赞 助</a-button>
                               </template>
-                        </a-table>
-                        
-                  </div>
-                 
+                        </a-table>  
+                  </a-col>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                   <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || lists.length == 0">加载更多</a-button>
@@ -104,7 +102,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 20px 0;
+            padding: 20px;
             background-color: #fff;
             .my-form-item{
                   margin: 0; 
@@ -116,18 +114,16 @@
       }
       .wyzz-content{
             display: flex;
-            justify-content: space-between;
-            
-            flex-wrap: wrap;
             background-color: #fff;
-            padding: 20px;
+            padding: 20px 80px;
+            justify-content: space-between;
+            flex-wrap: wrap;
             .items{
                   background-color: #fff;
                   border: 1px solid #ccc;
                   border-radius: 5px;
-                  width: 48%;
                   padding: 20px 10px;
-                  margin: 10px 0;
+                  margin: 20px 0;
                   .my-table{
                         padding-top: 20px;
                   }
@@ -136,6 +132,9 @@
                         .item{
                               display: flex;
                               justify-content: flex-start;
+                              .profile-image{
+                                    margin-left: 20px;
+                              }
                               .profile-info{
                                     margin-left: 30px;
                                     
