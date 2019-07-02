@@ -190,8 +190,8 @@ export default {
         this.imgurl = res.data.logo ? this.$host + res.data.logo : ''
         this.fileUrl = res.data.logo
         console.log(this.imgurl)
-        this.imgurl1 = res.data.businessImg ? this.$host + res.data.business_img : ''
-        this.fileUrl1 = res.data.businessImg
+        this.imgurl1 = res.data.business_img ? this.$host + res.data.business_img : ''
+        this.fileUrl1 = res.data.business_img
         console.log(this.imgurl1)
         const params1 = {
         flag: res.data.flag
@@ -221,7 +221,7 @@ export default {
             contact: values.contactName,
             phone: values.phoneName,
             logo: this.fileUrl,
-            businessImg: this.fileUrl1,
+            business_img: this.fileUrl1,
           }
           console.log(params)
           getChangeInformation(params).then(res => {

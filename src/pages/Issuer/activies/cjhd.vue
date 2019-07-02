@@ -112,7 +112,7 @@
                   <a-input
                     style="width: 68%"
                     placeholder="北京市"
-                    v-decorator="['addressName',{rules: [{ required: true, message: '请输入地址' }]}]"
+                    v-decorator="['addressName',{rules: [{ required: false, message: '请输入地址' }]}]"
                   />
                 </a-input-group>
               </a-form-item>
@@ -1483,6 +1483,7 @@ export default {
         this.confirmLoading = false
         if(this.areaList.length == 0) {
           this.$message.error('请添加活动地点')
+          return false
         }
         this.form.validateFields((err, values) => {
           console.log(values)
