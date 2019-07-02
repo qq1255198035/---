@@ -70,12 +70,12 @@
                   <div class="calc-price">
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               
-                              <a-input type='number' min="0" v-model="price" placeholder="单价" style="width: 100%;"/>
+                              <a-input-number :min="0" v-model="price" placeholder="单价" style="width: 100%;"/>
                               
                         </a-form-item>
                         *
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
-                              <a-input type='number' min="0" v-model="number" placeholder="数量" style="width: 100%;"/>
+                              <a-input-number :min="0" v-model="number" placeholder="数量" style="width: 100%;"/>
                               
                         </a-form-item>
                         =
@@ -190,7 +190,7 @@
 
 </style>
 <script>
-import { searchCampList,saveMySponsor } from "@/api/sponsor";
+import { searchCampList,saveMySponsor,checkMySponsor } from "@/api/sponsor";
 import { judge } from "@/api/common";
 export default {
       
@@ -244,7 +244,6 @@ export default {
             console.log(this.isPositive)
       },
       methods: {
-            
             getSearchCampList(startime, endtime, offset){
                   searchCampList(startime, endtime, offset).then(res=>{
                         if(res.code == 1000){
@@ -295,6 +294,7 @@ export default {
                   saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz, cash).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！');
+                              
                               this.confirmLoading = false;
                               this.visible = false;
                               this.cashMoney = '';
@@ -310,8 +310,21 @@ export default {
                   judge().then(res=>{
                         if (res.code == 1000) {
                               if (res.data == 0) {
-                                    that.id = id;
-                                    that.visible = true
+                                    checkMySponsor(id).then(res=>{
+                                          if (res.code == 1000) {
+                                                console.log(res)
+                                                if (res.msg == 2) {
+                                                      this.$error({
+                                                            title: '对不起...',
+                                                            content: '您要赞助的活动已经没有赞助名额',
+                                                      });
+                                                }else{
+                                                      that.id = id;
+                                                      that.visible = true
+                                                }
+                                          }
+                                    })
+                                    
                               }else{
                                     that.$error({
                                           okText: '去设置',

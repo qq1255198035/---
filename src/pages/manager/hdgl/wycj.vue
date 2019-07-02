@@ -13,10 +13,10 @@
                                     <a-col :span="14" class="item">
                                           <div class="profile-image">
                                           <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
-                                          <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
+                                          <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                           </div>
                                           <div class="profile-info">
-                                                <h2 class="no-margins">
+                                                <h2 class="no-margins" @click="$router.push({path:'/cjhdgl/ckhd',query:{id:item.campId}})">
                                                       {{item.name}}
                                                 </h2>
                                                 <p>时间：{{item.publishTime}}</p>
@@ -140,10 +140,10 @@
                                           color: #999;
                                     }
                                     .no-margins {
-                                          font-size: 16px;
+                                          font-size: 18px;
                                           color: #333;
                                           margin-bottom: 0;
-                                          
+                                          cursor: pointer;
                                     }
                                     .my-icon{
                                           margin-top: 20px;

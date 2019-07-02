@@ -322,9 +322,7 @@ export default {
               }
                 
                 .item-box{
-                  display: flex;
-                  align-items: flex-end;
-                  justify-content: center;
+                  position: relative;
                   &:nth-child(2){
                     .calc-price{
                     color: #FEBF56;
@@ -334,6 +332,7 @@ export default {
                   }
                 }
               .calc-price{
+                width: 100%;
                 position: absolute;
                 bottom: 80px;
                 text-align: center;

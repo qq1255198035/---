@@ -4,11 +4,11 @@ import { axios } from '@/utils/request'
 import qs from 'qs'
 //const baseUrl = 'server'
 // 明星管理列表
-export function starsList(name, offset) {
+export function starsList(status,name, offset) {
       return axios({
         url: '/vue/agent/searchCampStarForAgent',
         method: 'post',
-        data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), name: name, limit: 8, offset: offset })
+        data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), status:status, name: name, limit: 8, offset: offset })
       })
 }
 // 经纪人职业（演员）下拉选

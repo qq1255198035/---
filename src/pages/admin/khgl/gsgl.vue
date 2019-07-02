@@ -243,6 +243,8 @@ export default {
                               this.cardItemData1 = res.page.rows;
                               if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable1 = true;
+                              }else{
+                                    this.btnDsiable1 = false;
                               }
                               
                         }
@@ -256,6 +258,8 @@ export default {
                               this.cardItemData2 = res.page.rows;
                               if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable2 = true;
+                              }else{
+                                    this.btnDsiable2 = false;
                               }
                         }
                   })
@@ -323,8 +327,9 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getGsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
-                              this.getGsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                              setTimeout(() => {
+                                    window.location.reload();
+                              }, 500);
                         }
                   })
             },
@@ -335,11 +340,10 @@ export default {
             handleCancel(e) {
                   this.visible = false
             },
-            success (orgId) {
+            success(orgId) {
                   this.loading = true;
                   this.postOrganizeApproval(orgId, '', 0)
-                  this.getGsspList1(this.condition,1,this.offset,this.starttime,this.endtime);
-                  this.getGsspList0(this.condition,0,this.offset,this.starttime,this.endtime);
+                  
             },
       }
 }
