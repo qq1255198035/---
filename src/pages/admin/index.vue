@@ -106,7 +106,9 @@ export default {
       operationColumns: [
          {
                 title: '序号',
-                dataIndex: 'key'
+                dataIndex: 'key',
+                width: 60
+                
           },
           {
                 title: '活动名称',
@@ -115,11 +117,13 @@ export default {
           {
                 title: '活动类型',
                 dataIndex: 'campCatalogVal',
+                width: 100
           },
           {
                 title: '状态',
                 dataIndex: 'status',
-                scopedSlots: { customRender: 'status' }
+                scopedSlots: { customRender: 'status' },
+                width: 100
           },
           {
                 title: '描述',
