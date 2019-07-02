@@ -7,12 +7,12 @@
                   <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wyzz-content">
-                  <div class="items" v-for="(item,index) in lists" :key="index">
-                        <div class="title">
+                  <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item,index) in lists" :key="index">
+                        <a-row class="title">
                               <a-col :span="12" class="item">
                                     <div class="profile-image">
-                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
-                                    <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
+                                          <a-avatar :size="96" :src="item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                          <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                     </div>
                                     <div class="profile-info">
                                           <h2 class="no-margins" @click="$router.push({path:'/ckhd',query:{id:item.campId}})">
@@ -29,15 +29,13 @@
                                           {{item.address}}
                                     </span>
                               </a-col>
-                        </div>
+                        </a-row>
                         <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table">
                               <template slot="operation" slot-scope="text,record">
                                     <a-button @click="showModal(record.ssId)" type="primary">赞 助</a-button>
                               </template>
-                        </a-table>
-                        
-                  </div>
-                 
+                        </a-table>  
+                  </a-col>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                   <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || lists.length == 0">加载更多</a-button>
@@ -70,12 +68,12 @@
                   <div class="calc-price">
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
                               
-                              <a-input type='number' min="0" v-model="price" placeholder="单价" style="width: 100%;"/>
+                              <a-input-number :min="0" v-model="price" placeholder="单价" style="width: 100%;"/>
                               
                         </a-form-item>
                         *
                         <a-form-item class="my-form-item" :wrapperCol="{span: 24}">
-                              <a-input type='number' min="0" v-model="number" placeholder="数量" style="width: 100%;"/>
+                              <a-input-number :min="0" v-model="number" placeholder="数量" style="width: 100%;"/>
                               
                         </a-form-item>
                         =
@@ -104,7 +102,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 20px 0;
+            padding: 20px;
             background-color: #fff;
             .my-form-item{
                   margin: 0; 
@@ -116,18 +114,16 @@
       }
       .wyzz-content{
             display: flex;
-            justify-content: space-between;
-            
-            flex-wrap: wrap;
             background-color: #fff;
-            padding: 20px;
+            padding: 20px 80px;
+            justify-content: space-between;
+            flex-wrap: wrap;
             .items{
                   background-color: #fff;
                   border: 1px solid #ccc;
                   border-radius: 5px;
-                  width: 48%;
                   padding: 20px 10px;
-                  margin: 10px 0;
+                  margin: 20px 0;
                   .my-table{
                         padding-top: 20px;
                   }
@@ -136,6 +132,9 @@
                         .item{
                               display: flex;
                               justify-content: flex-start;
+                              .profile-image{
+                                    margin-left: 20px;
+                              }
                               .profile-info{
                                     margin-left: 30px;
                                     
@@ -190,7 +189,7 @@
 
 </style>
 <script>
-import { searchCampList,saveMySponsor } from "@/api/sponsor";
+import { searchCampList,saveMySponsor,checkMySponsor } from "@/api/sponsor";
 import { judge } from "@/api/common";
 export default {
       
@@ -234,17 +233,14 @@ export default {
                   number: '',
                   demand: '',
                   id: '',
-                  form: this.$form.createForm(this),
-                  host: ''
+                  form: this.$form.createForm(this)
             }
       },
       mounted(){
-            this.host = this.$host;
             this.getSearchCampList(this.starttime,this.endtime,this.offset);
             console.log(this.isPositive)
       },
       methods: {
-            
             getSearchCampList(startime, endtime, offset){
                   searchCampList(startime, endtime, offset).then(res=>{
                         if(res.code == 1000){
@@ -295,6 +291,7 @@ export default {
                   saveMySponsor(ssId, price, productName, productNum, productVal, tolMoney, bz, cash).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！');
+                              
                               this.confirmLoading = false;
                               this.visible = false;
                               this.cashMoney = '';
@@ -310,8 +307,21 @@ export default {
                   judge().then(res=>{
                         if (res.code == 1000) {
                               if (res.data == 0) {
-                                    that.id = id;
-                                    that.visible = true
+                                    checkMySponsor(id).then(res=>{
+                                          if (res.code == 1000) {
+                                                console.log(res)
+                                                if (res.msg == 2) {
+                                                      this.$error({
+                                                            title: '对不起...',
+                                                            content: '您要赞助的活动已经没有赞助名额',
+                                                      });
+                                                }else{
+                                                      that.id = id;
+                                                      that.visible = true
+                                                }
+                                          }
+                                    })
+                                    
                               }else{
                                     that.$error({
                                           okText: '去设置',

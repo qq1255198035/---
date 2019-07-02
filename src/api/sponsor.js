@@ -64,3 +64,14 @@ export function searchSponsor(name,startime, endtime, offset) {
             })
       })
 }
+// 赞助名额检验
+export function checkMySponsor(ssId) {
+      return axios({
+            url: '/vue/sponsor/checkMySponsor',
+            method: 'post',
+            data: qs.stringify({
+                  token: Vue.ls.get(ACCESS_TOKEN),
+                  ssId: ssId
+            })
+      })
+}

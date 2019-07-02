@@ -14,35 +14,71 @@
                   </div>
             </div>
             <div class="mxgl-content">
-                  <a-row type="flex" justify="start" align="top" v-if="cardItemData.length > 0" class="my-cards">
-                        <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
-                              <div class="title">
-                                    <h5>{{item.name}}</h5>
-                                    <span>{{item.en_name}}</span>
-                                    <a-avatar :size="64" :src="host + item.avatar" v-if="item.avatar"/>
-                                    <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
-                                    <div class="bottom">
-                                          <span>{{item.catalogVal}}</span>
-                                          <span>{{item.birth}} | {{item.height}} cm</span>
-                                          <span>{{item.addr}}</span>
-                                    </div>    
-                              </div>
-                              <div class="footer">
-                                    <transition name="fade">
-                                          <div class="button-box" v-show= "btnShow == index" key="1">
-                                                <a-button type="danger" class="danger" @click="showDeleteConfirm(item.athlete_id)">删除</a-button>
-                                                <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">修改</a-button>
+                  <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
+                        <a-tab-pane key="1" tab="待审批">
+                              <a-row type="flex" justify="start" align="top" v-if="cardItemData.length > 0" class="my-cards">
+                                    <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
+                                          <div class="title">
+                                                <h5>{{item.name}}</h5>
+                                                <span>{{item.en_name}}</span>
+                                                <a-avatar :size="64" :src="item.avatar" v-if="item.avatar"/>
+                                                <a-avatar v-else style="backgroundColor:#23C6C8" :size="64">Sponsor Cube</a-avatar>
+                                                <div class="bottom">
+                                                      <span>{{item.catalogVal}}</span>
+                                                      <span>{{item.birth}} | {{item.height}} cm</span>
+                                                      <span>{{item.addr}}</span>
+                                                </div>    
                                           </div>
-                                    </transition>
-                              </div> 
-                        </a-col>
-                  </a-row>
-                  <p v-else style="text-align: center; color: #ccc;">
-                        暂无数据
-                  </p>
-                  <div style="text-align: center; margin-top: 16px;">
-                        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
-                  </div>
+                                          <div class="footer">
+                                                <transition name="fade">
+                                                      <div class="button-box" v-show= "btnShow == index" key="1">
+                                                            <a-button type="danger" class="danger" @click="showDeleteConfirm(item.athlete_id)">删除</a-button>
+                                                            <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">修改</a-button>
+                                                      </div>
+                                                </transition>
+                                          </div> 
+                                    </a-col>
+                              </a-row>
+                              <p v-else style="text-align: center; color: #ccc;">
+                                    暂无数据
+                              </p>
+                              <div style="text-align: center; margin-top: 16px;">
+                                    <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+                              </div>
+                        </a-tab-pane>
+                        <a-tab-pane key="0" tab="已审批">
+                              <a-row type="flex" justify="start" align="top" v-if="cardItemData2.length > 0" class="my-cards">
+                                    <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
+                                          <div class="title">
+                                                <h5>{{item.name}}</h5>
+                                                <span>{{item.en_name}}</span>
+                                                <a-avatar :size="64" :src="item.avatar" v-if="item.avatar"/>
+                                                <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
+                                                <div class="bottom">
+                                                      <span>{{item.catalogVal}}</span>
+                                                      <span>{{item.birth}} | {{item.height}} cm</span>
+                                                      <span>{{item.addr}}</span>
+                                                </div>    
+                                          </div>
+                                          <div class="footer">
+                                                <transition name="fade">
+                                                      <div class="button-box" v-show= "btnShow == index" key="1">
+                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/cjhdgl/mxxq',query:{id: item.key}})">查 看</a-button>
+                                                      </div>
+                                                </transition>
+                                          </div> 
+                                    </a-col>
+                              </a-row>
+                              <p v-else style="text-align: center; color: #ccc;">
+                                    暂无数据
+                              </p>
+                              <div style="text-align: center; margin-top: 16px;">
+                                    <a-button @click="loadMore2" :loading="loadingMore" :disabled="btnDsiable2">加载更多</a-button>
+                              </div>
+                        </a-tab-pane>
+                        
+                  </a-tabs>
+                  
             </div>
             <a-modal
                   title="添加明星"
@@ -214,6 +250,8 @@
            }
       }
       .mxgl-content{
+            padding: 20px;
+            background-color: #fff;
             .my-cards{
                   flex-wrap: wrap;
                   background-color: #fff;
@@ -341,13 +379,15 @@ export default {
                   loadingMore:false,
                   loading:false,
                   btnDsiable: false,
+                  btnDsiable2: false,
                   imageUrl1: '',
                   imageUrl2: '',
                   imageUrl3: '',
                   cardItemData:[],
+                  cardItemData2:[],
                   name: '',
                   offset: 1,
-                  host:'',
+                  offset2: 1,
                   form: this.$form.createForm(this),
                   works:[],
                   country:[],
@@ -359,11 +399,10 @@ export default {
             }
       },
       mounted () {
-            this.getStarsList(this.name,this.offset); 
+            this.getStarsList(1,this.name,this.offset); 
+            this.getStarsList2(0,this.name,this.offset2);
             this.getProfessionList();
-            this.getCountryList();
-            this.host = this.$host
-            
+            this.getCountryList()
       },
       methods:{
             postStarUpdate(params){
@@ -412,9 +451,9 @@ export default {
                                     avatar: res.data.avatar,
                                     imgs: res.data.imgs
                               });
-                              this.imageUrl1 = this.host + res.data.credential;
-                              this.imageUrl2 = this.host + res.data.avatar;
-                              this.imageUrl3 = this.host + res.data.imgs;
+                              this.imageUrl1 = res.data.credential;
+                              this.imageUrl2 = res.data.avatar;
+                              this.imageUrl3 = res.data.imgs;
                               this.postImg1 = res.data.credential;
                               this.postImg2 = res.data.avatar;
                               this.postImg3 = res.data.imgs;
@@ -435,11 +474,30 @@ export default {
                         }
                   })
             },
-            getStarsList(name, offset){
-                  starsList(name, offset).then(res=>{
+            getStarsList(status,name, offset){
+                  starsList(status, name, offset).then(res=>{
                         if (res.code == 1000) {
                               this.cardItemData = res.page.rows;
                               this.loadingMore = false
+                              if (res.page.offset >= res.page.pages) {
+                                    this.btnDsiable = true;
+                              }else{
+                                    this.btnDsiable = false;
+                              }
+                              console.log(res)
+                        }
+                  })
+            },
+            getStarsList2(status,name, offset){
+                  starsList(status, name, offset).then(res=>{
+                        if (res.code == 1000) {
+                              this.cardItemData2 = res.page.rows;
+                              this.loadingMore = false
+                              if (res.page.offset >= res.page.pages) {
+                                    this.btnDsiable2 = true;
+                              }else{
+                                    this.btnDsiable2 = false;
+                              }
                               console.log(res)
                         }
                   })
@@ -450,7 +508,7 @@ export default {
             loadMore(){
                   this.offset++;
                   this.loadingMore = true;
-                  starsList('', this.offset).then(res=>{
+                  starsList(1,'', this.offset).then(res=>{
                         if (res.code == 1000) {
                               if (this.offset > res.page.pages) {
                                     this.$message.warning('已加载全部数据');
@@ -460,6 +518,24 @@ export default {
                               }
                               console.log(res)
                               this.cardItemData = this.cardItemData.concat(res.page.rows);
+                              this.loadingMore = false
+                        }
+                  })
+
+            },
+            loadMore2(){
+                  this.offset2++;
+                  this.loadingMore = true;
+                  starsList(0,'', this.offset2).then(res=>{
+                        if (res.code == 1000) {
+                              if (this.offset > res.page.pages) {
+                                    this.$message.warning('已加载全部数据');
+                                    this.loadingMore = false;
+                                    this.btnDsiable2 = true;
+                                    return;
+                              }
+                              console.log(res)
+                              this.cardItemData2 = this.cardItemData2.concat(res.page.rows);
                               this.loadingMore = false
                         }
                   })
@@ -496,7 +572,7 @@ export default {
                               };
                               this.postStarUpdate(params);
                               this.getStarsList(this.name,this.offset);
-                              window.location.reload();
+                              
                               console.log(this.stasId)
                         }
                   },);

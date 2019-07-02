@@ -1,5 +1,5 @@
 <template>
-  <page-view :avatar="logo ? this.$host + logo : ''" :title="false" :avatarshow="true">
+  <page-view :avatar="logo ? logo : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">
         {{ timeFix }}，{{ personInfo.contact }}，

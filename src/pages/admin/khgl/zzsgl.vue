@@ -25,7 +25,7 @@
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData1.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
                                           <div class="title">
-                                                <a-avatar :size="64" :src="host + item.logo"/>
+                                                <a-avatar :size="64" :src="item.logo"/>
                                                 <span>{{item.name}}</span>
                                           </div>
                                           <div class="content">
@@ -58,7 +58,7 @@
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData2.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
                                           <div class="title">
-                                                <a-avatar :size="64" :src="host + item.logo"/>
+                                                <a-avatar :size="64" :src="item.logo"/>
                                                 <span>{{item.name}}</span>
                                           </div>
                                           <div class="content">
@@ -217,7 +217,6 @@ export default {
                   offset2:1,
                   starttime:'',
                   endtime: '',
-                  host: '',
                   key:'',
                   reason:'',
                   status:1
@@ -226,7 +225,6 @@ export default {
        mounted(){
             this.getZzsspList1(this.condition,1,this.offset,this.starttime,this.endtime);
             this.getZzsspList0(this.condition,0,this.offset,this.starttime,this.endtime);
-            this.host = this.$host
       },
       methods:{
             tabChange(key){
@@ -238,8 +236,10 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData1 = res.page.rows
-                              if (res.page.offset == res.page.pages) {
+                              if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable1 = true;
+                              }else{
+                                    this.btnDsiable1 = false;
                               }
                         }
                   })
@@ -250,8 +250,10 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData2 = res.page.rows
-                              if (res.page.offset == res.page.pages) {
+                              if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable2 = true;
+                              }else{
+                                    this.btnDsiable2 = false;
                               }
                         }
                   })
@@ -320,8 +322,9 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getZzsspList0(this.condition,this.status,this.offset,this.starttime,this.endtime);
-                              this.getZzsspList1(this.condition,this.status,this.offset,this.starttime,this.endtime);
+                              setTimeout(() => {
+                                    window.location.reload();
+                              }, 500);
                         }
                   })
             },
@@ -335,8 +338,6 @@ export default {
             success (brandId) {
                   this.loading = true;
                   this.postSponsorApproval(brandId, '', 0)
-                  this.getZzsspList1(this.condition,1,this.offset,this.starttime,this.endtime);
-                  this.getZzsspList0(this.condition,0,this.offset,this.starttime,this.endtime);
             },
       }
 }

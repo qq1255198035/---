@@ -208,8 +208,8 @@ export default {
                               this.desc = res.data.introduction,
                               this.sex = res.data.sex,
                               this.email = res.data.email,
-                              this.avatar = this.$host + res.data.avatar,
-                              this.imgs = this.$host + res.data.imgs,
+                              this.avatar = res.data.avatar,
+                              this.imgs = res.data.imgs,
                               this.company = res.data.company,
                               this.contact = res.data.contact,
                               this.phone = res.data.phone

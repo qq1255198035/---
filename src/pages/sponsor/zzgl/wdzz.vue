@@ -7,37 +7,37 @@
                   <a-button type="primary" icon="search" @click="search">搜 索</a-button>
             </div>
             <div class="wdzz-content">
-                  <div class="items" v-for="(item,index) in data" :key="index">
-                        <div class="title">
-                              <a-col :span="12" class="item">
-                                    <div class="profile-image">
-                                    <a-avatar :size="96" :src="host + item.coverImg" class="img-circle" v-if="item.coverImg"/>
-                                    <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
-                                    </div>
-                                    <div class="profile-info">
-                                          <h2 class="no-margins">{{item.name}}</h2>
-                                          <p>时间：{{item.publishTime}}</p>
-                                          <p>分类：{{item.campCatalogVal}}</p>
-                                          <p>参赛人数：{{item.campNum}}人</p>
-                                    </div>
-                              </a-col>
-                              <a-col :span="12" class="item">
-                                    <span>
-                                          <a-icon type="environment" class="my-icon"/>
-                                          {{item.address}}
-                                    </span>
-                              </a-col>
-                        </div>
-                        <div class="my-collapse">
-                              <a-collapse>
-                                    <a-collapse-panel header="赞助纪录">
-                                          <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table"></a-table>
-                                    </a-collapse-panel>
-                              </a-collapse>
-                        </div>
-                        
-                        
-                  </div>  
+                  <a-row type="flex" justify="space-between">
+                        <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item,index) in data" :key="index">
+                              <div class="title">
+                                    <a-col :span="12" class="item">
+                                          <div class="profile-image">
+                                          <a-avatar :size="96" :src="item.coverImg" class="img-circle" v-if="item.coverImg"/>
+                                          <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
+                                          </div>
+                                          <div class="profile-info">
+                                                <h2 class="no-margins">{{item.name}}</h2>
+                                                <p>时间：{{item.publishTime}}</p>
+                                                <p>分类：{{item.campCatalogVal}}</p>
+                                                <p>参赛人数：{{item.campNum}}人</p>
+                                          </div>
+                                    </a-col>
+                                    <a-col :span="12" class="item">
+                                          <span>
+                                                <a-icon type="environment" class="my-icon"/>
+                                                {{item.address}}
+                                          </span>
+                                    </a-col>
+                              </div>
+                              <div class="my-collapse">
+                                    <a-collapse>
+                                          <a-collapse-panel header="赞助纪录">
+                                                <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table"></a-table>
+                                          </a-collapse-panel>
+                                    </a-collapse>
+                              </div>
+                        </a-col>
+                  </a-row>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                   <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || data.length == 0">加载更多</a-button>
@@ -51,7 +51,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding: 20px 0;
+            padding: 20px;
             background-color: #fff;
             .my-form-item{
                   margin: 0; 
@@ -62,18 +62,14 @@
             }
       }
       .wdzz-content{
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            flex-wrap: wrap;
+            padding: 20px 50px;
             background-color:#fff;
             .items{
                   background-color: #fff;
                   border: 1px solid #ccc;
                   border-radius: 5px;
-                  width: 48%;
                   padding: 20px 10px;
-                  margin: 10px 0;
+                  margin: 20px 0;
                   .my-table{
                         padding-top: 20px;
                   }
@@ -174,8 +170,7 @@ export default {
                   offset: 1,
                   confirmLoading: false,
                   loadingMore: true,
-                  btnDsiable:false,
-                  host:''
+                  btnDsiable:false
             }
       },
       methods: {
@@ -227,7 +222,6 @@ export default {
       },
       mounted(){
             this.getSearchMySponsor(this.starttime,this.endtime,this.offset);
-            this.host = this.$host
       }
 }
 </script>

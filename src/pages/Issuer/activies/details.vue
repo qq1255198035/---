@@ -548,13 +548,13 @@ export default {
         const avatarArrty = []
         for (let i = 0; i < res.data.starList.length; i++) {
           if (!res.data.starList.length == 0) {
-            avatarArrty.push(this.$host + res.data.starList[i].avatar)
+            avatarArrty.push(res.data.starList[i].avatar)
           }
         }
         const sponsorList = []
         for (let i = 0; i < res.data.sponsorList.length; i++) {
           if (!res.data.sponsorList.length == 0) {
-            sponsorList.push(this.$host + res.data.sponsorList[i].logo)
+            sponsorList.push(res.data.sponsorList[i].logo)
           }
         }
         this.sponsorList = sponsorList
@@ -573,8 +573,8 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl =activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
-        this.logo = activityDetail.cover_img ? this.$host + activityDetail.cover_img : ''
+        this.imgUrl =activityDetail.cover_img ? activityDetail.cover_img : ''
+        this.logo = activityDetail.cover_img ? activityDetail.cover_img : ''
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {
@@ -645,11 +645,11 @@ export default {
         console.log(res)
         this.activityContent = res.data.list[0].content
         console.log(this.activityContent)
-        this.videoUrls = res.data.list[0].video ? this.$host + res.data.list[0].video : ''
+        this.videoUrls = res.data.list[0].video ? res.data.list[0].video : ''
         const detailsArrty = []
         for (let i = 0; i < res.data.listCampAtt.length; i++) {
           if (!res.data.listCampAtt.length == 0) {
-            detailsArrty.push(this.$host + res.data.listCampAtt[i].location)
+            detailsArrty.push(res.data.listCampAtt[i].location)
           }
         }
         this.detailsImgs = detailsArrty

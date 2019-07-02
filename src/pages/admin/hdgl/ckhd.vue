@@ -54,13 +54,13 @@
                                                 </li>
                                                 <li>
                                                       <span>活动视频：</span>
-                                                      <video :src="host + video" controls width="200" height="150" v-if="video"></video>
+                                                      <video :src="video" controls width="200" height="150" v-if="video"></video>
                                                       <p v-else style="color: #ccc;">暂无视频</p>
                                                 </li>
                                                 <li>
                                                       <span>活动照片：</span>
                                                       <div class="img-box" v-for="(item,index) in imgs" :key="index">
-                                                            <img :src="host + item" alt="活动照片" v-if="item">   
+                                                            <img :src="item" alt="活动照片" v-if="item">   
                                                             <p v-else style="color: #ccc;">暂无图片</p>     
                                                       </div>
                                                       
@@ -372,7 +372,6 @@ export default {
                   status: '',
                   logo:'',
                   money:'',
-                  host:'',
                   schedule:0
             }
       },
@@ -382,7 +381,7 @@ export default {
             this.getSearchCampStar(this.$route.query.id);
             this.getCampHeadInfo(this.$route.query.id);
             this.getCampSchedule(this.$route.query.id)
-            this.host = this.$host;
+            
       },
       computed:{
             
@@ -453,7 +452,7 @@ export default {
                   campHeadInfo(id).then(res=>{
                         if(res.code == 1000){
                               console.log(res)
-                              this.logo = this.$host + res.data.campain.coverImg;
+                              this.logo = res.data.campain.coverImg;
                               this.titleName = res.data.campain.name;
                               this.status = res.data.campain.status;
                               this.money = res.data.amount;

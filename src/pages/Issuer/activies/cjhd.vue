@@ -1148,7 +1148,7 @@ export default {
               timePicker: moment(res.data.list[0].createTime, 'HH:mm:ss')
             })
             console.log(res.data.list[0].createTime)
-            this.imageUrl = this.$host + res.data.list[0].cover_img
+            this.imageUrl = res.data.list[0].cover_img
             this.fileUrl = res.data.list[0].cover_img
             console.log(this.imageUrl)
             this.areaList = res.data.listLoc
@@ -1188,7 +1188,7 @@ export default {
             this.form1.setFieldsValue({
               textName: res.data.list[0].content
             })
-            this.videoUrl = res.data.list[0].video ? this.$host + res.data.list[0].video : ''
+            this.videoUrl = res.data.list[0].video ? res.data.list[0].video : ''
             this.videoUrls = res.data.list[0].video
             console.log(this.videoUrl)
             console.log(res.data.listCampAtt.length)
@@ -1196,7 +1196,7 @@ export default {
             const fileArrty = []
             for (let i = 0; i < res.data.listCampAtt.length; i++) {
               if(!res.data.listCampAtt.length == 0) {
-                detailsArrty.push(this.$host + res.data.listCampAtt[i].location)
+                detailsArrty.push(res.data.listCampAtt[i].location)
               fileArrty.push({
                 location: res.data.listCampAtt[i].location,
                 file_name: res.data.listCampAtt[i].file_name,

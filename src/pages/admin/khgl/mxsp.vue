@@ -27,7 +27,7 @@
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{ item.enName}}</span>
-                                                <a-avatar :size="64" :src="host + item.avatar"/>
+                                                <a-avatar :size="64" :src="item.avatar"/>
                                                 <div class="bottom">
                                                       <span>{{item.catalog}}</span>
                                                       <span>{{item.birth}} | {{item.height}}cm</span>
@@ -65,7 +65,7 @@
                                           <div class="title">
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{ item.enName}}</span>
-                                                <a-avatar :size="64" :src="host + item.avatar"/>
+                                                <a-avatar :size="64" :src="item.avatar"/>
                                                 <div class="bottom">
                                                       <span>{{item.catalog}}</span>
                                                       <span>{{item.birth}} | {{item.height}}cm</span>
@@ -229,7 +229,6 @@ export default {
                   offset2:1,
                   starttime:'',
                   endtime: '',
-                  host: '',
                   key:'',
                   reason:'',
                   status:1,
@@ -238,8 +237,6 @@ export default {
       mounted(){
             this.getMxspList1(this.condition,1,this.offset,this.starttime,this.endtime);
             this.getMxspList0(this.condition,0,this.offset,this.starttime,this.endtime);
-            this.host = this.$host
-            
       },
       methods:{
             tabChange(key){
@@ -251,8 +248,10 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData1 = res.page.rows
-                              if (res.page.offset == res.page.pages) {
+                              if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable1 = true;
+                              }else{
+                                    this.btnDsiable1 = false;
                               }
                         }
                   })
@@ -263,8 +262,10 @@ export default {
                               this.loadingMore = false;
                               console.log(res)
                               this.cardItemData2 = res.page.rows
-                              if (res.page.offset == res.page.pages) {
+                              if (res.page.offset >= res.page.pages) {
                                     this.btnDsiable2 = true;
+                              }else{
+                                    this.btnDsiable2 = false;
                               }
                         }
                   })
@@ -332,8 +333,9 @@ export default {
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;
-                              this.getMxspList1(this.condition,1,this.offset,this.starttime,this.endtime);
-                              this.getMxspList0(this.condition,0,this.offset,this.starttime,this.endtime);  
+                              setTimeout(() => {
+                                    window.location.reload();
+                              }, 500);
                         }
                   })
             },
@@ -346,9 +348,7 @@ export default {
             },
             success (athleteId) {
                   this.loading = true;
-                  this.poststarApproval(athleteId, '', 0)
-                  this.getMxspList1(this.condition,1,this.offset,this.starttime,this.endtime);
-                  this.getMxspList0(this.condition,0,this.offset,this.starttime,this.endtime);  
+                  this.poststarApproval(athleteId, '', 0) 
             },
       }
 }

@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
+  <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{user}}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
       <div>管理员用户</div>
@@ -106,7 +106,9 @@ export default {
       operationColumns: [
          {
                 title: '序号',
-                dataIndex: 'key'
+                dataIndex: 'key',
+                width: 60
+                
           },
           {
                 title: '活动名称',
@@ -115,11 +117,13 @@ export default {
           {
                 title: '活动类型',
                 dataIndex: 'campCatalogVal',
+                width: 100
           },
           {
                 title: '状态',
                 dataIndex: 'status',
-                scopedSlots: { customRender: 'status' }
+                scopedSlots: { customRender: 'status' },
+                width: 100
           },
           {
                 title: '描述',
@@ -130,8 +134,7 @@ export default {
       sponsor:'',
       agent:'',
       tohand:'',
-      star:'',
-      host:''
+      star:''
     }
   },
   computed: {
@@ -145,7 +148,6 @@ export default {
     this.getSearchCampList('',1);
     this.getRightInfo();
     this.getUserInfo()
-    this.host = this.$host
   },
   methods: {
     

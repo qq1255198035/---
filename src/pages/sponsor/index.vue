@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar? host+avatar : ''" :title="false" :avatarshow="true">
+  <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">
         {{ timeFix }}，{{ user }}，
@@ -184,7 +184,6 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
-      host: '',
       pieScale,
       pieStyle: {
         stroke: '#fff',
@@ -296,7 +295,6 @@ export default {
     this.getPiesData()
     this.getSponsorList('', '', '', 1)
     this.getUserInfo()
-    this.host = this.$host
     const that = this
     window.onresize = () => {
       return (() => {

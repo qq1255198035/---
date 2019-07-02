@@ -4,11 +4,11 @@ import { axios } from '@/utils/request'
 import qs from 'qs'
 //const baseUrl = 'server'
 // 明星管理列表
-export function starsList(name, offset) {
+export function starsList(status,name, offset) {
       return axios({
         url: '/vue/agent/searchCampStarForAgent',
         method: 'post',
-        data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), name: name, limit: 8, offset: offset })
+        data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), status:status, name: name, limit: 8, offset: offset })
       })
 }
 // 经纪人职业（演员）下拉选
@@ -106,7 +106,7 @@ export function applicationList(startime, endtime, condition, offset) {
     })
   })
 }
-// 申请记录
+// 参加的活动
 export async function joinCampAll(year, month) {
   return axios({
     url: '/vue/agent/searchMyJoinCampAll',
@@ -115,6 +115,17 @@ export async function joinCampAll(year, month) {
       token: Vue.ls.get(ACCESS_TOKEN),
       year: year,
       month: month
+    })
+  })
+}
+// 参加的活动
+export async function joinCampAllYear(year) {
+  return axios({
+    url: '/vue/agent/searchMyJoinCampAllForYear',
+    method: 'post',
+    data: qs.stringify({
+      token: Vue.ls.get(ACCESS_TOKEN),
+      year: year,
     })
   })
 }
