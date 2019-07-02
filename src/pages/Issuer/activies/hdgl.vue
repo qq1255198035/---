@@ -16,6 +16,13 @@
         placeholder="请选择"
         :showSearch="true"
       />-->
+      <!--<a-cascader
+        :fieldNames="{ label: 'name', value: 'id',children: 'children' }"
+        :options="activeityClass"
+        @change="searchClassifyBtn"
+        placeholder="请选择"
+        :showSearch="true"
+      />-->
       <a-select
         style="width: 174px;"
         class="item-input"
@@ -225,7 +232,9 @@ export default {
     setInfo() {
       let that = this
       const token = this.$ls.get('Access-Token')
+      console.log(token)
       judge(token).then(res => {
+        console.log(res)
         if (res.code == 1000) {
           if (res.data == 0) {
             that.$router.push({ name: 'issuerCjhd' })

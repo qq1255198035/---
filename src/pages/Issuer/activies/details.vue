@@ -407,7 +407,7 @@ const columns4 = [
     align: 'center'
   },
   {
-    title: '出厂费用',
+    title: '出场费用',
     dataIndex: 'cost',
     align: 'center'
   },

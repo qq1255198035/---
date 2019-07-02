@@ -32,22 +32,22 @@
                 <a-row>
                   <a-col
                     :xl="12"
-                    :lg="24"
-                    :md="24"
-                    :sm="24"
-                    :xs="24"
+                    :lg="12"
+                    :md="12"
+                    :sm="12"
+                    :xs="12"
                     class="item-box"
                     v-if="chartDis"
-                    style="margin-left:-100px;"
+                    
                   >
-                    <v-chart :height="300" :data="pieData" :scale="pieScale">
+                    <v-chart :height="chartHeight" :width="chartWidth" :forceFit="chartBollean" :data="pieData" :scale="pieScale">
                       <v-legend
                         data-key="item"
                         :useHtml="true"
                         :itemTpl="itemTpl"
                         position="right"
-                        :offsetX="-50"
-                        :offsetY="-35"
+                        :offsetX="offetX"
+                        :offsetY="offetY"
                       />
                       <v-tooltip :showTitle="false" data-key="item*percent"/>
                       <v-axis/>
@@ -64,19 +64,19 @@
                   </a-col>
                   <a-col
                     :xl="12"
-                    :lg="24"
-                    :md="24"
-                    :sm="24"
-                    :xs="24"
+                    :lg="12"
+                    :md="12"
+                    :sm="12"
+                    :xs="12"
                     class="item-box"
                     v-if="chartDis1"
                   >
-                    <v-chart :height="300" :data="pieData1" :scale="pieScale">
+                    <v-chart :height="chartHeight" :width="chartWidth" :forceFit="chartBollean" :data="pieData1" :scale="pieScale">
                       <v-legend
                         data-key="item"
                         position="right"
-                        :offsetX="-50"
-                        :offsetY="-35"
+                        :offsetX="offetX"
+                        :offsetY="offetY"
                         :useHtml="true"
                         :itemTpl="itemTpl1"
                       />
@@ -161,7 +161,7 @@ import {
 } from '@api/hand'
 import { judge } from '@api/common'
 import { mapActions, mapGetters } from 'vuex'
-
+import G2 from '@antv/g2'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 const statusMap = {
@@ -204,6 +204,7 @@ let sourceData1 = [
 ]
 const DataSet = require('@antv/data-set')
 let dv = new DataSet.View().source(sourceData)
+console.log(new DataSet.View())
 let dv1 = new DataSet.View().source(sourceData1)
 const pieScale = [
   {
@@ -219,8 +220,14 @@ export default {
     PageView,
     HeadInfo
   },
+  
   data() {
     return {
+      chartWidth: 500,
+      chartHeight:300,
+      chartBollean: true,
+      offetX: -50,
+      offetY: -35,
       chartDis: true,
       chartDis1: true,
       logo: '',
@@ -345,6 +352,26 @@ export default {
           this._getHandActivities()
           this.user = this.userInfo
           this.avatar = this.userInfo.avatar
+          const that = this
+          window.onresize = () => {
+            return (() => {
+              window.screenWidth = document.body.clientWidth
+              console.log(window.screenWidth)
+              if(window.screenWidth <= 1366) {
+                console.log(window.screenWidth)
+                that.chartBollean = false
+                that.chartWidth = 240
+                that.chartHeight = 240
+                that.offetX = -80
+                that.offetY = -56
+              }else {
+                that.chartBollean = true
+                that.chartHeight = 300
+                that.offetX = -50
+                that.offetY = -35
+              }
+            })()
+          }
   },
   methods: {
     setInfo() {
@@ -503,6 +530,11 @@ export default {
     height: auto !important;
   }
 }
+@media screen and(max-width: 1336px) {
+  #home .my-cards .ant-card-body .item-boxes .item-row .item-box .calc-price{
+    font-size: 14px
+  }
+}
 #home {
   padding: 24px;
   .my-cards {
@@ -532,7 +564,8 @@ export default {
                 }
                 
                 .item-box{
-                  display: flex;
+                  position: relative;
+                  //display: flex;
                   align-items: flex-end;
                   justify-content: center;
                   &:nth-child(2){
@@ -544,6 +577,7 @@ export default {
                   }
                 }
                 .calc-price{
+                  width: 100%;
                   position: absolute;
                   bottom: 80px;
                   text-align: center;

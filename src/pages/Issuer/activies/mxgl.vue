@@ -32,7 +32,7 @@
                   <span>$</span>
                   {{item.cost}}
                 </p>
-                <span>出厂费用</span>
+                <span>出场费用</span>
               </div>
               <div class="content">
                 <p>联系人: {{ item.contact}}</p>
@@ -69,7 +69,7 @@
                   <span>$</span>
                   {{item.cost}}
                 </p>
-                <span>出厂费用</span>
+                <span>出场费用</span>
               </div>
               <div class="content">
                 <p>联系人: {{ item.contact}}</p>

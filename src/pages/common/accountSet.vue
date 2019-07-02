@@ -74,7 +74,7 @@
                   <a-input
                     style="width: 100%"
                     placeholder="联系电话"
-                    v-decorator="['phoneName',{rules: [{ required: true, message: '联系电话' }]}]"
+                    v-decorator="['phoneName',{rules: [{ required: true, message: '请输入正确电话' }, {validator:this.checkedTel.bind(this)}]}]"
                   />
                 </div>
               </a-form-item>
@@ -166,6 +166,13 @@ export default {
       this._getUserInformation()
   },
   methods: {
+    checkedTel(rule, value, callback) {
+      console.log(value)
+      const reg = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
+      if (!reg.test(value)) {
+        callback(new Error('请输入正确电话号'))
+      }
+    },
     _getUserInformation() {
       const token = this.$ls.get('Access-Token')
       const params = {

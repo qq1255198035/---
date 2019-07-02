@@ -20,14 +20,15 @@
               </a-list-item>
               
             </a-list>
+            <a class="new-list" @click="newList">查看全部消息</a>
           </a-tab-pane>
         </a-tabs>
       </a-spin>
     </template>
-    <span @click="fetchNotice" class="header-notice">
-      <a-badge :count="count" showZero>
-        <a-icon style="font-size: 16px; padding: 4px" type="bell" />
-      </a-badge>
+    <span @click="fetchNotice" class="header-notice" style="position: relative;">
+      <a-icon style="font-size: 16px; padding: 4px" type="bell" />
+      <a-badge v-if="count" class="diount" :count="count" showZero></a-badge>
+        
     </span>
   </a-popover>
 </template>
@@ -59,9 +60,20 @@ export default {
     
   },
   methods: {
+    newList() {
+      this.loadding = false
+      this.visible = false
+      this.$router.push({
+        path: '/tzxx'
+      })
+      setTimeout(() => {
+      window.location.reload()
+    }, 1000)
+    },
     fetchNotice () {
       if (!this.visible) {
         this.loadding = true
+        this.visible = false
         setTimeout(() => {
           this.loadding = false
         },100)
@@ -75,6 +87,7 @@ export default {
       unread().then(res => {
         if(res.code == 1000){
           this.count = res.data
+          console.log(this.count)
         }
       })
     },
@@ -99,6 +112,17 @@ export default {
   }
 </style>
 <style lang="less" scoped>
+.new-list{
+  width: 100%;
+  display: block;
+  text-align: center;
+  color: #23C6C8
+}
+.diount{
+  position: absolute;
+  top: 10px;
+  right: 0px;
+}
   .header-notice{
     display: inline-block;
     transition: all 0.3s;
