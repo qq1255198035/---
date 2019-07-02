@@ -22,7 +22,7 @@
                                                 <h5>{{item.name}}</h5>
                                                 <span>{{item.en_name}}</span>
                                                 <a-avatar :size="64" :src="host + item.avatar" v-if="item.avatar"/>
-                                                <a-avatar v-else style="backgroundColor:#23C6C8" size="96">Sponsor Cube</a-avatar>
+                                                <a-avatar v-else style="backgroundColor:#23C6C8" :size="64">Sponsor Cube</a-avatar>
                                                 <div class="bottom">
                                                       <span>{{item.catalogVal}}</span>
                                                       <span>{{item.birth}} | {{item.height}} cm</span>
