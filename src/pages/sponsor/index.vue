@@ -2,7 +2,10 @@
 <template>
   <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
+      <div class="title">
+        {{ timeFix }}，{{ user }}，
+        <span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span>
+      </div>
       <div>赞助商</div>
     </div>
     <div id="home">
@@ -11,55 +14,103 @@
           <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
-                  <a-row type="flex" justify="space-between">
-                    <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" v-if="nonum1">
-                        <v-chart :height="300" :data="pieData" :scale="pieScale">
-                          <v-legend dataKey="item" :useHtml="true" :itemTpl="itemTpl" position="right" :offsetX="-50" :offsetY="-35"/>
-                          <v-tooltip :showTitle="false" dataKey="item*percent" />
-                          <v-axis />
-                          <v-pie position="percent" :color="c" :vStyle="pieStyle"/>
-                          <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
-                        </v-chart>
-                        <div class="calc-price">
-                          总计：￥
-                          <span>{{sponsorTotal}}</span>
-                        </div>
-                    </a-col>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
-                        <p>暂无数据</p>
-                    </a-col>
-                    <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" class="item-box" v-if="nonum2">
-                      <v-chart :height="300" :data="pieData1" :scale="pieScale">
-                        <v-legend dataKey="item" position="right" :offsetX="-50" :offsetY="-35" :useHtml="true" :itemTpl="itemTpl1"/>
-                        <v-tooltip :showTitle="false" dataKey="item*percent" />
-                        <v-axis />
-                        <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
-                        <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
-                      </v-chart>
-                      <div class="calc-price">
-                          总计：￥
-                          <span>{{agentTotal}}</span>
-                        </div>
-                    </a-col>
-                    <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
-                        <p>暂无数据</p>
-                    </a-col>
-                  </a-row>
+                <a-row type="flex" justify="space-between">
+                  <a-col
+                    :xl="12"
+                    :lg="12"
+                    :md="12"
+                    :sm="12"
+                    :xs="12"
+                    class="item-box"
+                    v-if="nonum1"
+                  >
+                    <v-chart
+                      :height="chartHeight"
+                      :width="chartWidth"
+                      :forceFit="chartBollean"
+                      :data="pieData"
+                      :scale="pieScale"
+                    >
+                      <v-legend
+                        data-key="item"
+                        :useHtml="true"
+                        :itemTpl="itemTpl"
+                        position="right"
+                        :offsetX="offetX"
+                        :offsetY="offetY"
+                      />
+                      <v-tooltip :showTitle="false" data-key="item*percent" />
+                      <v-axis />
+                      <v-pie position="percent" :color="c" :vStyle="pieStyle" />
+                      <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
+                    </v-chart>
+                    <div class="calc-price">
+                      总计：￥
+                      <span>{{sponsorTotal}}</span>
+                    </div>
+                  </a-col>
+                  <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
+                    <p>暂无数据</p>
+                  </a-col>
+                  <a-col
+                    :xl="12"
+                    :lg="12"
+                    :md="12"
+                    :sm="12"
+                    :xs="12"
+                    class="item-box"
+                    v-if="nonum2"
+                  >
+                    <v-chart
+                      :height="chartHeight"
+                      :width="chartWidth"
+                      :forceFit="chartBollean"
+                      :data="pieData1"
+                      :scale="pieScale"
+                    >
+                      <v-legend
+                        data-key="item"
+                        position="right"
+                        :offsetX="offetX"
+                        :offsetY="offetY"
+                        :useHtml="true"
+                        :itemTpl="itemTpl1"
+                      />
+                      <v-tooltip :showTitle="false" data-key="item*percent" />
+                      <v-axis />
+                      <v-pie position="percent" :color="c1" :vStyle="pieStyle" />
+                      <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
+                    </v-chart>
+                    <div class="calc-price">
+                      总计：￥
+                      <span>{{agentTotal}}</span>
+                    </div>
+                  </a-col>
+                  <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
+                    <p>暂无数据</p>
+                  </a-col>
+                </a-row>
               </div>
-              
             </div>
           </a-card>
           <a-card title="活动动态" class="my-activity">
-            <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
-              
-            </a-table>
+            <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false"></a-table>
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
-          
-          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
+          <a-card
+            class="project-list"
+            :loading="loading"
+            style="margin-bottom: 24px;"
+            :bordered="false"
+            title="我的消息"
+            :body-style="{ padding: 0 }"
+          >
             <a slot="extra" @click="$router.push({name:'tzxx'})">全部消息</a>
-            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="projects.length == 0">暂无信息</p>
+            <p
+              style="color: #ccc;text-align: center; padding: 10px 0; margin: 0"
+              v-if="projects.length == 0"
+            >暂无信息</p>
             <div v-else>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -67,9 +118,7 @@
                     <div slot="title" class="card-title">
                       <a>{{ item.title }}</a>
                     </div>
-                    <div slot="description" class="card-description">
-                      {{ item.content }}
-                    </div>
+                    <div slot="description" class="card-description">{{ item.content }}</div>
                   </a-card-meta>
                   <div class="project-item">
                     <span class="datetime">{{ item.createtime }}</span>
@@ -86,42 +135,39 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { headMsg,piesData,userInfo } from '@/api/common'
+import { headMsg, piesData, userInfo } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 
-import { searchSponsor } from "@/api/sponsor";
-const sourceData = [
-  { item: '现金', count: null },
-  { item: '实物', count: null },
-  
-]
-const sourceData1 = [
-  { item: '未付', count: null },
-  { item: '已付', count: null },
-  
-]
+import { searchSponsor } from '@/api/sponsor'
+const sourceData = [{ item: '现金', count: null }, { item: '实物', count: null }]
+const sourceData1 = [{ item: '未付', count: null }, { item: '已付', count: null }]
 const DataSet = require('@antv/data-set')
 const dv = new DataSet.View().source(sourceData)
 const dv1 = new DataSet.View().source(sourceData1)
 
-const pieScale = [{
-  dataKey: 'percent',
-  min: 0,
-  formatter: '.0%',
-  height: window.innerHeight,
-}]
+const pieScale = [
+  {
+    dataKey: 'percent',
+    min: 0,
+    formatter: '.0%',
+    height: window.innerHeight
+  }
+]
 const pieData = dv.rows
 const pieData1 = dv1.rows
 export default {
-  
   components: {
     PageView,
-    HeadInfo,
-    
+    HeadInfo
   },
-  data () {
+  data() {
     return {
+      chartWidth: 500,
+      chartHeight: 300,
+      chartBollean: true,
+      offetX: -50,
+      offetY: -35,
       timeFix: timeFix(),
       avatar: '',
       user: '',
@@ -129,10 +175,10 @@ export default {
       pieData1,
       sourceData,
       sourceData1,
-      sponsorTotal:'',
-      agentTotal:'',
-      c:["item", ["#4275FC","#41BDFD",]],
-      c1:["item", ["#F56367","#FFB535",]],
+      sponsorTotal: '',
+      agentTotal: '',
+      c: ['item', ['#4275FC', '#41BDFD']],
+      c1: ['item', ['#F56367', '#FFB535']],
       projects: [],
       loading: true,
       radarLoading: true,
@@ -144,14 +190,54 @@ export default {
         lineWidth: 1
       },
       itemTpl: (value, color, checked, index) => {
-        const obj = dv.rows[index];
-        checked = checked ? 'checked' : 'unChecked';
-        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;min-width:180px;">' +'<td style="border: none;padding:0;min-width:50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+        const obj = dv.rows[index]
+        checked = checked ? 'checked' : 'unChecked'
+        return (
+          '<tr class="g2-legend-list-item item-' +
+          index +
+          ' ' +
+          checked +
+          '" data-value="' +
+          value +
+          '" data-color=' +
+          color +
+          ' style="cursor: pointer;font-size: 14px;min-width:180px;">' +
+          '<td style="border: none;padding:0;min-width:50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' +
+          color +
+          ';"></i>' +
+          '<span class="g2-legend-text">' +
+          value +
+          '</span></td>' +
+          '<td style="text-align: right;border: none;padding:0;">' +
+          obj.count +
+          '</td>' +
+          '</tr>'
+        )
       },
       itemTpl1: (value, color, checked, index) => {
-        const obj = dv1.rows[index];
-        checked = checked ? 'checked' : 'unChecked';
-        return '<tr class="g2-legend-list-item item-' + index + ' ' + checked +'" data-value="' + value + '" data-color=' + color +' style="cursor: pointer;font-size: 14px;min-width:180px;">' +'<td style="border: none;padding:0;min-width:50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' + color + ';"></i>' +'<span class="g2-legend-text">' + value + '</span></td>' +'<td style="text-align: right;border: none;padding:0;">' + obj.count + '</td>' +'</tr>';
+        const obj = dv1.rows[index]
+        checked = checked ? 'checked' : 'unChecked'
+        return (
+          '<tr class="g2-legend-list-item item-' +
+          index +
+          ' ' +
+          checked +
+          '" data-value="' +
+          value +
+          '" data-color=' +
+          color +
+          ' style="cursor: pointer;font-size: 14px;min-width:180px;">' +
+          '<td style="border: none;padding:0;min-width:50px;"><i class="g2-legend-marker" style="width:10px;height:10px;display:inline-block;margin-right:10px;background-color:' +
+          color +
+          ';"></i>' +
+          '<span class="g2-legend-text">' +
+          value +
+          '</span></td>' +
+          '<td style="text-align: right;border: none;padding:0;">' +
+          obj.count +
+          '</td>' +
+          '</tr>'
+        )
       },
       // data
       operationColumns: [
@@ -165,7 +251,7 @@ export default {
           dataIndex: 'name',
           key: 'name'
         },
-        
+
         {
           title: '推广形式',
           dataIndex: 'ssKind',
@@ -195,50 +281,66 @@ export default {
           title: '已付款',
           dataIndex: 'paid',
           key: 'yfk'
-        },
-        
+        }
       ],
       operation1: [],
-      nonum1:true,
-      nonum2:true,
+      nonum1: true,
+      nonum2: true
     }
   },
-  computed: {
-   
-  },
-  created () {
-   
-  },
-  mounted () {
-    this.getHeadMsg();
-    this.getPiesData();
-    this.getSponsorList('','','',1);
+  computed: {},
+  created() {},
+  mounted() {
+    this.getHeadMsg()
+    this.getPiesData()
+    this.getSponsorList('', '', '', 1)
     this.getUserInfo()
+    const that = this
+    window.onresize = () => {
+      return (() => {
+        window.screenWidth = document.body.clientWidth
+        console.log(window.screenWidth)
+        if (window.screenWidth <= 1366) {
+          console.log(window.screenWidth)
+          that.chartBollean = false
+          that.chartWidth = 240
+          that.chartHeight = 240
+          that.offetX = -80
+          that.offetY = -56
+        } else {
+          that.chartBollean = true
+          that.chartWidth = 500
+          that.chartHeight = 300
+          that.offetX = -50
+          that.offetY = -35
+        }
+      })()
+    }
   },
   methods: {
-    getHeadMsg(){
+    getHeadMsg() {
       headMsg().then(res => {
-        if(res.code == 1000){
+        if (res.code == 1000) {
           this.projects = res.data
           this.loading = false
         }
       })
     },
-    getPiesData(){
-      piesData().then(res=>{
+    getPiesData() {
+      piesData().then(res => {
         if (res.code == 1000) {
           console.log(res)
-          this.pieData[0].count= res.data.money;
-          this.pieData[1].count= res.data.goods;
-          this.pieData1[0].count= res.data.unpaid;
-          this.pieData1[1].count= res.data.paid;
-          this.sponsorTotal = res.data.sponsorTotal;
+          this.pieData[0].count = res.data.money
+          this.pieData[1].count = res.data.goods
+          this.pieData1[0].count = res.data.unpaid
+          this.pieData1[1].count = res.data.paid
+          this.sponsorTotal = res.data.sponsorTotal
           this.agentTotal = res.data.agentTotal
           if (res.data.money == 0 && res.data.goods == 0) {
-              this.nonum1 = false;
+            this.nonum1 = false
           }
           if (res.data.unpaid == 0 && res.data.paid == 0) {
-              this.nonum2 = false;
+            this.nonum2 = false
           }
           dv.transform({
             type: 'percent',
@@ -255,21 +357,21 @@ export default {
         }
       })
     },
-    getSponsorList(name,startime, endtime, offset){
-          searchSponsor(name,startime, endtime, offset).then(res=>{
-                if(res.code == 1000){
-                      console.log(res)
-                      let key = 'key';
-                      this.operation1 = res.page.rows;
-                      
-                      this.operation1.map((item,index)=>{
-                            item[key] = index + 1
-                      })
-                }
+    getSponsorList(name, startime, endtime, offset) {
+      searchSponsor(name, startime, endtime, offset).then(res => {
+        if (res.code == 1000) {
+          console.log(res)
+          let key = 'key'
+          this.operation1 = res.page.rows
+
+          this.operation1.map((item, index) => {
+            item[key] = index + 1
           })
+        }
+      })
     },
-    getUserInfo(id){
-      userInfo(id).then(res=>{
+    getUserInfo(id) {
+      userInfo(id).then(res => {
         if (res.code == 1000) {
             this.user = res.data.email;
             this.avatar = res.data.logo;
@@ -278,220 +380,212 @@ export default {
     },
     
   },
-  filters: {
-      
-  }
+  filters: {}
 }
 </script>
 <style lang="less">
-.project-card-grid{
+.project-card-grid {
   width: 100%;
   padding: 20px;
-  .card-description{
+  .card-description {
     height: auto !important;
   }
 }
-#home{
-	padding: 24px;
-    .my-cards{
-        .ant-card-body{
-            position: relative;
-            height: 227px;
-            overflow: hidden;
-            margin-bottom: 24px;
-            .item-boxes{
-              width: 100%;
-              height:100%;
-              .item-row{
-                width: 100%;
-                position: absolute;
-                left: -85px;
-                bottom: -60px;
-                .nonum1{
-                  display: flex;
-                  align-items: center;
-                  position: relative;
-                  P{
-                    position: absolute;
-                    bottom: 155px;
-                    left: 200px;
-                    color: #ccc;
-                  }
-              }
-                
-                .item-box{
-                  position: relative;
-                  &:nth-child(2){
-                    .calc-price{
-                    color: #FEBF56;
-                    span{
-                      color: #F5797D;
-                    }
-                  }
-                }
-              .calc-price{
-                width: 100%;
-                position: absolute;
-                bottom: 80px;
-                text-align: center;
-                font-size: 16px;
-                color: #5DC6FC;
-                span{
-                  font-size: 24px;
-                  font-weight: bold;
-                  color: #1890ff;
-                }
-          }
-          .desc{
+#home {
+  padding: 24px;
+  .my-cards {
+    .ant-card-body {
+      position: relative;
+      height: 227px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      .item-boxes {
+        width: 100%;
+        height: 100%;
+        .item-row {
+          width: 100%;
+          position: absolute;
+          left: -20px;
+          bottom: -60px;
+          .nonum1 {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding-top: 85px;
-          h5{
-            color: #333;
-            font-size: 20px;
-            span{
-              color: #666;
-              font-size: 14px;
+            align-items: center;
+            position: relative;
+            p {
+              position: absolute;
+              bottom: 155px;
+              left: 200px;
+              color: #ccc;
             }
           }
-          p{
-            font-size: 15px;
-            &:nth-child(1){
-              color: #42BCFD;
+
+          .item-box {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            &:nth-child(2) {
+              .calc-price {
+                color: #febf56;
+                span {
+                  color: #f5797d;
+                }
+              }
             }
-            &:nth-child(2){
-              color: #4075FC;
+            .calc-price {
+              position: absolute;
+              bottom: 80px;
+              text-align: center;
+              font-size: 16px;
+              color: #5dc6fc;
+              span {
+                font-size: 24px;
+                font-weight: bold;
+                color: #1890ff;
+              }
+            }
+            .desc {
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              padding-top: 85px;
+              h5 {
+                color: #333;
+                font-size: 20px;
+                span {
+                  color: #666;
+                  font-size: 14px;
+                }
+              }
+              p {
+                font-size: 15px;
+                &:nth-child(1) {
+                  color: #42bcfd;
+                }
+                &:nth-child(2) {
+                  color: #4075fc;
+                }
+              }
             }
           }
         }
       }
-      }
-      
-      }
-      
-}
-    }
-		.my-activity{border: 0;}
-}
-
-
-
-  .project-list {
-
-    .card-title {
-      font-size: 0;
-
-      a {
-        color: rgba(0, 0, 0, 0.85);
-        margin-left: 12px;
-        line-height: 24px;
-        height: 24px;
-        display: inline-block;
-        vertical-align: top;
-        font-size: 14px;
-
-        &:hover {
-          color: #1890ff;
-        }
-      }
-    }
-    .card-description {
-      color: rgba(0, 0, 0, 0.45);
-      height: 44px;
-      line-height: 22px;
-      overflow: hidden;
-    }
-    .project-item {
-      display: flex;
-      margin-top: 8px;
-      overflow: hidden;
-      font-size: 12px;
-      height: 20px;
-      line-height: 20px;
-      a {
-        color: rgba(0, 0, 0, 0.45);
-        display: inline-block;
-        flex: 1 1 0;
-
-        &:hover {
-          color: #1890ff;
-        }
-      }
-      .datetime {
-        color: rgba(0, 0, 0, 0.25);
-        flex: 0 0 auto;
-        float: right;
-      }
-    }
-    .ant-card-meta-description {
-      color: rgba(0, 0, 0, 0.45);
-      height: 44px;
-      line-height: 22px;
-      overflow: hidden;
     }
   }
-
-  .item-group {
-    
-    text-align: center;
-    h6{
-      font-size: 20px;
-      color: #666;
-      text-align: center;
-    }
-    
-    a {
-      color: rgba(0, 0, 0, 0.65);
-      display: inline-block;
-      font-size: 14px;
-      margin-bottom: 13px;
-      width: 25%;
-    }
+  .my-activity {
+    border: 0;
   }
+}
 
-  .members {
+.project-list {
+  .card-title {
+    font-size: 0;
+
     a {
-      display: block;
-      margin: 12px 0;
+      color: rgba(0, 0, 0, 0.85);
+      margin-left: 12px;
       line-height: 24px;
       height: 24px;
-      .member {
-        font-size: 14px;
-        color: rgba(0, 0, 0, .65);
-        line-height: 24px;
-        max-width: 100px;
-        vertical-align: top;
-        margin-left: 12px;
-        transition: all 0.3s;
-        display: inline-block;
-      }
+      display: inline-block;
+      vertical-align: top;
+      font-size: 14px;
+
       &:hover {
-        span {
-          color: #1890ff;
-        }
+        color: #1890ff;
       }
     }
   }
+  .card-description {
+    color: rgba(0, 0, 0, 0.45);
+    height: 44px;
+    line-height: 22px;
+    overflow: hidden;
+  }
+  .project-item {
+    display: flex;
+    margin-top: 8px;
+    overflow: hidden;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    a {
+      color: rgba(0, 0, 0, 0.45);
+      display: inline-block;
+      flex: 1 1 0;
 
-  .mobile {
-
-    .project-list {
-
-      .project-card-grid {
-        width: 100%;
+      &:hover {
+        color: #1890ff;
       }
     }
-
-    .more-info {
-      border: 0;
-      padding-top: 16px;
-      margin: 16px 0 16px;
+    .datetime {
+      color: rgba(0, 0, 0, 0.25);
+      flex: 0 0 auto;
+      float: right;
     }
+  }
+  .ant-card-meta-description {
+    color: rgba(0, 0, 0, 0.45);
+    height: 44px;
+    line-height: 22px;
+    overflow: hidden;
+  }
+}
 
-    .headerContent .title .welcome-text {
-      display: none;
+.item-group {
+  text-align: center;
+  h6 {
+    font-size: 20px;
+    color: #666;
+    text-align: center;
+  }
+
+  a {
+    color: rgba(0, 0, 0, 0.65);
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 13px;
+    width: 25%;
+  }
+}
+
+.members {
+  a {
+    display: block;
+    margin: 12px 0;
+    line-height: 24px;
+    height: 24px;
+    .member {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.65);
+      line-height: 24px;
+      max-width: 100px;
+      vertical-align: top;
+      margin-left: 12px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+    &:hover {
+      span {
+        color: #1890ff;
+      }
+    }
+  }
+}
+
+.mobile {
+  .project-list {
+    .project-card-grid {
+      width: 100%;
     }
   }
 
+  .more-info {
+    border: 0;
+    padding-top: 16px;
+    margin: 16px 0 16px;
+  }
+
+  .headerContent .title .welcome-text {
+    display: none;
+  }
+}
 </style>

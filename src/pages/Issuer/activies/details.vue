@@ -262,7 +262,8 @@ import {
   getActivityInformation,
   getSponsor,
   getStarsDeails,
-  getApprovalList
+  getApprovalList,
+  getMineSupport
 } from '@api/hand'
 import imgUrl from '@/assets/a1.jpg'
 
@@ -407,7 +408,7 @@ const columns4 = [
     align: 'center'
   },
   {
-    title: '出厂费用',
+    title: '出场费用',
     dataIndex: 'cost',
     align: 'center'
   },
@@ -502,8 +503,9 @@ export default {
       this._getActivityInformation()
       this._getSponsor()
       this._getStarsDeails()
-      this._getApprovalList()
+      //this._getApprovalList()
       this._getExtension()
+      this._getMineSupport()
       console.log(11)
   },
   methods: {
@@ -515,7 +517,7 @@ export default {
     pageNext(pagination, filters, sorte) {
       console.log(pagination, filters, sorte)
     },
-    _getApprovalList() {
+    _getMineSupport() {
       const token = this.$ls.get('Access-Token')
       const campId = this.$route.query.campId
       const params = {
@@ -523,11 +525,11 @@ export default {
         campId: campId
       }
       console.log(params)
-      getApprovalList(params).then(res => {
+      getMineSupport(params).then(res => {
         console.log(res)
         let key = 'key'
         this.dataNameArrty = res.data.campSponsorAllList
-        this.dataName = res.data.campInputSponsorList
+        this.dataName = res.data.campSponsorList
         console.log(this.dataName.length)
         this.dataName.map((item, index) => {
           item[key] = index + 1
@@ -564,8 +566,8 @@ export default {
         console.log(this.starAvatar)
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
-        this.start = activityDetail.createTime
-        this.adress = res.data.listLoc
+        this.start = activityDetail.publishTime + '-' + activityDetail.endTime + '-' + activityDetail.concreteTime
+        this.adress = res.data.listLoc1
         this.capName = activityDetail.capName
         this.campNum = activityDetail.campNum
         this.price = res.data.amount
