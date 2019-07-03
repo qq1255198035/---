@@ -3,15 +3,22 @@
     <div class="main">
       <a-col :span="10" class="item">
         <div class="profile-image">
-          <img width="90" height="90" v-if="logo" style="border-radius:50%" :src="logo" class="img-circle"/>
+          <img
+            width="90"
+            height="90"
+            v-if="logo"
+            style="border-radius:50%"
+            :src="logo"
+            class="img-circle"
+          />
         </div>
         <div class="profile-info">
           <h2 class="no-margins">{{title}}</h2>
           <p>时间：{{start}}</p>
-          <a-icon type="environment" class="my-icon"/>
-        <span>
-          <span>{{adress}}</span>
-        </span>
+          <a-icon type="environment" class="my-icon" />
+          <span>
+            <span>{{adress}}</span>
+          </span>
         </div>
       </a-col>
       <a-col :span="10">
@@ -22,18 +29,18 @@
             参与明星：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in stars" :key="index">
-                <a-avatar :size="40" class="img-circle" :src="item"/>
-                <i v-if="item.length > 4"></i>
+                <a-avatar :size="40" class="img-circle" :src="item" />
               </li>
+                <li class="ellipsis"><i v-if="stars.length >= 4">...</i></li>
             </ul>
           </li>
           <li>
             参与赞助：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in sponsors" :key="index">
-                <a-avatar :size="40" class="img-circle" :src="item"/>
-                <i v-if="item.length > 4"></i>
+                <a-avatar :size="40" class="img-circle" :src="item" />
               </li>
+              <li class="ellipsis"><i v-if="sponsors.length >= 4">...</i></li>
             </ul>
           </li>
         </ul>
@@ -54,6 +61,9 @@
   </div>
 </template>
 <style lang="less" scoped>
+.ellipsis{
+  align-items: flex-end
+}
 .zzgl-title {
   display: flex;
   justify-content: space-between;
@@ -119,11 +129,9 @@
 <script>
 export default {
   props: ['title', 'logo', 'start', 'adress', 'type', 'num', 'stars', 'sponsors', 'status', 'price'],
-    
+
   data() {
-    return {
-      
-    }
+    return {}
   },
   mounted() {
     console.log(this.logo)

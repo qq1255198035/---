@@ -7,8 +7,8 @@
       :start="start"
       :type="capName"
       :num="campNum"
-      :stars="starAvatar"
-      :sponsors="sponsorList"
+      :stars="starAvatar | filterLength"
+      :sponsors="sponsorList | filterLength"
       :status="status"
       :price="price"
       :adress="adress"
@@ -27,7 +27,7 @@
               <div class="title">
                 <h5>{{item.name}}</h5>
                 <span>{{item.company}}</span>
-                <a-avatar :size="64" :src="item.avatar"/>
+                <a-avatar :size="64" :src="item.avatar" />
                 <p>
                   <span>$</span>
                   {{item.cost}}
@@ -43,7 +43,12 @@
               <div class="footer">
                 <transition name="fade">
                   <div class="button-box" v-show="btnShow == index" key="1">
-                    <a-button type="primary" class="primary" style="background:#ccc;border:solid 1px #ccc;" @click="details(item)">查看</a-button>
+                    <a-button
+                      type="primary"
+                      class="primary"
+                      style="background:#ccc;border:solid 1px #ccc;"
+                      @click="details(item)"
+                    >查看</a-button>
                     <a-button type="danger" class="danger" @click="showModal(item)">驳回</a-button>
                     <a-button type="primary" class="primary" @click="success(item)">通过</a-button>
                   </div>
@@ -64,7 +69,7 @@
               <div class="title">
                 <h5>{{item.name}}</h5>
                 <span>{{item.company}}</span>
-                <a-avatar :size="64" :src="item.avatar"/>
+                <a-avatar :size="64" :src="item.avatar" />
                 <p>
                   <span>$</span>
                   {{item.cost}}
@@ -80,11 +85,7 @@
               <div class="footer">
                 <transition name="fade">
                   <div class="button-box" v-show="btnShow == index" key="1">
-                    <a-button
-                      type="primary"
-                      class="primary"
-                      @click="starDetail(item)"
-                    >查 看</a-button>
+                    <a-button type="primary" class="primary" @click="starDetail(item)">查 看</a-button>
                   </div>
                 </transition>
               </div>
@@ -101,7 +102,7 @@
       @cancel="handleCancel"
     >
       <a-form-item label="原因">
-        <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }" v-model="baseText"/>
+        <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }" v-model="baseText" />
       </a-form-item>
     </a-modal>
   </div>
@@ -230,15 +231,24 @@ export default {
       status: ''
     }
   },
-  
-  mounted(){
-        this._getStarList()
-        this._getJoinStar()
-        this._getActivityInformation()
+  filters: {
+    filterLength(val) {
+      if (val.length > 4) {
+        return val.slice(0, 4)
+      } else {
+        return val
+      }
+    }
+  },
+
+  mounted() {
+    this._getStarList()
+    this._getJoinStar()
+    this._getActivityInformation()
   },
   methods: {
     starDetail(item) {
-      this.$router.push({path: '/issuerMxxq', query: {userId: item.athlete_id, campId: this.$route.query.campId}})
+      this.$router.push({ path: '/issuerMxxq', query: { userId: item.athlete_id, campId: this.$route.query.campId } })
     },
     _getActivityInformation() {
       const token = this.$ls.get('Access-Token')
@@ -265,7 +275,7 @@ export default {
         }
         this.sponsorList = sponsorList
         console.log(this.sponsorList)
-        
+
         this.starAvatar = avatarArrty
         console.log(this.starAvatar)
         let activityDetail = res.data.list[0]
@@ -279,7 +289,7 @@ export default {
         this.phone = activityDetail.phone
         this.enName = activityDetail.enName
         this.contact = activityDetail.contact
-        this.imgUrl =activityDetail.cover_img ? activityDetail.cover_img : ''
+        this.imgUrl = activityDetail.cover_img ? activityDetail.cover_img : ''
         this.logo = activityDetail.cover_img ? activityDetail.cover_img : ''
         console.log(this.logo)
         console.log(this.campNum)
@@ -331,7 +341,7 @@ export default {
       this.orderId = item.recordId
     },
     details(item) {
-      this.$router.push({path: '/issuerMxxq', query: {userId: item.athleteId, campId: this.$route.query.campId}})
+      this.$router.push({ path: '/issuerMxxq', query: { userId: item.athleteId, campId: this.$route.query.campId } })
     },
     handleOk(e) {
       const token = this.$ls.get('Access-Token')
@@ -345,8 +355,11 @@ export default {
       console.log(params)
       getStarCheck(params).then(res => {
         console.log(res)
-        this._getStarList()
-        this._getJoinStar()
+        /*this._getStarList()
+        this._getJoinStar()*/
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
       })
       this.ModalText = 'The modal will be closed after two seconds'
       this.confirmLoading = true
@@ -375,14 +388,17 @@ export default {
       getStarCheck(params).then(res => {
         console.log(res)
         if (res.data.code == '1') {
-          this._getStarList()
-          this._getJoinStar()
+          /*this._getStarList()
+          this._getJoinStar()*/
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
           this.loading = true
           setTimeout(() => {
             this.loading = false
             this.$message.success('操作成功')
           }, 2000)
-        }else {
+        } else {
           setTimeout(() => {
             this.loading = false
             this.$message.error('操作失败')
