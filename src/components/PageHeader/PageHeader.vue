@@ -75,7 +75,7 @@ export default {
 
 <style lang="less" scoped>
 .page-header {
-  background: #fff;
+  background: #f8f8f8;
   padding: 16px 32px 0;
   border-bottom: 1px solid #e8e8e8;
 

@@ -14,7 +14,7 @@
                   </div>
             </div>
             <div class="mxgl-content">
-                  <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
+                  <a-tabs defaultActiveKey="1" tabPosition="top" size="large" @change="tabChange">
                         <a-tab-pane key="1" tab="待审批">
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
@@ -262,6 +262,7 @@
                         border-radius: 5px;
                         padding: 20px;
                         background-color: #fff;
+                        margin-bottom: 20px;
                         .title{
                               display: flex;
                               align-items: center;
@@ -395,7 +396,7 @@ export default {
                   postImg2:'',
                   postImg3:'',
                   stasId:'',
-                  
+                  status:1,
             }
       },
       mounted () {
@@ -405,13 +406,16 @@ export default {
             this.getCountryList()
       },
       methods:{
+            tabChange(key){
+                  this.status = key
+            },
             postStarUpdate(params){
                   starUpdate(params).then(res=>{
                         if (res.code == 1000) {
                               this.$message.success('操作成功！')
                               this.visible = false;
                               this.confirmLoading = false;
-                              this.getStarsList('',1);
+                              this.getStarsList(1,'',1);
                               this.form.setFieldsValue({
                                     lastname: '',
                                     firstname: '',
@@ -503,7 +507,15 @@ export default {
                   })
             },
             search(){
-                  this.getStarsList(this.name,1);
+                  this.offset = 1;
+                  this.offset2 = 1;
+                  this.btnDsiable = false;
+                  this.btnDsiable2 = false;
+                  if (this.status == 1) {
+                        this.getStarsList(this.status,this.name,this.offset); 
+                  }else{
+                        this.getStarsList2(this.status,this.name,this.offset2);
+                  }
             },
             loadMore(){
                   this.offset++;
@@ -528,7 +540,7 @@ export default {
                   this.loadingMore = true;
                   starsList(0,'', this.offset2).then(res=>{
                         if (res.code == 1000) {
-                              if (this.offset > res.page.pages) {
+                              if (this.offset2 > res.page.pages) {
                                     this.$message.warning('已加载全部数据');
                                     this.loadingMore = false;
                                     this.btnDsiable2 = true;
@@ -552,7 +564,7 @@ export default {
             handleOk(e) {
                   this.form.validateFields((err,values) => {
                         if (!err) {
-                              console.log(values.birthday.format('YYYY-MM-DD'));
+                              
                                var params = {
                                     athleteId: this.stasId,
                                     surname: values.lastname,
@@ -571,9 +583,6 @@ export default {
                                     credential: this.postImg1
                               };
                               this.postStarUpdate(params);
-                              this.getStarsList(this.name,this.offset);
-                              
-                              console.log(this.stasId)
                         }
                   },);
             },
@@ -607,7 +616,7 @@ export default {
                               starDel(id).then(res=>{
                                     if (res.code == 1000) {
                                           that.$message.success('操作成功');
-                                          that.getStarsList(that.name,that.offset);
+                                          that.getStarsList(1,that.name,that.offset);
                                     }
                               })
                         },

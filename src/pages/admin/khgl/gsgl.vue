@@ -27,7 +27,7 @@
                                           
                                           <div class="title">
                                                 <a-avatar :size="64" :src="item.logo"/>
-                                                <span>{{item.name}}</span>
+                                                <span :title="item.name">{{item.name}}</span>
                                           </div>
                                           <div class="content">
                                                 <p>联系人: {{ item.contact}}</p>
@@ -60,7 +60,7 @@
                                           
                                           <div class="title">
                                                 <a-avatar :size="64" :src="item.logo"/>
-                                                <span>{{item.name}}</span>
+                                                <span :title="item.name">{{item.name}}</span>
                                           </div>
                                           <div class="content">
                                                 <p>联系人: {{ item.contact }}</p>
@@ -136,13 +136,14 @@
             .my-cards{
                   flex-wrap: wrap;
                   .card-item{
-                        height: 400px;
+                        height: 420px;
                         margin-bottom: 20px;
                         border:1px solid #ccc;
                         border-radius: 5px;
                         padding: 40px 20px 0;
                         .title{
                               display: flex;
+                              height: 145px;
                               align-items: center;
                               flex-direction: column;
                               padding: 20px 0;
@@ -158,21 +159,31 @@
                               }
                               span{
                                     &:nth-child(2){
+                                          width: 100%;
+                                          padding: 0 10px;
+                                          display: block;
                                           font-size: 14px;
                                           color: #21C5C7;
                                           margin-top: 20px;
+                                          text-align: center;
+                                          overflow: hidden;
+                                          text-overflow: ellipsis;
+                                          white-space: nowrap;
                                     }   
                               }
                         }
                         .content{   
                               padding: 20px 10px 0;
+                              height: 155px;
+                              overflow: hidden;
                               p{
                                     margin: 0 0 10px;
+                                    word-break:break-all;
                               }
                         }
                         .footer{
                               .button-box{
-                                    padding: 10px 0;
+                                    padding: 20px 0;
                                     display: flex;
                                     justify-content: space-around;
                                     
@@ -301,6 +312,7 @@ export default {
             search(){
                   this.offset1 = 1;
                   this.offset2 = 1;
+                  this.btnDsiable1 = false;
                   this.btnDsiable2 = false;
                   if (this.status == 1) {
                         this.getGsspList1(this.condition,this.status,this.offset,this.starttime,this.endtime);

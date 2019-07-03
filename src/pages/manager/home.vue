@@ -8,7 +8,7 @@
     <div id="myhome">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
+          <a-card :loading="loading" title="收款详情" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                   <a-row>
@@ -78,8 +78,8 @@ import { headMsg,piesData } from '@/api/common'
 import { applicationList } from "@/api/manager"
 import { userInfo } from "@/api/common"
 const sourceData1 = [
-  { item: '未付', count: null },
-  { item: '已付', count: null },
+  { item: '未收', count: null },
+  { item: '已收', count: null },
   
 ]
 const DataSet = require('@antv/data-set')
@@ -212,7 +212,7 @@ export default {
       userInfo(id).then(res=>{
         if (res.code == 1000) {
             console.log(res);
-            this.user = res.data.name;
+            this.user = res.data.email;
             this.avatar = res.data.logo;
             console.log(this.avatar);
           }

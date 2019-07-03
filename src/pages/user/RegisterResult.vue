@@ -14,7 +14,7 @@
                   >
                   <template slot="action">
                         
-                        <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回首页</a-button>
+                        <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">去登陆</a-button>
                   </template>
             </result>
       </div>
