@@ -326,7 +326,7 @@ export default {
                                     that.$error({
                                           okText: '去设置',
                                           title: '错误',
-                                          content: '对不起，您的账户尚未通过审批！',
+                                          content: '对不起，您的账户尚未通过审批,请等待管理员审核！',
                                           onOk() {
                                                 that.$router.push({name: 'zhsz'})
                                           },

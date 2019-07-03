@@ -177,6 +177,7 @@ export default {
             getSearchMySponsor(startime, endtime, offset){
                   searchMySponsor(startime, endtime, offset).then(res=>{
                         if(res.code == 1000){
+                              console.log(res)
                               let key = 'key';
                               this.loadingMore = false;
                               this.data = res.page.rows;
