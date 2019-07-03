@@ -64,7 +64,7 @@ export function searchCampList(startime, endtime, offset){
     return axios({
       url: '/vue/agent/searchCampListForAgent',
       method: 'post',
-      data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), startime: startime, endtime: endtime, limit: 4, offset: offset })
+      data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), starttime: starttime, endtime: endtime, limit: 4, offset: offset })
     })
 }
 // 选择明星接口
@@ -98,7 +98,7 @@ export function applicationList(startime, endtime, condition, offset) {
     method: 'post',
     data: qs.stringify({
       token: Vue.ls.get(ACCESS_TOKEN),
-      startime: startime,
+      starttime: startime,
       endtime: endtime,
       condition: condition,
       limit: 10,

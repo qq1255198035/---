@@ -10,7 +10,7 @@ export function searchCampList(startime, endtime, offset) {
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
-                  startime: startime,
+                  starttime: startime,
                   endtime: endtime,
                   limit: 4,
                   offset: offset
@@ -42,7 +42,7 @@ export function searchMySponsor(startime, endtime, offset) {
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
-                  startime: startime,
+                  starttime: startime,
                   endtime: endtime,
                   limit: 4,
                   offset: offset
@@ -57,7 +57,7 @@ export function searchSponsor(name,startime, endtime, offset) {
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
                   name:name,
-                  startime: startime,
+                  starttime: startime,
                   endtime: endtime,
                   limit: 10,
                   offset: offset

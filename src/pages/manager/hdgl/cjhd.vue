@@ -3,9 +3,8 @@
             <div class="my-calendar">
                   <a-calendar @panelChange="onPanelChange">
                         <ul class="events" slot="dateCellRender" slot-scope="value">
-                              <li v-for="item in getCellData(value.year(),value.month()+1,value.date())" :key="item.camp_id" @click="showModal(value,item.camp_id)">
+                              <li v-for="(item,index) in getCellData(value.year(),value.month()+1,value.date())" :key="index" @click="showModal(value,item.camp_id)">
                                     <a-badge status="success" :text="item.campname"/>
-                                    
                               </li>
                         </ul>
                         <template slot="monthCellRender" slot-scope="value">
@@ -28,10 +27,13 @@
             >
                   <div class="items">
                         <div class="title">
-                              <a-col :span="12" class="item">
+                              <a-col :span="4" class="item">
                                     <div class="profile-image">
-                                    <a-avatar :size="96" src="./../../assets/a4.jpg" class="img-circle"/>
+                                          <a-avatar :size="96" :src="coverImg" class="img-circle" v-if="coverImg"/>
+                                          <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
                                     </div>
+                              </a-col>
+                              <a-col :span="20" class="item">
                                     <div class="profile-info">
                                           <h2 class="no-margins">
                                           {{actName}}
@@ -40,8 +42,6 @@
                                           <p>分类：{{campCatalog}}</p>
                                           <p>参赛人数：{{campNum}}人</p>
                                     </div>
-                              </a-col>
-                              <a-col :span="12" class="item">
                                     <span>
                                           <a-icon type="environment" class="my-icon"/>
                                           {{address}}
@@ -81,32 +81,33 @@
                   }
                   .title{
                         display: flex;
-				margin-bottom: 20px;
+                        margin-bottom: 20px;
+                        padding: 0 20px;
                         .item{
-                        display: flex;
-                        justify-content: space-around;
-                        .profile-info{
-                              margin-left: 20px;
-                              h2{color: #21C5C7 !important;}                              
-                              p{
-                                    color: #999;
-                                    margin-bottom: 0;
+                              display: flex;
+                              justify-content: flex-start;
+                              .profile-info{
+                                    margin-right: 100px;
+                                    h2{color: #21C5C7 !important;}                              
+                                    p{
+                                          color: #999;
+                                          margin-bottom: 0;
+                                    }
+                                    span{
+                                          color: #999;
+                                    }
+                                    .no-margins {
+                                          font-size: 16px;
+                                          color: #333;
+                                          margin-bottom: 0;
+                                          
+                                    }
+                                    .my-icon{
+                                          margin-right: 5px;
+                                    }
+                              
                               }
-                              span{
-                                    color: #999;
-                              }
-                              .no-margins {
-                                    font-size: 16px;
-                                    color: #333;
-                                    margin-bottom: 0;
-                                    
-                              }
-                              .my-icon{
-                                    margin-right: 5px;
-                              }
-                        
                         }
-                  }
                   }
                   
             }
@@ -127,6 +128,7 @@ export default {
                   actName:'',
                   publishTime:'',
                   campCatalog:'',
+                  coverImg:'',
                   campNum:'',
                   address:'',
                   columns: [
@@ -207,6 +209,7 @@ export default {
                               this.campCatalog = res.data.campaign.campCatalog;
                               this.campNum = res.data.campaign.campNum;
                               this.address = res.data.campaign.address;
+                              this.coverImg = res.data.campaign.coverImg
                         }
                   })
             }
