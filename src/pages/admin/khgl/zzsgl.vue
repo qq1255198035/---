@@ -26,7 +26,7 @@
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
                                           <div class="title">
                                                 <a-avatar :size="64" :src="item.logo"/>
-                                                <span>{{item.name}}</span>
+                                                <span :title="item.name">{{item.name}}</span>
                                           </div>
                                           <div class="content">
                                                 <p>联系人: {{ item.contact}}</p>
@@ -46,7 +46,6 @@
                                           </div>
                                     </a-col>
                               </a-row>
-                              
                               <p v-else style="text-align: center; color: #ccc;">
                                     暂无数据
                               </p>
@@ -59,7 +58,7 @@
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
                                           <div class="title">
                                                 <a-avatar :size="64" :src="item.logo"/>
-                                                <span>{{item.name}}</span>
+                                                <span :title="item.name">{{item.name}}</span>
                                           </div>
                                           <div class="content">
                                                 <p>联系人: {{ item.contact }}</p>
@@ -134,13 +133,14 @@
             .my-cards{
                   flex-wrap: wrap;
                   .card-item{
-                        height: 400px;
+                        height: 420px;
                         margin-bottom: 20px;
                         border:1px solid #ccc;
                         border-radius: 5px;
                         padding: 40px 20px 0;
                         .title{
                               display: flex;
+                              height: 145px;
                               align-items: center;
                               flex-direction: column;
                               padding: 20px 0;
@@ -156,21 +156,31 @@
                               }
                               span{
                                     &:nth-child(2){
+                                          width: 100%;
+                                          padding: 0 10px;
+                                          display: block;
                                           font-size: 14px;
                                           color: #21C5C7;
                                           margin-top: 20px;
+                                          text-align: center;
+                                          overflow: hidden;
+                                          text-overflow: ellipsis;
+                                          white-space: nowrap;
                                     }   
                               }
                         }
                         .content{   
                               padding: 20px 10px 0;
+                              height: 155px;
+                              overflow: hidden;
                               p{
                                     margin: 0 0 10px;
+                                    word-break:break-all;
                               }
                         }
                         .footer{
                               .button-box{
-                                    padding: 10px 0;
+                                    padding: 20px 0;
                                     display: flex;
                                     justify-content: space-around;
                                     
@@ -299,6 +309,7 @@ export default {
             search(){
                   this.offset1 = 1;
                   this.offset2 = 1;
+                  this.btnDsiable1 = false;
                   this.btnDsiable2 = false;
                   if (this.status == 1) {
                         this.getZzsspList1(this.condition,this.status,this.offset,this.starttime,this.endtime);

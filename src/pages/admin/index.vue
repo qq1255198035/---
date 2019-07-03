@@ -185,7 +185,7 @@ export default {
       userInfo(id).then(res=>{
         if (res.code == 1000) {
             console.log(res);
-            this.user = res.data.name;
+            this.user = res.data.email;
             this.avatar = res.data.avatar;
           }
         })

@@ -144,9 +144,9 @@ export default {
                   searchAuthenCampList(key,page,filter).then(res => {
                         if(res.code == 1000){
                               let key = 'num'
-                              this.pagination.total = parseInt(res.page.total)
+                              this.pagination.total = parseInt(res.page.total);
                               this.loading = false;
-                              this.data = res.page.rows
+                              this.data = res.page.rows;
                               this.data.map((item,index)=>{
                                     item[key] = (res.page.offset - 1).toString() + (index + 1)
                               })

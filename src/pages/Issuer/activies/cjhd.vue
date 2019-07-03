@@ -1433,18 +1433,6 @@ export default {
     },
     //地点添加
     addList() {
-      // can use data-binding to get
-      /*console.log(this.form.getFieldValue('keys'))
-      const keys = this.form.getFieldValue('keys')
-      console.log(keys)
-      console.log(++id)
-      const nextKeys = keys.concat(++id)
-      console.log(nextKeys)
-      // can use data-binding to set
-      // important! notify form to detect changes
-      this.form.setFieldsValue({
-        keys: nextKeys
-      })*/
       console.log(this.form.getFieldValue('placeName'))
       this.areaValue = this.form.getFieldValue('placeName').key
       this.address = this.form.getFieldValue('addressName')

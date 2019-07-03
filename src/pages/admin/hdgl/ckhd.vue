@@ -399,6 +399,7 @@ export default {
             getCampInformation(id){
                   campInformation(id).then(res=>{
                         if(res.code == 1000){
+                              console.log(res)
                               this.name = res.data.basic.name;
                               this.enName = res.data.basic.enName;
                               this.campCatalog = res.data.basic.campCatalog;
@@ -414,8 +415,8 @@ export default {
                               this.imgs = (res.data.basic.imgs || '').split(',');
                               this.data1 = res.data.campOrgList;
                               this.audiences = (res.data.basic.audiences || '').split(',');
+                              this.campFeature = (res.data.basic.campFeature || '').split(',');
                               this.data2 = res.data.campSponsor;
-                              console.log(boolean(this.imgs))
                               this.demand = res.data.campSponsor.length ? res.data.campSponsor[0].demand : '';
                               this.jzTime = res.data.campSponsor.length ? res.data.campSponsor[0].endTime : ''
                         }

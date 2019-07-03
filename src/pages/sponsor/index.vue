@@ -373,11 +373,12 @@ export default {
     getUserInfo(id) {
       userInfo(id).then(res => {
         if (res.code == 1000) {
-          this.user = res.data.name
-          this.avatar = res.data.logo
-        }
-      })
-    }
+            this.user = res.data.email;
+            this.avatar = res.data.logo;
+          }
+        })
+    },
+    
   },
   filters: {}
 }

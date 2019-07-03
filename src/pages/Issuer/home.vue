@@ -437,7 +437,11 @@ export default {
       }
       getHandActivities(params).then(res => {
         console.log(res)
-        this.operation = res.page.rows
+        let key = 'key';
+        this.operation = res.page.rows;
+        this.operation.map((item,index)=>{
+          item[key] = index + 1
+        })
       })
     },
     _getMyFiveNews() {

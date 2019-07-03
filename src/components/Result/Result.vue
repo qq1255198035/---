@@ -76,7 +76,7 @@ export default {
       color: red;
     }
     .title {
-      font-size: 24px;
+      font-size: 26px;
       color: rgba(0, 0, 0, .85);
       font-weight: 500;
       line-height: 32px;

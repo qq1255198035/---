@@ -5,7 +5,7 @@
                         <a-card :bordered="false">
                               <div class="account-center-avatarHolder">
                                     <div class="avatar">
-                                    <img :src="logo">
+                                    <img :src="logo" />
                                     </div>
                                     <div class="username">{{ name }}</div>
                               </div>
@@ -167,7 +167,7 @@ export default {
                               console.log(res)
                               this.email = res.data.email;
                               this.area = res.data.area;
-                              this.businessImg = res.data.businessImg;
+                              this.businessImg = res.data.business_img;
                               this.contact = res.data.contact;
                               this.phone = res.data.phone;
                               this.web = res.data.web;

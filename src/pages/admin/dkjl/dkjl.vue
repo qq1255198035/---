@@ -119,6 +119,7 @@ export default {
                               console.log(res)
                               let key = 'key'
                               this.loading = false;
+                              this.pagination.total = parseInt(res.page.total);
                               this.data = res.page.rows
                               this.data.map((item,index)=>{
                                     item[key] = index

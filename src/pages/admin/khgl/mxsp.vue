@@ -31,14 +31,14 @@
                                                 <div class="bottom">
                                                       <span>{{item.catalog}}</span>
                                                       <span>{{item.birth}} | {{item.height}}cm</span>
-                                                      <span>{{item.addr}}</span>
+                                                      <span :title="item.addr">{{item.addr}}</span>
                                                 </div>    
                                           </div>
                                           <div class="content">
                                                 <p>联系人: {{ item.contact}}</p>
                                                 <p>联系电话：{{item.phone}}</p>
                                                 <p>邮箱：{{item.email}}</p>
-                                                <p>公司：{{item.company}}</p>
+                                                <p :title="item.company">公司：{{item.company}}</p>
                                           </div>
                                           <div class="footer">
                                                 <transition name="fade">
@@ -69,14 +69,14 @@
                                                 <div class="bottom">
                                                       <span>{{item.catalog}}</span>
                                                       <span>{{item.birth}} | {{item.height}}cm</span>
-                                                      <span>{{item.addr}}</span>
+                                                      <span :title="item.addr">{{item.addr}}</span>
                                                 </div>    
                                           </div>
                                           <div class="content">
                                                 <p>联系人: {{ item.contact}}</p>
                                                 <p>联系电话：{{item.phone}}</p>
                                                 <p>邮箱：{{item.email}}</p>
-                                                <p>公司：{{item.company}}</p>
+                                                <p :title="item.company">公司：{{item.company}}</p>
                                           </div>
                                           <div class="footer">
                                                 <transition name="fade">
@@ -144,7 +144,7 @@
             .my-cards{
                   flex-wrap: wrap;
                   .card-item{
-                        height: 460px;
+                        height: 480px;
                         margin-bottom: 20px;
                         border:1px solid #ccc;
                         border-radius: 5px;
@@ -155,11 +155,19 @@
                               flex-direction: column;
                               padding: 10px 0;
                               .bottom{
+                                    width: 100%;
                                     margin-top: 20px;
                                     display: flex;
                                     justify-content: center;
                                     flex-direction: column;
                                     align-items: center;
+                                    span{
+                                          width:100%;
+                                          text-align: center;
+                                          overflow: hidden;
+                                          text-overflow: ellipsis;
+                                          white-space: nowrap;
+                                    }
                               }
                               h5{
                                     font-size: 14px;
@@ -167,17 +175,20 @@
                                     margin: 0;
                               }
                               span{
+                                   
                                     font-size: 14px;
                                     color: #333;
                                     margin-top: 5px; 
-                                    
                               }
                         }
                         .content{   
                               padding: 20px 0 0;
+                              height: 156px;
                               border-top: 1px solid #ccc;
+                              overflow: hidden;
                               p{
                                     margin: 0 0 10px;
+                                    word-break:break-all;
                               }
                         }
                         .footer{
@@ -311,6 +322,7 @@ export default {
             search(){
                   this.offset1 = 1;
                   this.offset2 = 1;
+                  this.btnDsiable1 = false;
                   this.btnDsiable2 = false;
                   if (this.status == 1) {
                         this.getMxspList1(this.condition,this.status,this.offset,this.starttime,this.endtime);
