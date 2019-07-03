@@ -539,6 +539,7 @@
                   slot-scope="text, record"
                 >
                   <template v-if="record.editable">
+                    
                     <a-input
                       :key="col"
                       v-if="col!='zzWay'"
@@ -551,8 +552,8 @@
                     <a-select
                       :key="col"
                       v-else
-                      :defaultValue="{ key: '请选择' }"
-                      @change="vlues"
+                      :defaultValue="text"
+                      @change="vlues(record.key, 'zzWay', $event)"
                       labelInValue
                       v-decorator="['xingShi2',{rules: [{ required: true, message: '请填写活动' }]}]"
                     >
@@ -786,6 +787,7 @@ export default {
       videoUrls: '', // 视频路径
       companyList: [], // 公司
       companyList1: [],
+      dataTable1: [],
       companyKey: '',
       companyJson: {},
       addressJson: {},
@@ -1307,7 +1309,7 @@ export default {
             for (let i = 0; i < dataArrty.length; i++) {
               tableList.push({
                 ssKind: dataArrty[i].ss_kind,
-                sponsorship: dataArrty[i].sponsorship,
+                sponsorship: dataArrty[i].sponsorship_code,
                 money: dataArrty[i].money,
                 num: dataArrty[i].num,
                 //bargain: isPrice,
@@ -1318,6 +1320,7 @@ export default {
                 key: length === 0 ? '1' : (parseInt(i) + 1).toString(),
                 tgWay: dataArrty[i].ss_kind,
                 zzWay: dataArrty[i].sponsorship,
+                zzWay1: dataArrty[i].sponsorship_code,
                 zzPrice: dataArrty[i].money,
                 zzNum: dataArrty[i].num,
                 remarks: dataArrty[i].bz,
@@ -1810,6 +1813,7 @@ export default {
         key: length === 0 ? '1' : (parseInt(this.dataTable[length - 1].key) + 1).toString(),
         tgWay: '',
         zzWay: '',
+        zzWay1: '',
         zzPrice: '',
         zzNum: '',
         isPrice: '',
@@ -1819,19 +1823,21 @@ export default {
       })
       console.log(this.dataTable)
     },
-    vlues(value) {
-      console.log(value)
-      this.xingValue = value.key
-      this.xingName = value.label
+    vlues(key, dataIndex, value) {
+      console.log(key, dataIndex, value)
+      const dataSource = [...this.dataTable]
+      console.log(dataSource)
+      const target = dataSource.find(item => item.key === key)
+      console.log(target)
+      if (target) {
+          target[dataIndex] = value.label
+          target['zzWay1'] = value.key
+        }
     },
     saveRow(record) {
       console.log(record)
-      this.memberLoading = true
-      record.zzWay = this.xingName
-      const zzWay1 = this.xingValue
-      console.log(this.xingValue1)
       const { key, tgWay, zzWay, zzPrice, zzNum, remarks } = record
-
+      
       if (!tgWay || !zzWay || !zzPrice || !zzNum) {
         this.memberLoading = false
         this.$message.error('请填写完整成员信息。')
@@ -1842,7 +1848,7 @@ export default {
         for (let i = 0; i < this.dataTable.length; i++) {
           tableList.push({
             ssKind: this.dataTable[i].tgWay,
-            sponsorship: zzWay1,
+            sponsorship: this.dataTable[i].zzWay1,
             money: this.dataTable[i].zzPrice,
             num: this.dataTable[i].zzNum,
             //bargain: isPrice,

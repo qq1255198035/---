@@ -2,7 +2,7 @@
   <page-view :avatar="logo ? logo : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">
-        {{ timeFix }}，{{ personInfo.contact }}，
+        {{ timeFix }}，{{ personInfo.email }}，
         <span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span>
       </div>
       <div>搞手</div>

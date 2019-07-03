@@ -28,7 +28,7 @@
               <a-textarea
                 placeholder="公司简介"
                 :autosize="{ minRows: 6 }"
-                v-decorator="['textName',{rules: [{ required: true, message: '公司简介' }]}]"
+                v-decorator="['textName',{rules: [{ max:30,required: true, message: '公司简介' }]}]"
               />
             </a-form-item>
             <a-form-item label="国家地区">
@@ -40,9 +40,9 @@
               </a-select>
             </a-form-item>
             <a-form-item label="所在省市">
-              <div class="select-box">
+              <div class="">
                 <a-select
-                  style="width:100%"
+                  
                   placeholder="请选择"
                   v-decorator="['addressName',{rules: [{ required: true, message: '所在省市' }]}]"
                 >
@@ -70,11 +70,10 @@
             </a-form-item>
             <a-input-group compact>
               <a-form-item label="联系电话">
-                <div class="input-group">
+                <div class="">
                   <a-input
-                    style="width: 100%"
                     placeholder="联系电话"
-                    v-decorator="['phoneName',{rules: [{ required: true, message: '请输入正确电话' }, {validator:this.checkedTel.bind(this)}]}]"
+                    v-decorator="['phoneName',{rules: [{pattern: new RegExp(/((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/), required: true, message: '请输入正确电话' }]}]"
                   />
                 </div>
               </a-form-item>
@@ -166,13 +165,13 @@ export default {
       this._getUserInformation()
   },
   methods: {
-    checkedTel(rule, value, callback) {
+    /*checkedTel(rule, value, callback) {
       console.log(value)
       const reg = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
       if (!reg.test(value)) {
         callback(new Error('请输入正确电话号'))
       }
-    },
+    },*/
     _getUserInformation() {
       const token = this.$ls.get('Access-Token')
       const params = {
@@ -186,7 +185,7 @@ export default {
           webName: res.data.web,
           email: res.data.email,
           textName: res.data.intro,
-          countryName: res.data.country,
+          countryName: res.data.flag,
           addressName: res.data.area,
           placeName: res.data.comp_addr,
           contactName: res.data.contact,
@@ -212,6 +211,7 @@ export default {
     },
     // 更新
     submitPerson() {
+      console.log(111)
       const token = this.$ls.get('Access-Token')
       this.form.validateFields((err, values) => {
         if (!err) {

@@ -270,8 +270,8 @@ export default {
         console.log(this.starAvatar)
         let activityDetail = res.data.list[0]
         this.name = activityDetail.name
-        this.start = activityDetail.createTime
-        this.adress = res.data.listLoc
+        this.start = activityDetail.publishTime + '-' + activityDetail.endTime + '-' + activityDetail.concreteTime
+        this.adress = res.data.listLoc1
         this.capName = activityDetail.capName
         this.campNum = activityDetail.campNum
         this.price = res.data.amount

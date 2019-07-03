@@ -10,7 +10,7 @@
           <p>时间：{{start}}</p>
           <a-icon type="environment" class="my-icon"/>
         <span>
-          <span v-for="(item, index) in adress" :key="index">{{item.area_name}}</span>
+          <span>{{adress}}</span>
         </span>
         </div>
       </a-col>
