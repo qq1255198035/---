@@ -28,7 +28,7 @@
           </div>
           <a-divider :dashed="true"/>
           <div class="account-center-team">
-            <img :src="busiess" alt>
+            <img v-if="busiess" :src="busiess" alt>
           </div>
         </a-card>
       </a-col>
@@ -159,7 +159,6 @@ export default {
         token: token
       }
       getUserInformation(params).then(res => {
-        console.log(res)
         this.personInfo = res.data
         this.busiess = res.data.business_img
         this.logo = res.data.logo

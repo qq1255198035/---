@@ -1923,10 +1923,10 @@ export default {
     this.form2 = this.$form.createForm(this)
     this.form3 = this.$form.createForm(this)
     console.log(this.form)
-    this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    /*this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
     this.form1.getFieldDecorator('keys', { initialValue: [], preserve: true })
     this.form2.getFieldDecorator('keys', { initialValue: [], preserve: true })
-    this.form3.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    this.form3.getFieldDecorator('keys', { initialValue: [], preserve: true })*/
 
   }
 }
