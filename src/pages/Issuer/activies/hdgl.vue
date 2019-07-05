@@ -29,6 +29,8 @@
         labelInValue
         :defaultValue="{key: '请选择'}"
         @change="searchClassifyBtn"
+        placeholder="请选择"
+        allowClear
       >
         <a-select-option
           v-for="(item, index) in activeityClass"

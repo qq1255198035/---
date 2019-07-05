@@ -337,7 +337,7 @@
                 <a-input-group compact style="width: 93%; margin-right: 8px">
                   <a-select
                     labelInValue
-                    defaultValue="请选择"
+                    placeholder="请选择"
                     v-decorator="['companyTitle',{rules: [{ required: true, message: '请输入公司名称' }]}]"
                   >
                     <a-select-option
@@ -1140,7 +1140,7 @@ export default {
               chineseName: res.data.list[0].name,
               englishName: res.data.list[0].enName,
               emailName: res.data.list[0].email,
-              HuoDongName: res.data.list[0].campCatalog ? parseInt(res.data.list[0].campCatalog) : '',
+              HuoDongName: res.data.list[0].campCatalog ? res.data.list[0].campCatalog : '',
               testNum: res.data.list[0].campNum,
               testName: res.data.list[0].contact,
               phoneName: res.data.list[0].phone,
