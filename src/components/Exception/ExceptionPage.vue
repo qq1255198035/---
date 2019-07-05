@@ -8,7 +8,7 @@
       <h1>{{ config[type].title }}</h1>
       <div class="desc">{{ config[type].desc }}</div>
       <div class="actions">
-        <a-button type="primary" @click="handleToHome">重新登录</a-button>
+        <a-button type="primary" @click="handleToHome">返回首页</a-button>
       </div>
     </div>
   </div>
@@ -16,7 +16,6 @@
 
 <script>
 import types from './type'
-import { mapActions } from 'vuex'
 export default {
   name: 'Exception',
   props: {
@@ -31,10 +30,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['Logout']),
+    
     handleToHome () {
-      this.$router.push({ name: 'login' });
-      this.Logout();
+      this.$router.push({ name: 'index' });
+      
     }
   }
 }
