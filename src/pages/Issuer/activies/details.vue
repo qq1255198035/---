@@ -7,8 +7,8 @@
       :start="start"
       :type="capName"
       :num="campNum"
-      :stars="starAvatar"
-      :sponsors="sponsorList"
+      :stars="starAvatar | filterLength"
+      :sponsors="sponsorList | filterLength"
       :status="status"
       :price="price"
       :adress="adress"
@@ -496,7 +496,15 @@ export default {
       dataTable: ''
     }
   },
-  
+  filters: {
+    filterLength(val) {
+      if (val.length > 4) {
+        return val.slice(0, 4)
+      } else {
+        return val
+      }
+    }
+  },
   mounted(){
       this._getCheckActivitiesDetail()
       this._getPress()

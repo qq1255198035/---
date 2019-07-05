@@ -55,7 +55,7 @@
                 <h2 class="ant-col-12 title">{{item.name}}</h2>
                 <h2 class="ant-col-6 my-text">
                   ${{item.money || 0}}
-                  <span>万</span>
+                  <span></span>
                 </h2>
                 <h2 class="ant-col-6 my-text">
                   {{item.people}}
@@ -221,7 +221,6 @@ export default {
       avtiveityDateEnd: '' // 结束时间
     }
   },
-
   computed: {},
   mounted() {
     this._getHandActivities()
