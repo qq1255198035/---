@@ -13,7 +13,7 @@
             <a-input
               size="large"
               type="text"
-              :placeholder="$t('login.zh')"
+              :placeholder="$t('login.zhs')"
               v-decorator="[
                 'username',
                 {rules: [{ required: true, message: `${$t('login.qsrzh')}` }], validateTrigger: 'change'}

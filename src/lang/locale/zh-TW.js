@@ -58,7 +58,7 @@ export default {
             hdgl: {
                   createAnEvent: '創建活動',
                   pleaseChoose: '請選擇',
-                  chineseName: '請輸入中文活動名稱',
+                  chineseName: '中文名稱',
                   searchs: '搜索',
                   sponsored: '已贊助',
                   participationStar: '參與明星',
@@ -202,6 +202,8 @@ export default {
                   zzxs: '贊助形式',
                   zzje: '贊助金額',
                   zzme: '贊助名額',
+                  sfgxq: '是否感興趣',
+                  xq: '詳情',
                   bz: '備註',
                   cz: '操作',
                   xh: '序號',
@@ -386,7 +388,7 @@ export default {
             zzs: '贊助商'
       },
       login: {
-            zh: '賬戶',
+            zhs: '賬戶',
             qsrzh: '請輸入帳戶名或郵箱地址',
             mm: '密碼',
             qsrmm: '請輸入密碼',
@@ -401,7 +403,7 @@ export default {
             txxx: '填寫信息',
             zccg: '註冊完成',
             qdl: '去登陸',
-            ndzh: '你的賬戶:',
+            ndzh: '你的賬戶',
             zccg: '註冊成功',
             zzs: '贊助商',
             gs: '搞手',
@@ -426,7 +428,15 @@ export default {
             ts: '提示',
             cs: '驗證碼獲取成功，請查收！',
             shzs: '請求出現錯誤，請稍後再試',
-            mmyw: '您輸入的賬號密碼有問題'
+            mmyw: '您輸入的賬號密碼有問題',
+            zgs: '中國',
+            xgs: '香港',
+            qsryzm: '請輸入驗證碼',
+            dd: '低',
+            zh: '中',
+            qi: '強',
+            hdlb: '活動列表',
+            zlf: '贊立方'
       }
             
 }

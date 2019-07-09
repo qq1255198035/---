@@ -10,15 +10,15 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <div>{{$t('issuer.index.zzdsp')}}</div>
+          <div style="height: 42px">{{$t('issuer.index.zzdsp')}}</div>
           <div class="numCenter">{{count2}}</div>
         </a-col>
         <a-col :span="8">
-          <div>{{$t('issuer.index.mxdsp')}}</div>
+          <div style="height: 42px">{{$t('issuer.index.mxdsp')}}</div>
           <div class="numCenter">{{count1}}</div>
         </a-col>
         <a-col :span="8">
-          <div>{{$t('issuer.index.hddsp')}}</div>
+          <div style="height: 42px">{{$t('issuer.index.hddsp')}}</div>
           <div class="numCenter">{{count3}}</div>
         </a-col>
       </a-row>
@@ -98,11 +98,13 @@
             </div>
           </a-card>
           <a-card :title="$t('issuer.index.hddt')" class="my-activity">
+            <a-locale-provider :locale="locale">
             <a-table :columns="operationColumns" :dataSource="operation" :pagination="false">
               <template slot="status" slot-scope="status">
                 <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
               </template>
             </a-table>
+            </a-locale-provider>
           </a-card>
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
@@ -165,6 +167,14 @@ import G2 from '@antv/g2'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import i18n from '@lang/index'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 const statusMap = {
   0: {
     status: 'processing',
@@ -224,7 +234,7 @@ export default {
   
   data() {
     return {
-      
+      locale: lang[localStorage.getItem('lang')],
       chartWidth: 500,
       chartHeight:300,
       chartBollean: true,
@@ -435,7 +445,8 @@ export default {
       const params = {
         token: token,
         offset: 1,
-        limit: 10
+        limit: 10,
+        internationalization: localStorage.lang
       }
       getHandActivities(params).then(res => {
         console.log(res)

@@ -14,6 +14,7 @@
       </div>
     </page-header>
     <div class="content">
+      <a-locale-provider :locale="locale">
       <a-card style="margin-top: 24px;" :bordered="false">
         <a-list
           size="large"
@@ -33,6 +34,7 @@
           </div>
         </a-list>
       </a-card>
+      </a-locale-provider>
     </div>
   </div>
 </template>
@@ -49,6 +51,14 @@
 import { mixinsTitle } from '@/utils/mixin.js'
 import { ArticleListContent } from '@/components'
 import { infoList } from '@/api/common'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 export default {
   mixins: [mixinsTitle],
   components: {
@@ -56,6 +66,7 @@ export default {
   },
   data() {
     return {
+      locale: lang[localStorage.getItem('lang')],
       loading: true,
       loadingMore: false,
       data: [],

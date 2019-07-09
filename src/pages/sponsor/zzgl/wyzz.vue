@@ -9,9 +9,10 @@
                   <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
             </div>
             <div class="wyzz-content">
+                  <a-locale-provider :locale="locale">
                   <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item,index) in lists" :key="index">
                         <a-row class="title">
-                              <a-col :span="12" class="item">
+                              <a-col :span="14" class="item">
                                     <div class="profile-image">
                                           <a-avatar :size="96" :src="item.coverImg" class="img-circle" v-if="item.coverImg"/>
                                           <a-avatar v-else style="backgroundColor:#23C6C8" :size="96">Sponsor Cube</a-avatar>
@@ -38,10 +39,12 @@
                               </template>
                         </a-table>  
                   </a-col>
+                  </a-locale-provider>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                   <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || lists.length == 0">{{$t('issuer.hdgl.loadMore')}}</a-button>
             </div>
+            <a-locale-provider :locale="locale">
             <a-modal
                   :title="$t('admin.zz')"
                   :visible="visible"
@@ -97,6 +100,7 @@
                   </a-form-item>
                   </a-form>
             </a-modal>
+            </a-locale-provider>
       </div>
 </template>
 <style lang="less" scoped>

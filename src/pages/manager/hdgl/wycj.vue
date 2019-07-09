@@ -9,6 +9,7 @@
                   <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
             </div>
             <div class="wycj-content">
+                  <a-locale-provider :locale="locale">
                   <a-row type="flex" justify="space-between" align="top" class="items-box">
                         <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item, index) in listInfo" :key="index" @mouseenter="showItem = index" @mouseleave="showItem = -1">
                               <a-row class="title">
@@ -30,7 +31,7 @@
                                     </a-col>
                                     <a-col :span="12" class="item">
                                           <p>{{$t('admin.fl')}}：{{item.campCatalogVal}}</p>
-                                          <p>{{$t('admin.csrs')}}：{{item.campNum}}人</p>
+                                          <p>{{$t('admin.csrs')}}：{{item.campNum}} {{$t('admin.people')}}</p>
                                     </a-col>
                               </a-row>
                               <div class="main">
@@ -42,14 +43,16 @@
                                     </ul>
                               </div>
                               <div class="footer" v-show="showItem == index">
-                                    <a-button type="primary" @click="showModal(item.campId)">{{$t('issuer.accountInfo.wycj')}}</a-button>
+                                    <a-button type="primary" @click="showModal(item.campId)">{{$t('admin.wycj')}}</a-button>
                               </div>
                         </a-col>
                   </a-row>
+                  </a-locale-provider>
                   <div style="text-align: center; margin-top: 30px;">
                         <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || listInfo.length == 0">{{$t('issuer.hdgl.loadMore')}}</a-button>
                   </div>
             </div>
+            <a-locale-provider :locale="locale">
             <a-modal
                   :title="$t('admin.zz')"
                   :visible="visible"
@@ -87,6 +90,7 @@
                         </a-form-item>
                   </a-form>
             </a-modal>
+            </a-locale-provider>
       </div>
 </template>
 <style lang="less" scoped>

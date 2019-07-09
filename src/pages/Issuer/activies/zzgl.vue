@@ -120,6 +120,7 @@
         </a-tab-pane>
       </a-tabs>
     </div>
+    <a-locale-provider :locale="locale">
     <a-modal
       title
       :visible="visible"
@@ -131,6 +132,7 @@
         <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }" v-model="baseText"/>
       </a-form-item>
     </a-modal>
+    </a-locale-provider>
   </div>
 </template>
 <style lang="less" scoped>
@@ -597,7 +599,8 @@ export default {
       const campId = this.$route.query.campId
       const params = {
         token: token,
-        campId: campId
+        campId: campId,
+        internationalization: localStorage.lang
       }
       getMineSupport(params).then(res => {
         console.log(res)

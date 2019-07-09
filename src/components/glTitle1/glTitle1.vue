@@ -24,7 +24,7 @@
       <a-col :span="10">
         <ul class="dl-horizontal">
           <li>{{$t('issuer.cjhd.sort')}}：{{type}}</li>
-          <li>{{$t('issuer.cjhd.number')}}：{{num}}人</li>
+          <li>{{$t('issuer.cjhd.number')}}：{{num}} {{$t('admin.people')}}</li>
           <li>
             {{$t('issuer.hdgl.participationStar')}}：
             <ul style="display: flex; padding: 0">

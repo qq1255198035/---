@@ -17,7 +17,7 @@
     <a-card
       style="margin-top: 24px"
       :bordered="false"
-      title="活动列表">
+      :title="$t('login.hdlb')">
 
       <div slot="extra">
         <a-radio-group v-model="radioval" @change="onChange">

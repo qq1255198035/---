@@ -16,7 +16,7 @@
     </div> -->
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2018 <span>赞立方</span>
+      <a-icon type="copyright" /> 2018 <span>{{$t('login.zlf')}}</span>
     </div>
   </div>
 </template>

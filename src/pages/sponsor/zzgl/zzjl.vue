@@ -23,12 +23,14 @@
             </div>
             <div class="zzjl-content">
                   <div class="my-table">
+                        <a-locale-provider :locale="locale">
                         <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
                               <span slot="status" slot-scope="text">
                                     <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                               </span>
                               
                         </a-table>
+                        </a-locale-provider>
                   </div>
             </div>
       </div>

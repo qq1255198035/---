@@ -138,7 +138,7 @@ import { mixinsTitle } from '@/utils/mixin.js'
 export default {
   data() {
     return {
-      city: [{label: '0', value: '中国'}, {label: '1', value: '香港'}],
+      city: [{label: '0', value: this.$t('login.zgs')}, {label: '1', value: this.$t('login.xgs')}],
       personInfo: {},
       places: '',
       companyName: '',
@@ -200,7 +200,8 @@ export default {
         this.fileUrl1 = res.data.business_img
         console.log(this.imgurl1)
         const params1 = {
-        flag: res.data.flag
+        flag: res.data.flag,
+        internationalization: localStorage.lang
       }
       console.log(params1)
       getBooleanPlace(params1).then(res => {
@@ -254,7 +255,8 @@ export default {
       })
       this.flag = value
       const params = {
-        flag: value
+        flag: value,
+        internationalization: localStorage.lang
       }
       getBooleanPlace(params).then(res => {
         console.log(res)

@@ -37,7 +37,7 @@ export default {
   computed: {
     email () {
       const v = this.form && this.form.email || 'xxx'
-      const title = `${$t('login.ndzh')}：${v} ${$t('login.zccg')}`
+      const title = `${this.$t('login.ndzh')}：${v} ${this.$t('login.zccg')}`
       return title
     }
   },

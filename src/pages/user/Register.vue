@@ -80,18 +80,26 @@
                                     <a-row :gutter="16">
                                     <a-col class="gutter-row" :span="16">
                                     <a-form-item>
-                                          <a-input size="large" type="text" :placeholder="$t('login.yzm')" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
+                                          <a-input size="large" type="text" :placeholder="$t('login.yzm')" v-decorator="['captcha', {rules: [{ required: true, message: `${$t('login.qsryzm')}` }], validateTrigger: 'blur'}]">
                                           <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                                           </a-input>
                                     </a-form-item>
                                     </a-col>
                                     <a-col class="gutter-row" :span="8">
                                     <a-button
+                                          v-if="state.smsSendBtn"
                                           class="getCaptcha"
                                           size="large"
                                           :disabled="state.smsSendBtn"
                                           @click.stop.prevent="getCaptcha"
-                                          v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"></a-button>
+                                          v-text="(state.time+' s')"></a-button>
+                                    <a-button
+                                          v-if="!state.smsSendBtn"
+                                          class="getCaptcha"
+                                          size="large"
+                                          :disabled="state.smsSendBtn"
+                                          @click.stop.prevent="getCaptcha"
+                                          v-text="getCode"></a-button>
                                     </a-col>
                                     </a-row>
 
@@ -222,11 +230,12 @@
 <script>
 import { mixinDevice } from '@/utils/mixin.js'
 import { getSmsCaptcha,register } from '@/api/login'
+import i18n from '@lang/index'
 const levelNames = {
-  0: '低',
-  1: '低',
-  2: '中',
-  3: '强'
+  0: i18n.t('login.dd'),
+  1: i18n.t('login.dd'),
+  2: i18n.t('login.zh'),
+  3: i18n.t('login.qi')
 }
 const levelClass = {
   0: 'error',
@@ -247,6 +256,7 @@ export default {
       mixins: [mixinDevice],
       data(){
             return{
+                  getCode: i18n.t('login.hqyzm'),
                   current: "0",
                   activeIndex: "",
                   form: this.$form.createForm(this),
@@ -345,7 +355,7 @@ export default {
                   const { form: { validateFields }, $router, $notification } = this
                   validateFields((err, values) => {
                   if (!err) {
-                        register(api,{username: values.email,password: values.password,code: values.captcha}).then(res =>{          
+                        register(api,{username: values.email,password: values.password,code: values.captcha, internationalization: localStorage.lang}).then(res =>{          
                         if(res.status == 200){
                               $router.push({ name: 'registerResult', params: { ...values } })
                         }else{
@@ -375,12 +385,12 @@ export default {
                         }
                         }, 1000)
                         const hide = $message.loading(this.$t('login.yzmfsz'),1)
-                        getSmsCaptcha({ username: values.email }).then(res => {
+                        getSmsCaptcha({ username: values.email, internationalization: localStorage.lang }).then(res => {
                               console.log(res)
                               if(res.status == 200){
                                     setTimeout(hide, 1)
                                     $notification['success']({
-                                          message: this.$t('login.error'),
+                                          message: this.$t('login.ts'),
                                           description: this.$t('login.cs'),
                                           duration: 8
                                     })

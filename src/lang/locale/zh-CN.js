@@ -58,7 +58,7 @@ export default {
             hdgl: {
                   createAnEvent: '创建活动',
                   pleaseChoose: '请选择',
-                  chineseName: '请输入中文活动名称',
+                  chineseName: '中文名称',
                   searchs: '搜索',
                   sponsored: '已赞助',
                   participationStar: '参与明星',
@@ -76,7 +76,7 @@ export default {
                   application: '申请中',
                   successNmae: '成功',
                   tjcg: '提交成功',
-                  czcg: '操作成功',
+                  czcg: '操作成功!',
                   czsb: '操作失败',
                   spcg: '审批成功',
                   spsb: '审批失败',
@@ -388,7 +388,7 @@ export default {
             zzs: '赞助商'
       },
       login: {
-            zh: '账户',
+            zhs: '账户',
             qsrzh: '请输入帐户名或邮箱地址',
             mm: '密码',
             qsrmm: '请输入密码',
@@ -403,7 +403,7 @@ export default {
             txxx: '填写信息',
             zccg: '注册完成',
             qdl: '去登陆',
-            ndzh: '你的账户:',
+            ndzh: '你的账户',
             zccg: '注册成功',
             zzs: '赞助商',
             gs: '搞手',
@@ -428,6 +428,14 @@ export default {
             ts: '提示',
             cs: '验证码获取成功，请查收！',
             shzs: '请求出现错误，请稍后再试',
-            mmyw: '您输入的账号密码有问题'
+            mmyw: '您输入的账号密码有问题',
+            zgs: '中国',
+            xgs: '香港',
+            qsryzm: '请输入验证码',
+            dd: '低',
+            zh: '中',
+            qi: '强',
+            hdlb: '活动列表',
+            zlf: '赞立方'
       }
 }

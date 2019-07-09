@@ -39,7 +39,7 @@
               <detail-list :title="$t('issuer.cjhd.hdjbxx')">
                 <detail-list-item :term="$t('issuer.cjhd.hdzwmc')">{{name}}</detail-list-item>
                 <detail-list-item :term="$t('issuer.cjhd.hdfl')">{{capName}}</detail-list-item>
-                <detail-list-item :term="$t('issuer.cjhd.number')">{{campNum}}人</detail-list-item>
+                <detail-list-item :term="$t('issuer.cjhd.number')">{{campNum}} {{$t('admin.people')}}</detail-list-item>
                 <detail-list-item :term="$t('issuer.cjhd.hdywmc')">{{enName}}</detail-list-item>
                 <detail-list-item :term="$t('issuer.cjhd.hdsj')">{{start}}</detail-list-item>
                 <detail-list-item :term="$t('issuer.accountInfo.contact')">{{contact}}</detail-list-item>
@@ -48,6 +48,7 @@
               </detail-list>
               <detail-list>
                 <detail-list-item :term="$t('issuer.cjhd.hddq')" class="my-item">
+                  <a-locale-provider :locale="locale">
                   <a-table
                     :columns="columns"
                     :dataSource="data"
@@ -55,6 +56,7 @@
                     :pagination="false"
                     class="my-table"
                   />
+                  </a-locale-provider>
                 </detail-list-item>
                 <!--<detail-list-item term="活动封面" class="my-item-1">
                   <img :src="imgUrl" alt>
@@ -83,6 +85,7 @@
               <ul>
                 <li>
                   <span>{{$t('issuer.cjhd.mainContractor')}}：</span>
+                  <a-locale-provider :locale="locale">
                   <a-table
                     :columns="columns1"
                     :dataSource="data1"
@@ -90,6 +93,7 @@
                     :pagination="false"
                     class="my-table"
                   />
+                  </a-locale-provider>
                 </li>
                 <li>
                   <span>{{$t('issuer.cjhd.szqz')}}：</span>
@@ -114,6 +118,7 @@
                 </li>
                 <li>
                   <span>{{$t('issuer.cjhd.zzyq')}}：</span>
+                  <a-locale-provider :locale="locale">
                   <a-table
                     :columns="columns2"
                     :dataSource="data2"
@@ -121,6 +126,7 @@
                     :pagination="false"
                     class="my-table"
                   />
+                  </a-locale-provider>
                 </li>
                 <li>
                   <span>{{$t('issuer.cjhd.hdyq')}}：</span>
@@ -544,7 +550,8 @@ export default {
       const campId = this.$route.query.campId
       const params = {
         token: token,
-        campId: campId
+        campId: campId,
+        internationalization: localStorage.lang
       }
       console.log(params)
       getMineSupport(params).then(res => {
@@ -563,7 +570,8 @@ export default {
       const campId = this.$route.query.campId
       const params = {
         token: token,
-        campId: campId
+        campId: campId,
+        internationalization: localStorage.lang
       }
       console.log(params)
       getActivityInformation(params).then(res => {

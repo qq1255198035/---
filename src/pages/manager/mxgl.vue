@@ -80,6 +80,7 @@
                   </a-tabs>
                   
             </div>
+            <a-locale-provider :locale="locale">
             <a-modal
                   :title="$t('admin.tjmx')"
                   :visible="visible"
@@ -92,11 +93,11 @@
                         <a-form :form="form">
                               <div class="left">
                                     <div class="section">
-                                          <a-form-item :label="$t('mar.surname')" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 3}">
+                                          <a-form-item :label="$t('mar.surname')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 8}">
                                                 <a-input :placeholder="$t('mar.qsr')" class="my-input" v-decorator="[
                                                 'lastname',{rules: [{ required: true, message: `${$t('mar.qtxxs')}`}]}]"/>
                                           </a-form-item>
-                                          <a-form-item :label="$t('mar.ming')" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 3}">
+                                          <a-form-item :label="$t('mar.ming')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 8}">
                                                 <a-input :placeholder="$t('mar.qsr')" class="my-input" v-decorator="[
                                                 'firstname',{rules: [{ required: true, message: `${$t('mar.qtxmz')}` }]}]"/>
                                           </a-form-item>
@@ -119,8 +120,10 @@
                                           </a-select>
                                     </a-form-item>
                                     <a-form-item :label="$t('mar.csrq')" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}" class="my-form-item">
+                                          <a-locale-provider :locale="locale">
                                           <a-date-picker class="my-picker" v-decorator="[
                                                 'birthday',{rules: [{ required: true, message: `${$t('mar.qxzcsrq')}`}]}]"/>
+                                          </a-locale-provider>
                                     </a-form-item>
                                     <a-form-item :label="$t('mar.sg')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-input addonAfter="cm" :placeholder="$t('mar.qsr')" v-decorator="[
@@ -224,6 +227,7 @@
                         </a-form>
                   </div>
             </a-modal>
+            </a-locale-provider>
       </div>
 </template>
 <style lang="less" scoped>
@@ -364,6 +368,14 @@
 import { starsList,getProfession,getCountry,searchStarInfo,starUpdate,getUpload,starDel } from "@/api/manager";
 import { mixinsTitle } from "@/utils/mixin";
 import moment from 'moment';
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 function getBase64 (img, callback) {
       const reader = new FileReader()
       reader.addEventListener('load', () => callback(reader.result))
@@ -373,6 +385,7 @@ export default {
       mixins:[mixinsTitle],
       data(){
             return{
+                  locale: lang[localStorage.getItem('lang')],
                   pageTitle: null,
                   btnShow: -1,
                   visible: false,
@@ -412,7 +425,7 @@ export default {
             postStarUpdate(params){
                   starUpdate(params).then(res=>{
                         if (res.code == 1000) {
-                              this.$message.success('操作成功！')
+                              this.$message.success(this.$t('issuer.hdgl.czcg'))
                               this.visible = false;
                               this.confirmLoading = false;
                               this.getStarsList(1,'',1);
@@ -616,14 +629,14 @@ export default {
             showDeleteConfirm(id) {
                   var that = this;
                   that.$confirm({
-                        title: this.$t('mar.qrscm'),
-                        okText: this.$t('mar.qd'),
+                        title: that.$t('mar.qrscm'),
+                        okText: that.$t('mar.qd'),
                         okType: 'danger',
-                        cancelText: this.$t('mar.qx'),
+                        cancelText: that.$t('mar.qx'),
                         onOk() {
                               starDel(id).then(res=>{
                                     if (res.code == 1000) {
-                                          that.$message.success(this.$t('issuer.hdgl.czcg'));
+                                          that.$message.success(that.$t('issuer.hdgl.czcg'));
                                           that.getStarsList(1,that.name,that.offset);
                                     }
                               })

@@ -156,7 +156,8 @@ export default {
     _getUserInformation() {
       const token = this.$ls.get('Access-Token')
       const params = {
-        token: token
+        token: token,
+        internationalization: localStorage.lang
       }
       getUserInformation(params).then(res => {
         this.personInfo = res.data

@@ -71,18 +71,19 @@ import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 import { searchCampList,rightInfo } from '@/api/admin'
 import { userInfo } from "@/api/common";
+import i18n from '@lang/index'
 const statusMap = {
       0: {
             status: 'processing',
-            text: '待审批'
+            text: i18n.t('issuer.index.pending')
       },
       20: {
             status: 'success',
-            text: '已通过'
+            text: i18n.t('issuer.index.passed')
       },
       30: {
             status: 'error',
-            text: '驳回'
+            text: i18n.t('issuer.hdgl.bh')
       },
 }
 export default {

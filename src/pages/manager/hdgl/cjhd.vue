@@ -42,7 +42,7 @@
                                           </h2>
                                           <p>{{$t('admin.timer')}}：{{publishTime}}</p>
                                           <p>{{$t('admin.fl')}}：{{campCatalog}}</p>
-                                          <p>{{$t('admin.csrs')}}：{{campNum}}人</p>
+                                          <p>{{$t('admin.csrs')}}：{{campNum}} {{$t('admin.people')}}</p>
                                     </div>
                                     <span>
                                           <a-icon type="environment" class="my-icon"/>

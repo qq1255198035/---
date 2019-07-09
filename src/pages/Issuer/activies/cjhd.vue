@@ -57,8 +57,8 @@
               <a-form-item
                 :label="$t('issuer.hdgl.chineseName')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-input
                   :placeholder="$t('issuer.hdgl.chineseName')"
@@ -69,8 +69,8 @@
               <a-form-item
                 :label="$t('issuer.cjhd.englishName')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-input
                   :placeholder="$t('issuer.cjhd.englishName')"
@@ -79,7 +79,7 @@
                   v-decorator="['englishName',{rules: [{ required: true, message: `${$t('issuer.cjhd.englishName')}` }]}]"
                 />
               </a-form-item>
-              <a-form-item :label="$t('issuer.cjhd.eventDate')" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+              <a-form-item :label="$t('issuer.cjhd.eventDate')" :wrapperCol="{span: 17, offset: 1}" :labelCol="{span: 5}">
                 <a-locale-provider :locale="locale">
                 <a-range-picker
                   style="width: 100%;"
@@ -88,7 +88,7 @@
                 />
                 </a-locale-provider>
               </a-form-item>
-              <a-form-item :label="$t('issuer.cjhd.activityTime')" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
+              <a-form-item :label="$t('issuer.cjhd.activityTime')" :labelCol="{span: 5}" :wrapperCol="{span: 17, offset: 1}">
                 <a-time-picker
                   @change="onChangeTime"
                   v-decorator="['timePicker', {rules: [{ type: 'object', required: true, message: `${$t('issuer.cjhd.activityTime')}` }]}]"
@@ -96,12 +96,13 @@
               </a-form-item>
               <a-form-item
                 :label="$t('issuer.cjhd.eventLocation')"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 1}"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 17, offset: 1}"
                 :required="true"
               >
-                <a-input-group compact style="width: 93%; margin-right: 8px">
+                <a-input-group compact style="width: 100%; margin-right: 8px">
                   <a-select
+                    style="width: 50%"
                     :defaultValue="$t('issuer.hdgl.pleaseChoose')"
                     labelInValue
                     v-decorator="['placeName',{rules: [{ required: true, message: `${$t('issuer.cjhd.eventLocation')}` }]}]"
@@ -113,7 +114,7 @@
                     >{{item.value}}</a-select-option>
                   </a-select>
                   <a-input
-                    style="width: 68%"
+                    style="width: 50%"
                     :placeholder="$t('issuer.cjhd.beiJing')"
                     v-decorator="['addressName',{rules: [{ required: false, message: `${$t('issuer.cjhd.eventLocation')}` }]}]"
                   />
@@ -172,8 +173,8 @@
               <a-form-item
                 :label="$t('issuer.accountInfo.email')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-input
                   :placeholder="$t('issuer.accountInfo.email')"
@@ -186,8 +187,8 @@
               <a-form-item
                 :label="$t('issuer.cjhd.activityClassification')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-select
                   :placeholder="$t('issuer.hdgl.pleaseChoose')"
@@ -203,8 +204,8 @@
               <a-form-item
                 :label="$t('issuer.cjhd.number')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-input
                   placeholder="1"
@@ -217,8 +218,8 @@
               <a-form-item
                 :label="$t('issuer.accountInfo.contact')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-input
                   :placeholder="$t('issuer.accountInfo.contact')"
@@ -229,11 +230,11 @@
               <a-form-item
                 :label="$t('issuer.accountInfo.telphone')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-input-group>
-                  <a-col :span="18">
+                  <a-col :span="24">
                     <a-input
                       :placeholder="$t('issuer.accountInfo.telphone')"
                       v-decorator="['phoneName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.telphone')}` }]}]"
@@ -244,8 +245,8 @@
               <a-form-item
                 :label="$t('issuer.cjhd.uploadCover')"
                 class="my-form-item"
-                :wrapperCol="{span: 18, offset: 1}"
-                :labelCol="{span: 4}"
+                :wrapperCol="{span: 17, offset: 1}"
+                :labelCol="{span: 5}"
               >
                 <a-upload
                   name="avatar"
@@ -337,8 +338,9 @@
                 :wrapperCol="{span: 18, offset: 1}"
                 class="my-form-item"
               >
-                <a-input-group compact style="width: 93%; margin-right: 8px">
+                <a-input-group compact style="width: 100%; margin-right: 8px">
                   <a-select
+                   style="width: 36%"
                     labelInValue
                     defaultValue="$t('issuer.hdgl.pleaseChoose')"
                     v-decorator="['companyTitle',{rules: [{ required: true, message: `${$t('issuer.cjhd.inputCompany')}` }]}]"
@@ -350,7 +352,7 @@
                     >{{item.name}}</a-select-option>
                   </a-select>
                   <a-input
-                    style="width: 66%"
+                    style="width: 64%"
                     v-decorator="['companyName',{rules: [{ required: false, message: `${$t('issuer.cjhd.gsdz')}` }]}]"
                   />
                 </a-input-group>
@@ -1663,7 +1665,7 @@ export default {
             getEventSponsorship(params).then(res => {
               console.log(res)
               this.userid = res.data.campId
-              if (res.data.code == 1000 || rea.data.code == 1001) {
+              if (res.data.code == 1000 || res.data.code == 1001) {
                 this.data[this.formShow].actions.title = this.$t('issuer.hdgl.modify')
                 this.visible = false
                   this.confirmLoading = false
@@ -1859,7 +1861,8 @@ export default {
         console.log(this.dataTable)
         const tableList = []
         for (let i = 0; i < this.dataTable.length; i++) {
-          if(!tgWay || !zzWay || !zzPrice || !zzNum) {
+          if(this.dataTable[i].tgWay || this.dataTable[i].zzWay1 || this.dataTable[i].zzPrice || this.dataTable[i].zzNum) {
+            console.log(11)
             tableList.push({
             ssKind: this.dataTable[i].tgWay,
             sponsorship: this.dataTable[i].zzWay1,

@@ -17,7 +17,7 @@
     <a-card
       style="margin-top: 24px"
       :bordered="false"
-      title="活动列表">
+      :title="$t('login.hdlb')">
 
       <div slot="extra">
         <a-radio-group v-model="radioval" @change="onChange">
@@ -224,7 +224,7 @@ export default {
                   this.loading = true;
                   campApproval(campId, reject, agreement).then(res=>{
                         if (res.code == 1000) {
-                              this.$message.success('操作成功 ！');
+                              this.$message.success(this.$t('issuer.hdgl.czcg'));
                               this.getApprovalNumber();
                               this.getSearchCampList(this.searchkey,this.offset,this.radioval);
                               this.loading = false;

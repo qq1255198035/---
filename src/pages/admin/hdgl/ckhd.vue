@@ -32,7 +32,7 @@
                                           <detail-list :title="$t('issuer.cjhd.hdjbxx')">
                                                 <detail-list-item :term="$t('issuer.cjhd.hdzwmc')">{{name}}</detail-list-item>
                                                 <detail-list-item :term="$t('issuer.cjhd.hdfl')">{{campCatalog}}</detail-list-item>
-                                                <detail-list-item :term="$t('issuer.cjhd.number')">{{campNum}}</detail-list-item>
+                                                <detail-list-item :term="$t('issuer.cjhd.number')">{{campNum}} {{$t('admin.people')}}</detail-list-item>
                                                 <detail-list-item :term="$t('issuer.cjhd.hdywmc')">{{enName}}</detail-list-item>
                                                 <detail-list-item :term="$t('issuer.cjhd.hdsj')">{{publishTime}} ~ {{endTime}}</detail-list-item>
                                                 <detail-list-item :term="$t('issuer.accountInfo.contact')">{{contact}}</detail-list-item>
@@ -56,13 +56,13 @@
                                                 <li>
                                                       <span>{{$t('issuer.cjhd.hdsp')}}：</span>
                                                       <video :src="video" controls width="200" height="150" v-if="video"></video>
-                                                      <p v-else style="color: #ccc;">{{$t(issuer.cjhd.zwsp)}}</p>
+                                                      <p v-else style="color: #ccc;">{{$t('issuer.cjhd.zwsp')}}</p>
                                                 </li>
                                                 <li>
                                                       <span>{{$t('issuer.cjhd.hdzp')}}：</span>
                                                       <div class="img-box" v-for="(item,index) in imgs" :key="index">
                                                             <img :src="item" alt="活动照片" v-if="item">   
-                                                            <p v-else style="color: #ccc;">{{$t(issuer.cjhd.zwzp)}}</p>     
+                                                            <p v-else style="color: #ccc;">{{$t('issuer.cjhd.zwzp')}}</p>     
                                                       </div>
                                                       
                                                 </li>
@@ -482,10 +482,10 @@ export default {
       filters:{
             filterStatus(val){
                   switch (val) {
-                        case 0 : return this.$t('issuer.hdgl.wsp');
-                        case 20 : return this.$t('issuer.hdgl.ysp');
-                        case 30 : return this.$t('issuer.hdgl.bh');
-                        case 40 : return this.$t('issuer.hdgl.yez')
+                        case 0 : return i18n.t('issuer.hdgl.wsp');
+                        case 20 : return i18n.t('issuer.hdgl.ysp');
+                        case 30 : return i18n.t('issuer.hdgl.bh');
+                        case 40 : return i18n.t('issuer.hdgl.yez')
                   }
             },
             filterLength(val){

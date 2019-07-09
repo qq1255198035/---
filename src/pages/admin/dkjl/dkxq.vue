@@ -34,7 +34,7 @@
                         display: flex;
                         margin: 5px 0;
                         span{
-                              width: 116px;
+                              width: 158px;
                               color: #21C5C7;
                               text-align: right;
                         }

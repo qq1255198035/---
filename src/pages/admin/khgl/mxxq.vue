@@ -53,6 +53,12 @@
                               <div class="img-content">
                                     <img :src="imgs" alt="">
                               </div>
+                              <div class="title">
+                                    <h5>{{$t('mar.sqzs')}}</h5>
+                              </div>
+                              <div class="img-content">
+                                    <img :src="credential" alt="">
+                              </div>
                         </div>
                         <div style="display: flex;justify-content: center;margin-top:30px;">
                               <a-button type="primary" @click="$router.go(-1)">{{$t('issuer.accountInfo.back')}}</a-button>
@@ -179,6 +185,7 @@ export default {
                   desc: "",
                   sex: "",
                   avatar: "",
+                  credential: '',
                   imgs: "",
                   company:"",
                   contact:"",
@@ -210,6 +217,7 @@ export default {
                               this.email = res.data.email,
                               this.avatar = res.data.avatar,
                               this.imgs = res.data.imgs,
+                              this.credential = res.data.credential,
                               this.company = res.data.company,
                               this.contact = res.data.contact,
                               this.phone = res.data.phone

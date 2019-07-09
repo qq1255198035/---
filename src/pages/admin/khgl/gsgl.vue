@@ -99,7 +99,7 @@
                   :confirmLoading="confirmLoading"
                   @cancel="handleCancel"
             >
-                  <a-form-item :label="$t('issuer.index.yy')">
+                  <a-form-item :label="$t('issuer.hdgl.yy')">
                         <a-textarea :placeholder="$t('admin.qsryy')" :autosize="{ minRows: 4 }" v-model="reason"/>
                   </a-form-item>
             </a-modal>

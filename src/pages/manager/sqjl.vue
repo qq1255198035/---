@@ -5,7 +5,7 @@
                   <a-row :gutter="2" type="flex" justify="start" align="middle">
                         <a-col :span="6">
                               <div class="input-box">
-                                    <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 17, offset: 1}" :labelCol="{span: 5}">
                                           <a-locale-provider :locale="locale">
                                           <a-range-picker @change="changeDate" class="my-picker"/>
                                           </a-locale-provider>
@@ -14,7 +14,7 @@
                         </a-col>
                         <a-col :span="6">
                               <div class="input-box">
-                                    <a-form-item :label="$t('admin.hdmc')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('admin.hdmc')" class="my-form-item" :wrapperCol="{span: 17, offset: 1}" :labelCol="{span: 5}">
                                           <a-input :placeholder="$t('admin.qxzhdmc')" v-model="condition"/>
                                     </a-form-item>
                               </div>
@@ -26,12 +26,14 @@
             </div>
             <div class="sqjl-content">
                   <div class="my-table">
+                        <a-locale-provider :locale="locale">
                         <a-table :columns="columns" :dataSource="data" :loading="loading" :pagination="pagination" @change="handleTableChange">
                               <span slot="status" slot-scope="text">
                                     <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                               </span>
                               
                         </a-table>
+                        </a-locale-provider>
                   </div>
             </div>
       </div>

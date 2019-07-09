@@ -9,6 +9,7 @@
                   <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
             </div>
             <div class="wdzz-content">
+                  <a-locale-provider :locale="locale">
                   <a-row type="flex" justify="space-between">
                         <a-col class="items" :xxl="{span:11}" :xl="{span:24}" v-for="(item,index) in data" :key="index">
                               <div class="title">
@@ -40,6 +41,7 @@
                               </div>
                         </a-col>
                   </a-row>
+                  </a-locale-provider>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                   <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || data.length == 0">{{$t('issuer.hdgl.loadMore')}}</a-button>
