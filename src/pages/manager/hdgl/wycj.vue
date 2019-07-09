@@ -288,7 +288,7 @@ export default {
            
            
             changeDate(val,date){
-                  this.starttime = date[0];
+                  this.startime = date[0];
                   this.endtime = date[1]
             },
             loadMore(){

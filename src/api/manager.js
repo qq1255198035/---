@@ -62,7 +62,7 @@ export function starDel(athleteId) {
   })
 }
 // 获取我要参加列表
-export function searchCampList(startime, endtime, offset){
+export function searchCampList(starttime, endtime, offset){
     return axios({
       url: '/vue/agent/searchCampListForAgent',
       method: 'post',

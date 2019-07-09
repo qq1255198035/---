@@ -1,6 +1,6 @@
 
 <template>
-  <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
+  <page-view :title="false" :avatarshow="true">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{user}}，<span class="welcome-text">{{$t('header.HeadMenu.welcome')}} Sponsor Cube {{$t('header.HeadMenu.platform')}}</span></div>
       <div>{{$t('header.HeadMenu.glyyh')}}</div>

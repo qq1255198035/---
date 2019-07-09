@@ -41,6 +41,7 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
+      Vue.ls.set(ACCESS_TOKEN,'')
       return new Promise((resolve, reject) => {
         login(userInfo)
           .then(res => {
@@ -53,7 +54,6 @@ const user = {
               commit('SET_AVATAR', res.avatar)
               commit('SET_NAME', { name: res.user.name })
               commit('SET_INFO', res.user)
-              
             }
             resolve(res)
           })
