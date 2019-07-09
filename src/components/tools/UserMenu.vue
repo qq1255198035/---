@@ -46,8 +46,10 @@ export default {
     handleLogout () {
       const that = this
       this.$confirm({
-        title: '提示',
-        content: '真的要注销登录吗 ?',
+        title: this.$t('header.HeadMenu.ts'),
+        content: this.$t('header.HeadMenu.zdzx'),
+        okText: this.$t('admin.qr'),
+        cancelText: this.$t('admin.qx'),
         onOk () {
           that.Logout();
           window.location.reload()

@@ -3,16 +3,18 @@
             <page-header :title="pageTitle"></page-header>
             <div class="dkjl-content">
                   <div class="input-box">
-                        <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                              <a-locale-provider :locale="locale">
                               <a-range-picker @change="changeDate" class="my-picker"/>
+                              </a-locale-provider>
                         </a-form-item>
-                        <a-button type="primary" icon="search" @click="search">搜 索</a-button>
-                        <a-button type="primary" @click="$router.push({name:'dkxx'})" style="margin-left: 20px;">添加打款信息</a-button>
+                        <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
+                        <a-button type="primary" @click="$router.push({name:'dkxx'})" style="margin-left: 20px;">{{$t('admin.tjdkxx')}}</a-button>
                   </div>
                   <div class="my-stable">
                         <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
                               <template slot="action" slot-scope="text,record">
-                                    <a-button type="primary" ghost @click="$router.push({path: '/dkxq',query:{data:record}})">查 看</a-button>
+                                    <a-button type="primary" ghost @click="$router.push({path: '/dkxq',query:{data:record}})">{{$t('issuer.hdgl.examine')}}</a-button>
                               </template>
                         </a-table>
                   </div>
@@ -50,7 +52,14 @@
 import { mixinsTitle } from "@/utils/mixin.js";
 import HeadInfo from '@/components/tools/HeadInfo'
 import { STable } from '@/components'
-
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 import { transferMoneyList } from "@/api/admin";
 export default {
       components: {
@@ -60,6 +69,7 @@ export default {
       mixins:[mixinsTitle],
       data(){
             return{
+                  locale: lang[localStorage.getItem('lang')], 
                   pageTitle: null,
                   selectedRowKeys: [],
                   condition:'',
@@ -74,35 +84,35 @@ export default {
                   columns: [
                               
                               {
-                                    title: '汇款公司',
+                                    title: this.$t('admin.hkgs'),
                                     dataIndex: 'payCompany'
                               },
                               {
-                                    title: '收款公司',
+                                    title: this.$t('admin.skgs'),
                                     dataIndex: 'receiveCompany'
                               },
                               {
-                                    title: '汇款时间',
+                                    title: this.$t('admin.hksj'),
                                     dataIndex: 'createTime',
                                    
                               },
                               {
-                                    title: '未付款',
+                                    title: this.$t('admin.wfk'),
                                     dataIndex: 'balance',
                                     
                               },
                               {
-                                    title: '已付款',
+                                    title: this.$t('admin.yfk'),
                                     dataIndex: 'payment',
                               
                               },
                               {
-                                    title: '备注',
+                                    title: this.$t('admin.bz'),
                                     dataIndex: 'bz',
                               
                               },
                               {
-                                    title: '操作',
+                                    title: this.$t('admin.cz'),
                                     dataIndex: 'action',
                                     scopedSlots: { customRender: 'action' },
                               }

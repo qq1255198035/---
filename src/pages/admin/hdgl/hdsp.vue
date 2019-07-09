@@ -3,13 +3,13 @@
     <a-card :bordered="false">
       <a-row>
         <a-col :sm="8" :xs="24">
-          <head-info title="待审批" :content="notApprovalNum + '个活动'" :bordered="true"/>
+          <head-info :title="$t('issuer.index.pending')" :content="notApprovalNum + $t('issuer.hdgl.ghd')" :bordered="true"/>
         </a-col>
         <a-col :sm="8" :xs="24">
-          <head-info title="已审批" :content="approvalNum + '个活动'" :bordered="true"/>
+          <head-info :title="$t('issuer.hdgl.ysp')" :content="approvalNum + $t('issuer.hdgl.ghd')" :bordered="true"/>
         </a-col>
         <a-col :sm="8" :xs="24">
-          <head-info title="总计" :content="allNum + '个活动'"/>
+          <head-info :title="$t('issuer.index.totalPrice')" :content="allNum + $t('issuer.hdgl.ghd')"/>
         </a-col>
       </a-row>
     </a-card>
@@ -22,42 +22,44 @@
       <div slot="extra">
         <a-radio-group v-model="radioval" @change="onChange">
           <a-radio-button value="9">
-          全部
+          {{$t('issuer.hdgl.qb')}}
         </a-radio-button>
         <a-radio-button value="0">
-          待审批
+          {{$t('issuer.index.pending')}}
         </a-radio-button>
         <a-radio-button value="20">
-          已审批
+          {{$t('issuer.hdgl.ysp')}}
         </a-radio-button>
         <a-radio-button value="30">
-          驳回
+          {{$t('issuer.hdgl.bh')}}
         </a-radio-button>
         </a-radio-group>
         <a-input-search style="margin-left: 16px; width: 272px;" @search="onSearch"/>
       </div>
       <div class="my-stable">
+            <a-locale-provider :locale="locale">
             <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
                   <span slot="status" slot-scope="text">
                         <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                   </span>
                   <template slot="operation" slot-scope="text,record">
-                        <a href="javascript:;" @click="$router.push({path: '/hdgl/ckhd',query: { id: record.key}})">查 看</a>
+                        <a href="javascript:;" @click="$router.push({path: '/hdgl/ckhd',query: { id: record.key}})">{{$t('issuer.hdgl.examine')}}</a>
                         <div style="display: inline-block;" v-if="record.status == 0">
                               <a-divider type="vertical"/>
                               <a-popconfirm
-                                    title="选择操作"
+                                    :title="$t('admin.xzcz')"
                                     @confirm="confirm"
                                     @cancel="cancel"
-                                    okText="通过" 
-                                    cancelText="驳回"
+                                    :okText="$t('issuer.hdgl.tg')" 
+                                    :cancelText="$t('issuer.hdgl.bh')"
                               >
-                                    <a href="javascript:;" @click="recordKey = record.key">审 批</a>
+                                    <a href="javascript:;" @click="recordKey = record.key">{{$t('admin.sp')}}</a>
                               </a-popconfirm>
                         </div>
                         
                   </template>
             </a-table>
+            </a-locale-provider>
       </div>
     </a-card>
             <a-modal
@@ -67,8 +69,8 @@
                   :confirmLoading="confirmLoading"
                   @cancel="handleCancel"
             >
-                  <a-form-item label="原因">
-                        <a-textarea placeholder="请输入原因" :autosize="{ minRows: 4 }" v-model="cancelReason"/>
+                  <a-form-item :label="$t('issuer.hdgl.yy')">
+                        <a-textarea :placeholder="$t('admin.qsryy')" :autosize="{ minRows: 4 }" v-model="cancelReason"/>
                   </a-form-item>
             </a-modal>
       </div>
@@ -77,18 +79,27 @@
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
 import { approvalNumber,searchCampList,campApproval,campInformation } from '@/api/admin'
+import i18n from '@lang/index'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 const statusMap = {
       0: {
             status: 'warning',
-            text: '待审批'
+            text: i18n.t('issuer.index.pending')
       },
       20: {
             status: 'success',
-            text: '已审批'
+            text: i18n.t('issuer.hdgl.ysp')
       },
       30: {
             status: 'error',
-            text: '驳回'
+            text: i18n.t('issuer.hdgl.bh')
       },
 }
 export default {
@@ -98,6 +109,7 @@ export default {
 
       data () {
             return {
+                  locale: lang[localStorage.getItem('lang')],
                   visible: false,
                   confirmLoading: false,
                   loading: true,
@@ -112,28 +124,28 @@ export default {
                   },
                   columns: [
                         {
-                              title: '序号',
+                              title: this.$t('issuer.cjhd.xh'),
                               dataIndex: 'num'
                         },
                         {
-                              title: '活动名称',
+                              title: this.$t('admin.hdmc'),
                               dataIndex: 'name'
                         },
                         {
-                              title: '活动类型',
+                              title: this.$t('admin.hdlx'),
                               dataIndex: 'campCatalogVal',
                         },
                         {
-                              title: '状态',
+                              title: this.$t('issuer.index.status'),
                               dataIndex: 'status',
                               scopedSlots: { customRender: 'status' }
                         },
                         {
-                              title: '描述',
+                              title: this.$t('admin.ms'),
                               dataIndex: 'content',
                         },
                         {
-                              title: '操作',
+                              title: this.$t('issuer.cjhd.cz'),
                               dataIndex: 'operation',
                               scopedSlots: { customRender: 'operation' }
                             

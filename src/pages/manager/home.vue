@@ -2,13 +2,13 @@
 <template>
   <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user }}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
-      <div>经纪人</div>
+      <div class="title">{{ timeFix }}，{{ user }}，<span class="welcome-text">{{$t('header.HeadMenu.welcome')}} Sponsor Cube {{$t('header.HeadMenu.platform')}}</span></div>
+      <div>{{$t('admin.jjr')}}</div>
     </div>
     <div id="myhome">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="收款详情" :bordered="false" class="my-cards">
+          <a-card :loading="loading" :title="$t('admin.skxq')" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                   <a-row>
@@ -21,7 +21,7 @@
                         <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                       </v-chart>
                       <div class="calc-price">
-                          总计：￥
+                          {{$t('issuer.index.totalPrice')}}：￥
                           <span>{{agentTotal}}</span>
                         </div>
                     </a-col>
@@ -29,10 +29,10 @@
                   </a-row>
                   
               </div>
-              <p v-if="!chartshow">暂无数据</p>
+              <p v-if="!chartshow">{{$t('issuer.index.noData')}}</p>
             </div>
           </a-card>
-          <a-card title="活动动态" class="my-activity">
+          <a-card :title="$t('issuer.index.hddt')" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false">
                   
             </a-table>
@@ -40,10 +40,10 @@
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           
-          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
+          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
            
-            <a slot="extra" @click="$router.push({name:'tzxx'})">全部消息</a>
-            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="projects.length == 0">暂无信息</p>
+            <a slot="extra" @click="$router.push({name:'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
+            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="projects.length == 0">{{$t('issuer.index.noData')}}</p>
             <div v-else>
            
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
@@ -77,9 +77,10 @@ import { Radar } from '@/components'
 import { headMsg,piesData } from '@/api/common'
 import { applicationList } from "@/api/manager"
 import { userInfo } from "@/api/common"
+import i18n from '@lang/index'
 const sourceData1 = [
-  { item: '未收', count: null },
-  { item: '已收', count: null },
+  { item: i18n.t('admin.ws'), count: null },
+  { item: i18n.t('admin.ys'), count: null },
   
 ]
 const DataSet = require('@antv/data-set')
@@ -126,27 +127,27 @@ export default {
       },
       operationColumns: [
         {
-            title: '序号',
+            title: this.$t('admin.xh'),
             dataIndex: 'key',
         },
         {
-            title: '活动名称',
+            title: this.$t('admin.hdmc'),
             dataIndex: 'campname'
         },
         {
-            title: '已付款',
+            title: this.$t('admin.yfk'),
             dataIndex: 'paid',
         },
         {
-            title: '活动时间',
+            title: this.$t('admin.hdsj'),
             dataIndex: 'publishTime'
         },
         {
-            title: '参加明星',
+            title: this.$t('admin.cjmx'),
             dataIndex: 'username',
         },
         {
-            title: '出场总额',
+            title: this.$t('admin.ccze'),
             dataIndex: 'cost',
         },
       ],

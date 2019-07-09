@@ -2,29 +2,29 @@
 <template>
   <page-view :avatar="avatar? avatar : ''" :title="false" :avatarshow="true">
     <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{user}}，<span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span></div>
-      <div>管理员用户</div>
+      <div class="title">{{ timeFix }}，{{user}}，<span class="welcome-text">{{$t('header.HeadMenu.welcome')}} Sponsor Cube {{$t('header.HeadMenu.platform')}}</span></div>
+      <div>{{$t('header.HeadMenu.glyyh')}}</div>
     </div>
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="6">
-          <head-info title="搞手待审批" :content="tohand" :center="false" :bordered="false"/>
+          <head-info :title="$t('admin.gsdsp')" :content="tohand" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="6">
-          <head-info title="赞助商待审批" :content="sponsor" :center="false" :bordered="false"/>
+          <head-info :title="$t('admin.jxsdsp')" :content="sponsor" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="6">
-          <head-info title="经纪人待审批" :content="agent" :center="false" />
+          <head-info :title="$t('admin.jjrdsp')" :content="agent" :center="false" />
         </a-col>
         <a-col :span="6">
-          <head-info title="明星待审批" :content="star" :center="false" />
+          <head-info :title="$t('admin.mxdsp')" :content="star" :center="false" />
         </a-col>
       </a-row>
     </div>
     <div id="adminIndex">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card title="活动动态" class="my-activity">
+          <a-card :title="$t('issuer.index.hddt')" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false" :loading="tableLoading">
               <template slot="status" slot-scope="status">
                 <a-badge :status="status | statusTypeFilter" :text="status | statusFilter"/>
@@ -34,9 +34,9 @@
         </a-col>
         <a-col style="padding: 0 12px" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           
-          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" title="我的消息" :body-style="{ padding: 0 }">
-            <a slot="extra" @click="$router.push({name:'admintzxx'})">全部消息</a>
-            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="infoList.length == 0">暂无信息</p>
+          <a-card class="project-list" :loading="loading" style="margin-bottom: 24px;" :bordered="false" :title="$t('issuer.index.wdxx')" :body-style="{ padding: 0 }">
+            <a slot="extra" @click="$router.push({name:'admintzxx'})">{{$t('issuer.index.qbxx')}}</a>
+            <p style="color: #ccc;text-align: center; padding: 10px 0; margin: 0" v-if="infoList.length == 0">{{$t('issuer.index.noData')}}</p>
             <div v-else>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in infoList" >
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -105,28 +105,28 @@ export default {
       teams: [],
       operationColumns: [
          {
-                title: '序号',
+                title: this.$t('issuer.cjhd.xh'),
                 dataIndex: 'key',
                 width: 60
                 
           },
           {
-                title: '活动名称',
+                title: this.$t('issuer.index.eventName'),
                 dataIndex: 'name'
           },
           {
-                title: '活动类型',
+                title: this.$t('admin.hdlx'),
                 dataIndex: 'campCatalogVal',
                 width: 100
           },
           {
-                title: '状态',
+                title: this.$t('issuer.index.status'),
                 dataIndex: 'status',
                 scopedSlots: { customRender: 'status' },
                 width: 100
           },
           {
-                title: '描述',
+                title: this.$t('admin.ms'),
                 dataIndex: 'content',
           },
       ],

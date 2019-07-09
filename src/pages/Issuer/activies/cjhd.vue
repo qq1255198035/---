@@ -2,7 +2,7 @@
   <div id="cjhd">
     <page-header :title="pageTitle"></page-header>
     <div class="cjhd-header">
-      <a-card title="活动进度">
+      <a-card :title="$t('issuer.cjhd.activityProgress')">
         <div class="secetion">
           <a-steps :current="current">
             <a-popover slot="progressDot" slot-scope="{index, status, prefixCls}">
@@ -11,10 +11,10 @@
               </template>
               <span :class="`${prefixCls}-icon-dot`"></span>
             </a-popover>
-            <a-step title="创建活动"/>
-            <a-step title="平台审核"/>
-            <a-step title="活动进行中"/>
-            <a-step title="完成"/>
+            <a-step :title="$t('issuer.hdgl.createAnEvent')"/>
+            <a-step :title="$t('issuer.cjhd.platformReview')"/>
+            <a-step :title="$t('issuer.cjhd.activityProgress')"/>
+            <a-step :title="$t('issuer.cjhd.okOver')"/>
           </a-steps>
         </div>
       </a-card>
@@ -36,10 +36,11 @@
         </a-list-item>
       </a-list>
       <div class="btn-bottom">
-        <a-button @click="goHome">取消</a-button>
-        <a-button type="primary" @click="handleSubmit">提交审批</a-button>
+        <a-button @click="goHome">{{$t('issuer.cjhd.cancel')}}</a-button>
+        <a-button type="primary" @click="handleSubmit">{{$t('issuer.cjhd.Submit')}}</a-button>
       </div>
       <a-alert v-if="alertVisible" banner :description="alertText" showIcon/>
+      <a-locale-provider :locale="locale">
       <a-modal
         :title="title"
         :visible="visible"
@@ -54,54 +55,56 @@
           <div class="info-item" v-if="formShow == 0">
             <div class="left">
               <a-form-item
-                label="中文名称"
+                :label="$t('issuer.hdgl.chineseName')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="中文名称"
+                  :placeholder="$t('issuer.hdgl.chineseName')"
                   class="my-input"
-                  v-decorator="['chineseName',{rules: [{ required: true, message: '请输入中文名称' }]}]"
+                  v-decorator="['chineseName',{rules: [{ required: true, message: `${$t('issuer.hdgl.chineseName')}` }]}]"
                 />
               </a-form-item>
               <a-form-item
-                label="英文名称"
+                :label="$t('issuer.cjhd.englishName')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="英文名称"
+                  :placeholder="$t('issuer.cjhd.englishName')"
                   class="my-input"
                   autocomplete="false"
-                  v-decorator="['englishName',{rules: [{ required: true, message: '请输入英文' }]}]"
+                  v-decorator="['englishName',{rules: [{ required: true, message: `${$t('issuer.cjhd.englishName')}` }]}]"
                 />
               </a-form-item>
-              <a-form-item label="活动日期" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+              <a-form-item :label="$t('issuer.cjhd.eventDate')" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                <a-locale-provider :locale="locale">
                 <a-range-picker
                   style="width: 100%;"
                   @change="onChangeDate"
-                  v-decorator="['rangePicker', {rules: [{ type: 'array', required: true, message: '请选择日期' }]}]"
+                  v-decorator="['rangePicker', {rules: [{ type: 'array', required: true, message: `${$t('issuer.cjhd.eventDate')}` }]}]"
                 />
+                </a-locale-provider>
               </a-form-item>
-              <a-form-item label="活动时间" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
+              <a-form-item :label="$t('issuer.cjhd.activityTime')" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}">
                 <a-time-picker
                   @change="onChangeTime"
-                  v-decorator="['timePicker', {rules: [{ type: 'object', required: true, message: '请选择时间' }]}]"
+                  v-decorator="['timePicker', {rules: [{ type: 'object', required: true, message: `${$t('issuer.cjhd.activityTime')}` }]}]"
                 />
               </a-form-item>
               <a-form-item
-                label="活动地点"
+                :label="$t('issuer.cjhd.eventLocation')"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 1}"
                 :required="true"
               >
                 <a-input-group compact style="width: 93%; margin-right: 8px">
                   <a-select
-                    defaultValue="请选择"
+                    :defaultValue="$t('issuer.hdgl.pleaseChoose')"
                     labelInValue
-                    v-decorator="['placeName',{rules: [{ required: true, message: '请输入地址' }]}]"
+                    v-decorator="['placeName',{rules: [{ required: true, message: `${$t('issuer.cjhd.eventLocation')}` }]}]"
                   >
                     <a-select-option
                       v-for="(item, index) in cityPlace"
@@ -111,15 +114,15 @@
                   </a-select>
                   <a-input
                     style="width: 68%"
-                    placeholder="北京市"
-                    v-decorator="['addressName',{rules: [{ required: false, message: '请输入地址' }]}]"
+                    :placeholder="$t('issuer.cjhd.beiJing')"
+                    v-decorator="['addressName',{rules: [{ required: false, message: `${$t('issuer.cjhd.eventLocation')}` }]}]"
                   />
                 </a-input-group>
               </a-form-item>
               <a-form-item>
                 <a-list itemLayout="horizontal" :dataSource="areaList">
                   <a-list-item slot="renderItem" slot-scope="item, index">
-                    <a slot="actions" @click="detelList(index)">删除</a>
+                    <a slot="actions" @click="detelList(index)">{{$t('issuer.hdgl.detel')}}</a>
                     <a-list-item-meta>
                       <a slot="title">{{item.area_name}}</a>
                       <a
@@ -163,32 +166,32 @@
               </a-form-item>-->
               <a-form-item v-bind="formItemLayoutWithOutLabel">
                 <a-button type="dashed" style="width: 100%" @click="addList">
-                  <a-icon type="plus"/>添加
+                  <a-icon type="plus"/>{{$t('issuer.cjhd.addBtn')}}
                 </a-button>
               </a-form-item>
               <a-form-item
-                label="电子邮件"
+                :label="$t('issuer.accountInfo.email')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="email"
+                  :placeholder="$t('issuer.accountInfo.email')"
                   class="my-input"
-                  v-decorator="['emailName',{rules: [{type: 'email', required: true, message: '请输入电子邮箱' }]}]"
+                  v-decorator="['emailName',{rules: [{type: 'email', required: true, message: `${$t('issuer.accountInfo.email')}` }]}]"
                 />
               </a-form-item>
             </div>
             <div class="right">
               <a-form-item
-                label="活动分类"
+                :label="$t('issuer.cjhd.activityClassification')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
                 <a-select
-                  placeholder="请选择"
-                  v-decorator="['HuoDongName',{rules: [{ required: true, message: '请填写活动' }]}]"
+                  :placeholder="$t('issuer.hdgl.pleaseChoose')"
+                  v-decorator="['HuoDongName',{rules: [{ required: true, message: `${$t('issuer.cjhd.activityClassification')}` }]}]"
                 >
                   <a-select-option
                     v-for="(item, index) in classify"
@@ -198,7 +201,7 @@
                 </a-select>
               </a-form-item>
               <a-form-item
-                label="参赛人数"
+                :label="$t('issuer.cjhd.number')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
@@ -208,23 +211,23 @@
                   type="number"
                   class="my-input"
                   :min="1"
-                  v-decorator="['testNum',{rules: [{ required: true, message: '请输入数字' }]}]"
+                  v-decorator="['testNum',{rules: [{ required: true, message: `${$t('issuer.cjhd.number')}` }]}]"
                 />
               </a-form-item>
               <a-form-item
-                label="联系人"
+                :label="$t('issuer.accountInfo.contact')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="contact"
+                  :placeholder="$t('issuer.accountInfo.contact')"
                   class="my-input"
-                  v-decorator="['testName',{rules: [{ required: true, message: '请输入名字' }]}]"
+                  v-decorator="['testName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.contact')}` }]}]"
                 />
               </a-form-item>
               <a-form-item
-                label="联系电话"
+                :label="$t('issuer.accountInfo.telphone')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
@@ -232,14 +235,14 @@
                 <a-input-group>
                   <a-col :span="18">
                     <a-input
-                      placeholder="phone"
-                      v-decorator="['phoneName',{rules: [{ required: true, message: '请输入电话号' }]}]"
+                      :placeholder="$t('issuer.accountInfo.telphone')"
+                      v-decorator="['phoneName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.telphone')}` }]}]"
                     />
                   </a-col>
                 </a-input-group>
               </a-form-item>
               <a-form-item
-                label="上传封面"
+                :label="$t('issuer.cjhd.uploadCover')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
@@ -254,10 +257,10 @@
                   <img v-if="imageUrl" :src="imageUrl" alt="avatar">
                   <div v-else>
                     <a-icon :type="loading ? 'loading' : 'plus'"/>
-                    <div class="ant-upload-text">上传</div>
+                    <div class="ant-upload-text">{{$t('issuer.cjhd.upload')}}</div>
                   </div>
                 </a-upload>
-                <span>建议尺寸 200 * 300</span>
+                <span>{{$t('issuer.cjhd.size')}}</span>
               </a-form-item>
             </div>
           </div>
@@ -266,21 +269,21 @@
           <!--活动详情-->
           <div class="info-item-column" v-if="formShow == 1">
             <a-form-item
-              label="活动内容"
+              :label="$t('issuer.cjhd.Activities')"
               class="my-form-item"
               :wrapperCol="{span: 18, offset: 1}"
               :labelCol="{span: 4}"
             >
               <a-textarea
-                placeholder="活动内容"
+                :placeholder="$t('issuer.cjhd.Activities')"
                 class="my-input"
                 maxlength="300"
-                v-decorator="['textName',{rules: [{ required: true, message: '活动内容' }]}]"
+                v-decorator="['textName',{rules: [{ required: true, message: `${$t('issuer.cjhd.Activities')}` }]}]"
                 :autosize="{ minRows: 4, maxRows: 6 }"
               />
             </a-form-item>
             <a-form-item
-              label="上传视频"
+              :label="$t('issuer.cjhd.uploadVideo')"
               class="my-form-item"
               :wrapperCol="{span: 18, offset: 1}"
               :labelCol="{span: 4}"
@@ -295,11 +298,11 @@
                 <video v-if="videoUrl" height="180" width="180" :src="videoUrl" controls></video>
                 <div v-else>
                   <a-icon :type="loading ? 'loading' : 'plus'"/>
-                  <div class="ant-upload-text">上传</div>
+                  <div class="ant-upload-text">{{$t('issuer.cjhd.upload')}}</div>
                 </div>
               </a-upload>
             </a-form-item>
-            <a-form-item label="上传多张图片" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+            <a-form-item :label="$t('issuer.cjhd.uploadMoreImg')" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
               <div class="imgFile">
                 <div class="imgsFileBox" v-for="(item, index) in detailsImgs" :key="index">
                   <img :src="item" alt width="102" height="102">
@@ -315,7 +318,7 @@
               >
                 <div v-if="detailsImgs.length < 9">
                   <a-icon type="plus"/>
-                  <div class="ant-upload-text">上传</div>
+                  <div class="ant-upload-text">{{$t('issuer.cjhd.upload')}}</div>
                 </div>
               </a-upload>
               <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancelImg(item)">
@@ -329,7 +332,7 @@
           <div class="info-item" v-if="formShow == 2">
             <div class="left">
               <a-form-item
-                label="主承办方"
+                :label="$t('issuer.cjhd.mainContractor')"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 1}"
                 class="my-form-item"
@@ -337,8 +340,8 @@
                 <a-input-group compact style="width: 93%; margin-right: 8px">
                   <a-select
                     labelInValue
-                    defaultValue="请选择"
-                    v-decorator="['companyTitle',{rules: [{ required: true, message: '请输入公司名称' }]}]"
+                    defaultValue="$t('issuer.hdgl.pleaseChoose')"
+                    v-decorator="['companyTitle',{rules: [{ required: true, message: `${$t('issuer.cjhd.inputCompany')}` }]}]"
                   >
                     <a-select-option
                       v-for="(item, index) in organizerTypeList"
@@ -348,14 +351,14 @@
                   </a-select>
                   <a-input
                     style="width: 66%"
-                    v-decorator="['companyName',{rules: [{ required: false, message: '公司地址' }]}]"
+                    v-decorator="['companyName',{rules: [{ required: false, message: `${$t('issuer.cjhd.gsdz')}` }]}]"
                   />
                 </a-input-group>
               </a-form-item>
               <a-form-item>
                 <a-list itemLayout="horizontal" :dataSource="companyList">
                   <a-list-item slot="renderItem" slot-scope="item, index">
-                    <a slot="actions" @click="detelCompany(index)">删除</a>
+                    <a slot="actions" @click="detelCompany(index)">{{$t('issuer.hdgl.detel')}}</a>
                     <a-list-item-meta>
                       <a slot="title">{{item.work_name}}</a>
                       <a slot="title" class="addressPaading">{{item.name}}</a>
@@ -365,29 +368,29 @@
               </a-form-item>
               <a-form-item v-bind="formItemLayoutWithOutLabel">
                 <a-button type="dashed" style="width: 100%" @click="addCompany">
-                  <a-icon type="plus"/>添加
+                  <a-icon type="plus"/>{{$t('issuer.cjhd.addBtn')}}
                 </a-button>
               </a-form-item>
               <a-form-item
-                label="播放平台"
+                :label="$t('issuer.cjhd.playPlatform')"
                 class="my-form-item"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
               >
                 <a-input
-                  placeholder="请输入播放平台"
+                  :placeholder="$t('issuer.cjhd.inputPlay')"
                   class="my-input"
-                  v-decorator="['pingName',{rules: [{ required: false, message: '请输入播放平台' }]}]"
+                  v-decorator="['pingName',{rules: [{ required: false, message: `${$t('issuer.cjhd.inputPlay')}` }]}]"
                 />
               </a-form-item>
               <a-form-item
-                label="活动特点"
+                :label="$t('issuer.cjhd.activityTrait')"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
                 class="my-form-item"
               >
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">活动级别</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.activityLevel')}}</span>
                   <div>
                     <a-checkable-tag
                       v-for=" tag in tags"
@@ -399,7 +402,7 @@
                   </div>
                 </div>
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">适合企业</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.shqy')}}</span>
                   <div>
                     <a-checkable-tag
                       v-for=" tag in tags1"
@@ -411,7 +414,7 @@
                   </div>
                 </div>
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">覆盖范围</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.fgfw')}}</span>
                   <div>
                     <a-checkable-tag
                       :key="tag.id"
@@ -423,7 +426,7 @@
                   </div>
                 </div>
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">活动特点</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.hdtd')}}</span>
                   <div>
                     <a-checkable-tag
                       v-for=" tag in tags3"
@@ -438,13 +441,13 @@
             </div>
             <div class="right">
               <a-form-item
-                label="受众群众"
+                :label="$t('issuer.cjhd.szqz')"
                 :wrapperCol="{span: 18, offset: 1}"
                 :labelCol="{span: 4}"
                 class="my-form-item"
               >
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">年龄段</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.nld')}}</span>
                   <div>
                     <a-checkable-tag
                       v-for=" tag in tags4"
@@ -456,7 +459,7 @@
                   </div>
                 </div>
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">社会属性</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.shsx')}}</span>
                   <div>
                     <a-checkable-tag
                       v-for=" tag in tags5"
@@ -468,7 +471,7 @@
                   </div>
                 </div>
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">消费特征</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.xftz')}}</span>
                   <div>
                     <a-checkable-tag
                       :key="tag.id"
@@ -480,7 +483,7 @@
                   </div>
                 </div>
                 <div class="my-tag-box">
-                  <span :style="{ marginRight: 8 }">职业特征</span>
+                  <span :style="{ marginRight: 8 }">{{$t('issuer.cjhd.zytz')}}</span>
                   <div>
                     <a-checkable-tag
                       v-for=" tag in tags7"
@@ -511,22 +514,25 @@
         <a-form layout="horizontal" :form="form3">
           <div class="info-item-column" v-if="formShow == 3">
             <a-form-item
-              label="招商截止日期"
+              :label="$t('issuer.cjhd.zsjzrq')"
               class="my-form-item"
               :wrapperCol="{span: 20, offset: 1}"
               :labelCol="{span: 3}"
             >
+            <a-locale-provider :locale="locale">
               <a-date-picker
                 @change="onClosingDate"
-                v-decorator="['closingDate',{rules: [{ type: 'object', required: true, message: '请输入时间' }]}]"
+                v-decorator="['closingDate',{rules: [{ type: 'object', required: true, message: `${$t('issuer.cjhd.qsrsj')}` }]}]"
               />
+              </a-locale-provider>
             </a-form-item>
             <a-form-item
-              label="赞助要求"
+              :label="$t('issuer.cjhd.zzyq')"
               class="my-form-item"
               :wrapperCol="{span: 20, offset: 1}"
               :labelCol="{span: 3}"
             >
+            <a-locale-provider :locale="locale">
               <a-table
                 :columns="columns"
                 :dataSource="dataTable"
@@ -546,7 +552,7 @@
                       style="margin: -5px 0"
                       :value="text"
                       :placeholder="columns[i].title"
-                      v-decorator="['requireName',{rules: [{ required: true, message: '请输入' }]}]"
+                      v-decorator="['requireName',{rules: [{ required: true, message: `${$t('issuer.notices.pleaseEnter')}` }]}]"
                       @change="e => handleChange2(e.target.value, record.key, col)"
                     />
                     <a-select
@@ -555,7 +561,7 @@
                       :defaultValue="text"
                       @change="vlues(record.key, 'zzWay', $event)"
                       labelInValue
-                      v-decorator="['xingShi2',{rules: [{ required: true, message: '请填写活动' }]}]"
+                      v-decorator="['xingShi2',{rules: [{ required: true, message: `${$t('issuer.cjhd.qtxhd')}` }]}]"
                     >
                       <a-select-option
                         v-for="(item, index) in zanZah"
@@ -569,50 +575,52 @@
                 <template slot="operation" slot-scope="text, record">
                   <template v-if="record.editable">
                     <span v-if="record.isNew">
-                      <a @click="saveRow(record)">确定</a>
+                      <a @click="saveRow(record)">{{$t('issuer.cjhd.qd')}}</a>
                       <a-divider type="vertical"/>
-                      <a-popconfirm title="是否要删除此行？" @confirm="remove1(record.key)">
-                        <a>取消</a>
+                      <a-popconfirm :title="$t('issuer.cjhd.sfdel')" @confirm="remove1(record.key)">
+                        <a>{{$t('issuer.cjhd.cancel')}}</a>
                       </a-popconfirm>
                     </span>
                     <span v-else>
-                      <a @click="saveRow(record)">保存</a>
+                      <a @click="saveRow(record)">{{$t('issuer.cjhd.bc')}}</a>
                       <a-divider type="vertical"/>
-                      <a @click="cancel(record.key)">取消</a>
+                      <a @click="cancel(record.key)">{{$t('issuer.cjhd.cancel')}}</a>
                     </span>
                   </template>
                   <span v-else>
-                    <a @click="toggle(record.key)">编辑</a>
+                    <a @click="toggle(record.key)">{{$t('issuer.cjhd.bj')}}</a>
                     <a-divider type="vertical"/>
-                    <a-popconfirm title="是否要删除此行？" @confirm="remove1(record.key)">
-                      <a>取消</a>
+                    <a-popconfirm :title="$t('issuer.cjhd.sfdel')" @confirm="remove1(record.key)">
+                      <a>{{$t('issuer.cjhd.cancel')}}</a>
                     </a-popconfirm>
                   </span>
                 </template>
               </a-table>
+              </a-locale-provider>
               <a-button
                 style="width: 100%; margin-top: 16px; margin-bottom: 8px"
                 type="dashed"
                 icon="plus"
                 @click="newMember"
-              >新增赞助</a-button>
+              >{{$t('issuer.cjhd.xzzz')}}</a-button>
             </a-form-item>
             <a-form-item
-              label="合作要求"
+              :label="$t('issuer.cjhd.hzyq')"
               class="my-form-item"
               :wrapperCol="{span: 20, offset: 1}"
               :labelCol="{span: 3}"
             >
               <a-textarea
-                placeholder="合作要求"
+                :placeholder="$t('issuer.cjhd.hzyq')"
                 class="my-input"
                 :autosize="{ minRows: 4, maxRows: 6 }"
-                v-decorator="['textYao',{rules: [{ required: false, message: '合作要求' }]}]"
+                v-decorator="['textYao',{rules: [{ required: false, message: `${$t('issuer.cjhd.hzyq')}` }]}]"
               />
             </a-form-item>
           </div>
         </a-form>
       </a-modal>
+      </a-locale-provider>
     </div>
   </div>
 </template>
@@ -664,11 +672,11 @@
             width: 100%;
             display: flex;
             .my-tag-box {
-              display: flex;
+              //display: flex;
               > span {
                 margin-right: 10px;
-                min-width: 56px;
-                text-align: right;
+                min-width: 62px;
+                text-align: left;
               }
               .my-tag {
                 border: 1px solid #ccc;
@@ -722,6 +730,14 @@ function uniq(array) {
 }
 import { mixinsTitle } from '@/utils/mixin.js'
 import moment from 'moment'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 import {
   getPlace,
   getActivityTest,
@@ -744,8 +760,8 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
-      zanZah: [{ label: '0', value: '现金' }, { label: '1', value: '现金+实物' }, { label: '2', value: '实物' }],
-      xingShi: [{ label: '0', value: '形式' }, { label: '1', value: '形式' }, { label: '2', value: '形式' }],
+      locale: lang[localStorage.getItem('lang')],
+      zanZah: [{ label: '0', value: this.$t('issuer.index.cash') }, { label: '1', value: this.$t('issuer.index.cashReal') }, { label: '2', value: this.$t('issuer.index.realThing') }],
       visible: false,
       confirmLoading: false,
       times: [],
@@ -830,15 +846,15 @@ export default {
       fileImgs: '',
       detailsImgs: [], // 活动详情多张图片
       data: [
-        { title: '活动基本信息', description: '活动详细内容编辑', value: '', actions: { title: '',checked: '' } },
-        { title: '活动详情', description: '设置活动详细信息以及推广内容设置', value: '', actions: { title: '', checked: '' } },
+        { title: this.$t('issuer.cjhd.hdjbxx'), description: this.$t('issuer.cjhd.xzzzDesc'), value: '', actions: { title: '',checked: '' } },
+        { title: this.$t('issuer.cjhd.hdxq'), description: this.$t('issuer.cjhd.hzyqDesc'), value: '', actions: { title: '', checked: '' } },
         {
-          title: '活动推广',
-          description: '把自己的活动推广到社交平台以及微媒平台上',
+          title: this.$t('issuer.cjhd.hdtg'),
+          description: this.$t('issuer.cjhd.hdtgDesc'),
           value: '',
           actions: { title: '',checked: '' }
         },
-        { title: '活动赞助', description: '把自己的活动赞助情况设置', value: '', actions: { title: '',checked: '' } }
+        { title: this.$t('issuer.cjhd.hdzz'), description: this.$t('issuer.cjhd.hdzzDesc'), value: '', actions: { title: '',checked: '' } }
         //{ title: '报名', description: '设置报名信息，用户分组/售票等设置', value: '', actions: { title: '修改' } }
       ],
       formItemLayout: {
@@ -859,28 +875,28 @@ export default {
       memberLoading: false,
       columns: [
         {
-          title: '推广形式',
+          title: this.$t('issuer.cjhd.tgxs'),
           dataIndex: 'tgWay',
           key: 'tgWay',
           width: '15%',
           scopedSlots: { customRender: 'tgWay' }
         },
         {
-          title: '赞助形式',
+          title: this.$t('issuer.cjhd.zzxs'),
           dataIndex: 'zzWay',
           key: 'zzWay',
           width: '15%',
           scopedSlots: { customRender: 'zzWay' }
         },
         {
-          title: '赞助金额',
+          title: this.$t('issuer.cjhd.zzje'),
           dataIndex: 'zzPrice',
           key: 'zzPrice',
           width: '15%',
           scopedSlots: { customRender: 'zzPrice' }
         },
         {
-          title: '赞助名额',
+          title: this.$t('issuer.cjhd.zzme'),
           dataIndex: 'zzNum',
           key: 'zzNum',
           width: '15%',
@@ -894,14 +910,14 @@ export default {
           scopedSlots: { customRender: 'isPrice' }
         },*/
         {
-          title: '备注',
+          title: this.$t('issuer.cjhd.bz'),
           dataIndex: 'remarks',
           key: 'remarks',
           width: '12%',
           scopedSlots: { customRender: 'remarks' }
         },
         {
-          title: '操作',
+          title: this.$t('issuer.cjhd.cz'),
           key: 'action',
           scopedSlots: { customRender: 'operation' }
         }
@@ -940,9 +956,9 @@ export default {
       for (let i = 0; i < this.data.length; i++) {
         console.log(this.$route.query.campId)
         if (this.$route.query.campId) {
-          this.data[i].actions.title = '修改'
+          this.data[i].actions.title = this.$t('issuer.hdgl.modify')
         } else {
-          this.data[i].actions.title = '新增'
+          this.data[i].actions.title = this.$t('issuer.hdgl.newAdd')
         }
       }
     },
@@ -981,24 +997,24 @@ export default {
               path: '/issuerHdgl'
             })
             this.$notification.success({
-              message: '成功',
-              description: '提交成功',
+              message: this.$t('issuer.hdgl.successNmae'),
+              description: this.$t('issuer.hdgl.tjcg'),
               duration: 4
             })
             //window.location.reload();
           }else if(res.data.code == '1002') {
-            this.$message.error('活动详情没有数据')
+            this.$message.error(this.$t('issuer.cjhd.errorOne'))
           }
           else if(res.data.code == '1003') {
-            this.$message.error('活动推广信没有填写')
+            this.$message.error(this.$t('issuer.cjhd.errorTwo'))
           }else{
-            this.$message.error('活动赞助信息没有填写')
+            this.$message.error(this.$t('issuer.cjhd.errorThree'))
           }
         })
       } else {
         this.$notification['error']({
-          message: '失败',
-          description: '提交失败，请先填写活动基本信息',
+          message: this.$t('issuer.cjhd.errorFive'),
+          description: this.$t('issuer.cjhd.errorFour'),
           duration: 4
         })
       }
@@ -1108,11 +1124,15 @@ export default {
       const token = this.$ls.get('Access-Token')
       const campId = this.$route.query.campId ? this.$route.query.campId : this.userid
       if (index == 0) {
-        getPlace().then(res => {
+        const lang = {
+          internationalization: localStorage.lang
+        }
+        console.log(lang)
+        getPlace(lang).then(res => {
           console.log(res)
           this.cityPlace = res.data
         })
-        getClassify().then(res => {
+        getClassify(lang).then(res => {
           this.classify = res.data
           console.log(res)
         })
@@ -1140,12 +1160,12 @@ export default {
               chineseName: res.data.list[0].name,
               englishName: res.data.list[0].enName,
               emailName: res.data.list[0].email,
-              HuoDongName: res.data.list[0].campCatalog ? parseInt(res.data.list[0].campCatalog) : '',
+              HuoDongName: res.data.list[0].campCatalog ? res.data.list[0].campCatalog : '',
               testNum: res.data.list[0].campNum,
               testName: res.data.list[0].contact,
               phoneName: res.data.list[0].phone,
-              placeName: { key: '110000', label: '北京市' },
-              addressName: '北京市',
+              placeName: { key: '110000', label: this.$t('issuer.cjhd.beiJing') },
+              addressName: this.$t('issuer.cjhd.beiJing'),
               rangePicker: list,
               timePicker: moment(res.data.list[0].createTime, 'HH:mm:ss')
             })
@@ -1165,7 +1185,7 @@ export default {
               testNum: '',
               testName: '',
               phoneName: '',
-              placeName: { key: '110000', label: '北京市' },
+              placeName: { key: '110000', label: this.$t('issuer.cjhd.beiJing')},
               rangePicker: [moment(), moment()],
               timePicker: moment()
             })
@@ -1227,7 +1247,8 @@ export default {
         console.log(campId)
         const params = {
         token: token,
-        campId: campId
+        campId: campId,
+        internationalization: localStorage.lang
       }
         getCheckInformation(params).then(res => {
           console.log(res)
@@ -1250,18 +1271,21 @@ export default {
           if (this.code == '1000' || campId) {
             this.form2.setFieldsValue({
               pingName: res.platform,
-              companyTitle: { key: '133', label: '主办方' },
+              companyTitle: { key: '133', label: this.$t('issuer.cjhd.zbf') },
               companyName: ''
             })
             const selectArry = res.campFeature.split(',')
             const companyArry = res.data
             const companyList1 = []
             for (let i = 0; i < companyArry.length; i++) {
-              companyList1.push({
+              if(companyArry.length !== 0) {
+                companyList1.push({
                 work_name: companyArry[i].work_name,
                 name: companyArry[i].name,
                 workType: companyArry[i].work_type
               })
+              }
+              
             }
             this.companyList = companyList1
             const tagsList = []
@@ -1271,11 +1295,12 @@ export default {
               tagsList.push(selectArry[i])
             }
             console.log(tagsList)
+            this.characteristic = tagsList.join(',')
             this. selectedTags= tagsList
           } else {
             this.form2.setFieldsValue({
               pingName: '',
-              companyTitle: { key: '133', label: '主办方' }
+              companyTitle: { key: '133', label: this.$t('issuer.cjhd.zbf') }
             })
             console.log(this.companyList)
             this.companyList = []
@@ -1361,7 +1386,7 @@ export default {
           this.visible = true
         } else{
           this.alertVisible = true
-        this.alertText = '请先填写活动基本信息'
+        this.alertText = this.$t('issuer.cjhd.alertText')
         setTimeout(() => {
           this.alertVisible = false
         }, 1000)
@@ -1473,7 +1498,7 @@ export default {
       if (this.formShow == 0) {
         this.confirmLoading = false
         if(this.areaList.length == 0) {
-          this.$message.error('请添加活动地点')
+          this.$message.error(this.$t('issuer.cjhd.alertText1'))
           return false
         }
         this.form.validateFields((err, values) => {
@@ -1527,14 +1552,14 @@ export default {
                 this.data[0].actions.checked = true
               }*/
               if (res.data.code == '1000' || res.data.code == '1001') {
-                this.data[this.formShow].actions.title = '修改'
+                this.data[this.formShow].actions.title = this.$t('issuer.hdgl.modify')
                 this.visible = false
                   this.confirmLoading = false
                 this.findIndex = 1
-                this.$message.success('成功');
+                this.$message.success(this.$t('issuer.hdgl.successNmae'));
               } else {
                 this.findIndex = 0
-                this.$message.error('失败');
+                this.$message.error(this.$t('issuer.cjhd.errorFive'));
               }
             })
           }
@@ -1564,12 +1589,12 @@ export default {
               console.log(res)
               this.userid = res.data.campId
               if (res.data.code == '1000' || res.data.code == '1001') {
-                this.data[this.formShow].actions.title = '修改'
+                this.data[this.formShow].actions.title = this.$t('issuer.hdgl.modify')
                 this.visible = false
                   this.confirmLoading = false
-                  this.$message.success('成功');
+                  this.$message.success(this.$t('issuer.hdgl.successNmae'));
               }else {
-                this.$message.error('失败');
+                this.$message.error(this.$t('issuer.cjhd.errorFive'));
               }
             })
           }
@@ -1579,7 +1604,7 @@ export default {
       if (this.formShow == 2) {
         this.confirmLoading = false
         if(this.companyList.length == 0) {
-          this.$message.error('请添加主承办方')
+          this.$message.error(this.$t('issuer.cjhd.alertText2'))
           return false
         }
         this.form2.validateFields((err, values) => {
@@ -1603,12 +1628,12 @@ export default {
               console.log(res)
               this.userid = res.data.campId
               if (res.data.code == '1000' || res.data.code == '1001') {
-                this.data[this.formShow].actions.title = '修改'
+                this.data[this.formShow].actions.title = this.$t('issuer.hdgl.modify')
                 this.visible = false
                 this.confirmLoading = false
-                this.$message.success('成功');
+                this.$message.success(this.$t('issuer.hdgl.successNmae'));
               }else {
-                this.$message.error('失败');
+                this.$message.error(this.$t('issuer.cjhd.errorFive'));
               }
             })
           }
@@ -1639,12 +1664,12 @@ export default {
               console.log(res)
               this.userid = res.data.campId
               if (res.data.code == 1000 || rea.data.code == 1001) {
-                this.data[this.formShow].actions.title = '修改'
+                this.data[this.formShow].actions.title = this.$t('issuer.hdgl.modify')
                 this.visible = false
                   this.confirmLoading = false
-                this.$message.success('成功');
+                this.$message.success(this.$t('issuer.hdgl.successNmae'));
               }else {
-                this.$message.error('失败');
+                this.$message.error(this.$t('issuer.cjhd.errorFive'));
               }
             })
           }
@@ -1683,12 +1708,12 @@ export default {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       if (!isJPG && !isPNG) {
-        this.$message.error('You can only upload JPG file!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
         return isJPG
       }
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
         return isLt2M
       }
       getBase64(file, imageUrl => {
@@ -1712,7 +1737,7 @@ export default {
       const isRMVB = file.type === 'video/rmvb'
       const isAVI = file.type === 'video/avi'
       if (!isMP4 && !isRMVB && !isAVI) {
-        this.$message.error('不是视频格式!')
+        this.$message.error(this.$t('issuer.cjhd.message1'))
         return false
       }
       getBase64(file, videoUrl => {
@@ -1736,12 +1761,12 @@ export default {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       if (!isJPG && !isPNG) {
-        this.$message.error('You can only upload JPG file!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
         return isJPG
       }
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
         return isLt2M
       }
       getBase64(file, imageUrl => {
@@ -1767,7 +1792,7 @@ export default {
         console.log(this.fileList)
         const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
       }
       return isLt2M
       })
@@ -1828,13 +1853,14 @@ export default {
       
       if (!tgWay || !zzWay || !zzPrice || !zzNum) {
         this.memberLoading = false
-        this.$message.error('请填写完整成员信息。')
+        this.$message.error(this.$t('issuer.cjhd.message2'))
         return
       } else {
         console.log(this.dataTable)
         const tableList = []
         for (let i = 0; i < this.dataTable.length; i++) {
-          tableList.push({
+          if(!tgWay || !zzWay || !zzPrice || !zzNum) {
+            tableList.push({
             ssKind: this.dataTable[i].tgWay,
             sponsorship: this.dataTable[i].zzWay1,
             money: this.dataTable[i].zzPrice,
@@ -1842,6 +1868,8 @@ export default {
             //bargain: isPrice,
             bz: this.dataTable[i].remarks
           })
+          } 
+          
         }
 
         this.supportAyyty = tableList
@@ -1923,10 +1951,10 @@ export default {
     this.form2 = this.$form.createForm(this)
     this.form3 = this.$form.createForm(this)
     console.log(this.form)
-    /*this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
+    this.form.getFieldDecorator('keys', { initialValue: [], preserve: true })
     this.form1.getFieldDecorator('keys', { initialValue: [], preserve: true })
     this.form2.getFieldDecorator('keys', { initialValue: [], preserve: true })
-    this.form3.getFieldDecorator('keys', { initialValue: [], preserve: true })*/
+    this.form3.getFieldDecorator('keys', { initialValue: [], preserve: true })
 
   }
 }

@@ -4,14 +4,14 @@
     <div slot="headerContent">
       <div class="title">
         {{ timeFix }}，{{ user }}，
-        <span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span>
+        <span class="welcome-text">{{$t('header.HeadMenu.welcome')}} Sponsor Cube {{$t('header.HeadMenu.platform')}}</span>
       </div>
-      <div>赞助商</div>
+      <div>{{$t('mar.zzs')}}</div>
     </div>
     <div id="home">
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="赞助详情" :bordered="false" class="my-cards">
+          <a-card :loading="loading" :title="$t('issuer.index.zzxq')" :bordered="false" class="my-cards">
             <div class="item-boxes">
               <div class="item-row">
                 <a-row type="flex" justify="space-between">
@@ -45,12 +45,12 @@
                       <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                     </v-chart>
                     <div class="calc-price">
-                      总计：￥
+                      {{$t('issuer.index.totalPrice')}}：￥
                       <span>{{sponsorTotal}}</span>
                     </div>
                   </a-col>
                   <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
-                    <p>暂无数据</p>
+                    <p>{{$t('issuer.index.noData')}}</p>
                   </a-col>
                   <a-col
                     :xl="12"
@@ -82,18 +82,18 @@
                       <v-coord type="theta" :radius="0.75" :innerRadius="0.3" />
                     </v-chart>
                     <div class="calc-price">
-                      总计：￥
+                      {{$t('issuer.index.totalPrice')}}：￥
                       <span>{{agentTotal}}</span>
                     </div>
                   </a-col>
                   <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
-                    <p>暂无数据</p>
+                    <p>{{$t('issuer.index.noData')}}</p>
                   </a-col>
                 </a-row>
               </div>
             </div>
           </a-card>
-          <a-card title="活动动态" class="my-activity">
+          <a-card :title="$t('issuer.index.hddt')" class="my-activity">
             <a-table :columns="operationColumns" :dataSource="operation1" :pagination="false"></a-table>
           </a-card>
         </a-col>
@@ -103,14 +103,14 @@
             :loading="loading"
             style="margin-bottom: 24px;"
             :bordered="false"
-            title="我的消息"
+            :title="$t('issuer.index.wdxx')"
             :body-style="{ padding: 0 }"
           >
-            <a slot="extra" @click="$router.push({name:'tzxx'})">全部消息</a>
+            <a slot="extra" @click="$router.push({name:'tzxx'})">{{$t('issuer.index.qbxx')}}</a>
             <p
               style="color: #ccc;text-align: center; padding: 10px 0; margin: 0"
               v-if="projects.length == 0"
-            >暂无信息</p>
+            >{{$t('issuer.index.noData')}}</p>
             <div v-else>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -138,10 +138,10 @@ import { timeFix } from '@/utils/util'
 import { headMsg, piesData, userInfo } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-
+import i18n from '@lang/index'
 import { searchSponsor } from '@/api/sponsor'
-const sourceData = [{ item: '现金', count: null }, { item: '实物', count: null }]
-const sourceData1 = [{ item: '未付', count: null }, { item: '已付', count: null }]
+const sourceData = [{ item: i18n.t('issuer.index.cash'), count: null }, { item: i18n.t('issuer.index.realThing'), count: null }]
+const sourceData1 = [{ item: i18n.t('issuer.index.unpaid'), count: null }, { item: i18n.t('issuer.index.paid'), count: null }]
 const DataSet = require('@antv/data-set')
 const dv = new DataSet.View().source(sourceData)
 const dv1 = new DataSet.View().source(sourceData1)
@@ -242,43 +242,43 @@ export default {
       // data
       operationColumns: [
         {
-          title: '序号',
+          title: this.$t('issuer.cjhd.xh'),
           dataIndex: 'key',
           key: 'number'
         },
         {
-          title: '活动名称',
+          title: this.$t('admin.hdmc'),
           dataIndex: 'name',
           key: 'name'
         },
 
         {
-          title: '推广形式',
+          title: this.$t('issuer.cjhd.tgxs'),
           dataIndex: 'ssKind',
           key: 'tgxs'
         },
         {
-          title: '赞助形式',
+          title: this.$t('issuer.cjhd.zzxs'),
           dataIndex: 'sponsorship',
           key: 'zzxs'
         },
         {
-          title: '现金资助',
+          title: this.$t('issuer.cjhd.xjzz'),
           dataIndex: 'cash',
           key: 'xjzz'
         },
         {
-          title: '实物赞助',
+          title: this.$t('issuer.cjhd.swzz'),
           dataIndex: 'product',
           key: 'swzz'
         },
         {
-          title: '赞助金额',
+          title: this.$t('issuer.cjhd.zzje'),
           dataIndex: 'tolMoney',
           key: 'zzje'
         },
         {
-          title: '已付款',
+          title: this.$t('admin.yfk'),
           dataIndex: 'paid',
           key: 'yfk'
         }

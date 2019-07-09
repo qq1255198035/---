@@ -15,7 +15,7 @@
     ></glTitle>
     <div class="details-content">
       <div class="details-header">
-        <a-card title="活动进度">
+        <a-card :title="$t('issuer.cjhd.activityProgress')">
           <div class="secetion">
             <a-steps :current="current">
               <a-popover slot="progressDot" slot-scope="{index, status, prefixCls}">
@@ -24,30 +24,30 @@
                 </template>
                 <span :class="`${prefixCls}-icon-dot`"></span>
               </a-popover>
-              <a-step title="创建活动"/>
-              <a-step title="平台审核"/>
-              <a-step title="活动进行中"/>
-              <a-step title="完成"/>
+              <a-step :title="$t('issuer.hdgl.createAnEvent')"/>
+              <a-step :title="$t('issuer.cjhd.platformReview')"/>
+              <a-step :title="$t('issuer.cjhd.activityProgress')"/>
+              <a-step :title="$t('issuer.cjhd.okOver')"/>
             </a-steps>
           </div>
         </a-card>
       </div>
       <div class="details-main">
         <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
-          <a-tab-pane key="1" tab="活动信息">
+          <a-tab-pane key="1" :tab="$t('issuer.cjhd.hdxxs')">
             <a-card :bordered="false">
-              <detail-list title="活动基本信息">
-                <detail-list-item term="活动中文名称">{{name}}</detail-list-item>
-                <detail-list-item term="活动分类">{{capName}}</detail-list-item>
-                <detail-list-item term="参赛人数">{{campNum}}人</detail-list-item>
-                <detail-list-item term="活动英文名称">{{enName}}</detail-list-item>
-                <detail-list-item term="活动时间">{{start}}</detail-list-item>
-                <detail-list-item term="联系人">{{contact}}</detail-list-item>
-                <detail-list-item term="电子邮件">{{email}}</detail-list-item>
-                <detail-list-item term="联系电话">{{phone}}</detail-list-item>
+              <detail-list :title="$t('issuer.cjhd.hdjbxx')">
+                <detail-list-item :term="$t('issuer.cjhd.hdzwmc')">{{name}}</detail-list-item>
+                <detail-list-item :term="$t('issuer.cjhd.hdfl')">{{capName}}</detail-list-item>
+                <detail-list-item :term="$t('issuer.cjhd.number')">{{campNum}}人</detail-list-item>
+                <detail-list-item :term="$t('issuer.cjhd.hdywmc')">{{enName}}</detail-list-item>
+                <detail-list-item :term="$t('issuer.cjhd.hdsj')">{{start}}</detail-list-item>
+                <detail-list-item :term="$t('issuer.accountInfo.contact')">{{contact}}</detail-list-item>
+                <detail-list-item :term="$t('issuer.accountInfo.email')">{{email}}</detail-list-item>
+                <detail-list-item :term="$t('issuer.accountInfo.telphone')">{{phone}}</detail-list-item>
               </detail-list>
               <detail-list>
-                <detail-list-item term="活动地区" class="my-item">
+                <detail-list-item :term="$t('issuer.cjhd.hddq')" class="my-item">
                   <a-table
                     :columns="columns"
                     :dataSource="data"
@@ -62,27 +62,27 @@
               </detail-list>
             </a-card>
             <div class="my-item-list">
-              <h3>活动详情</h3>
+              <h3>{{$t('issuer.cjhd.hdxq')}}</h3>
               <ul>
                 <li>
-                  <span>活动内容：</span>
+                  <span>{{$t('issuer.cjhd.Activities')}}：</span>
                   <p>{{activityContent}}</p>
                 </li>
                 <li>
-                  <span>活动视频：</span>
+                  <span>{{$t('issuer.cjhd.hdsp')}}：</span>
                   <video v-if="videoUrls" :src="videoUrls" controls width="200px" height="150px"></video>
                 </li>
                 <li>
-                  <span>活动照片：</span>
+                  <span>{{$t('issuer.cjhd.hdzp')}}：</span>
                   <img v-for="item in detailsImgs" :src="item" :key="item" alt>
                 </li>
               </ul>
             </div>
             <div class="my-item-list">
-              <h3>活动推广</h3>
+              <h3>{{$t('issuer.cjhd.hdtg')}}</h3>
               <ul>
                 <li>
-                  <span>主办承办方：</span>
+                  <span>{{$t('issuer.cjhd.mainContractor')}}：</span>
                   <a-table
                     :columns="columns1"
                     :dataSource="data1"
@@ -92,13 +92,13 @@
                   />
                 </li>
                 <li>
-                  <span>受众群众：</span>
+                  <span>{{$t('issuer.cjhd.szqz')}}：</span>
                   <div>
                     <a-tag color="pink" v-for="(item, index) in selectedTags1" :key="index">{{item}}</a-tag>
                   </div>
                 </li>
                 <li>
-                  <span>活动特点：</span>
+                  <span>{{$t('issuer.cjhd.hdtd')}}：</span>
                   <div>
                     <a-tag color="orange" v-for="(item, index) in selectedTags" :key="index">{{item}}</a-tag>
                   </div>
@@ -106,14 +106,14 @@
               </ul>
             </div>
             <div class="my-item-list">
-              <h3>活动赞助</h3>
+              <h3>{{$t('issuer.cjhd.hdzz')}}</h3>
               <ul>
                 <li>
-                  <span>招商截止日期：</span>
+                  <span>{{$t('issuer.cjhd.zsjzrq')}}：</span>
                   <p>{{closingDate}}</p>
                 </li>
                 <li>
-                  <span>赞助要求：</span>
+                  <span>{{$t('issuer.cjhd.zzyq')}}：</span>
                   <a-table
                     :columns="columns2"
                     :dataSource="data2"
@@ -123,13 +123,13 @@
                   />
                 </li>
                 <li>
-                  <span>活动要求：</span>
+                  <span>{{$t('issuer.cjhd.hdyq')}}：</span>
                   <p>{{requirdContent}}</p>
                 </li>
               </ul>
             </div>
           </a-tab-pane>
-          <a-tab-pane key="2" tab="赞助信息">
+          <a-tab-pane key="2" :tab="$t('issuer.cjhd.zzxx')">
             <div>
                 <a-collapse accordion activeKey="1" :bordered="false">
                           <a-collapse-panel :key="index" v-for="(item, index) in dataNameArrty">
@@ -140,7 +140,9 @@
                             <div>
                                     
                               <div class="my-tables">
+                                <a-locale-provider :locale="locale">
                                   <a-table :columns="columns3" :dataSource="filterItems(dataName,item.ss_id)" @change="pageNext" size="middle"></a-table>
+                                </a-locale-provider>
                               </div>
                             </div>
                             
@@ -162,9 +164,11 @@
               <a-table :columns="columns3" :dataSource="dataOther" size="middle"></a-table>
             </div>-->
           </a-tab-pane>
-          <a-tab-pane key="3" tab="明星信息">
+          <a-tab-pane key="3" :tab="$t('issuer.cjhd.mxxx')">
             <div class="my-tables">
+              <a-locale-provider :locale="locale">
               <a-table :columns="columns4" :dataSource="starList" size="middle"></a-table>
+               </a-locale-provider>
             </div>
           </a-tab-pane>
         </a-tabs>
@@ -255,6 +259,14 @@
 <script>
 import glTitle from '@/components/glTitle1/glTitle1'
 import DetailList from '@/components/tools/DetailList'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 import {
   getCheckActivitiesDetail,
   getExtension,
@@ -268,46 +280,47 @@ import {
 import imgUrl from '@/assets/a1.jpg'
 
 import { mixinsTitle } from '@/utils/mixin.js'
+import i18n from '@lang/index'
 const DetailListItem = DetailList.Item
 const columns = [
   {
-    title: '地区',
+    title: i18n.t('issuer.cjhd.dq'),
     dataIndex: 'area_name'
   },
   {
-    title: '详细',
+    title: i18n.t('issuer.cjhd.xx'),
     dataIndex: 'addr'
   }
 ]
 const columns1 = [
   {
-    title: '主办承办方',
+    title: i18n.t('issuer.cjhd.mainContractor'),
     dataIndex: 'work_name'
   },
   {
-    title: '名称',
+    title: i18n.t('issuer.cjhd.mc'),
     dataIndex: 'name'
   }
 ]
 const columns2 = [
   {
-    title: '推广形式',
+    title: i18n.t('issuer.cjhd.tgxs'),
     dataIndex: 'ss_kind'
   },
   {
-    title: '赞助形式',
+    title: i18n.t('issuer.cjhd.zzxs'),
     dataIndex: 'sponsorship'
   },
   {
-    title: '赞助金额',
+    title: i18n.t('issuer.cjhd.zzje'),
     dataIndex: 'money'
   },
   {
-    title: '赞助名额',
+    title: i18n.t('issuer.cjhd.zzme'),
     dataIndex: 'num'
   },
   {
-    title: '备注',
+    title: i18n.t('issuer.cjhd.bz'),
     dataIndex: 'bz'
   }
 ]
@@ -365,70 +378,70 @@ const data2 = [
 ]
 const columns3 = [
   {
-    title: '序号',
+    title: i18n.t('issuer.cjhd.xh'),
     dataIndex: 'key',
     align: 'center'
   },
   {
-    title: '赞助公司名称',
+    title: i18n.t('issuer.cjhd.zzgsmc'),
     dataIndex: 'name',
     align: 'center'
   },
   {
-    title: '赞助形式',
+    title: i18n.t('issuer.cjhd.zzxs'),
     dataIndex: 'sponsorship',
     align: 'center'
   },
 
   {
-    title: '现金赞助',
+    title: i18n.t('issuer.cjhd.xjzz'),
     dataIndex: 'cash',
     align: 'center'
   },
   {
-    title: '实物赞助',
+    title: i18n.t('issuer.cjhd.swzz'),
     dataIndex: 'productVal',
     align: 'center'
   },
   {
-    title: '赞助总额',
+    title: i18n.t('issuer.cjhd.zzze'),
     dataIndex: 'tolMoney',
     align: 'center'
   },
   {
-    title: '已付款金额',
+    title: i18n.t('issuer.cjhd.yfkje'),
     dataIndex: 'paid',
     align: 'center'
   }
 ]
 const columns4 = [
   {
-    title: '姓名',
+    title: i18n.t('issuer.cjhd.xm'),
     dataIndex: 'name',
     align: 'center'
   },
   {
-    title: '出场费用',
+    title: i18n.t('issuer.cjhd.ccfy'),
     dataIndex: 'cost',
     align: 'center'
   },
   {
-    title: '联系人',
+    title: i18n.t('issuer.accountInfo.contact'),
     dataIndex: 'contact',
     align: 'center'
   },
   {
-    title: '联系电话',
+    title: i18n.t('issuer.accountInfo.telphone'),
     dataIndex: 'phone',
     align: 'center'
   },
   {
-    title: '邮箱',
+    title: i18n.t('issuer.accountInfo.email'),
     dataIndex: 'email',
     align: 'center'
   },
   {
-    title: '公司',
+    title: i18n.t('issuer.accountInfo.companyTitle'),
     dataIndex: 'company',
     align: 'center'
   }
@@ -442,6 +455,7 @@ export default {
   },
   data() {
     return {
+      locale: lang[localStorage.getItem('lang')],
       lists: [
         {
           title: '形式1',
@@ -588,19 +602,19 @@ export default {
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {
-          this.status = '创建活动'
+          this.status = this.$t('issuer.hdgl.createAnEvent')
         }
         if (activityDetail.status == 0) {
-          this.status = '平台审核'
+          this.status = this.$t('issuer.cjhd.platformReview')
         }
         if (activityDetail.status == 20) {
-          this.status = '活动进行中'
+          this.status = this.$t('issuer.cjhd.activityProgress')
         }
         if (activityDetail.status == 30) {
-          this.status = '创建活动'
+          this.status = this.$t('issuer.hdgl.createAnEvent')
         }
         if (activityDetail.status == 50) {
-          this.status = '活动完成'
+          this.status = this.$t('issuer.cjhd.hdwc')
         }
       })
     },

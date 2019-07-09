@@ -5,15 +5,15 @@
                   <div class="left">
                         <a-form layout="vertical" :form="form">
                               <a-form-item
-                                    label="标题："
+                                    :label="$t('admin.bt')"
                                     :label-col="{ span: 5 }"
                                     :wrapper-col="{ span: 24 }"
                               >
-                                    <a-input placeholder="请输入标题" v-decorator="[
-                                    'title',{rules: [{ required: true, message: '请输入标题' }]}]"/>
+                                    <a-input :placeholder="$t('admin.qsrbt')" v-decorator="[
+                                    'title',{rules: [{ required: true, message: `${$t('admin.qsrbt')}` }]}]"/>
                               </a-form-item>
                               <a-form-item
-                                    label="发送至："
+                                    :label="$t('admin.fsz')"
                                     :label-col="{ span: 5 }"
                                     :wrapper-col="{ span: 24}"
                               >
@@ -24,20 +24,20 @@
                                           :filterOption="filterOption"
                                           allowClear
                                           v-decorator="[
-                                    'person',{rules: [{ required: true, message: '请选择发送人' }]}]"
+                                    'person',{rules: [{ required: true, message: `${$t('admin.qxzfsr')}` }]}]"
                                     >
                                           <a-select-option v-for="item in actor" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
                                     </a-select>
                               </a-form-item>
                               <a-form-item
-                                    label="内容："
+                                    :label="$t('admin.nr')"
                                     :label-col="{ span: 3 }"
                                     :wrapper-col="{ span: 24 }"
                               >
                                     <a-textarea placeholder="" :rows="8" v-decorator="[
-                                    'message',{rules: [{ required: true, message: '请输入内容' }]}]"/>
+                                    'message',{rules: [{ required: true, message: `${$t('admin.qsrnr')}` }]}]"/>
                               </a-form-item>
-                              <a-button type="primary" block @click="sendMessages">发 送</a-button>
+                              <a-button type="primary" block @click="sendMessages">{{$t('admin.fs')}}</a-button>
                         </a-form>
                   </div>
                   <div class="right">
@@ -57,7 +57,7 @@
                                           <article-list-content :description="item.content" :updateAt="item.createtime" />
                                     </a-list-item>
                                     <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
-                                          <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+                                          <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">{{$t('issuer.hdgl.loadMore')}}</a-button>
                                     </div>
                               </a-list>
                         </a-card>
@@ -132,7 +132,7 @@ export default {
                               let page = parseInt(this.pages)
                               if (res.page.offset > page) {
                                     this.btnDsiable = true;
-                                    this.$message.warning('已加载全部信息！');
+                                    this.$message.warning($t('issuer.hdgl.allLoaded'));
                                     this.loadingMore = false;
                                     this.loading = false;
                                     return
@@ -162,7 +162,7 @@ export default {
             postSendMessage(title, content, recipients){
                         sendMessage(title, content, recipients).then(res=>{
                               if(res.code == 1000){
-                                    this.$message.success('发送成功！');
+                                    this.$message.success(this.$t('admin.fscg'));
                                     setTimeout(() => {
                                           window.location.reload();
                                     }, 1000);

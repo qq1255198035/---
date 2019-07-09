@@ -21,7 +21,8 @@ export function searchCampList(content, offset, status) {
                   content: content,
                   offset: offset,
                   limit: 8,
-                  status: status
+                  status: status,
+                  internationalization: localStorage.lang
             })
       })
 }
@@ -34,7 +35,8 @@ export function campApproval(campId, reject, agreement) {
                   token: Vue.ls.get(ACCESS_TOKEN),
                   campId: campId,
                   reject: reject,
-                  agreement: agreement
+                  agreement: agreement,
+                  internationalization: localStorage.lang
             })
       })
 }
@@ -51,7 +53,7 @@ export function searchAuthenCampList(content, offset,status) {
       return axios({
             url: '/vue/admin/searchAuthenticationCampList',
             method: 'post',
-            data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), content: content, offset: offset, limit: 8,status: status })
+            data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), content: content, offset: offset, limit: 8,status: status, internationalization: localStorage.lang })
       })
 }
 // 认证活动接口
@@ -74,7 +76,8 @@ export function campInformation(campId) {
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
-                  campId: campId
+                  campId: campId,
+                  internationalization: localStorage.lang
             })
       })
 }
@@ -107,7 +110,8 @@ export function campHeadInfo(campId) {
             method: 'post',
             data: qs.stringify({
                   token: Vue.ls.get(ACCESS_TOKEN),
-                  campId: campId
+                  campId: campId,
+                  internationalization: localStorage.lang
             })
       })
 }
@@ -184,7 +188,8 @@ export function organizeApproval(orgId, reject, agreement) {
                   token: Vue.ls.get(ACCESS_TOKEN),
                   orgId: orgId,
                   reject: reject,
-                  agreement: agreement
+                  agreement: agreement,
+                  internationalization: localStorage.lang
            })
       })
 }
@@ -197,7 +202,8 @@ export function agentApproval(agentId, reject, agreement) {
                   token: Vue.ls.get(ACCESS_TOKEN),
                   agentId: agentId,
                   reject: reject,
-                  agreement: agreement
+                  agreement: agreement,
+                  internationalization: localStorage.lang
            })
       })
 }
@@ -210,7 +216,8 @@ export function sponsorApproval(brandId, reject, agreement) {
                   token: Vue.ls.get(ACCESS_TOKEN),
                   brandId: brandId,
                   reject: reject,
-                  agreement: agreement
+                  agreement: agreement,
+                  internationalization: localStorage.lang
            })
       })
 }
@@ -223,7 +230,8 @@ export function starApproval(athleteId, reject, agreement) {
                   token: Vue.ls.get(ACCESS_TOKEN),
                   athleteId: athleteId,
                   reject: reject,
-                  agreement: agreement
+                  agreement: agreement,
+                  internationalization: localStorage.lang
            })
       })
 }

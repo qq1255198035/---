@@ -3,48 +3,48 @@
             <page-header :title="pageTitle"></page-header>
             <div class="form-box">
                   <a-form :form="form" @submit="handleSubmit">
-                        <a-form-item label="活动名称" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-select placeholder="请选择" @change="selectName" v-decorator="[
-                                    'hdmc',{rules: [{ required: true, message: '请选择活动名称' }]}]">
+                        <a-form-item :label="$t('admin.hdmc')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-select :placeholder="$t('issuer.hdgl.pleaseChoose')" @change="selectName" v-decorator="[
+                                    'hdmc',{rules: [{ required: true, message: `${$t('admin.qxzhdmc')}` }]}]">
                                     <a-select-option v-for="item in hdmc" :value="item.campId"  :key="item.name">{{ item.name }}</a-select-option>
                               </a-select>
                         </a-form-item>
-                        <a-form-item label="汇款用途" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-select @change="selectWay" placeholder="请选择" v-decorator="[
-                                    'hkyt',{rules: [{ required: true, message: '请选择活动名称' }]}]">
+                        <a-form-item :label="$t('admin.hkyt')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-select @change="selectWay" :placeholder="$t('issuer.hdgl.pleaseChoose')" v-decorator="[
+                                    'hkyt',{rules: [{ required: true, message: `${$t('admin.qxzhkyt')}` }]}]">
                                     <a-select-option v-for="(item,index) in hkfs" :value="item.type + ',' +item.recordId" :key="index">{{ item.details }}</a-select-option>
                               </a-select>
                         </a-form-item>
-                        <a-form-item label="付款公司" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" v-decorator="['fkgs',{rules: [{ required: true, message: '请填写付款公司' }]}]"/>
+                        <a-form-item :label="$t('admin.fkgs')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" v-decorator="['fkgs',{rules: [{ required: true, message: `${$t('admin.qtxfkgs')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="付款账号" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" type="number" v-decorator="['fkzh',{rules: [{ required: true, message: '请填写付款账号' }]}]"/>
+                        <a-form-item :label="$t('admin.fkzh')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" type="number" v-decorator="['fkzh',{rules: [{ required: true, message: `${$t('admin.qtxfkzh')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="收款公司" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" v-decorator="['skgs',{rules: [{ required: true, message: '请填写收款公司' }]}]"/>
+                        <a-form-item :label="$t('admin.fkgs')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" v-decorator="['skgs',{rules: [{ required: true, message: `${$t('admin.qtxskgs')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="收款账号" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" type="number" v-decorator="['skzh',{rules: [{ required: true, message: '请填写收款账号' }]}]"/>
+                        <a-form-item :label="$t('admin.skzh')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" type="number" v-decorator="['skzh',{rules: [{ required: true, message: `${$t('admin.qtxskzh')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="收款银行开户行" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" v-decorator="['khh',{rules: [{ required: true, message: '请填写开户行' }]}]"/>
+                        <a-form-item :label="$t('admin.skyhkhh')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" v-decorator="['khh',{rules: [{ required: true, message: `${$t('admin.qtxkhh')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="预付金额" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" type="number" v-decorator="['ycje',{rules: [{ required: true, message: '请填写预存金额' }]}]"/>
+                        <a-form-item :label="$t('admin.ycje')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" type="number" v-decorator="['ycje',{rules: [{ required: true, message: `${$t('admin.qtxycje')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="手续费" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" type="number" v-decorator="['sxf',{rules: [{ required: true, message: '请填写手续费' }]}]"/>
+                        <a-form-item :label="$t('admin.sxf')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" type="number" v-decorator="['sxf',{rules: [{ required: true, message: `${$t('admin.qtxsxf')}`}]}]"/>
                         </a-form-item>
-                        <a-form-item label="尾款" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="请输入" type="number" v-decorator="['wk',{rules: [{ required: true, message: '请填写尾款金额' }]}]"/>
+                        <a-form-item :label="$t('admin.wk')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('issuer.notices.pleaseEnter')" type="number" v-decorator="['wk',{rules: [{ required: true, message: `${$t('admin.qtxwk')}` }]}]"/>
                         </a-form-item>
-                        <a-form-item label="备注" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
-                              <a-textarea placeholder="请输入" v-decorator="['bz',{rules: [{ required: false, message: '请填写备注' }]}]"/>
+                        <a-form-item :label="$t('admin.bz')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 4}">
+                              <a-textarea :placeholder="$t('issuer.notices.pleaseEnter')" v-decorator="['bz',{rules: [{ required: false, message:`${$t('admin.qtxbz')}` }]}]"/>
                         </a-form-item>
                         <a-form-item style="margin-top:24px; display: flex; justify-content: center;">
-                              <a-button type="primary" htmlType="submit" class="btn">提交</a-button>
-                              <a-button class="btn" @click="$router.go(-1)">取消</a-button>
+                              <a-button type="primary" htmlType="submit" class="btn">{{$t('admin.tj')}}</a-button>
+                              <a-button class="btn" @click="$router.go(-1)">{{$t('admin.qx')}}</a-button>
                         </a-form-item>
                   </a-form>
             </div>
@@ -95,7 +95,7 @@ export default {
             postAddTransferMoney(payCompany, receiveCompany, payment, balance, payAccount, bz, receiveAccount, receiveBank, serviceCharge, campId, type, recordId){
                   addTransferMoney(payCompany, receiveCompany, payment, balance, payAccount, bz, receiveAccount, receiveBank, serviceCharge, campId, type, recordId).then(res=>{
                         if (res.code == 1000) {
-                              this.$message.success('操作成功');
+                              this.$message.success(this.$t('issuer.hdgl.czcg'));
                               this.$router.push({name:'dkjl'})
                               window.location.reload()
                         }    

@@ -5,46 +5,46 @@
       <a-col :lg="9">
         <div>
           <a-form layout="vertical" :form="form">
-            <a-form-item label="邮箱">
+            <a-form-item :label="$t('issuer.accountInfo.email')">
               <a-input
-                placeholder="邮箱"
+                :placeholder="$t('issuer.accountInfo.email')"
                 :disabled="true"
-                v-decorator="['email',{rules: [{ required: true, message: '公司名称' }]}]"
+                v-decorator="['email',{rules: [{ required: true, message: `${$t('issuer.accountInfo.email')}` }]}]"
               />
             </a-form-item>
-            <a-form-item label="公司名称">
+            <a-form-item :label="$t('issuer.accountInfo.companyTitle')">
               <a-input
-                placeholder="公司名称"
-                v-decorator="['companyName',{rules: [{ required: true, message: '公司名称' }]}]"
+                :placeholder="$t('issuer.accountInfo.companyTitle')"
+                v-decorator="['companyName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.companyTitle')}` }]}]"
               />
             </a-form-item>
-            <a-form-item label="公司网址">
+            <a-form-item :label="$t('issuer.accountInfo.webName')">
               <a-input
-                placeholder="公司网址"
-                v-decorator="['webName',{rules: [{ required: true, message: '公司网址' }]}]"
+                :placeholder="$t('issuer.accountInfo.webName')"
+                v-decorator="['webName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.webName')}` }]}]"
               />
             </a-form-item>
-            <a-form-item label="公司简介">
+            <a-form-item :label="$t('issuer.accountInfo.companyName')">
               <a-textarea
-                placeholder="公司简介"
+                :placeholder="$t('issuer.accountInfo.companyName')"
                 :autosize="{ minRows: 6 }"
-                v-decorator="['textName',{rules: [{ max:30,required: true, message: '公司简介' }]}]"
+                v-decorator="['textName',{rules: [{ max:30,required: true, message: `${$t('issuer.accountInfo.companyName')}` }]}]"
               />
             </a-form-item>
-            <a-form-item label="国家地区">
+            <a-form-item :label="$t('issuer.accountInfo.country')">
               <a-select
                 @change="countryBtn"
-                v-decorator="['countryName',{rules: [{ required: true, message: '国家地区' }]}]"
+                v-decorator="['countryName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.country')}` }]}]"
               >
                 <a-select-option v-for="(item, index) in city" :key="index" :value="item.label">{{item.value}}</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="所在省市">
+            <a-form-item :label="$t('issuer.accountInfo.ProvinceCity')">
               <div class="">
                 <a-select
                   
-                  placeholder="请选择"
-                  v-decorator="['addressName',{rules: [{ required: true, message: '所在省市' }]}]"
+                  :placeholder="$t('issuer.hdgl.pleaseChoose')"
+                  v-decorator="['addressName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.ProvinceCity')}` }]}]"
                 >
                   <a-select-option
                     v-for="(item, index) in activeityPlace"
@@ -54,39 +54,39 @@
                 </a-select>
               </div>
             </a-form-item>
-            <a-form-item label="街道地址">
+            <a-form-item :label="$t('issuer.accountInfo.StreetAddress')">
               <a-input
-                placeholder="街道地址"
+                :placeholder="$t('issuer.accountInfo.StreetAddress')"
                 :autosize="{ minRows: 6 }"
-                v-decorator="['placeName',{rules: [{ required: true, message: '街道地址' }]}]"
+                v-decorator="['placeName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.StreetAddress')}` }]}]"
               />
             </a-form-item>
-            <a-form-item label="联系人">
+            <a-form-item :label="$t('issuer.accountInfo.contact')">
               <a-input
-                placeholder="联系人"
+                :placeholder="$t('issuer.accountInfo.contact')"
                 :autosize="{ minRows: 6 }"
-                v-decorator="['contactName',{rules: [{ required: true, message: '联系人' }]}]"
+                v-decorator="['contactName',{rules: [{ required: true, message: `${$t('issuer.accountInfo.contact')}` }]}]"
               />
             </a-form-item>
             <a-input-group compact>
-              <a-form-item label="联系电话">
+              <a-form-item :label="$t('issuer.accountInfo.telphone')">
                 <div class="">
                   <a-input
-                    placeholder="联系电话"
-                    v-decorator="['phoneName',{rules: [{pattern: new RegExp(/((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/), required: true, message: '请输入正确电话' }]}]"
+                    :placeholder="$t('issuer.accountInfo.telphone')"
+                    v-decorator="['phoneName',{rules: [{pattern: new RegExp(/((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/), required: true, message: `${$t('issuer.accountInfo.telphone')}` }]}]"
                   />
                 </div>
               </a-form-item>
             </a-input-group>
-            <a-button type="primary" @click="submitPerson">更新信息</a-button>
-            <a-button type="primary" @click="$router.go(-1)" style="margin-left: 20px;">返 回</a-button>
+            <a-button type="primary" @click="submitPerson">{{$t('issuer.accountInfo.updateInfo')}}</a-button>
+            <a-button type="primary" @click="$router.go(-1)" style="margin-left: 20px;">{{$t('issuer.accountInfo.back')}}</a-button>
           </a-form>
         </div>
       </a-col>
       <a-col :lg="6">
         <div class="upload">
           <div class="top">
-            <p>公司LOGO</p>
+            <p>{{$t('issuer.accountInfo.companyLogo')}}</p>
             <img
               v-if="imgurl"
               :src="imgurl"
@@ -98,13 +98,13 @@
             <template>
               <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload">
                 <a-button>
-                  <a-icon type="upload"/>更换LOGO
+                  <a-icon type="upload"/>{{$t('issuer.accountInfo.avtarLogo')}}
                 </a-button>
               </a-upload>
             </template>
           </div>
           <div class="top">
-            <p>营业执照</p>
+            <p>{{$t('issuer.accountInfo.business')}}</p>
             <img
               v-if="imgurl1"
               :src="imgurl1"
@@ -116,7 +116,7 @@
             <template>
               <a-upload name="avatar" :showUploadList="false" :beforeUpload="beforeUpload1">
                 <a-button>
-                  <a-icon type="upload"/>更换营业执照
+                  <a-icon type="upload"/>{{$t('issuer.accountInfo.changeBusiness')}}
                 </a-button>
               </a-upload>
             </template>
@@ -235,8 +235,8 @@ export default {
             console.log(res)
             if (res.code == 1000) {
               this.$notification.success({
-                message: '成功',
-                description: '更新成功',
+                message: this.$t('issuer.hdgl.successNmae'),
+                description: this.$t('issuer.accountInfo.updateCompleted'),
                 duration: 4
               })
               this.$router.push({
@@ -266,12 +266,12 @@ export default {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       if (!isJPG && !isPNG) {
-        this.$message.error('You can only upload JPG file!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
         return isJPG
       }
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
         return isLt2M
       }
       getBase64(file, imageUrl => {
@@ -289,12 +289,12 @@ export default {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       if (!isJPG && !isPNG) {
-        this.$message.error('You can only upload JPG file!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
         return isJPG
       }
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
+        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
         return isLt2M
       }
       getBase64(file, imageUrl => {

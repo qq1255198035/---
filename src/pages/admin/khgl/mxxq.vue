@@ -12,10 +12,10 @@
                               </div>
                               <div class="account-center-detail">
                                           <p v-if="sex == 1">
-                                                <a-icon type="man"/>男
+                                                <a-icon type="man"/>{{$t('issuer.accountInfo.boy')}}
                                           </p>
                                           <p v-if="sex == 2">
-                                                <a-icon type="woman"/>女
+                                                <a-icon type="woman"/>{{$t('issuer.accountInfo.gril')}}
                                           </p>
                                           <p>
                                                 <a-icon type="bank" class="tel"></a-icon>{{country}}
@@ -24,7 +24,7 @@
                                                 <a-icon type="sort-descending" />{{height}}cm
                                           </p>
                                           <p>
-                                                <a-icon type="contacts" /> {{heavy}}公斤
+                                                <a-icon type="contacts" /> {{heavy}}kg
                                           </p>
                                           <p>
                                                 <a-icon type="environment" /><span>{{home}}</span>
@@ -32,30 +32,30 @@
                               </div>
                               <a-divider :dashed="true"/>
                               <div class="account-center-team">
-                                    <p>公司名称：{{company}}</p>
-                                    <p>联系人：{{contact}}</p>
-                                    <p>联系电话：{{phone}}</p>
-                                    <p>邮箱：{{email}}</p>
+                                    <p>{{$t('issuer.accountInfo.companyTitle')}}：{{company}}</p>
+                                    <p>{{$t('issuer.accountInfo.contact')}}：{{contact}}</p>
+                                    <p>{{$t('issuer.accountInfo.telphone')}}：{{phone}}</p>
+                                    <p>{{$t('issuer.accountInfo.email')}}：{{email}}</p>
                               </div>
                         </a-card>
                   </a-col>
                   <a-col :md="24" :lg="17">
                         <div class="info-box">
                               <div class="title">
-                                    <h5>公司简介</h5>
+                                    <h5>{{$t('issuer.accountInfo.companyName')}}</h5>
                               </div>
                               <div class="content">
                                     <p>{{desc}}</p>
                               </div>
                               <div class="title">
-                                    <h5>个人图册</h5>
+                                    <h5>{{$t('issuer.accountInfo.grtc')}}</h5>
                               </div>
                               <div class="img-content">
                                     <img :src="imgs" alt="">
                               </div>
                         </div>
                         <div style="display: flex;justify-content: center;margin-top:30px;">
-                              <a-button type="primary" @click="$router.go(-1)">返 回</a-button>
+                              <a-button type="primary" @click="$router.go(-1)">{{$t('issuer.accountInfo.back')}}</a-button>
                         </div>
                   </a-col>
             </a-row>

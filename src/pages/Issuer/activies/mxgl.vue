@@ -15,7 +15,7 @@
     ></glTitle>
     <div class="mxgl-content">
       <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
-        <a-tab-pane key="1" tab="明星审批">
+        <a-tab-pane key="1" :tab="$t('issuer.hdgl.starsApproval')">
           <div class="my-cards">
             <div
               class="card-item ant-card-hoverable"
@@ -32,13 +32,13 @@
                   <span>$</span>
                   {{item.cost}}
                 </p>
-                <span>出场费用</span>
+                <span>{{$t('issuer.cjhd.ccfy')}}</span>
               </div>
               <div class="content">
-                <p>联系人: {{ item.contact}}</p>
-                <p>联系电话：{{item.phone}}</p>
-                <p>邮箱：{{item.email}}</p>
-                <p>公司：{{item.company}}</p>
+                <p>{{$t('issuer.accountInfo.contact')}}: {{ item.contact}}</p>
+                <p>{{$t('issuer.accountInfo.telphone')}}：{{item.phone}}</p>
+                <p>{{$t('issuer.accountInfo.email')}}：{{item.email}}</p>
+                <p>{{$t('issuer.accountInfo.companyTitle')}}：{{item.company}}</p>
               </div>
               <div class="footer">
                 <transition name="fade">
@@ -48,16 +48,16 @@
                       class="primary"
                       style="background:#ccc;border:solid 1px #ccc;"
                       @click="details(item)"
-                    >查看</a-button>
-                    <a-button type="danger" class="danger" @click="showModal(item)">驳回</a-button>
-                    <a-button type="primary" class="primary" @click="success(item)">通过</a-button>
+                    >{{$t('issuer.hdgl.examine')}}</a-button>
+                    <a-button type="danger" class="danger" @click="showModal(item)">{{$t('issuer.hdgl.bh')}}</a-button>
+                    <a-button type="primary" class="primary" @click="success(item)">{{$t('issuer.hdgl.tg')}}</a-button>
                   </div>
                 </transition>
               </div>
             </div>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="参加明星">
+        <a-tab-pane key="2" :tab="$t('issuer.hdgl.participationStar')">
           <div class="my-cards">
             <div
               class="card-item ant-card-hoverable"
@@ -74,18 +74,18 @@
                   <span>$</span>
                   {{item.cost}}
                 </p>
-                <span>出场费用</span>
+                <span>{{$t('issuer.cjhd.ccfy')}}</span>
               </div>
               <div class="content">
-                <p>联系人: {{ item.contact}}</p>
-                <p>联系电话：{{item.phone}}</p>
-                <p>邮箱：{{item.email}}</p>
-                <p>公司：{{item.company}}</p>
+                <p>{{$t('issuer.accountInfo.contact')}}: {{ item.contact}}</p>
+                <p>{{$t('issuer.accountInfo.telphone')}}：{{item.phone}}</p>
+                <p>{{$t('issuer.accountInfo.email')}}：{{item.email}}</p>
+                <p>{{$t('issuer.accountInfo.companyTitle')}}：{{item.company}}</p>
               </div>
               <div class="footer">
                 <transition name="fade">
                   <div class="button-box" v-show="btnShow == index" key="1">
-                    <a-button type="primary" class="primary" @click="starDetail(item)">查 看</a-button>
+                    <a-button type="primary" class="primary" @click="starDetail(item)">{{$t('issuer.hdgl.examine')}}</a-button>
                   </div>
                 </transition>
               </div>
@@ -101,7 +101,7 @@
       :confirmLoading="confirmLoading"
       @cancel="handleCancel"
     >
-      <a-form-item label="原因">
+      <a-form-item :label="$t('issuer.hdgl.yy')">
         <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }" v-model="baseText" />
       </a-form-item>
     </a-modal>
@@ -294,19 +294,19 @@ export default {
         console.log(this.logo)
         console.log(this.campNum)
         if (activityDetail.status == 10) {
-          this.status = '创建活动'
+          this.status = this.$t('issuer.hdgl.createAnEvent')
         }
         if (activityDetail.status == 0) {
-          this.status = '平台审核'
+          this.status = this.$t('issuer.cjhd.platformReview')
         }
         if (activityDetail.status == 20) {
-          this.status = '活动进行中'
+          this.status = this.$t('issuer.cjhd.activityProgress')
         }
         if (activityDetail.status == 30) {
-          this.status = '创建活动'
+          this.status = this.$t('issuer.hdgl.createAnEvent')
         }
         if (activityDetail.status == 50) {
-          this.status = '活动完成'
+          this.status = this.$t('issuer.cjhd.hdwc')
         }
       })
     },
@@ -350,7 +350,8 @@ export default {
         token: token,
         orderId: this.orderId,
         agreement: 0,
-        reject: this.baseText
+        reject: this.baseText,
+        internationalization: localStorage.lang
       }
       console.log(params)
       getStarCheck(params).then(res => {
@@ -366,13 +367,12 @@ export default {
       setTimeout(() => {
         this.visible = false
         this.confirmLoading = false
-        this.$message.success('操作成功')
+        this.$message.success(this.$t('issuer.hdgl.czcg'))
         //失败提示
         //this.$message.error('This is a message of error');
       }, 2000)
     },
     handleCancel(e) {
-      console.log('Clicked cancel button')
       this.visible = false
     },
     success(item) {
@@ -382,7 +382,8 @@ export default {
       const params = {
         token: token,
         orderId: item.recordId,
-        agreement: 1
+        agreement: 1,
+        internationalization: localStorage.lang
       }
       console.log(params)
       getStarCheck(params).then(res => {
@@ -396,12 +397,12 @@ export default {
           this.loading = true
           setTimeout(() => {
             this.loading = false
-            this.$message.success('操作成功')
+            this.$message.success(this.$t('issuer.hdgl.czcg'))
           }, 2000)
         } else {
           setTimeout(() => {
             this.loading = false
-            this.$message.error('操作失败')
+            this.$message.error(this.$t('issuer.hdgl.czsb'))
           }, 2000)
         }
       })

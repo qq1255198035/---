@@ -1,10 +1,12 @@
 <template>
       <div id="wdzz">
             <div class="input-box">
-                  <a-form-item label="活动日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                  <a-form-item :label="$t('admin.hdsj')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-locale-provider :locale="locale">
                         <a-range-picker @change="changeDate" class="my-picker"/>
+                        </a-locale-provider>
                   </a-form-item>
-                  <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                  <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
             </div>
             <div class="wdzz-content">
                   <a-row type="flex" justify="space-between">
@@ -17,9 +19,9 @@
                                           </div>
                                           <div class="profile-info">
                                                 <h2 class="no-margins">{{item.name}}</h2>
-                                                <p>时间：{{item.publishTime}}</p>
-                                                <p>分类：{{item.campCatalogVal}}</p>
-                                                <p>参赛人数：{{item.campNum}}人</p>
+                                                <p>{{$t('admin.timer')}}：{{item.publishTime}}</p>
+                                                <p>{{$t('admin.fl')}}：{{item.campCatalogVal}}</p>
+                                                <p>{{$t('admin.csrs')}}：{{item.campNum}}{{$t('admin.people')}}</p>
                                           </div>
                                     </a-col>
                                     <a-col :span="12" class="item">
@@ -31,7 +33,7 @@
                               </div>
                               <div class="my-collapse">
                                     <a-collapse>
-                                          <a-collapse-panel header="赞助纪录">
+                                          <a-collapse-panel :header="$t('admin.czjl')">
                                                 <a-table :columns="columns" :dataSource="item.sponsor" :pagination="false" :bordered="false" class="my-table"></a-table>
                                           </a-collapse-panel>
                                     </a-collapse>
@@ -40,7 +42,7 @@
                   </a-row>
             </div>
             <div style="text-align: center; margin-top: 30px;">
-                  <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || data.length == 0">加载更多</a-button>
+                  <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || data.length == 0">{{$t('issuer.hdgl.loadMore')}}</a-button>
             </div>
       </div>
 </template>
@@ -134,33 +136,42 @@
 </style>
 <script>
 import { searchMySponsor } from "@/api/sponsor";
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 export default {
       data(){
             return{
+                  locale: lang[localStorage.getItem('lang')],
                   columns: [
                         {
-                              title: '推广形式',
+                              title: this.$t('issuer.cjhd.tgxs'),
                               dataIndex: 'ssKind'
                         },
                         {
-                              title: '赞助形式',
+                              title: this.$t('issuer.cjhd.zzxs'),
                               dataIndex: 'sponsorship'
                         },
                         {
-                              title: '现金赞助',
+                              title: this.$t('issuer.cjhd.xjzz'),
                               dataIndex: 'cash',
                         },
                         {
-                              title: '实物赞助',
+                              title: this.$t('issuer.cjhd.swzz'),
                               dataIndex: 'productVal',
                               
                         },
                         {
-                              title: '赞助总额',
+                              title: this.$t('issuer.cjhd.zzze'),
                               dataIndex: 'tolMoney',
                         },
                         {
-                              title: '已付款',
+                              title: this.$t('admin.yfk'),
                               dataIndex: 'paid',
                         }
                   ],
@@ -196,7 +207,7 @@ export default {
                   searchMySponsor('','', this.offset).then(res=>{
                         if(res.code == 1000){
                               if (this.offset > res.page.pages) {
-                                    this.$message.warning('已加载全部数据');
+                                    this.$message.warning(this.$t('admin.yjzqusj'));
                                     this.loadingMore = false;
                                     this.btnDsiable = true;
                                     return;

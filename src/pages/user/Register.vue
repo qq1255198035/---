@@ -2,9 +2,9 @@
       <div id="register">
             <div class="step-box">
                   <a-steps :current="current | String2Num">
-                        <a-step title="选择用户"/>
-                        <a-step title="填写信息"/>
-                        <a-step title="注册完成"/>
+                        <a-step :title="$t('login.xzyh')"/>
+                        <a-step :title="$t('login.txxx')"/>
+                        <a-step :title="$t('login.zccg')"/>
                   </a-steps>
             </div>
             <div class="register-box">
@@ -14,22 +14,22 @@
                                     <ul>
                                           <li :class="{'active': activeIndex == 1}" @click="activeIndex = 1">
                                                 <a-icon type="property-safety"></a-icon>
-                                                赞助商
+                                                {{$t('login.zzs')}}
                                           </li>
                                           <li :class="{'active': activeIndex == 2}" @click="activeIndex = 2">
                                                 <a-icon type="code-sandbox"></a-icon>
-                                                搞手
+                                                {{$t('login.gs')}}
                                           </li>
                                           <li :class="{'active': activeIndex == 3}" @click="activeIndex = 3">
                                                 <a-icon type="usergroup-add"></a-icon>
-                                                经纪人
+                                                {{$t('login.jjr')}}
                                           </li>
                                     </ul>
                                     <div class="bottom">
                                           <a-button type="primary" @click="goRegister" class="my-btn">
-                                                下一步
+                                                {{$t('login.xyb')}}
                                           </a-button>
-                                          <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
+                                          <router-link class="login" :to="{ name: 'login' }">{{$t('login.yyzh')}}</router-link>
                                     </div>
                               </div>
                         </a-tab-pane>
@@ -40,18 +40,18 @@
                                     <a-input
                                     size="large"
                                     type="text"
-                                    placeholder="邮箱"
-                                    v-decorator="['email', {rules: [{ required: true, type: 'email', message: '请输入邮箱地址' }], validateTrigger: ['change', 'blur']}]"
+                                    :placeholder="$t('login.yx')"
+                                    v-decorator="['email', {rules: [{ required: true, type: 'email', message: `${$t('login.qsryx')}` }], validateTrigger: ['change', 'blur']}]"
                                     ></a-input>
                                     </a-form-item>
 
                                     <a-popover placement="rightTop" trigger="click" :visible="state.passwordLevelChecked">
                                     <template slot="content">
                                     <div :style="{ width: '240px' }" >
-                                          <div :class="['user-register', passwordLevelClass]">强度：<span>{{ passwordLevelName }}</span></div>
+                                          <div :class="['user-register', passwordLevelClass]">{{$t('login.qds')}}<span>{{ passwordLevelName }}</span></div>
                                           <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
                                           <div style="margin-top: 10px;">
-                                          <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
+                                          <span>{{$t('login.zs')}}</span>
                                           </div>
                                     </div>
                                     </template>
@@ -62,8 +62,8 @@
                                           @keydown="insertDown"
                                           @keyup="insertUp"
                                           autocomplete="false"
-                                          placeholder="至少6位密码，区分大小写"
-                                          v-decorator="['password', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+                                          :placeholder="$t('login.qf')"
+                                          v-decorator="['password', {rules: [{ required: true, message: `${$t('login.qf')}`}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
                                     ></a-input>
                                     </a-form-item>
                                     </a-popover>
@@ -73,14 +73,14 @@
                                     size="large"
                                     type="password"
                                     autocomplete="false"
-                                    placeholder="确认密码"
-                                    v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+                                    :placeholder="$t('login.qrmm')"
+                                    v-decorator="['password2', {rules: [{ required: true, message:  `${$t('login.qf')}` }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
                                     ></a-input>
                                     </a-form-item>
                                     <a-row :gutter="16">
                                     <a-col class="gutter-row" :span="16">
                                     <a-form-item>
-                                          <a-input size="large" type="text" placeholder="验证码" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
+                                          <a-input size="large" type="text" :placeholder="$t('login.yzm')" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
                                           <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                                           </a-input>
                                     </a-form-item>
@@ -101,7 +101,7 @@
                                                 type="primary"
                                                 class="register-button"
                                                 @click.stop.prevent="current = '0'"
-                                                :disabled="registerBtn">上一步
+                                                :disabled="registerBtn">{{$t('login.syb')}}
                                           </a-button>
                                           <a-button
                                                 size="large"
@@ -110,9 +110,9 @@
                                                 class="register-button"
                                                 :loading="registerBtn"
                                                 @click.stop.prevent="handleSubmit"
-                                                :disabled="registerBtn">注册
+                                                :disabled="registerBtn">{{$t('login.zc')}}
                                           </a-button>
-                                          <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
+                                          <router-link class="login" :to="{ name: 'login' }">{{$t('login.yyzh')}}</router-link>
                                     </a-form-item>
 
                               </a-form>
@@ -303,16 +303,16 @@ export default {
                   if (level === 0) {
                   this.state.percent = 10
                   }
-                  callback(new Error('密码强度不够'))
+                  callback(new Error(this.$t('login.qdbg')))
                   }
             },
             handlePasswordCheck (rule, value, callback) {
                   const password = this.form.getFieldValue('password')
                   if (value === undefined) {
-                  callback(new Error('请输入密码'))
+                  callback(new Error(this.$t('login.qsrmm')))
                   }
                   if (value && password && value.trim() !== password.trim()) {
-                  callback(new Error('两次密码不一致'))
+                  callback(new Error(this.$t('login.byz')))
                   }
                   callback()
             },
@@ -335,7 +335,7 @@ export default {
             },
             goRegister(){
                   if(!this.activeIndex){
-                        this.$message.error('请选择要注册的角色！');
+                        this.$message.error(this.$t('login.qxzjs'));
                         console.log(this.current)
                   }else{
                         this.current = '1'
@@ -350,7 +350,7 @@ export default {
                               $router.push({ name: 'registerResult', params: { ...values } })
                         }else{
                               $notification['error']({
-                              message: '错误',
+                              message: this.$t('login.error'),
                               description: res.info,
                               duration: 8
                         })
@@ -374,14 +374,14 @@ export default {
                         window.clearInterval(interval)
                         }
                         }, 1000)
-                        const hide = $message.loading('验证码发送中..',1)
+                        const hide = $message.loading(this.$t('login.yzmfsz'),1)
                         getSmsCaptcha({ username: values.email }).then(res => {
                               console.log(res)
                               if(res.status == 200){
                                     setTimeout(hide, 1)
                                     $notification['success']({
-                                          message: '提示',
-                                          description: '验证码获取成功，请查收！',
+                                          message: this.$t('login.error'),
+                                          description: this.$t('login.cs'),
                                           duration: 8
                                     })
                               }else if(res.status == 201){
@@ -403,8 +403,8 @@ export default {
             },
             requestFailed (err) {
                   this.$notification['error']({
-                        message: '错误',
-                        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+                        message: this.$t('login.error'),
+                        description: ((err.response || {}).data || {}).message || this.$t('login.shzs'),
                         duration: 4
                   })
                   this.registerBtn = false

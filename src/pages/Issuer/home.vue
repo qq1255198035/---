@@ -3,9 +3,9 @@
     <div slot="headerContent">
       <div class="title">
         {{ timeFix }}，{{ personInfo.email }}，
-        <span class="welcome-text">欢迎来到 Sponsor Cube 管理平台</span>
+        <span class="welcome-text">{{$t('header.HeadMenu.welcome')}} Sponsor Cube {{$t('header.HeadMenu.platform')}}</span>
       </div>
-      <div>搞手</div>
+      <div>{{$t('header.HeadMenu.handName')}}</div>
     </div>
     <div slot="extra">
       <a-row class="more-info">
@@ -55,12 +55,12 @@
                       <v-coord type="theta" :radius="0.75" :innerRadius="0.3"/>
                     </v-chart>
                     <div class="calc-price">
-                      总计：￥
+                      {{$t('issuer.index.totalPrice')}}：￥
                       <span>{{sponSor.tolMoney}}</span>
                     </div>
                   </a-col>
                   <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
-                    <p>暂无数据</p>
+                    <p>{{$t('issuer.index.noData')}}</p>
                   </a-col>
                   <a-col
                     :xl="12"
@@ -86,12 +86,12 @@
                       <v-coord type="theta" :radius="0.75" :innerRadius="0.3"/>
                     </v-chart>
                     <div class="calc-price">
-                      总计：￥
+                      {{$t('issuer.index.totalPrice')}}：￥
                       <span>{{sponSor.tolMoney}}</span>
                     </div>
                   </a-col>
                   <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24" v-else class="nonum1">
-                    <p>暂无数据</p>
+                    <p>{{$t('issuer.index.noData')}}</p>
                   </a-col>
                 </a-row>
               </div>
@@ -164,41 +164,42 @@ import { mapActions, mapGetters } from 'vuex'
 import G2 from '@antv/g2'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
+import i18n from '@lang/index'
 const statusMap = {
   0: {
     status: 'processing',
-    text: '待审批'
+    text: i18n.t('issuer.index.pending')
   },
   20: {
     status: 'success',
-    text: '已通过'
+    text: i18n.t('issuer.index.passed')
   },
   10: {
     status: 'warning',
-    text: '创建中'
+    text: i18n.t('issuer.index.creating')
   },
   1: {
     status: 'success',
-    text: '已删除'
+    text: i18n.t('issuer.index.deleted')
   }
 }
 let sourceData = [
   {
-    item: '现金',
+    item: i18n.t('issuer.index.cash'),
     count: null
   },
   {
-    item: '实物',
+    item: i18n.t('issuer.index.realThing'),
     count: null
   }
 ]
 let sourceData1 = [
   {
-    item: '未付',
+    item: i18n.t('issuer.index.unpaid'),
     count: null
   },
   {
-    item: '已付',
+    item: i18n.t('issuer.index.paid'),
     count: null
   }
 ]
@@ -223,6 +224,7 @@ export default {
   
   data() {
     return {
+      
       chartWidth: 500,
       chartHeight:300,
       chartBollean: true,
@@ -311,22 +313,22 @@ export default {
       // data
       operationColumns: [
         {
-          title: '活动名称',
+          title: i18n.t('issuer.index.eventName'),
           dataIndex: 'name',
           key: 'name'
         },
         {
-          title: '开始时间',
+          title: i18n.t('issuer.index.startTime'),
           dataIndex: 'publishTime',
           key: 'publishTime'
         },
         {
-          title: '活动分类',
+          title: i18n.t('issuer.index.capName'),
           dataIndex: 'capName',
           key: 'capName'
         },
         {
-          title: '状态',
+          title: i18n.t('issuer.index.status'),
           dataIndex: 'status',
           key: 'status',
           scopedSlots: { customRender: 'status' }
@@ -383,9 +385,9 @@ export default {
             that.$router.push({ name: 'issuerCjhd' })
           } else {
             that.$error({
-              okText: '去设置',
-              title: '错误',
-              content: '对不起，您的账户尚未通过审批！',
+              okText: this.$t('issuer.index.gotoSet'),
+              title: this.$t('issuer.index.error'),
+              content: this.$t('issuer.index.sorry'),
               onOk() {
                 that.$router.push({ name: 'zhsz' })
               }

@@ -1,10 +1,12 @@
 <template>
       <div id="wycj">
             <div class="input-box">
-                  <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                  <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-locale-provider :locale="locale">
                         <a-range-picker @change="changeDate" class="my-picker"/>
+                        </a-locale-provider>
                   </a-form-item>
-                  <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                  <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
             </div>
             <div class="wycj-content">
                   <a-row type="flex" justify="space-between" align="top" class="items-box">
@@ -19,7 +21,7 @@
                                                 <h2 class="no-margins" @click="$router.push({path:'/cjhdgl/ckhd',query:{id:item.campId}})">
                                                       {{item.name}}
                                                 </h2>
-                                                <p>时间：{{item.publishTime}}</p>
+                                                <p>{{$t('admin.timer')}}：{{item.publishTime}}</p>
                                                 <span>
                                                       <a-icon type="environment" class="my-icon"/>
                                                       {{item.address}}
@@ -27,29 +29,29 @@
                                           </div>
                                     </a-col>
                                     <a-col :span="12" class="item">
-                                          <p>分类：{{item.campCatalogVal}}</p>
-                                          <p>参赛人数：{{item.campNum}}人</p>
+                                          <p>{{$t('admin.fl')}}：{{item.campCatalogVal}}</p>
+                                          <p>{{$t('admin.csrs')}}：{{item.campNum}}人</p>
                                     </a-col>
                               </a-row>
                               <div class="main">
                                     <ul>
-                                          <li>公司：{{item.company}}</li>
-                                          <li>联系人：{{item.contact}}</li>
-                                          <li>邮箱：{{item.email}}</li>
-                                          <li>联系电话：{{item.phone}}</li>
+                                          <li>{{$t('issuer.accountInfo.companyTitle')}}：{{item.company}}</li>
+                                          <li>{{$t('issuer.accountInfo.contact')}}：{{item.contact}}</li>
+                                          <li>{{$t('issuer.accountInfo.email')}}：{{item.email}}</li>
+                                          <li>{{$t('issuer.accountInfo.telphone')}}：{{item.phone}}</li>
                                     </ul>
                               </div>
                               <div class="footer" v-show="showItem == index">
-                                    <a-button type="primary" @click="showModal(item.campId)">我要参加</a-button>
+                                    <a-button type="primary" @click="showModal(item.campId)">{{$t('issuer.accountInfo.wycj')}}</a-button>
                               </div>
                         </a-col>
                   </a-row>
                   <div style="text-align: center; margin-top: 30px;">
-                        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || listInfo.length == 0">加载更多</a-button>
+                        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable || listInfo.length == 0">{{$t('issuer.hdgl.loadMore')}}</a-button>
                   </div>
             </div>
             <a-modal
-                  title="赞助"
+                  :title="$t('admin.zz')"
                   :visible="visible"
                   @ok="handleOk"
                   :confirmLoading="confirmLoading"
@@ -57,27 +59,27 @@
                   wrapClassName="my-modal"
             >
                   <a-form :form="form">
-                        <a-form-item label="出场费用" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-form-item :label="$t('admin.ccfy')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                               <a-input type="number"
                                     v-decorator="[
                                           'ccfy',
-                                          {rules: [{ required: true, message: '请填写出场费用!' }]}
+                                          {rules: [{ required: true, message: `${$t('admin.qtxccf')}` }]}
                                     ]"
                               />
                         </a-form-item>
-                        <a-form-item label="选择明星" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-form-item :label="$t('admin.xzmx')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                               <a-select
                                     v-decorator="[
                                           'stars',
-                                          {rules: [{ required: true, message: '请选择明星!' }]}
+                                          {rules: [{ required: true, message: `${$t('admin.qxzmx')}` }]}
                                           ]"
-                                          placeholder="请选择"
+                                          :placeholder="$t('admin.qxz')"
                                           class="my-select"
                               >
                                           <a-select-option :value="item.athleteId" v-for="(item,index) in starsList" :key="index">{{item.name}}</a-select-option>    
                               </a-select>
                         </a-form-item>
-                        <a-form-item label="备注" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                        <a-form-item :label="$t('issuer.cjhd.bz')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                               <a-textarea class="my-input" v-decorator="[
                                           'desc',
                                           {rules: [{ required: false, }]}
@@ -182,9 +184,18 @@
 <script>
 import { searchCampList,chooseStar,wantJoin } from "@/api/manager";
 import { judge } from "@/api/common";
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 export default {
       data(){
             return{
+                  locale: lang[localStorage.getItem('lang')],
                   showItem: -1,
                   visible: false,
                   confirmLoading: false,
@@ -209,7 +220,7 @@ export default {
             postWantJoin(campId, athleteId, cost, details){
                   wantJoin(campId, athleteId, cost, details).then(res=>{
                         if (res.code == 1000) {
-                              this.$message.success('操作成功！');
+                              this.$message.success(this.$t('issuer.hdgl.czcg'));
                               this.visible = false;
                               this.confirmLoading = false;
                               this.form.setFieldsValue({
@@ -246,9 +257,9 @@ export default {
                                     that.key = id
                               }else{
                                     that.$error({
-                                          okText: '去设置',
-                                          title: '错误',
-                                          content: '对不起，您的账户尚未通过审批！',
+                                          okText: this.$t('issuer.index.gotoSet'),
+                                          title: this.$t('issuer.index.error'),
+                                          content: this.$t('issuer.index.sorry'),
                                           onOk() {
                                                 that.$router.push({name: 'zhsz'})
                                           },
@@ -286,7 +297,7 @@ export default {
                   searchCampList('', '', this.offset).then(res=>{
                         if (res.code == 1000) {
                               if (this.offset > res.page.pages) {
-                                    this.$message.warning('已加载全部数据');
+                                    this.$message.warning(this.$t('admin.yjzqusj'));
                                     this.loadingMore = false;
                                     this.btnDsiable = true;
                                     return;

@@ -1,6 +1,7 @@
 <template>
       <div id="cjdhd">
             <div class="my-calendar">
+                  <a-locale-provider :locale="locale">
                   <a-calendar @panelChange="onPanelChange">
                         <ul class="events" slot="dateCellRender" slot-scope="value">
                               <li v-for="(item,index) in getCellData(value.year(),value.month()+1,value.date())" :key="index" @click="showModal(value,item.camp_id)">
@@ -9,19 +10,20 @@
                         </ul>
                         <template slot="monthCellRender" slot-scope="value">
                               <div v-if="getMonthData(value.year(),value.month()+1)" class="notes-month">
-                                    <span>您本月一共参加了</span>
+                                    <span>{{$t('admin.nbycj')}}</span>
                                     <section>{{getMonthData(value.year(),value.month()+1)}}</section>
-                                    <span>场活动</span>
+                                    <span>{{$t('admin.chd')}}</span>
                               </div>
                         </template>
                   </a-calendar>
+                  </a-locale-provider>
             </div>
             <a-modal
-                  :title="`${nowMonth+1} 月 ${nowData} 日 活动 `"
+                  :title="`${nowMonth+1} ${$t('admin.mouth')} ${nowData} ${$t('admin.daty')} ${$t('admin.hd')}`"
                   v-model="visible"
                   @ok="hideModal"
-                  okText="确认"
-                  cancelText=""
+                  :okText="$t('admin.qr')"
+                  :cancelText="$t('admin.qx')"
                   wrapClassName="my-popup"
                   :width="960"
             >
@@ -38,9 +40,9 @@
                                           <h2 class="no-margins">
                                           {{actName}}
                                           </h2>
-                                          <p>时间：{{publishTime}}</p>
-                                          <p>分类：{{campCatalog}}</p>
-                                          <p>参赛人数：{{campNum}}人</p>
+                                          <p>{{$t('admin.timer')}}：{{publishTime}}</p>
+                                          <p>{{$t('admin.fl')}}：{{campCatalog}}</p>
+                                          <p>{{$t('admin.csrs')}}：{{campNum}}人</p>
                                     </div>
                                     <span>
                                           <a-icon type="environment" class="my-icon"/>
@@ -117,10 +119,19 @@
 import { joinCampAll,searchDetail, joinCampAllYear } from "@/api/manager";
 import { axios } from '@/utils/request';
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 import qs from 'qs'
 export default {
       data() {
             return {
+                  locale: lang[localStorage.getItem('lang')], 
                   visible: false,
                   nowData: '',
                   nowMonth: '',
@@ -133,15 +144,15 @@ export default {
                   address:'',
                   columns: [
                         {
-                              title: '参加明星',
+                              title: this.$t('admin.cjmx'),
                               dataIndex: 'details'
                         },
                         {
-                              title: '出场总额',
+                              title: this.$t('admin.ccze'),
                               dataIndex: 'cost'
                         },
                         {
-                              title: '已付款',
+                              title: this.$t('admin.yfk'),
                               dataIndex: 'paid',
                         }
                   ],

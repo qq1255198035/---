@@ -12,17 +12,19 @@ export function starsList(status,name, offset) {
       })
 }
 // 经纪人职业（演员）下拉选
-export function getProfession() {
+export function getProfession(parames) {
       return axios({
         url: '/vue/agent/getProfession',
-        method: 'post'
+        method: 'post',
+        data: qs.stringify(parames)
       })
 }
 // 经纪人国家下拉选
-export function getCountry() {
+export function getCountry(parames) {
   return axios({
     url: '/vue/agent/getCountry',
-    method: 'post'
+    method: 'post',
+    data: qs.stringify(parames)
   })
 }
 // 经纪人修改明星时获取的信息接口
@@ -30,7 +32,7 @@ export function searchStarInfo(athleteId) {
   return axios({
     url: '/vue/agent/searchStarInfo',
     method: 'post',
-    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), athleteId: athleteId })
+    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), athleteId: athleteId, internationalization : localStorage.lang})
   })
 }
 // 图片上传地址
@@ -64,7 +66,7 @@ export function searchCampList(startime, endtime, offset){
     return axios({
       url: '/vue/agent/searchCampListForAgent',
       method: 'post',
-      data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN), starttime: starttime, endtime: endtime, limit: 4, offset: offset })
+      data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN),internationalization: localStorage.lang, starttime: starttime, endtime: endtime, limit: 4, offset: offset })
     })
 }
 // 选择明星接口
@@ -137,6 +139,7 @@ return axios({
   data: qs.stringify({
     token: Vue.ls.get(ACCESS_TOKEN),
     campId: campId,
+    internationalization: localStorage.lang
     
   })
 })

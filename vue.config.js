@@ -39,6 +39,7 @@ module.exports = {
       .set('@views', resolve('src/views'))
       .set('@layout', resolve('src/layout'))
       .set('@static', resolve('src/static'))
+      .set('@lang', resolve('src/lang'))
 
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()

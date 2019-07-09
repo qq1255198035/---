@@ -87,7 +87,9 @@ const user = {
       })
     },
     SetLang({ commit }, lang) {
+      console.log(lang)
       return new Promise(resolve => {
+        
         commit('SET_LANG', lang)
         loadLanguageAsync(lang)
         resolve()

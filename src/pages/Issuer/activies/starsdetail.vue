@@ -25,7 +25,7 @@
             </p>
             <p>
               <a-icon type="contacts"/>
-              {{starDetils.weight}}公斤
+              {{starDetils.weight}}kg
             </p>
             <p>
               <a-icon type="environment"/>
@@ -34,23 +34,23 @@
           </div>
           <a-divider :dashed="true"/>
           <div class="account-center-team">
-            <p>公司名称：{{starDetils.company}}</p>
-            <p>联系人：{{starDetils.contact}}</p>
-            <p>联系电话：{{starDetils.phone}}</p>
-            <p>邮箱：{{starDetils.email}}</p>
+            <p>{{$t('issuer.accountInfo.companyTitle')}}：{{starDetils.company}}</p>
+            <p>{{$t('issuer.accountInfo.contact')}}：{{starDetils.contact}}</p>
+            <p>{{$t('issuer.accountInfo.telphone')}}：{{starDetils.phone}}</p>
+            <p>{{$t('issuer.accountInfo.email')}}：{{starDetils.email}}</p>
           </div>
         </a-card>
       </a-col>
       <a-col :md="24" :lg="17">
         <div class="info-box">
           <div class="title">
-            <h5>公司简介</h5>
+            <h5>{{$t('issuer.accountInfo.companyName')}}</h5>
           </div>
           <div class="content">
             <p>{{starDetils.introduction}}</p>
           </div>
           <div class="title">
-            <h5>个人图册</h5>
+            <h5>{{$t('issuer.accountInfo.grtc')}}</h5>
           </div>
           <div class="img-content">
             <img :src="detailsImgs" alt="">
@@ -59,7 +59,7 @@
         </div>
       </a-col>
     </a-row>
-    <div class="back_btn"><a-button type="primary" @click="handleBack">返回</a-button></div>
+    <div class="back_btn"><a-button type="primary" @click="handleBack">{{$t('issuer.accountInfo.back')}}</a-button></div>
   </div>
 </template>
 <style lang="less" scoped>
@@ -205,7 +205,7 @@ export default {
         this.starDetils = res.data
         this.avatars = res.data.avatar
         console.log(this.avatar)
-        this.sex = res.data.sex === '1' ? '男' : '女'
+        this.sex = res.data.sex === '1' ? this.$t('issuer.accountInfo.boy') : this.$t('issuer.accountInfo.gril')
         this.detailsImgs = res.data.imgs
         console.log(this.detailsImgs)
       })

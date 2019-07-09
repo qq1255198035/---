@@ -4,24 +4,26 @@
                   <a-row :gutter="2">
                         <a-col :span="8">
                               <div class="input-box">
-                                    <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-locale-provider :locale="locale">
                                           <a-range-picker @change="changeDate" class="my-picker"/>
+                                          </a-locale-provider>
                                     </a-form-item>
                               </div>
                         </a-col>
                         <a-col :span="8">
                               <div class="input-box">
-                                    <a-form-item label="公司名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="请输入公司名称" v-model="condition"/>
+                                    <a-form-item :label="$t('issuer.accountInfo.companyTitle')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input :placeholder="$t('issuer.cjhd.inputCompany')" v-model="condition"/>
                                     </a-form-item>
-                                    <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                                    <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
                               </div>
                         </a-col>
                   </a-row>
             </div>
             <div class="gsgl-content">
                   <a-tabs defaultActiveKey="1" tabPosition="top" size="large" @change="tabChange">
-                        <a-tab-pane key="1" tab="待审批">
+                        <a-tab-pane key="1" :tab="$t('issuer.index.pending')">
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData1.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData1" :key="index">
                                           
@@ -30,17 +32,17 @@
                                                 <span :title="item.name">{{item.name}}</span>
                                           </div>
                                           <div class="content">
-                                                <p>联系人: {{ item.contact}}</p>
-                                                <p>联系电话：{{item.phone}}</p>
-                                                <p>邮箱：{{item.email}}</p>
-                                                <p>公司：{{item.name}}</p>
+                                                <p>{{$t('issuer.accountInfo.contact')}}: {{ item.contact}}</p>
+                                                <p>{{$t('issuer.accountInfo.telphone')}}：{{item.phone}}</p>
+                                                <p>{{$t('issuer.accountInfo.email')}}：{{item.email}}</p>
+                                                <p>{{$t('issuer.accountInfo.companyTitle')}}：{{item.name}}</p>
                                           </div>
                                           <div class="footer">
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
-                                                            <a-button type="danger" class="danger" @click="showModal(item.key)">驳回</a-button>
-                                                            <a-button type="primary" class="primary" @click="success(item.key)" :loading="loading">通过</a-button>
-                                                            <a-button @click="$router.push({path:'/khgl/gsxq',query:{id: item.key}})">查 看</a-button>
+                                                            <a-button type="danger" class="danger" @click="showModal(item.key)">{{$t('issuer.hdgl.bh')}}</a-button>
+                                                            <a-button type="primary" class="primary" @click="success(item.key)" :loading="loading">{{$t('issuer.hdgl.tg')}}</a-button>
+                                                            <a-button @click="$router.push({path:'/khgl/gsxq',query:{id: item.key}})">{{$t('issuer.hdgl.examine')}}</a-button>
                                                       </div>
                                                 </transition>
                                                 
@@ -48,13 +50,13 @@
                                     </a-col>
                               </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
-                                    暂无数据
+                                    {{$t('issuer.index.noData')}}
                               </p>
                               <div style="text-align: center; margin-top: 16px;">
-                                    <a-button @click="loadMore1" :loading="loadingMore" :disabled="btnDsiable1">加载更多</a-button>
+                                    <a-button @click="loadMore1" :loading="loadingMore" :disabled="btnDsiable1">{{$t('issuer.hdgl.loadMore')}}</a-button>
                               </div>
                         </a-tab-pane>
-                        <a-tab-pane key="0" tab="已审批">
+                        <a-tab-pane key="0" :tab="$t('issuer.hdgl.ysp')">
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData2.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
                                           
@@ -63,16 +65,16 @@
                                                 <span :title="item.name">{{item.name}}</span>
                                           </div>
                                           <div class="content">
-                                                <p>联系人: {{ item.contact }}</p>
-                                                <p>联系电话：{{item.phone}}</p>
-                                                <p>邮箱：{{item.email}}</p>
-                                                <p>公司：{{item.name}}</p>
+                                                <p>{{$t('issuer.accountInfo.contact')}}: {{ item.contact }}</p>
+                                                <p>{{$t('issuer.accountInfo.telphone')}}：{{item.phone}}</p>
+                                                <p>{{$t('issuer.accountInfo.email')}}：{{item.email}}</p>
+                                                <p>{{$t('issuer.accountInfo.companyTitle')}}：{{item.name}}</p>
                                           </div>
                                           <div class="footer">
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
                                                             
-                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/khgl/gsxq',query:{id: item.key}})">查 看</a-button>
+                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/khgl/gsxq',query:{id: item.key}})">{{$t('issuer.hdgl.examine')}}</a-button>
                                                       </div>
                                                 </transition>
                                                 
@@ -80,10 +82,10 @@
                                     </a-col>
                               </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
-                                    暂无数据
+                                   {{$t('issuer.index.noData')}}
                               </p>
                               <div style="text-align: center; margin-top: 16px;">
-                                    <a-button @click="loadMore2" :loading="loadingMore" :disabled="btnDsiable2">加载更多</a-button>
+                                    <a-button @click="loadMore2" :loading="loadingMore" :disabled="btnDsiable2">{{$t('issuer.hdgl.loadMore')}}</a-button>
                               </div>
                         </a-tab-pane>
                         
@@ -97,8 +99,8 @@
                   :confirmLoading="confirmLoading"
                   @cancel="handleCancel"
             >
-                  <a-form-item label="原因">
-                        <a-textarea placeholder="请输入驳回原因" :autosize="{ minRows: 4 }" v-model="reason"/>
+                  <a-form-item :label="$t('issuer.index.yy')">
+                        <a-textarea :placeholder="$t('admin.qsryy')" :autosize="{ minRows: 4 }" v-model="reason"/>
                   </a-form-item>
             </a-modal>
       </div>
@@ -209,12 +211,21 @@
 </style>
 <script>
 import { gsspList, organizeApproval } from '@/api/admin'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 export default {
       components:{
             
       },
       data(){
-            return{       
+            return{
+                  locale: lang[localStorage.getItem('lang')],   
                   btnShow: -1,
                   visible: false,
                   confirmLoading: false,
@@ -278,7 +289,7 @@ export default {
                   gsspList('',1,this.offset1,'','').then(res=>{
                         if (res.code == 1000) {
                               if (this.offset1 > res.page.pages) {
-                                    this.$message.warning('已加载全部数据');
+                                    this.$message.warning(this.$t('admin.yjzqusj'));
                                     this.loadingMore = false;
                                     this.btnDsiable1 = true;
                                     return;
@@ -297,7 +308,7 @@ export default {
                   gsspList('',0,this.offset2,'','').then(res=>{
                         if (res.code == 1000) {
                               if (this.offset2 > res.page.pages) {
-                                    this.$message.warning('已加载全部数据');
+                                    this.$message.warning(this.$t('admin.yjzqusj'));
                                     this.loadingMore = false;
                                     this.btnDsiable2 = true;
                                     return;
@@ -332,7 +343,7 @@ export default {
             postOrganizeApproval(orgId, reject, agreement){
                   organizeApproval(orgId, reject, agreement).then(res=>{
                         if (res.code == 1000) {
-                              this.$message.success('操作成功');
+                              this.$message.success(this.$t('issuer.hdgl.czcg'));
                               this.loading = false;
                               this.confirmLoading = false;
                               this.visible = false;

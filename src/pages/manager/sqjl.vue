@@ -5,20 +5,22 @@
                   <a-row :gutter="2" type="flex" justify="start" align="middle">
                         <a-col :span="6">
                               <div class="input-box">
-                                    <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-locale-provider :locale="locale">
                                           <a-range-picker @change="changeDate" class="my-picker"/>
+                                          </a-locale-provider>
                                     </a-form-item>
                               </div>
                         </a-col>
                         <a-col :span="6">
                               <div class="input-box">
-                                    <a-form-item label="活动名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="Basic usage" v-model="condition"/>
+                                    <a-form-item :label="$t('admin.hdmc')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input :placeholder="$t('admin.qxzhdmc')" v-model="condition"/>
                                     </a-form-item>
                               </div>
                         </a-col>
                         <a-col :span="6">
-                              <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                              <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
                         </a-col>
                   </a-row>
             </div>
@@ -65,20 +67,29 @@
 }
 </style>
 <script>
+import i18n from '@lang/index'
 import { applicationList } from "@/api/manager";
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 const statusMap = {
       
       2: {
             status: 'processing',
-            text: '待审批'
+            text: i18n.t('admin.dsp')
       },
       1: {
             status: 'success',
-            text: '通过'
+            text: i18n.t('admin.tg')
       },
       0: {
             status: 'error',
-            text: '驳回'
+            text: i18n.t('admin.bh')
       },
       
 }
@@ -86,31 +97,32 @@ export default {
      
       data(){
             return{
+                  locale: lang[localStorage.getItem('lang')],
                   pageTitle: null,
                   columns: [
                         {
-                              title: '活动名称',
+                              title: this.$t('admin.hdmc'),
                               dataIndex: 'campname'
                         },
                         {
-                              title: '活动时间',
+                              title: this.$t('admin.hdsj'),
                               dataIndex: 'publishTime'
                         },
                         {
-                              title: '参加明星',
+                              title: this.$t('admin.cjmx'),
                               dataIndex: 'username',
                         },
                         {
-                              title: '出场总额',
+                              title: this.$t('admin.ccze'),
                               dataIndex: 'cost',
                         },
                         {
-                              title: '备注',
+                              title: this.$t('admin.bz'),
                               dataIndex: 'details',
                               
                         },
                         {
-                              title: '状态',
+                              title: this.$t('admin.zt'),
                               dataIndex: 'status',
                               scopedSlots: { customRender: 'status' }
                         },
