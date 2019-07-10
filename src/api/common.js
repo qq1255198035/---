@@ -37,7 +37,8 @@ return axios({
     method: 'post',
     data: qs.stringify({
       token: Vue.ls.get(ACCESS_TOKEN),
-      userId: userId
+      userId: userId,
+      internationalization: localStorage.lang
     })
   })
 }

@@ -64,11 +64,13 @@ const notFoundRouter = {
  * 获取后端路由信息的 axios API
  * @returns {Promise}
  */
+
 export const getRouterByUser = () => {
+
   return axios({
     url: '/vue/menu',
     method: 'post',
-    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) })
+    data: qs.stringify({ token: Vue.ls.get(ACCESS_TOKEN) ,internationalization:localStorage.lang})
     /* headers: {
       'Access-Token': 'xxx'
     }
@@ -88,6 +90,7 @@ export const generatorDynamicRouter = () => {
   return new Promise((resolve, reject) => {
     // ajax
     getRouterByUser().then(res => {
+      console.log(res)
       const result = res.data
       console.log(result)
       console.log(res.data)

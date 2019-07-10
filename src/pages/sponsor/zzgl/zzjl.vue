@@ -4,29 +4,33 @@
                   <a-row :gutter="2">
                         <a-col :span="8">
                               <div class="input-box">
-                                    <a-form-item label="选择日期" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('admin.xzrq')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-locale-provider :locale="locale">
                                           <a-range-picker @change="changeDate" class="my-picker"/>
+                                          </a-locale-provider>
                                     </a-form-item>
                               </div>
                         </a-col>
                         <a-col :span="8">
                               <div class="input-box">
-                                    <a-form-item label="活动名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="请输入活动名称" v-model="name"/>
+                                    <a-form-item :label="$t('admin.hdmc')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input :placeholder="$t('admin.qxzhdmc')" v-model="name"/>
                                     </a-form-item>
-                                    <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                                    <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
                               </div>
                         </a-col>
                   </a-row>
             </div>
             <div class="zzjl-content">
                   <div class="my-table">
+                        <a-locale-provider :locale="locale">
                         <a-table :columns="columns" :dataSource="data" :pagination="pagination" @change="handleTableChange" :loading="loading">
                               <span slot="status" slot-scope="text">
                                     <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
                               </span>
                               
                         </a-table>
+                        </a-locale-provider>
                   </div>
             </div>
       </div>
@@ -62,24 +66,33 @@
 </style>
 <script>
 import { searchSponsor } from "@/api/sponsor";
+import i18n from '@lang/index'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 const statusMap = {
       20: {
             status: 'success',
-            text: '通过'
+            text: i18n.t('admin.tg')
       },
       30: {
             status: 'error',
-            text: '驳回'
+            text: i18n.t('admin.bh')
       },
       11:{
             status: 'warning',
-            text: '未审批'
+            text: i18n.t('issuer.hdgl.wsp')
       }
 }
 export default {
       data () {
             return {
-                        
+                        locale: lang[localStorage.getItem('lang')],
                         starttime: '',
                         endtime: '',
                         condition: '',
@@ -89,36 +102,36 @@ export default {
                         selectedRowKeys: [],
                         columns: [
                               {
-                                    title: '赞助活动名称',
+                                    title: this.$t('issuer.cjhd.zzhdmc'),
                                     dataIndex: 'name'
                               },
                               {
-                                    title: '推广形式',
+                                    title: this.$t('issuer.cjhd.tgxs'),
                                     dataIndex: 'ssKind'
                               },
                               {
-                                    title: '赞助形式',
+                                    title: this.$t('issuer.cjhd.zzxs'),
                                     dataIndex: 'sponsorship',
                               },
                               {
-                                    title: '现金赞助',
+                                    title: this.$t('issuer.cjhd.xjzz'),
                                     dataIndex: 'cash',
                               },
                               {
-                                    title: '实物赞助',
+                                    title: this.$t('issuer.cjhd.swzz'),
                                     dataIndex: 'product'
                               },
                               {
-                                    title: '赞助总额',
+                                    title: this.$t('issuer.cjhd.zzze'),
                                     dataIndex: 'tolMoney',
                               },
                               {
-                                    title: '备注',
+                                    title: this.$t('issuer.cjhd.bz'),
                                     dataIndex: 'approval',
                                     
                               },
                               {
-                                    title: '状态',
+                                    title: this.$t('admin.zt'),
                                     dataIndex: 'status',
                                     scopedSlots: { customRender: 'status' }
                               },

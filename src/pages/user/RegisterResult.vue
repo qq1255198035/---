@@ -2,9 +2,9 @@
       <div id="RR">
             <div class="my-steps">
                   <a-steps :current="2">
-                        <a-step title="选择用户"/>
-                        <a-step title="填写信息"/>
-                        <a-step title="注册完成"/>
+                        <a-step :title="$t('login.xzyh')"/>
+                        <a-step :title="$t('login.txxx')"/>
+                        <a-step :title="$t('login.zccg')"/>
                   </a-steps>
             </div>
             <result
@@ -14,7 +14,7 @@
                   >
                   <template slot="action">
                         
-                        <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">去登陆</a-button>
+                        <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">{{$t('login.qdl')}}</a-button>
                   </template>
             </result>
       </div>
@@ -37,7 +37,7 @@ export default {
   computed: {
     email () {
       const v = this.form && this.form.email || 'xxx'
-      const title = `你的账户：${v} 注册成功`
+      const title = `${this.$t('login.ndzh')}：${v} ${this.$t('login.zccg')}`
       return title
     }
   },

@@ -14,7 +14,7 @@
         </div>
         <div class="profile-info">
           <h2 class="no-margins">{{title}}</h2>
-          <p>时间：{{start}}</p>
+          <p>{{$t('issuer.cjhd.timer')}}：{{start}}</p>
           <a-icon type="environment" class="my-icon" />
           <span>
             <span>{{adress}}</span>
@@ -23,10 +23,10 @@
       </a-col>
       <a-col :span="10">
         <ul class="dl-horizontal">
-          <li>分类：{{type}}</li>
-          <li>参赛人数：{{num}}人</li>
+          <li>{{$t('issuer.cjhd.sort')}}：{{type}}</li>
+          <li>{{$t('issuer.cjhd.number')}}：{{num}} {{$t('admin.people')}}</li>
           <li>
-            参与明星：
+            {{$t('issuer.hdgl.participationStar')}}：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in stars" :key="index">
                 <a-avatar :size="40" class="img-circle" :src="item" />
@@ -35,7 +35,7 @@
             </ul>
           </li>
           <li>
-            参与赞助：
+            {{$t('issuer.cjhd.cyzz')}}：
             <ul style="display: flex; padding: 0">
               <li v-for="(item,index) in sponsors" :key="index">
                 <a-avatar :size="40" class="img-circle" :src="item" />
@@ -49,11 +49,11 @@
     <div class="side">
       <a-row class="status-list">
         <a-col :xs="12" :sm="12">
-          <div class="text">状态</div>
+          <div class="text"> {{$t('issuer.index.status')}}</div>
           <div class="heading">{{status}}</div>
         </a-col>
         <a-col :xs="12" :sm="12">
-          <div class="text">预计赞助金额</div>
+          <div class="text">{{$t('issuer.cjhd.yjzzje')}}</div>
           <div class="heading">¥ {{price}}</div>
         </a-col>
       </a-row>

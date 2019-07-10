@@ -2,12 +2,12 @@
   <div id="hdgl">
     <page-header :title="pageTitle"></page-header>
     <div class="header">
-      <a-button type="primary" class="item-input" @click="setInfo">创建活动</a-button>
+      <a-button type="primary" class="item-input" @click="setInfo">{{$t('issuer.hdgl.createAnEvent')}}</a-button>
       <a-locale-provider :locale="locale">
-        <a-date-picker class="item-input" placeholder="开始时间" @change="searchDate" />
+        <a-date-picker class="item-input" :placeholder="$t('issuer.index.startTime')" @change="searchDate" />
       </a-locale-provider>
       <a-locale-provider :locale="locale">
-        <a-date-picker class="item-input" placeholder="结束时间" @change="searchDate1" />
+        <a-date-picker class="item-input" :placeholder="$t('issuer.index.endTime')" @change="searchDate1" />
       </a-locale-provider>
       <!--<a-cascader
         :fieldNames="{ label: 'value', value: 'label', children: 'children' }"
@@ -27,7 +27,7 @@
         style="width: 174px;"
         class="item-input"
         labelInValue
-        :defaultValue="{key: '请选择'}"
+        :defaultValue="{key: `${$t('issuer.hdgl.pleaseChoose')}`}"
         @change="searchClassifyBtn"
         placeholder="请选择"
         allowClear
@@ -40,9 +40,9 @@
       </a-select>
 
       <a-input-search
-        placeholder="请输入中文活动名称"
+        :placeholder="$t('issuer.hdgl.pleaseChoose')"
         @search="onSearch"
-        enterButton="搜索"
+        :enterButton="$t('issuer.hdgl.searchs')"
         style="width: 350px;"
         class="item-input"
         v-model="searchText"
@@ -61,13 +61,13 @@
                 </h2>
                 <h2 class="ant-col-6 my-text">
                   {{item.people}}
-                  <span>位</span>
+                  <span>{{$t('issuer.hdgl.wei')}}</span>
                 </h2>
               </div>
               <div class="second-row">
-                <span class="ant-col-12">开始时间：{{item.publishTime}}</span>
-                <span class="ant-col-6">已赞助</span>
-                <span class="ant-col-6">参与明星</span>
+                <span class="ant-col-12">{{$t('issuer.index.startTime')}}：{{item.publishTime}}</span>
+                <span class="ant-col-6">{{$t('issuer.hdgl.sponsored')}}</span>
+                <span class="ant-col-6">{{$t('issuer.hdgl.participationStar')}}</span>
               </div>
               <div class="second-row">
                 <span class="ant-col-12"></span>
@@ -92,18 +92,18 @@
                   ghost
                   class="btn-success"
                   @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
-                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
+                >&nbsp;&nbsp; {{$t('issuer.hdgl.examine')}} &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-primary"
                     @click="$router.push({path: '/zzsp', query: {campId: item.campId}})"
-                  >赞助审批</a-button>
+                  >{{$t('issuer.hdgl.sponsorApproval')}}</a-button>
                   <a-button
                     ghost
                     class="btn-info"
                     @click="$router.push({path: '/issuerMxsp', query: {campId: item.campId}})"
-                  >明星审批</a-button>
+                  >{{$t('issuer.hdgl.starsApproval')}}</a-button>
                 </div>
               </div>
               <div class="button-box" v-if="item.status == 0">
@@ -111,20 +111,20 @@
                   ghost
                   class="btn-success"
                   @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
-                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
+                >&nbsp;&nbsp; {{$t('issuer.hdgl.examine')}} &nbsp;&nbsp;</a-button>
               </div>
               <div class="button-box" v-if="item.status == 30">
                 <a-button
                   ghost
                   class="btn-success"
                   @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
-                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
+                >&nbsp;&nbsp; {{$t('issuer.hdgl.examine')}} &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-warning"
                     @click="$router.push({path: '/issuerCjhd', query: {campId: item.campId}})"
-                  >&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
+                  >&nbsp;&nbsp; {{$t('issuer.hdgl.modify')}} &nbsp;&nbsp;</a-button>
                 </div>
               </div>
               <div class="button-box" v-if="item.status == 10">
@@ -132,18 +132,18 @@
                   ghost
                   class="btn-success"
                   @click="$router.push({path:'/issuerCkhd', query: {campId: item.campId}})"
-                >&nbsp;&nbsp; 查 看 &nbsp;&nbsp;</a-button>
+                >&nbsp;&nbsp; {{$t('issuer.hdgl.examine')}} &nbsp;&nbsp;</a-button>
                 <div>
                   <a-button
                     ghost
                     class="btn-warning"
                     @click="$router.push({path: '/issuerCjhd', query: {campId: item.campId}})"
-                  >&nbsp;&nbsp; 修 改 &nbsp;&nbsp;</a-button>
+                  >&nbsp;&nbsp; {{$t('issuer.hdgl.modify')}} &nbsp;&nbsp;</a-button>
                   <a-button
                     ghost
                     class="btn-danger"
                     @click="showDeleteConfirm(item.campId, index)"
-                  >&nbsp;&nbsp; 删 除 &nbsp;&nbsp;</a-button>
+                  >&nbsp;&nbsp; {{$t('issuer.hdgl.detel')}} &nbsp;&nbsp;</a-button>
                 </div>
               </div>
             </div>
@@ -151,15 +151,18 @@
         </a-col>
       </div>
       <div slot="footer" v-if="cardList.length > 0" style="text-align: center; margin-top: 16px;">
-        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+        <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">{{$t('issuer.hdgl.loadMore')}}</a-button>
       </div>
       <div class="hide-item" v-else>
         <a-col :span="8">
           <a-card title :bordered="false" :body-style="{padding: 20}">
             <div class="item-group">
-              <h6>Ready to publish your Campaign</h6>
-              <p>Upgrade now to make your campaign public and start receiving application.</p>
-              <a-button type="primary" @click="setInfo">发布活动</a-button>
+              <h6>{{$t('issuer.index.title')}}</h6>
+              <p>{{$t('issuer.index.desc')}}</p>
+              <a-button
+                type="primary"
+                @click="setInfo"
+              >{{$t('issuer.index.fbhd')}}</a-button>
             </div>
           </a-card>
         </a-col>
@@ -175,6 +178,7 @@ import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
 import api from '@/api/index'
+import i18n from '@lang/index'
 const lang = {
   'zh-TW': zhTW,
   'zh-CN': zhCN,
@@ -183,23 +187,23 @@ const lang = {
 const statusMap = {
   0: {
     status: 'processing',
-    text: '申请中'
+    text: i18n.t('issuer.hdgl.application')
   },
   20: {
     status: 'success',
-    text: '成功'
+    text: i18n.t('issuer.hdgl.successNmae')
   },
   10: {
     status: 'warning',
-    text: '创建中'
+    text: i18n.t('issuer.index.creating')
   },
   30: {
     status: 'error',
-    text: '驳回'
+    text: i18n.t('issuer.hdgl.turnDown')
   },
   50: {
     status: 'error',
-    text: '关闭'
+    text: i18n.t('issuer.hdgl.shutDown')
   }
 }
 export default {
@@ -241,9 +245,9 @@ export default {
             that.$router.push({ name: 'issuerCjhd' })
           } else {
             that.$error({
-              okText: '去设置',
-              title: '错误',
-              content: '对不起，您的账户尚未通过审批！',
+              okText: this.$t('issuer.index.gotoSet'),
+              title: this.$t('issuer.index.error'),
+              content: this.$t('issuer.index.sorry'),
               onOk() {
                 that.$router.push({ name: 'zhsz' })
               }
@@ -270,13 +274,19 @@ export default {
     },
     // 地点
     _getPlace() {
-      getPlace().then(res => {
+      const lang = {
+        internationalization: localStorage.lang
+      }
+      getPlace(lang).then(res => {
         console.log(res)
         this.activeityPlace = res.data
       })
     },
     _getClassify() {
-      getClassify().then(res => {
+      const lang = {
+        internationalization: localStorage.lang
+      }
+      getClassify(lang).then(res => {
         console.log(res)
         this.activeityClass = res.data
       })
@@ -300,7 +310,7 @@ export default {
           let page = parseInt(this.pages)
           if (this.offset > page) {
             this.btnDsiable = true
-            this.$message.warning('已加载全部信息！')
+            this.$message.warning(this.$t('issuer.hdgl.allLoaded'))
             this.loadingMore = false
             this.loading = false
             return
@@ -351,11 +361,11 @@ export default {
       }
       console.log(params)
       this.$confirm({
-        title: '是否删除本条数据?',
+        title: this.$t('issuer.hdgl.whetherDetel'),
         //content: 'Some descriptions',
-        okText: '是',
+        okText: this.$t('issuer.hdgl.yes'),
         okType: 'danger',
-        cancelText: '否',
+        cancelText: this.$t('issuer.hdgl.not'),
         onOk() {
           console.log('OK')
           getDetele(params).then(res => {

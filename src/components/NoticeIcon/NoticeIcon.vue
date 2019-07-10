@@ -11,7 +11,7 @@
     <template slot="content">
       <a-spin :spinning="loadding">
         <a-tabs>
-          <a-tab-pane tab="通知" key="1">
+          <a-tab-pane :tab="$t('header.HeadMenu.tz')" key="1">
             <a-list v-for="(item,index) in notice" :key="index">
               <a-list-item >
                 <a-list-item-meta :title="item.title" :description="item.createtime">
@@ -20,7 +20,7 @@
               </a-list-item>
               
             </a-list>
-            <a class="new-list" @click="newList">查看全部消息</a>
+            <a class="new-list" @click="newList">{{$t('header.HeadMenu.ckqbxx')}}</a>
           </a-tab-pane>
         </a-tabs>
       </a-spin>

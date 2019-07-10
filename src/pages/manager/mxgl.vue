@@ -3,19 +3,19 @@
             <page-header :title="pageTitle"></page-header>
             <div class="mxgl-header">
                   <div class="input-box">
-                        <a-form-item label="明星名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                              <a-input placeholder="Basic usage" v-model="name"/>
+                        <a-form-item :label="$t('admin.mxmc')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                              <a-input :placeholder="$t('admin.ssmx')" v-model="name"/>
                         </a-form-item>
-                        <a-button type="primary" icon="search" @click="search">搜 索</a-button>
+                        <a-button type="primary" icon="search" @click="search">{{$t('issuer.hdgl.searchs')}}</a-button>
                   </div>
                   <div class="btn-box">
                         <a-divider class="my-divider"/>
-                        <a-button type="primary" icon="plus" @click="showModal($event)">新建</a-button>
+                        <a-button type="primary" icon="plus" @click="showModal($event)">{{$t('admin.xj')}}</a-button>
                   </div>
             </div>
             <div class="mxgl-content">
                   <a-tabs defaultActiveKey="1" tabPosition="top" size="large" @change="tabChange">
-                        <a-tab-pane key="1" tab="待审批">
+                        <a-tab-pane key="1" :tab="$t('admin.dsp')">
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData" :key="index">
                                           <div class="title">
@@ -32,21 +32,21 @@
                                           <div class="footer">
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
-                                                            <a-button type="danger" class="danger" @click="showDeleteConfirm(item.athlete_id)">删除</a-button>
-                                                            <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">修改</a-button>
+                                                            <a-button type="danger" class="danger" @click="showDeleteConfirm(item.athlete_id)">{{$t('admin.sc')}}</a-button>
+                                                            <a-button type="primary" class="primary" @click="showModal($event,item.athlete_id)" :loading="loading">{{$t('admin.xg')}}</a-button>
                                                       </div>
                                                 </transition>
                                           </div> 
                                     </a-col>
                               </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
-                                    暂无数据
+                                    {{$t('issuer.index.noData')}}
                               </p>
                               <div style="text-align: center; margin-top: 16px;">
-                                    <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+                                    <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">{{$t('issuer.hdgl.loadMore')}}</a-button>
                               </div>
                         </a-tab-pane>
-                        <a-tab-pane key="0" tab="已审批">
+                        <a-tab-pane key="0" :tab="$t('issuer.hdgl.ysp')">
                               <a-row type="flex" justify="start" align="top" v-if="cardItemData2.length > 0" class="my-cards">
                                     <a-col :xxl="{span:5,offset:1}" :xl="{span:9,offset:2}" :lg="{span:8,offset:2}" :md="{span:12,offset:2}" class="card-item" @mouseenter="btnShow = index" @mouseleave="btnShow = -1" v-for="(item,index) in cardItemData2" :key="index">
                                           <div class="title">
@@ -63,25 +63,26 @@
                                           <div class="footer">
                                                 <transition name="fade">
                                                       <div class="button-box" v-show= "btnShow == index" key="1">
-                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/cjhdgl/mxxq',query:{id: item.athlete_id}})">查 看</a-button>
+                                                            <a-button type="primary" class="primary" @click="$router.push({path:'/cjhdgl/mxxq',query:{id: item.athlete_id}})">{{$t('issuer.hdgl.examine')}}</a-button>
                                                       </div>
                                                 </transition>
                                           </div> 
                                     </a-col>
                               </a-row>
                               <p v-else style="text-align: center; color: #ccc;">
-                                    暂无数据
+                                    {{$t('issuer.index.noData')}}
                               </p>
                               <div style="text-align: center; margin-top: 16px;">
-                                    <a-button @click="loadMore2" :loading="loadingMore" :disabled="btnDsiable2">加载更多</a-button>
+                                    <a-button @click="loadMore2" :loading="loadingMore" :disabled="btnDsiable2">{{$t('issuer.hdgl.loadMore')}}</a-button>
                               </div>
                         </a-tab-pane>
                         
                   </a-tabs>
                   
             </div>
+            <a-locale-provider :locale="locale">
             <a-modal
-                  title="添加明星"
+                  :title="$t('admin.tjmx')"
                   :visible="visible"
                   @ok="handleOk"
                   :confirmLoading="confirmLoading"
@@ -92,66 +93,68 @@
                         <a-form :form="form">
                               <div class="left">
                                     <div class="section">
-                                          <a-form-item label="姓" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 3}">
-                                                <a-input placeholder="请输入" class="my-input" v-decorator="[
-                                                'lastname',{rules: [{ required: true, message: '请填写姓氏'}]}]"/>
+                                          <a-form-item :label="$t('mar.surname')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 8}">
+                                                <a-input :placeholder="$t('mar.qsr')" class="my-input" v-decorator="[
+                                                'lastname',{rules: [{ required: true, message: `${$t('mar.qtxxs')}`}]}]"/>
                                           </a-form-item>
-                                          <a-form-item label="名" class="my-form-item" :wrapperCol="{span: 19, offset: 1}" :labelCol="{span: 3}">
-                                                <a-input placeholder="请输入" class="my-input" v-decorator="[
-                                                'firstname',{rules: [{ required: true, message: '请填写名字' }]}]"/>
+                                          <a-form-item :label="$t('mar.ming')" class="my-form-item" :wrapperCol="{span: 14, offset: 1}" :labelCol="{span: 8}">
+                                                <a-input :placeholder="$t('mar.qsr')" class="my-input" v-decorator="[
+                                                'firstname',{rules: [{ required: true, message: `${$t('mar.qtxmz')}` }]}]"/>
                                           </a-form-item>
                                     </div>
                                     
-                                    <a-form-item label="英文名称" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="请输入英文名称" class="my-input" v-decorator="[
-                                                'enname',{rules: [{ required: true, message: '请填写英文名称' }]}]"/>
+                                    <a-form-item :label="$t('mar.ywmc')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input :placeholder="$t('mar.qsrywmc')" class="my-input" v-decorator="[
+                                                'enname',{rules: [{ required: true, message: `${$t('mar.qsrywmc')}` }]}]"/>
                                     </a-form-item>
-                                    <a-form-item label="职业" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
-                                          <a-select class="my-select" placeholder="请选择" v-decorator="[
-                                                'works',{rules: [{ required: true, message: '请选择活职业' }]}]">
+                                    <a-form-item :label="$t('mar.zy')" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
+                                          <a-select class="my-select" :placeholder="$t('mar.qxz')" v-decorator="[
+                                                'works',{rules: [{ required: true, message: `${$t('mar.qxzzy')}` }]}]">
                                                 <a-select-option v-for="(item,index) in works" :value="item.id" :key="index">{{ item.name }}</a-select-option>
                                           </a-select>
                                     </a-form-item>
-                                    <a-form-item label="国籍" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
-                                          <a-select class="my-select" placeholder="请选择" v-decorator="[
-                                                'country',{rules: [{ required: true, message: '请选择国籍' }]}]">
+                                    <a-form-item :label="$t('mar.gj')" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}" class="my-form-item">
+                                          <a-select class="my-select" :placeholder="$t('mar.qxz')" v-decorator="[
+                                                'country',{rules: [{ required: true, message: `${$t('mar.qxzgj')}` }]}]">
                                                 <a-select-option v-for="(item,index) in country" :value="item.id" :key="index">{{ item.name }}</a-select-option>
                                           </a-select>
                                     </a-form-item>
-                                    <a-form-item label="出生日期" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}" class="my-form-item">
+                                    <a-form-item :label="$t('mar.csrq')" :labelCol="{span: 4}" :wrapperCol="{span: 18, offset: 1}" class="my-form-item">
+                                          <a-locale-provider :locale="locale">
                                           <a-date-picker class="my-picker" v-decorator="[
-                                                'birthday',{rules: [{ required: true, message: '请选择出生日期' }]}]"/>
+                                                'birthday',{rules: [{ required: true, message: `${$t('mar.qxzcsrq')}`}]}]"/>
+                                          </a-locale-provider>
                                     </a-form-item>
-                                    <a-form-item label="身高" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input addonAfter="cm" placeholder="请输入" v-decorator="[
-                                                'height',{rules: [{ required: true, message: '请填写身高' }]}]"/>
+                                    <a-form-item :label="$t('mar.sg')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input addonAfter="cm" :placeholder="$t('mar.qsr')" v-decorator="[
+                                                'height',{rules: [{ required: true, message: `${$t('mar.qtxsg')}` }]}]"/>
                                     </a-form-item>
-                                    <a-form-item label="体重" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input addonAfter="公斤" placeholder="请输入" v-decorator="[
-                                                'heavy',{rules: [{ required: true, message: '请填写体重' }]}]"/>
+                                    <a-form-item :label="$t('mar.tz')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input addonAfter="kg" :placeholder="$t('mar.qsr')" v-decorator="[
+                                                'heavy',{rules: [{ required: true, message: `${$t('mar.qtxtz')}` }]}]"/>
                                     </a-form-item>
-                                    <a-form-item label="出生地" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-input placeholder="请输入" class="my-input" v-decorator="[
-                                                'home',{rules: [{ required: true, message: '请填写出生地址' }]}]"/>
+                                    <a-form-item :label="$t('mar.csd')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-input :placeholder="$t('mar.qsr')" class="my-input" v-decorator="[
+                                                'home',{rules: [{ required: true, message: `${$t('mar.qtxcsd')}` }]}]"/>
                                     </a-form-item>
-                                    <a-form-item label="简介" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
-                                          <a-textarea placeholder="请输入简介" :rows="6" v-decorator="[
-                                                'desc',{rules: [{ required: true, message: '请输入简介' }]}]"></a-textarea>
+                                    <a-form-item :label="$t('mar.jj')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                          <a-textarea :placeholder="$t('mar.qsrjj')" :rows="6" v-decorator="[
+                                                'desc',{rules: [{ required: true, message: `${$t('mar.qsrjj')}` }]}]"></a-textarea>
                                     </a-form-item>
                               </div>
                               <div class="right">
-                                    <a-form-item label="性别" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('mar.sex')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-radio-group v-decorator="[
-                                                'sex',{rules: [{ required: true, message: '请输入性别' }]}]">
+                                                'sex',{rules: [{ required: true, message: `${$t('mar.qsrxb')}`}]}]">
                                                 <a-radio value="1">
-                                                男
+                                                {{$t('mar.boy')}}
                                                 </a-radio>
                                                 <a-radio value="2">
-                                                女
+                                                {{$t('mar.gril')}}
                                                 </a-radio>
                                           </a-radio-group>
                                     </a-form-item>
-                                    <a-form-item label="授权证书" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('mar.sqzs')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
                                                 name="avatar"
                                                 listType="picture-card"
@@ -163,18 +166,18 @@
                                                 
                                                 <div v-else>
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
-                                                      <div class="ant-upload-text">上传</div>
+                                                      <div class="ant-upload-text">{{$t('mar.sc')}}</div>
                                                 </div>
                                                 <a-input  v-decorator="[
-                                                'uploader',{rules: [{ required: true, message: '请上传证书' }]}]"
+                                                'uploader',{rules: [{ required: true, message: `${$t('mar.qsczs')}` }]}]"
                                                 
                                                 type="hidden"
                                                 />
                                           </a-upload>
-                                          <span>建议尺寸 200 * 300</span><br>
+                                          <span>{{$t('mar.jycc')}}</span><br>
                                           
                                     </a-form-item>
-                                    <a-form-item label="上传头像" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('mar.sctx')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
                                                 name="avatar"
                                                 listType="picture-card"
@@ -186,18 +189,18 @@
                                                 <img v-if="imageUrl2" :src="imageUrl2" alt="avatar" />
                                                 <div v-else>
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
-                                                      <div class="ant-upload-text">上传</div>
+                                                      <div class="ant-upload-text">{{$t('mar.sc')}}</div>
                                                 </div>
                                                  <a-input  v-decorator="[
-                                                'avatar',{rules: [{ required: true, message: '请上传头像' }]}]"
+                                                'avatar',{rules: [{ required: true, message: `${$t('mar.qsctx')}` }]}]"
                                                 
                                                 type="hidden"
                                                 />
                                                 </a-upload>
-                                                <span>建议尺寸 200 * 300</span><br>
+                                                <span>{{$t('mar.jycc')}}</span><br>
                                                 
                                     </a-form-item>
-                                    <a-form-item label="上传图片" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
+                                    <a-form-item :label="$t('mar.sctp')" class="my-form-item" :wrapperCol="{span: 18, offset: 1}" :labelCol="{span: 4}">
                                           <a-upload
                                                 name="avatar"
                                                 listType="picture-card"
@@ -209,21 +212,22 @@
                                                 <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" />
                                                 <div v-else>
                                                       <a-icon :type="loading ? 'loading' : 'plus'" />
-                                                      <div class="ant-upload-text">上传</div>
+                                                      <div class="ant-upload-text">{{$t('mar.sc')}}</div>
                                                 </div>
                                                  <a-input  v-decorator="[
-                                                'imgs',{rules: [{ required: true, message: '请上传图片' }]}]"
+                                                'imgs',{rules: [{ required: true, message: `${$t('mar.qsctp')}` }]}]"
                                                 
                                                 type="hidden"
                                                 />
                                                 </a-upload>
-                                                <span>建议尺寸 200 * 300</span><br>
+                                                <span>{{$t('mar.jycc')}}</span><br>
 
                                     </a-form-item>
                               </div>
                         </a-form>
                   </div>
             </a-modal>
+            </a-locale-provider>
       </div>
 </template>
 <style lang="less" scoped>
@@ -364,6 +368,14 @@
 import { starsList,getProfession,getCountry,searchStarInfo,starUpdate,getUpload,starDel } from "@/api/manager";
 import { mixinsTitle } from "@/utils/mixin";
 import moment from 'moment';
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 function getBase64 (img, callback) {
       const reader = new FileReader()
       reader.addEventListener('load', () => callback(reader.result))
@@ -373,6 +385,7 @@ export default {
       mixins:[mixinsTitle],
       data(){
             return{
+                  locale: lang[localStorage.getItem('lang')],
                   pageTitle: null,
                   btnShow: -1,
                   visible: false,
@@ -412,7 +425,7 @@ export default {
             postStarUpdate(params){
                   starUpdate(params).then(res=>{
                         if (res.code == 1000) {
-                              this.$message.success('操作成功！')
+                              this.$message.success(this.$t('issuer.hdgl.czcg'))
                               this.visible = false;
                               this.confirmLoading = false;
                               this.getStarsList(1,'',1);
@@ -465,14 +478,22 @@ export default {
                   })
             },
             getProfessionList(){
-                  getProfession().then(res=>{
+                  const lang = {
+                        internationalization : localStorage.lang
+                  }
+                  console.log(lang)
+                  getProfession(lang).then(res=>{
+                        console.log(res)
                         if (res.code == 1000) {
                               this.works = res.data
                         }
                   })
             },
             getCountryList(){
-                  getCountry().then(res=>{
+                  const lang = {
+                        internationalization : localStorage.lang
+                  }
+                  getCountry(lang).then(res=>{
                         if (res.code == 1000) {
                               this.country = res.data
                         }
@@ -523,7 +544,7 @@ export default {
                   starsList(1,'', this.offset).then(res=>{
                         if (res.code == 1000) {
                               if (this.offset > res.page.pages) {
-                                    this.$message.warning('已加载全部数据');
+                                    this.$message.warning(this.$t('admin.yjzqusj'));
                                     this.loadingMore = false;
                                     this.btnDsiable = true;
                                     return;
@@ -541,7 +562,7 @@ export default {
                   starsList(0,'', this.offset2).then(res=>{
                         if (res.code == 1000) {
                               if (this.offset2 > res.page.pages) {
-                                    this.$message.warning('已加载全部数据');
+                                    this.$message.warning(this.$t('admin.yjzqusj'));
                                     this.loadingMore = false;
                                     this.btnDsiable2 = true;
                                     return;
@@ -557,7 +578,7 @@ export default {
                   this.visible = true
                   this.stasId = id
                   
-                  if(e.target.innerText === '修 改'){
+                  if(this.stasId){
                         this.getSearchStarInfo(id)
                   }
             },
@@ -608,14 +629,14 @@ export default {
             showDeleteConfirm(id) {
                   var that = this;
                   that.$confirm({
-                        title: '确定删除吗？',
-                        okText: '确定',
+                        title: that.$t('mar.qrscm'),
+                        okText: that.$t('mar.qd'),
                         okType: 'danger',
-                        cancelText: '取消',
+                        cancelText: that.$t('mar.qx'),
                         onOk() {
                               starDel(id).then(res=>{
                                     if (res.code == 1000) {
-                                          that.$message.success('操作成功');
+                                          that.$message.success(that.$t('issuer.hdgl.czcg'));
                                           that.getStarsList(1,that.name,that.offset);
                                     }
                               })
@@ -629,12 +650,12 @@ export default {
                   const isJPG = file.type == 'image/jpeg'
                   const isPNG = file.type == 'image/png'
                   if (!(!isJPG || !isPNG)) {
-                        this.$message.error('You can upload JPG and PNG file!')
+                        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
                         return
                   }
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
-                        this.$message.error('Image must smaller than 2MB!')
+                        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
                         return
                   }
                   getBase64(file, (imageUrl) => {
@@ -658,12 +679,12 @@ export default {
                   const isJPG = file.type === 'image/jpeg'
                   const isPNG = file.type === 'image/png'
                   if (!(!isJPG || !isPNG)) {
-                        this.$message.error('You can only upload JPG file!')
+                        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
                         return
                   }
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
-                        this.$message.error('Image must smaller than 2MB!')
+                        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
                         return
                   }
                   getBase64(file, (imageUrl) => {
@@ -684,12 +705,12 @@ export default {
                   const isJPG = file.type === 'image/jpeg'
                   const isPNG = file.type === 'image/png'
                   if (!(!isJPG || !isPNG)) {
-                        this.$message.error('You can only upload JPG file!')
+                        this.$message.error(this.$t('issuer.accountInfo.onlyImage'))
                         return
                   }
                   const isLt2M = file.size / 1024 / 1024 < 2
                   if (!isLt2M) {
-                        this.$message.error('Image must smaller than 2MB!')
+                        this.$message.error(this.$t('issuer.accountInfo.onlyM'))
                         return
                   }
                   getBase64(file, (imageUrl) => {

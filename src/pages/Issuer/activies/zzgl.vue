@@ -15,7 +15,7 @@
     ></glTitle>
     <div class="zzgl-content">
       <a-tabs defaultActiveKey="1" tabPosition="top" size="large">
-        <a-tab-pane key="1" tab="赞助审批">
+        <a-tab-pane key="1" :tab="$t('issuer.hdgl.sponsorApproval')">
           <div >
             <a-collapse accordion activeKey="1" v-if="cardItemData1.length" :bordered="false">
               <a-collapse-panel   v-for="(item, index) in cardItemData1" :key="index">
@@ -48,7 +48,7 @@
                                   <span>{{k.company}}</span>
                                 </div>
                                 <div class="content">
-                                  <p>赞助金额：{{k.tolMoney}}</p>
+                                  <p>{{$t('issuer.cjhd.zzje')}}：{{k.tolMoney}}</p>
                                   <div class="my-charts">
                                     <v-chart :height="300" :data="pieData" :scale="pieScale">
                                       <v-legend
@@ -67,23 +67,23 @@
                                   </div>
                                 </div>
                                 <div class="footer">
-                                  <p>联系人: {{ k.contact}}</p>
-                                  <p>联系电话：{{k.phone}}</p>
-                                  <p>邮箱：{{k.email}}</p>
-                                  <p>备注：{{k.bz}}</p>
+                                  <p>{{$t('issuer.accountInfo.contact')}}: {{ k.contact}}</p>
+                                  <p>{{$t('issuer.accountInfo.telphone')}}：{{k.phone}}</p>
+                                  <p>{{$t('issuer.accountInfo.email')}}：{{k.email}}</p>
+                                  <p>{{$t('issuer.cjhd.bz')}}：{{k.bz}}</p>
                                   <div class="calc-price">
-                                      总计：￥
+                                      {{$t('issuer.index.totalPrice')}}：￥
                                       <span>{{k.tolMoney}}</span>
                                     </div>
                                   <transition name="fade">
                                     <div class="button-box" v-show="btnShow == index" key="1">
-                                      <a-button type="danger" class="danger" @click="showModal(k, index)">驳回</a-button>
+                                      <a-button type="danger" class="danger" @click="showModal(k, index)">{{$t('issuer.hdgl.bh')}}</a-button>
                                       <a-button
                                         type="primary"
                                         class="primary"
                                         @click="success(k)"
                                         :loading="loading"
-                                      >通过</a-button>
+                                      >{{$t('issuer.hdgl.tg')}}</a-button>
                                     </div>
                                   </transition>
                                 </div>
@@ -96,7 +96,7 @@
             </a-collapse>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="我的赞助">
+        <a-tab-pane key="2" :tab="$t('issuer.cjhd.wdzz')">
          
                 <div>
                 <a-collapse accordion activeKey="1" :bordered="false">
@@ -108,7 +108,9 @@
                             <div>
                                     
                               <div class="my-tables">
+                                <a-locale-provider :locale="locale">
                                   <a-table :columns="columns" :dataSource="filterItems(dataList,item.ss_id)" @change="pageNext" size="middle"></a-table>
+                                </a-locale-provider>
                               </div>
                             </div>
                             
@@ -118,6 +120,7 @@
         </a-tab-pane>
       </a-tabs>
     </div>
+    <a-locale-provider :locale="locale">
     <a-modal
       title
       :visible="visible"
@@ -125,10 +128,11 @@
       :confirmLoading="confirmLoading"
       @cancel="handleCancel"
     >
-      <a-form-item label="原因">
+      <a-form-item :label="$t('issuer.hdgl.yy')">
         <a-textarea placeholder="input placeholder" :autosize="{ minRows: 4 }" v-model="baseText"/>
       </a-form-item>
     </a-modal>
+    </a-locale-provider>
   </div>
 </template>
 <style lang="less" scoped>
@@ -285,13 +289,22 @@ import glTitle from '@/components/glTitle1/glTitle1'
 import { getApprovalList, getMineSupport, getApproval, getActivityInformation } from '@api/hand'
 import { mixinsTitle } from '@/utils/mixin.js'
 import { PageView } from '@/layouts'
+import i18n from '@lang/index'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 let sourceData = [
   {
-    item: '现金',
+    item: i18n.t('issuer.index.cash'),
     count: null
   },
   {
-    item: '实物',
+    item: i18n.t('issuer.index.realThing'),
     count: null
   }
 ]
@@ -309,32 +322,32 @@ const pieScale = [
 const columns = [
   
   {
-    title: '赞助公司名称',
+    title: i18n.t('issuer.cjhd.zzgsmc'),
     dataIndex: 'name',
     align: 'center'
   },
   {
-    title: '赞助形式',
+    title: i18n.t('issuer.cjhd.zzxs'),
     dataIndex: 'sponsorship',
     align: 'center'
   },
   {
-    title: '现金赞助',
+    title: i18n.t('issuer.cjhd.xjzz'),
     dataIndex: 'cash',
     align: 'center'
   },
   {
-    title: '实物赞助',
+    title: i18n.t('issuer.cjhd.swzz'),
     dataIndex: 'productVal',
     align: 'center'
   },
   {
-    title: '赞助总额',
+    title: i18n.t('issuer.cjhd.zzze'),
     dataIndex: 'tolMoney',
     align: 'center'
   },
   {
-    title: '已付款金额',
+    title: i18n.t('issuer.cjhd.yfkje'),
     dataIndex: 'paid',
     align: 'center'
   }
@@ -347,6 +360,7 @@ export default {
   mixins: [mixinsTitle],
   data() {
     return {
+      locale: lang[localStorage.getItem('lang')],
       btnShow: -1,
       logo: [],
       current: 1,
@@ -528,19 +542,19 @@ export default {
         this.imgUrl =activityDetail.cover_img ? activityDetail.cover_img : ''
         this.logo = activityDetail.cover_img ? activityDetail.cover_img : ''
         if (activityDetail.status == 10) {
-          this.status = '创建活动'
+          this.status = this.$t('issuer.hdgl.createAnEvent')
         }
         if (activityDetail.status == 0) {
-          this.status = '平台审核'
+          this.status = this.$t('issuer.cjhd.platformReview')
         }
         if (activityDetail.status == 20) {
-          this.status = '活动进行中'
+          this.status = this.$t('issuer.cjhd.activityProgress')
         }
         if (activityDetail.status == 30) {
-          this.status = '创建活动'
+          this.status = this.$t('issuer.hdgl.createAnEvent')
         }
         if (activityDetail.status == 50) {
-          this.status = '活动完成'
+          this.status = this.$t('issuer.cjhd.hdwc')
         }
       })
     },
@@ -585,7 +599,8 @@ export default {
       const campId = this.$route.query.campId
       const params = {
         token: token,
-        campId: campId
+        campId: campId,
+        internationalization: localStorage.lang
       }
       getMineSupport(params).then(res => {
         console.log(res)
@@ -619,7 +634,8 @@ export default {
         token: token,
         orderId: this.orderId,
         agreement: 30,
-        reject: this.baseText
+        reject: this.baseText,
+        internationalization: localStorage.lang
       }
       console.log(params)
       getApproval(params).then(res => {
@@ -628,13 +644,13 @@ export default {
           this._getApprovalList()
         this._getMineSupport()
           this.$notification.success({
-          message: '成功',
-          description: '审批成功'
+          message: this.$t('issuer.hdgl.successNmae'),
+          description: this.$t('issuer.hdgl.spcg')
         })
         }else {
           this.$notification['error']({
-          message: '失败',
-          description: '审批失败'
+          message: this.$t('issuer.hdgl.sb'),
+          description: this.$t('issuer.hdgl.spsb')
         })
         }
       })
@@ -643,7 +659,7 @@ export default {
       setTimeout(() => {
         this.visible = false
         this.confirmLoading = false
-        this.$message.success('操作成功')
+        this.$message.success(this.$t('issuer.hdgl.czcg'))
         //失败提示
         //this.$message.error('This is a message of error');
       }, 2000)
@@ -659,7 +675,8 @@ export default {
       const params = {
         token: token,
         orderId: item.orderId,
-        agreement: 20
+        agreement: 20,
+        internationalization: localStorage.lang
       }
       console.log(params)
       getApproval(params).then(res => {
@@ -668,13 +685,13 @@ export default {
           this._getApprovalList()
         this._getMineSupport()
           this.$notification.success({
-          message: '成功',
-          description: '通过'
+          message: this.$t('issuer.hdgl.successNmae'),
+          description: this.$t('issuer.hdgl.tg')
         })
         }else {
           this.$notification['error']({
-          message: '失败',
-          description: '未通过'
+          message: this.$t('issuer.hdgl.sb'),
+          description: this.$t('issuer.hdgl.wtg')
         })
         }
       })
@@ -682,7 +699,7 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-        this.$message.success('操作成功')
+        this.$message.success(this.$t('issuer.hdgl.czcg'))
       }, 2000)
     }
   }

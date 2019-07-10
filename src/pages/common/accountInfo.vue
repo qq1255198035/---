@@ -13,16 +13,16 @@
           </div>
           <div class="account-center-detail">
             <p>
-              <span>联系人：</span><a-icon type="user" class="user"></a-icon>{{personInfo.contact}}
+              <span>{{$t('issuer.accountInfo.contact')}}：</span><a-icon type="user" class="user"></a-icon>{{personInfo.contact}}
             </p>
             <p>
-              <span>联系电话：</span><a-icon type="phone" class="tel"></a-icon>{{personInfo.phone}}
+              <span>{{$t('issuer.accountInfo.telphone')}}：</span><a-icon type="phone" class="tel"></a-icon>{{personInfo.phone}}
             </p>
             <p>
-              <span>网址：</span><i class="group"></i>{{personInfo.web}}
+              <span>{{$t('issuer.accountInfo.webName')}}：</span><i class="group"></i>{{personInfo.web}}
             </p>
             <p>
-              <span>地点：</span><i class="address"></i>
+              <span>{{$t('issuer.accountInfo.placeName')}}：</span><i class="address"></i>
               {{personInfo.country}}
             </p>
           </div>
@@ -36,9 +36,9 @@
         <div class="info-box">
           
           <div class="title">
-            <a-button type="primary" @click="$router.push({name: 'zhsz'})">账户设置</a-button>
+            <a-button type="primary" @click="$router.push({name: 'zhsz'})">{{$t('issuer.accountInfo.accountSet')}}</a-button>
           </div>
-          <p class="company_title">公司简介</p>
+          <p class="company_title">{{$t('issuer.accountInfo.companyName')}}</p>
           <a-divider :dashed="true"/>
           <div class="content">
             <p>{{personInfo.intro}}</p>
@@ -156,7 +156,8 @@ export default {
     _getUserInformation() {
       const token = this.$ls.get('Access-Token')
       const params = {
-        token: token
+        token: token,
+        internationalization: localStorage.lang
       }
       getUserInformation(params).then(res => {
         this.personInfo = res.data

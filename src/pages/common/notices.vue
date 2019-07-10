@@ -5,15 +5,16 @@
         <div class="page-menu-search">
           <a-input-search
             style="width: 80%; max-width: 522px;"
-            placeholder="请输入..."
+            :placeholder="$t('issuer.notices.pleaseEnter')"
             size="large"
-            enterButton="搜索"
+            :enterButton="$t('issuer.hdgl.searchs')"
             @search="onSearch"
           />
         </div>
       </div>
     </page-header>
     <div class="content">
+      <a-locale-provider :locale="locale">
       <a-card style="margin-top: 24px;" :bordered="false">
         <a-list
           size="large"
@@ -29,10 +30,11 @@
             <article-list-content :description="item.content" :updateAt="item.createtime" />
           </a-list-item>
           <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
-            <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">加载更多</a-button>
+            <a-button @click="loadMore" :loading="loadingMore" :disabled="btnDsiable">{{$t('issuer.hdgl.loadMore')}}</a-button>
           </div>
         </a-list>
       </a-card>
+      </a-locale-provider>
     </div>
   </div>
 </template>
@@ -49,6 +51,14 @@
 import { mixinsTitle } from '@/utils/mixin.js'
 import { ArticleListContent } from '@/components'
 import { infoList } from '@/api/common'
+import enUS from 'ant-design-vue/lib/locale-provider/en_US'
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
+const lang = {
+  'zh-TW': zhTW,
+  'zh-CN': zhCN,
+  'en-US': enUS
+}
 export default {
   mixins: [mixinsTitle],
   components: {
@@ -56,6 +66,7 @@ export default {
   },
   data() {
     return {
+      locale: lang[localStorage.getItem('lang')],
       loading: true,
       loadingMore: false,
       data: [],
@@ -85,7 +96,7 @@ export default {
           let page = parseInt(this.pages)
           if (res.page.offset > page) {
             this.btnDsiable = true
-            this.$message.warning('已加载全部信息！')
+            this.$message.warning(this.$t('issuer.hdgl.allLoaded'))
             this.loadingMore = false
             this.loading = false
             return

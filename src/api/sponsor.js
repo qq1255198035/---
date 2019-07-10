@@ -13,7 +13,8 @@ export function searchCampList(startime, endtime, offset) {
                   starttime: startime,
                   endtime: endtime,
                   limit: 4,
-                  offset: offset
+                  offset: offset,
+                  internationalization: localStorage.lang
             })
       })
 }
@@ -45,7 +46,8 @@ export function searchMySponsor(startime, endtime, offset) {
                   starttime: startime,
                   endtime: endtime,
                   limit: 4,
-                  offset: offset
+                  offset: offset,
+                  internationalization: localStorage.lang
             })
       })
 }
@@ -60,7 +62,8 @@ export function searchSponsor(name,startime, endtime, offset) {
                   starttime: startime,
                   endtime: endtime,
                   limit: 10,
-                  offset: offset
+                  offset: offset,
+                  internationalization: localStorage.lang
             })
       })
 }

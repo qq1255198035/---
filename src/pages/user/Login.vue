@@ -13,10 +13,10 @@
             <a-input
               size="large"
               type="text"
-              placeholder="账户"
+              :placeholder="$t('login.zhs')"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: `${$t('login.qsrzh')}` }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -28,10 +28,10 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码"
+              :placeholder="$t('login.mm')"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                {rules: [{ required: true, message: `${$t('login.qsrmm')}`}], validateTrigger: 'blur'}
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -50,11 +50,11 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
-        >确定</a-button>
+        >{{$t('login.qd')}}</a-button>
       </a-form-item>
 
       <div class="user-login-other">
-        <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
+        <router-link class="register" :to="{ name: 'register' }">{{$t('login.zczh')}}</router-link>
       </div>
     </a-form>
 
@@ -139,21 +139,22 @@ export default {
       // 延迟 1 秒显示欢迎信息
       if(res.code !=1000) {
           this.$notification['error']({
-          message: '错误',
-          description: (res.msg || '请求出现错误，请稍后再试'),
+          message: this.$t('login.error'),
+          description: (this.$t('login.mmyw') || this.$t('login.message')),
           duration: 4
         })
       }else{
         this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
+          message: this.$t('login.error1'),
+          description: `${timeFix()}，${this.$t('login.message1')}`
         })
       }
     },
     requestFailed (err) {
+      console.log(err)
       this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        message: this.$t('login.error'),
+        description: ((err.response || {}).data || {}).message || this.$t('login.message2'),
         duration: 4
       })
     }

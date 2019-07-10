@@ -39,6 +39,7 @@ module.exports = {
       .set('@views', resolve('src/views'))
       .set('@layout', resolve('src/layout'))
       .set('@static', resolve('src/static'))
+      .set('@lang', resolve('src/lang'))
 
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()
@@ -92,7 +93,11 @@ module.exports = {
       '/api': {
         // 测试环境
         //target: 'http://192.168.0.122:8090', // 接口域名
+<<<<<<< HEAD
         target: process.env.NODE_ENV == 'production' ? 'http://192.168.0.9:8080' : 'http://192.168.0.129:8080',
+=======
+        target: 'http://192.168.0.9:8080',
+>>>>>>> 49d4b8af76701252ed6d56722854d8348a0ed186
         //target: 'http://192.168.0.129:8080',
         changeOrigin: true // 是否跨域
       }

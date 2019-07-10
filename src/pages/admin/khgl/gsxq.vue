@@ -34,14 +34,14 @@
                   <a-col :md="24" :lg="17">
                         <div class="info-box">
                               <div class="title">
-                                    <h5>公司简介</h5>
+                                    <h5>{{$t('issuer.accountInfo.companyName')}}</h5>
                               </div>
                               <div class="content">
                                     <p>{{intro}}</p>
                               </div>
                         </div>
                         <div style="display: flex;justify-content: center;margin-top:30px;">
-                              <a-button type="primary" @click="$router.go(-1)">返 回</a-button>
+                              <a-button type="primary" @click="$router.go(-1)">{{$t('issuer.accountInfo.back')}}</a-button>
                         </div>
                   </a-col>
             </a-row>
