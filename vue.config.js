@@ -7,7 +7,7 @@ function resolve (dir) {
 
 // vue.config.js
 module.exports = {
-  publicPath: "./",
+  publicPath: './',
   /*
     Vue-cli3:
     Crashed when using Webpack `import()` #2463
@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   */
- 
+
   configureWebpack: {
     plugins: [
       // Ignore all locale files of moment.js
@@ -92,9 +92,9 @@ module.exports = {
       '/api': {
         // 测试环境
         //target: 'http://192.168.0.122:8090', // 接口域名
-        target: 'http://192.168.0.9:8080',
+        target: process.env.NODE_ENV == 'production' ? 'http://192.168.0.9:8080' : 'http://192.168.0.129:8080',
         //target: 'http://192.168.0.129:8080',
-        changeOrigin: true, // 是否跨域
+        changeOrigin: true // 是否跨域
       }
     }
   },
