@@ -71,7 +71,7 @@ import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 import { searchCampList,rightInfo } from '@/api/admin'
 import { userInfo } from "@/api/common";
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 const statusMap = {
       0: {
             status: 'processing',

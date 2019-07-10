@@ -77,7 +77,7 @@ import { Radar } from '@/components'
 import { headMsg,piesData } from '@/api/common'
 import { applicationList } from "@/api/manager"
 import { userInfo } from "@/api/common"
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 const sourceData1 = [
   { item: i18n.t('admin.ws'), count: null },
   { item: i18n.t('admin.ys'), count: null },

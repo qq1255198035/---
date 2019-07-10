@@ -178,7 +178,7 @@ import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
 import api from '@/api/index'
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 const lang = {
   'zh-TW': zhTW,
   'zh-CN': zhCN,

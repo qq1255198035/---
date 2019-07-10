@@ -79,7 +79,7 @@
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
 import { approvalNumber,searchCampList,campApproval,campInformation } from '@/api/admin'
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'

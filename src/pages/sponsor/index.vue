@@ -138,7 +138,7 @@ import { timeFix } from '@/utils/util'
 import { headMsg, piesData, userInfo } from '@/api/common'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 import { searchSponsor } from '@/api/sponsor'
 const sourceData = [{ item: i18n.t('issuer.index.cash'), count: null }, { item: i18n.t('issuer.index.realThing'), count: null }]
 const sourceData1 = [{ item: i18n.t('issuer.index.unpaid'), count: null }, { item: i18n.t('issuer.index.paid'), count: null }]

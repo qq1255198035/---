@@ -69,7 +69,7 @@
 }
 </style>
 <script>
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 import { applicationList } from "@/api/manager";
 import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'

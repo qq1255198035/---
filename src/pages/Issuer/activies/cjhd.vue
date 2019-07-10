@@ -342,13 +342,8 @@
                   <a-select
                    style="width: 36%"
                     labelInValue
-<<<<<<< HEAD
-                    placeholder="请选择"
-                    v-decorator="['companyTitle',{rules: [{ required: true, message: '请输入公司名称' }]}]"
-=======
                     defaultValue="$t('issuer.hdgl.pleaseChoose')"
                     v-decorator="['companyTitle',{rules: [{ required: true, message: `${$t('issuer.cjhd.inputCompany')}` }]}]"
->>>>>>> 49d4b8af76701252ed6d56722854d8348a0ed186
                   >
                     <a-select-option
                       v-for="(item, index) in organizerTypeList"

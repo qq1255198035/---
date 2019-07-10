@@ -286,7 +286,7 @@ import {
 import imgUrl from '@/assets/a1.jpg'
 
 import { mixinsTitle } from '@/utils/mixin.js'
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 const DetailListItem = DetailList.Item
 const columns = [
   {

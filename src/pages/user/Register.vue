@@ -230,7 +230,7 @@
 <script>
 import { mixinDevice } from '@/utils/mixin.js'
 import { getSmsCaptcha,register } from '@/api/login'
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 const levelNames = {
   0: i18n.t('login.dd'),
   1: i18n.t('login.dd'),

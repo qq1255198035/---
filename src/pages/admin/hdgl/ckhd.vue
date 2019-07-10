@@ -226,7 +226,7 @@ import DetailList from '@/components/tools/DetailList'
 import imgUrl from '@/assets/a1.jpg'
 import { campInformation,searchCampSponsor,searchCampStar,campHeadInfo } from '@/api/admin'
 import { campSchedule } from "@/api/common";
-import i18n from '@lang/index'
+import i18n from '@/lang/index'
 import enUS from 'ant-design-vue/lib/locale-provider/en_US'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import zhTW from 'ant-design-vue/lib/locale-provider/zh_TW'
