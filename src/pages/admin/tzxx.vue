@@ -19,7 +19,7 @@
                               >
                                     <a-select
                                           showSearch
-                                          placeholder="Select a person"
+                                          :placeholder="$t('login.xzyg')"
                                           optionFilterProp="children"
                                           :filterOption="filterOption"
                                           allowClear
@@ -31,7 +31,7 @@
                               </a-form-item>
                               <a-form-item
                                     :label="$t('admin.nr')"
-                                    :label-col="{ span: 3 }"
+                                    :label-col="{ span: 4 }"
                                     :wrapper-col="{ span: 24 }"
                               >
                                     <a-textarea placeholder="" :rows="8" v-decorator="[
