@@ -436,6 +436,7 @@ export default {
             zh: '中',
             qi: '强',
             hdlb: '活动列表',
-            zlf: '赞立方'
+            zlf: '赞立方',
+            xzyg: '选择一个人'
       }
 }
